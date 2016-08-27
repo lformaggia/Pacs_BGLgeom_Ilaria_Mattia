@@ -22,9 +22,9 @@ struct Edge_Weight{
 };
 
 //Ora creo i tipi e le strutture che mi servono per dare le proprietà a vertici e archi usando bene le property maps.
-enum vertex_label_t {vertex_label /*, index, first_name, second_name, ... */};  //posso mettere tutti i campi che voglio!!! (vedi sopra)
-namespace boost {BOOST_INSTALL_PROPERTY(vertex,label);};
-typedef boost::property<vertex_label_t, std::string> Label_property;
+enum vertex_property_t {vertex_label /*, index, first_name, second_name, ... */};  //posso mettere tutti i campi che voglio!!! (vedi sopra)
+namespace boost {BOOST_INSTALL_PROPERTY(vertex,property);};
+typedef boost::property<vertex_property_t, std::string> Label_property;
 
 
 int main(){
@@ -96,7 +96,7 @@ int main(){
 	Graph2 G2(4);		//crea un grafo di tipo Graph2 con 4 nodi
 	
 	//Per ora non metto archi, ma creo la property map dei nomi dei vertici e assegno i nomi:
-	property_map<Graph2, vertex_label_t>::type name = get(vertex_label, G2);		//name è un property_map del tipo giusto per essere una property_map<Graph2, vertex_label_t>. Forse ho capito. Allora. vertex_label_t è una enum, quindi può contenere campi/nomi/record diversi. Ora qui io sto dicendo che voglio una property_map associata ai grafi di tipo Graph2 e che abbia come attributi in ogni nodo tutti i campi contenuti nella enum vertex_label_t. name è una property_map del tipo giusto per matchare con quello che viene restituito da get, che in questo caso mi restituisce il campo vertex_label (che è uno dei campi contenuti nella enum vertex_label_t con cui ho costruito la mappa) del grafo G2. Qual è il tipo che viene restituito quindi? Una stringa. Con la specifica ::type, name diventa di tipo stringa.
+	property_map<Graph2, vertex_property_t>::type name = get(vertex_label, G2);		//name è un property_map del tipo giusto per essere una property_map<Graph2, vertex_property_t>. Forse ho capito. Allora. vertex_property_t è una enum, quindi può contenere campi/nomi/record diversi. Ora qui io sto dicendo che voglio una property_map associata ai grafi di tipo Graph2 e che abbia come attributi in ogni nodo tutti i campi contenuti nella enum vertex_property_t. name è una property_map del tipo giusto per matchare con quello che viene restituito da get, che in questo caso mi restituisce il campo vertex_label (che è uno dei campi contenuti nella enum vertex_property_t con cui ho costruito la mappa) del grafo G2. Qual è il tipo che viene restituito quindi? Una stringa. Con la specifica ::type, name diventa di tipo stringa.
 	//Ora mettiamo i label che vogliamo con put() o con l'operatore []:
 	put(name, 0, "Pippo");	//put(nome della property_map in cui voglio inserire il valore, chiave che identifica quel nodo/arco, valore da inserire)
 	put(name, 1, "Pluto");
