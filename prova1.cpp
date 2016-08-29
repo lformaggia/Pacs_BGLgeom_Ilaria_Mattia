@@ -125,7 +125,9 @@ int main(){
 	property_map<Graph2, edge_property_t>::type Weights = get(weight2, G2);
 	//Ora dovrei fare put() dei vari pesi negli archi, ma gli archi ancora non ce li ho. Potrei fare in due modi: o così (ma non saprei bene come fare a indicare la chiave di quell'arco), oppure, se non ho ancora aggiunto gli archi, creare gli archi e contemporaneamente associargli i pesi, usando add_edge:
 	//Posso usare i numeri per i nodi perché sto utilizzando vecS come container per i nodi:
-	add_edge(0,1,Edge_weight2(20),G2);
+	graph_traits<Graph2>::edge_descriptor test_edge;
+	bool ins;
+	tie(test_edge,ins) = add_edge(0,1,Edge_weight2(20),G2);
 	add_edge(1,2,Edge_weight2(15),G2);
 	add_edge(2,3,Edge_weight2(10),G2);
 	add_edge(0,3,Edge_weight2(50),G2);
@@ -137,7 +139,19 @@ int main(){
 		graph_traits<Graph2>::vertex_descriptor t = target(*e2_iterator.first, G2);
 		std::cout << "Il peso dell'arco da " << get(name, s) << " a " << get(name, t) << " è: " << get(Weights, *e2_iterator.first) << endl;
 		}
-
+	std::cout << "Benissimo! Fatto." << endl;
+	
+	std::cout << endl << "Ora proviamo a cambiare il valore della proprietà di un arco con put. (il problema è: qual è la chiave?)" << endl;
+	put(Weights, test_edge, 100);
+	std::cout << "Ho cambiato il peso al primo arco. Controlliamo che effettivamente sia così:" << endl;
+	std::pair<edge2_iter_type, edge2_iter_type> e3_iterator = edges(G2);
+	for( ; e3_iterator.first != e3_iterator.second; e3_iterator.first++){
+		graph_traits<Graph2>::vertex_descriptor s = source(*e3_iterator.first, G2);
+		graph_traits<Graph2>::vertex_descriptor t = target(*e3_iterator.first, G2);
+		std::cout << "Il peso dell'arco da " << get(name, s) << " a " << get(name, t) << " è: " << get(Weights, *e3_iterator.first) << endl;
+		}
+	std::cout << "Bella lì! Quindi per cambiare le proprietà ad un arco con put, la chiave da usare è semplicemente l'edge_descriptor di quell'arco. Probabilmente va bene anche l'edge_iterator a quell'arco." << endl;
+	
 	
 	return 0;
 }
