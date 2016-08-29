@@ -24,7 +24,12 @@ struct Edge_Weight{
 //Ora creo i tipi e le strutture che mi servono per dare le proprietà a vertici e archi usando bene le property maps.
 enum vertex_property_t {vertex_label /*, index, first_name, second_name, ... */};  //posso mettere tutti i campi che voglio!!! (vedi sopra)
 namespace boost {BOOST_INSTALL_PROPERTY(vertex,property);};
-typedef boost::property<vertex_property_t, std::string> Label_property;
+using Label_property = boost::property<vertex_property_t, std::string>;
+
+//Creo le strutture per associare pesi agli archi:
+enum edge_property_t {weight2};
+namespace boost {BOOST_INSTALL_PROPERTY(edge,property);};
+using Edge_weight2 = boost::property<edge_property_t, unsigned int>;
 
 
 int main(){
@@ -92,7 +97,7 @@ int main(){
 	//Proviamo ora ad attaccare a vertici ed archi le proprietà usando bene le property maps. Devo fare ancora un po' di magheggiamenti all'inizio.
 	std::cout << endl;
 	std::cout << "Proviamo ora a costruire un nuovo grafo in cui associamo ai nodi le proprietà usando bene le property_map:" << endl;
-	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Label_property>;
+	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Label_property,Edge_weight2>;
 	Graph2 G2(4);		//crea un grafo di tipo Graph2 con 4 nodi
 	
 	//Per ora non metto archi, ma creo la property map dei nomi dei vertici e assegno i nomi:
@@ -107,10 +112,32 @@ int main(){
 	std::cout << endl;
 	std::cout << "Proviamo a vedere se ha funzionato:" << endl;
 	//Tra l'altro, queste 4 righe per stampare gli attributi credo che si possano templatizzare con una comoda funzione facilmente.
-	using vertex_iter_type = typename graph_traits<Graph2>::vertex_iterator;	
-	std::pair<vertex_iter_type, vertex_iter_type> v2_iterator = vertices(G2);		
+	using vertex2_iter_type = typename graph_traits<Graph2>::vertex_iterator;	
+	std::pair<vertex2_iter_type, vertex2_iter_type> v2_iterator = vertices(G2);		
 	for( ; v2_iterator.first != v2_iterator.second; v2_iterator.first++)
 		std::cout << get(name, *v2_iterator.first)  << endl;
+		
+		
+	//Ora provo ad associare dei pesi agli archi. Devo definire la enum all'inizio.
+	std::cout << endl;
+	std::cout << "Associo proprietà (pesi) agli archi nel nuovo grafo usando la property_map: " << endl;
+	//Creo la property_map:
+	property_map<Graph2, edge_property_t>::type Weights = get(weight2, G2);
+	//Ora dovrei fare put() dei vari pesi negli archi, ma gli archi ancora non ce li ho. Potrei fare in due modi: o così (ma non saprei bene come fare a indicare la chiave di quell'arco), oppure, se non ho ancora aggiunto gli archi, creare gli archi e contemporaneamente associargli i pesi, usando add_edge:
+	//Posso usare i numeri per i nodi perché sto utilizzando vecS come container per i nodi:
+	add_edge(0,1,Edge_weight2(20),G2);
+	add_edge(1,2,Edge_weight2(15),G2);
+	add_edge(2,3,Edge_weight2(10),G2);
+	add_edge(0,3,Edge_weight2(50),G2);
+	std::cout << "Dovrei aver inserito gli archi con i loro pesi. Controlliamo:" << endl;
+	using edge2_iter_type = typename graph_traits<Graph2>::edge_iterator;
+	std::pair<edge2_iter_type, edge2_iter_type> e2_iterator = edges(G2);
+	for( ; e2_iterator.first != e2_iterator.second; e2_iterator.first++){
+		graph_traits<Graph2>::vertex_descriptor s = source(*e2_iterator.first, G2);
+		graph_traits<Graph2>::vertex_descriptor t = target(*e2_iterator.first, G2);
+		std::cout << "Il peso dell'arco da " << get(name, s) << " a " << get(name, t) << " è: " << get(Weights, *e2_iterator.first) << endl;
+		}
+
 	
 	return 0;
 }
