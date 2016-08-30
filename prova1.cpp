@@ -31,6 +31,14 @@ enum edge_property_t {weight2};
 namespace boost {BOOST_INSTALL_PROPERTY(edge,property);};
 using Edge_weight2 = boost::property<edge_property_t, unsigned int>;
 
+//Nuova struttura per vertici con più proprietà:
+enum vertex_fname_t {first_name};
+enum vertex_sname_t {second_name};
+namespace boost {BOOST_INSTALL_PROPERTY(vertex,fname);
+				 BOOST_INSTALL_PROPERTY(vertex,sname);
+				 };
+using First_Name = boost::property<vertex_fname_t, std::string>;
+using All_Name = boost::property<vertex_sname_t, std::string, First_Name>;
 
 int main(){
 
@@ -151,6 +159,27 @@ int main(){
 		std::cout << "Il peso dell'arco da " << get(name, s) << " a " << get(name, t) << " è: " << get(Weights, *e3_iterator.first) << endl;
 		}
 	std::cout << "Bella lì! Quindi per cambiare le proprietà ad un arco con put, la chiave da usare è semplicemente l'edge_descriptor di quell'arco. Probabilmente va bene anche l'edge_iterator a quell'arco." << endl;
+	
+	//Ora l'ultima cosa che rimane da fare è provare a creare un grafo con proprietà per vertici e archi che abbiano più di un solo campo. Rifacciamo tutto dall'inizio, creiamo nuove strutture per le proprietà e un nuovo grafo. Facciamo solo per i vertici per ora.
+	using Graph3 = adjacency_list<vecS,vecS,undirectedS,All_Name>;
+	Graph3 G3(4);		//Grafo di tipo Graph3 con 4 nodi;
+	property_map<Graph3, vertex_fname_t>::type f_name = get(first_name, G3);
+	property_map<Graph3, vertex_sname_t>::type s_name = get(second_name, G3);
+	//Metto nei nodi i dati: nome e cognome:
+	f_name[0] = "Anna"; s_name[0] = "Bolena";
+	f_name[1] = "Barbara"; s_name[1] = "Santa";
+	put(f_name, 2, "Cinzia"); put(s_name, 2, "Fontana");
+	f_name[3] = "Donatella"; s_name[3] = "Balla";
+	
+	//stampiamo:
+	using vertex3_iter_type = typename graph_traits<Graph3>::vertex_iterator;	
+	std::pair<vertex3_iter_type, vertex3_iter_type> v3_iterator = vertices(G2);
+	std::cout << endl;
+	std::cout << "Ora creiamo proprietà con più dati per i nodi. Nomi dei nodi:" << endl;	
+	for( ; v3_iterator.first != v3_iterator.second; v3_iterator.first++)
+		std::cout << get(f_name, *v3_iterator.first) << " " << get(s_name, *v3_iterator.first) << endl;
+	std::cout << "Fatto, funziona. Quindi in teoria per mettere più caratteristiche sui nodi o archi bisogna fare le proporty annidate l'una nell'altra, e poi ci sono un po' di sintassi varie per assegnare i valori" << endl;
+
 	
 	
 	return 0;
