@@ -3,6 +3,7 @@
 #include<tuple>			//per tie
 #include<boost/graph/adjacency_list.hpp>		//per struttura dati dove immagazinare il grafo
 #include<boost/property_map/property_map.hpp>	//per usare funzioni e strutture delle property map
+#include<prova_output.h>
 
 //Questa per immagazinare la proprietà/caratteristica del nodo nella property map dei vertici.
 //Questa è la classe (quindi il tipo) dei dati che voglio associare ai nodi. Posso mettere quante variabili interne voglio.
@@ -68,7 +69,7 @@ int main(){
 	for( ; v_iterator.first != v_iterator.second; v_iterator.first++)
 		std::cout << get(&Vertex_Labels::label, G, *v_iterator.first)  << endl;
 		//Come ho usato get: get(variabile/proprietà (nella classe che uso come proprietà) che voglio estrarre, grafo (quindi da dove), "numero/indice" del vertice/lato di cui voglio estrarre la variabile/proprietà.
-	
+		
 	std::cout << endl;
 	std::cout << "Ora mettiamo gli archi:" << endl;
 	
@@ -119,12 +120,14 @@ int main(){
 	
 	std::cout << endl;
 	std::cout << "Proviamo a vedere se ha funzionato:" << endl;
+	print_vertex_properties(G, name);
+	/*
 	//Tra l'altro, queste 4 righe per stampare gli attributi credo che si possano templatizzare con una comoda funzione facilmente.
 	using vertex2_iter_type = typename graph_traits<Graph2>::vertex_iterator;	
 	std::pair<vertex2_iter_type, vertex2_iter_type> v2_iterator = vertices(G2);		
 	for( ; v2_iterator.first != v2_iterator.second; v2_iterator.first++)
 		std::cout << get(name, *v2_iterator.first)  << endl;
-		
+	*/	
 		
 	//Ora provo ad associare dei pesi agli archi. Devo definire la enum all'inizio.
 	std::cout << endl;
@@ -140,14 +143,19 @@ int main(){
 	add_edge(2,3,Edge_weight2(10),G2);
 	add_edge(0,3,Edge_weight2(50),G2);
 	std::cout << "Dovrei aver inserito gli archi con i loro pesi. Controlliamo:" << endl;
+	print_edge_properties(G,Weights);
+	
 	using edge2_iter_type = typename graph_traits<Graph2>::edge_iterator;
 	std::pair<edge2_iter_type, edge2_iter_type> e2_iterator = edges(G2);
+	/*
 	for( ; e2_iterator.first != e2_iterator.second; e2_iterator.first++){
 		graph_traits<Graph2>::vertex_descriptor s = source(*e2_iterator.first, G2);
 		graph_traits<Graph2>::vertex_descriptor t = target(*e2_iterator.first, G2);
 		std::cout << "Il peso dell'arco da " << get(name, s) << " a " << get(name, t) << " è: " << get(Weights, *e2_iterator.first) << endl;
 		}
 	std::cout << "Benissimo! Fatto." << endl;
+	
+	*/
 	
 	std::cout << endl << "Ora proviamo a cambiare il valore della proprietà di un arco con put. (il problema è: qual è la chiave?)" << endl;
 	put(Weights, test_edge, 100);
