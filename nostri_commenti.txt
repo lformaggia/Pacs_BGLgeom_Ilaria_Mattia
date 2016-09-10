@@ -1,0 +1,6 @@
+- READ_ORIGINAL_FILE.CPP rivedere strutture dati se sono corrette
+			 gestire errori e capire quanto dobbiamo garantire che il ns controllo sia robusto (trade-off tra controllo ed efficienza)
+			 aggiungere l'inserimento delle proprietà di vertici ed edges nelle adeguate strutture predisposte
+- MAKEFILE da sistemare con wildcards e simili per cominciare ad averlo ordinato e completo
+	   aggiungere comandi ALL, CLEAN, DISTCLEAN
+	   chiedere a Mattia cosa è BGLInc così la aggiungo anche io
