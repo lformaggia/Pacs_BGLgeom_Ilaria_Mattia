@@ -22,7 +22,7 @@ class point {
 				pos[2] = z;
 			if(dim == 2 && z != 0)
 				std::cout << "Warning: third coordinate not used" << std::endl;
-			std::cout << "Normal constructor used" << std::endl;
+
 		};
 		
 		//!Constructor with array: (dovrebbe essere in realtà il copy constructor, quindi possiamo mettere default)
@@ -34,8 +34,13 @@ class point {
 		
 		//!Const copy constructor:
 		
-		//!Get coordinates:
-		Storage_t 
+		//!Printing method:
+		void print(){
+			std::cout << "this point is: " << pos[0] << " " << pos[1];
+			if(dim == 3)
+				std::cout << " " << pos[2];
+			std::cout << std::endl; 
+		};
 		
 };
 
