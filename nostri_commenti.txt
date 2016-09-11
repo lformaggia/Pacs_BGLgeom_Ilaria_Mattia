@@ -1,6 +1,17 @@
 - READ_ORIGINAL_FILE.CPP rivedere strutture dati se sono corrette
 			 gestire errori e capire quanto dobbiamo garantire che il ns controllo sia robusto (trade-off tra controllo ed efficienza)
 			 aggiungere l'inserimento delle proprietà di vertici ed edges nelle adeguate strutture predisposte
-- MAKEFILE da sistemare con wildcards e simili per cominciare ad averlo ordinato e completo
+
+- MAKEFILE da sistemare con wildcards e simili per cominciare ad averlo ordinato e completo --->
+			---> il Makefile è da rifare da capo. In Makefile.inc ho cominciato a mettere un po' di valore delle varie variabili.
 	   aggiungere comandi ALL, CLEAN, DISTCLEAN
-	   chiedere a Mattia cosa è BGLInc così la aggiungo anche io
+	   chiedere a Mattia cosa è BGLInc così la aggiungo anche io --->
+	   	---> mkBGLInc è la variabile globale dove ho definito il path alla cartella dove ho io la BGL.
+	   	
+- GENERIC_POINT.HPP : 
+		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti. 
+		Copy constructor non può essere default
+		Mancano metodi .x() .y() .z() per avere leggibili le coordinate e gli stream operator.
+		
+	   
+
