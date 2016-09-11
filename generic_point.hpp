@@ -19,17 +19,25 @@ class point {
 		std::array<Storage_t, dim> coord;
 	
 	public:
+		//! Default constructor:
+		point(){
+			for(std::size_t i = 0; i < dim; i++){
+				coord[i] = static_cast<Storage_t>(0);
+			}
+			std::cout << "I'm using default constructor" << std::endl;
+		};
+	
 		//! Default constructor for a 1D point:
-		point<1, Storage_t>(const Storage_t& x = 0) : coord{{x}} {};
+		point(const Storage_t& x ) : coord{{x}} { std::cout << "1D constructor" << std::endl;};
 		
 		//! Default constructor for a 2D point:
-		point<2, Storage_t>(const Storage_t& x = 0, const Storage_t& y = 0) : coord{{x,y}} {};
+		point(const Storage_t& x , const Storage_t& y ) : coord{{x,y}} {std::cout << "2D constructor" << std::endl;};
 		
 		//! Default constructor for a 3D point:
-		point<3, Storage_t>(const Storage_t& x = 0, , const Storage_t& y = 0, const Storage_t& z = 0) : coord{{x,y,z}} {};
+		point(const Storage_t& x , const Storage_t& y , const Storage_t& z ) : coord{{x,y,z}} {std::cout << "3D constructor" << std::endl;};
 		
 		//! Copy constructor:
-		point(const std::array<Storage_t, dim>& _coord) = default;
+		//point(const std::array<Storage_t, dim>& _coord) = default;
 		
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
@@ -44,5 +52,14 @@ class point {
 		};
 		
 };
+/*
+template <typename Storage_t = double>
+point<1, Storage_t>::point(const Storage_t& x = 0) : coord{{x}} {};
 
+template <typename Storage_t = double>
+point<2, Storage_t>::point(const Storage_t& x = 0, const Storage_t& y = 0) : coord{{x,y}} {};
+
+template <typename Storage_t = double>
+point<3, Storage_t>::point(const Storage_t& x = 0, , const Storage_t& y = 0, const Storage_t& z = 0) : coord{{x,y,z}} {};
+*/
 #endif // #ifnedf HH_GENERIC_POINT_HH
