@@ -1,7 +1,7 @@
 SRCS=$(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 HEADERS = $(wildcard *.hpp)
-CPPFLAGS ?= -I. # -I bgl
+CPPFLAGS ?= -I. -I$(mkBGLInc)
 LDFLAGS ?= 
 LIBS = 
 exe_sources=$(filter main%.cpp,$(SRCS))
@@ -29,4 +29,4 @@ clean :
 	$(RM) $(OBJS)
 
 distclean : clean
-	$(RM) fem1d
+	$(RM) 
