@@ -9,9 +9,8 @@
 	   	---> mkBGLInc è la variabile globale dove ho definito il path alla cartella dove ho io la BGL.
 	   	
 - GENERIC_POINT.HPP : 
-		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti. 
-		Copy constructor non può essere default
-		Mancano metodi .x() .y() .z() per avere leggibili le coordinate e gli stream operator.
-		
+		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti.
+		Mancano gli stream operator.
+		Manca controllo per numero sbagliato di argomenti anche nei metodi set.
 	   
 
