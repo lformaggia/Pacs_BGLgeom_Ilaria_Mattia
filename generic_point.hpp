@@ -42,6 +42,40 @@ class point {
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
 		
+		//! Getting the first coordinate:
+		Storage_t x() const { return coord[0]; };
+		
+		//! Getting the second coordinate:
+		Storage_t y() const { return coord[1]; };
+		
+		//! Getting the third coordinate:
+		Storage_t z() const { return coord[2]; };
+		
+		//Per tutti i metodi set manca direi un controllo sul numero di argomenti in ingresso e la dimensione del punto.
+		
+		//! Setting new coordinates for an already existing 1D point:
+		void set(Storage_t const& x){
+			coord[0] = x;
+		};
+		
+		//! Setting new coordinates for an already existing 2D point:
+		void set(Storage_t const& x, Storage_t const& y){
+			coord[0] = x;
+			coord[1] = y;
+		};
+		
+		//!Setting new coordinates for an already existing 3D point:
+		void set(Storage_t const& x, Storage_t const& y, Storage_t const& z){
+			coord[0] = x;
+			coord[1] = y;
+			coord[2] = z;
+		};
+		
+		//! Setting new coordinates for an already existing nD point:
+		void set(std::array<Storage_t, dim> const& ppoint){
+			for(std::size_t i = 0; i < dim; i++)
+				coord[i] = ppoint[i];
+		};
 		
 		//!Printing method:
 		void print(){
