@@ -1,7 +1,32 @@
+SRCS=$(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+HEADERS = $(wildcard *.hpp)
+CPPFLAGS ?= -I. -I$(mkBGLInc)
+LDFLAGS ?= 
+LIBS = 
+exe_sources=$(filter main%.cpp,$(SRCS))
+EXEC=$(exe_sources:.cpp=)
+
 -include Makefile.inc
 
-prova: prova1.o
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS)  prova1.o -o prova
+# $(EXEC) : $(OBJS)
+#	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
+
+# $(OBJS) : $(SRCS) $(HEADERS)
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 	
-prova1.o: prova1.cpp prova_output.h
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNS) -c prova1.cpp
+read_original_format : read_original_format.o
+	$(CXX) $(LDFLAGS) read_original_format.o -o $@ $(LIBS)
+read_original_format.o : read_original_format.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	
+doc:
+	doxygen $(DOXYFILE)
+
+.PHONY: clean distclean
+
+clean :
+	$(RM) $(OBJS)
+
+distclean : clean
+	$(RM) 
