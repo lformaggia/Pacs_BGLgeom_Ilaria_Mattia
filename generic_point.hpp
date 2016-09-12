@@ -37,7 +37,10 @@ class point {
 		point(const Storage_t& x , const Storage_t& y , const Storage_t& z ) : coord{{x,y,z}} {std::cout << "3D constructor" << std::endl;};
 		
 		//! Copy constructor:
-		//point(const std::array<Storage_t, dim>& _coord) = default;
+		point(point<dim, Storage_t> const& _point) = default;/*{
+			for(std::size_t i = 0; i < dim; i++)
+				coord[i] = _coord[i];
+		};*/S
 		
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
