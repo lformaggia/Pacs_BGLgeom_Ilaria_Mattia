@@ -13,4 +13,5 @@
 		Mancano gli stream operator.
 		Manca controllo per numero sbagliato di argomenti anche nei metodi set.
 	   
-
+-CONSTRUCTOR DI ADJACENCY_LIST: 
+		Problema con l'EdgePropertyIterator, che sa che non c'è ma lo vede lo stesso e lo dereferenzia, ma ovviamente non c'è niente da dereferenziare e quindi sbarella.
