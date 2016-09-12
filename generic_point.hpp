@@ -12,6 +12,7 @@
 #include<array>
 #include<iostream>
 #include<initializer_list>
+#include<type_traits>
 
 //! Class template for storing the vertex coordition in two or three dimentional space.
 
@@ -31,6 +32,7 @@ class point {
 		
 		point(std::initializer_list<Storage_t> args){  //! this method allows a generic number of input parameters
 			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
+			//! manca eventuale gestione degli errori da parte dell'utente
 			int i=0;
 			for(init_list_it it = args.begin(); it != args.end(); ++it){
 				coord[i] = *it;
@@ -39,15 +41,6 @@ class point {
 				
 			
 		};
-	
-		//! Default constructor for a 1D point:
-		// point(const Storage_t& x ) : coord{{x}} { std::cout << "1D constructor" << std::endl;};
-		
-		//! Default constructor for a 2D point:
-		// point(const Storage_t& x , const Storage_t& y ) : coord{{x,y}} {std::cout << "2D constructor" << std::endl;};
-		
-		//! Default constructor for a 3D point:
-		// point(const Storage_t& x , const Storage_t& y , const Storage_t& z ) : coord{{x,y,z}} {std::cout << "3D constructor" << std::endl;};
 		
 		//! Copy constructor:
 		//point(const std::array<Storage_t, dim>& _coord) = default;
@@ -55,28 +48,17 @@ class point {
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
 		
-		
-		//!Printing method:
-		void print(){
-			std::cout << "this point is: (";
-			for(int i=0; i < dim; ++i){
-				std::cout << coord[i] << " "; 
-			}
-			std::cout << ")" << std::endl;
-			
-		};
-		
-		void print() const {
-			std::cout << "this point is: " << coord[0] << " " << coord[1];
-			if(dim == 3)
-				std::cout << " " << coord[2];
-			std::cout << std::endl; 
-		};
-		
 		//! operator << overloading
 		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P) {
 			for(int i=0; i < dim; ++i){
 				std::cout << P.coord[i] << " "; 
+			}
+		}
+		
+		//! operator >> overloading
+		friend std::istream & operator >> (std::istream & in, point<dim,Storage_t> & P){
+			for (int i=0; i < dim; i++){
+				in >> P.coord[i];
 			}
 		}
 		

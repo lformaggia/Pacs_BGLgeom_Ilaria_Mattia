@@ -13,5 +13,11 @@
 		Copy constructor non può essere default
 		Mancano metodi .x() .y() .z() per avere leggibili le coordinate e gli stream operator.
 		
+- DOMANDE PER PROF FORMAGGIA
+	input file?
+	gestione errori utente
+	
+	ci iscriviamo all'appello di settembre?
+		
 	   
 
