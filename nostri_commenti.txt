@@ -1,6 +1,6 @@
 - READ_ORIGINAL_FILE.CPP rivedere strutture dati se sono corrette
 			 gestire errori e capire quanto dobbiamo garantire che il ns controllo sia robusto (trade-off tra controllo ed efficienza)
-			 aggiungere l'inserimento delle proprietà di vertici ed edges nelle adeguate strutture predisposte
+			 0 è in questo caso vertice pendente: rimuoverlo dopo controllo?
 
 - MAKEFILE da sistemare con wildcards e simili per cominciare ad averlo ordinato e completo --->
 			---> il Makefile è da rifare da capo. In Makefile.inc ho cominciato a mettere un po' di valore delle varie variabili.
@@ -9,9 +9,15 @@
 	   	---> mkBGLInc è la variabile globale dove ho definito il path alla cartella dove ho io la BGL.
 	   	
 - GENERIC_POINT.HPP : 
-		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti.
-		Mancano gli stream operator.
-		Manca controllo per numero sbagliato di argomenti anche nei metodi set.
+		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti. 
+		Copy constructor non può essere default
+		Mancano metodi .x() .y() .z() per avere leggibili le coordinate e gli stream operator.
+		
+- DOMANDE PER PROF FORMAGGIA
+	input file?
+	gestione errori utente
+	
+	ci iscriviamo all'appello di settembre?
+		
 	   
--CONSTRUCTOR DI ADJACENCY_LIST: 
-		Problema con l'EdgePropertyIterator, che sa che non c'è ma lo vede lo stesso e lo dereferenzia, ma ovviamente non c'è niente da dereferenziare e quindi sbarella.
+

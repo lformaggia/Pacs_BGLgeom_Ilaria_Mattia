@@ -1,9 +1,9 @@
 #ifndef HH_EDGE_PROPERTY_HH
 #define HH_EDGE_PROPERTY_HH
 
-struct edge_prop{
+struct edge_prop_t{
 	double diam;
-	double lenght;
+	double length;
 };
 
 

@@ -17,7 +17,7 @@ EXEC=$(exe_sources:.cpp=)
 	
 read_original_format : read_original_format.o
 	$(CXX) $(LDFLAGS) read_original_format.o -o $@ $(LIBS)
-read_original_format.o : read_original_format.cpp
+read_original_format.o : read_original_format.cpp 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 	
 doc:
