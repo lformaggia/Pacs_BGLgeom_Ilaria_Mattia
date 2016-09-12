@@ -14,6 +14,7 @@
 #include<initializer_list>
 
 //! Class template for storing the vertex coordition in two or three dimentional space.
+
 template <int dim, typename Storage_t = double>
 class point {
 	private:
@@ -28,9 +29,12 @@ class point {
 			std::cout << "I'm using default constructor" << std::endl;
 		};
 		
-		point(std::initializer_list<Storage_t> args){
-			for(int i=0 , std::initializer_list<Storage_t>::iterator it = args.begin(); it != args.end(); ++it, ++i){
+		point(std::initializer_list<Storage_t> args){  //! this method allows a generic number of input parameters
+			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
+			int i=0;
+			for(init_list_it it = args.begin(); it != args.end(); ++it){
 				coord[i] = *it;
+				++i;
 			}
 				
 			
@@ -54,13 +58,37 @@ class point {
 		
 		//!Printing method:
 		void print(){
+			std::cout << "this point is: (";
+			for(int i=0; i < dim; ++i){
+				std::cout << coord[i] << " "; 
+			}
+			std::cout << ")" << std::endl;
+			
+		};
+		
+		void print() const {
 			std::cout << "this point is: " << coord[0] << " " << coord[1];
 			if(dim == 3)
 				std::cout << " " << coord[2];
 			std::cout << std::endl; 
 		};
 		
+		//! operator << overloading
+		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P) {
+			for(int i=0; i < dim; ++i){
+				std::cout << P.coord[i] << " "; 
+			}
+		}
+		
 };
+
+/*template<int dim, typename Storage_t>
+std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P){
+			for(int i=0; i < dim; ++i){
+				std::cout << P.coord[i] << " "; 
+			}
+		} */
+
 /*
 template <typename Storage_t = double>
 point<1, Storage_t>::point(const Storage_t& x = 0) : coord{{x}} {};
