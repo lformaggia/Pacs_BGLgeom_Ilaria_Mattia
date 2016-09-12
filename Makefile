@@ -1,7 +1,7 @@
 SRCS=$(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 HEADERS = $(wildcard *.hpp)
-CPPFLAGS ?= -I. # -I bgl
+CPPFLAGS ?= -I. -I$(mkBGLInc)
 LDFLAGS ?= 
 LIBS = 
 exe_sources=$(filter main%.cpp,$(SRCS))
@@ -18,6 +18,11 @@ EXEC=$(exe_sources:.cpp=)
 read_original_format : read_original_format.o
 	$(CXX) $(LDFLAGS) read_original_format.o -o $@ $(LIBS)
 read_original_format.o : read_original_format.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	
+generic_point: generic_point.o
+	$(CXX) $(LDFLAGS) generic_point.o -o $@ $(LIBS)
+generic_point.o : generic_point.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 	
 doc:

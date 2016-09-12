@@ -11,6 +11,7 @@
 
 #include<array>
 #include<iostream>
+#include<initializer_list>
 
 //! Class template for storing the vertex coordition in two or three dimentional space.
 template <int dim, typename Storage_t = double>
@@ -26,15 +27,23 @@ class point {
 			}
 			std::cout << "I'm using default constructor" << std::endl;
 		};
+		
+		point(std::initializer_list<Storage_t> args){
+			for(int i=0 , std::initializer_list<Storage_t>::iterator it = args.begin(); it != args.end(); ++it, ++i){
+				coord[i] = *it;
+			}
+				
+			
+		};
 	
 		//! Default constructor for a 1D point:
-		point(const Storage_t& x ) : coord{{x}} { std::cout << "1D constructor" << std::endl;};
+		// point(const Storage_t& x ) : coord{{x}} { std::cout << "1D constructor" << std::endl;};
 		
 		//! Default constructor for a 2D point:
-		point(const Storage_t& x , const Storage_t& y ) : coord{{x,y}} {std::cout << "2D constructor" << std::endl;};
+		// point(const Storage_t& x , const Storage_t& y ) : coord{{x,y}} {std::cout << "2D constructor" << std::endl;};
 		
 		//! Default constructor for a 3D point:
-		point(const Storage_t& x , const Storage_t& y , const Storage_t& z ) : coord{{x,y,z}} {std::cout << "3D constructor" << std::endl;};
+		// point(const Storage_t& x , const Storage_t& y , const Storage_t& z ) : coord{{x,y,z}} {std::cout << "3D constructor" << std::endl;};
 		
 		//! Copy constructor:
 		//point(const std::array<Storage_t, dim>& _coord) = default;
