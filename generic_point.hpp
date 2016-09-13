@@ -43,17 +43,57 @@ class point {
 		};
 		
 		//! Copy constructor:
-		//point(const std::array<Storage_t, dim>& _coord) = default;
+		point(point<dim, Storage_t> const& _point) = default;/*{
+			for(std::size_t i = 0; i < dim; i++)
+				coord[i] = _coord[i];
+		};*/
 		
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
 		
+
 		//! operator << overloading
 		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P) {
 			for(int i=0; i < dim; ++i){
 				std::cout << P.coord[i] << " "; 
 			}
 		}
+
+		//! Getting the first coordinate:
+		Storage_t x() const { return coord[0]; };
+		
+		//! Getting the second coordinate:
+		Storage_t y() const { return coord[1]; };
+		
+		//! Getting the third coordinate:
+		Storage_t z() const { return coord[2]; };
+		
+		//Per tutti i metodi set manca direi un controllo sul numero di argomenti in ingresso e la dimensione del punto.
+		
+		//! Setting new coordinates for an already existing 1D point:
+		void set(Storage_t const& x){
+			coord[0] = x;
+		};
+		
+		//! Setting new coordinates for an already existing 2D point:
+		void set(Storage_t const& x, Storage_t const& y){
+			coord[0] = x;
+			coord[1] = y;
+		};
+		
+		//!Setting new coordinates for an already existing 3D point:
+		void set(Storage_t const& x, Storage_t const& y, Storage_t const& z){
+			coord[0] = x;
+			coord[1] = y;
+			coord[2] = z;
+		};
+		
+		//! Setting new coordinates for an already existing nD point:
+		void set(std::array<Storage_t, dim> const& ppoint){
+			for(std::size_t i = 0; i < dim; i++)
+				coord[i] = ppoint[i];
+		};
+
 		
 		//! operator >> overloading
 		friend std::istream & operator >> (std::istream & in, point<dim,Storage_t> & P){
