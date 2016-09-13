@@ -77,47 +77,16 @@ class point {
 		
 		//Per tutti i metodi set manca direi un controllo sul numero di argomenti in ingresso e la dimensione del punto.
 		
-		//! Setting new coordinates for an already existing 1D point:
-		void set(Storage_t const& x){
-			coord[0] = x;
-		};
-		
-		//! Setting new coordinates for an already existing 2D point:
-		void set(Storage_t const& x, Storage_t const& y){
-			coord[0] = x;
-			coord[1] = y;
-		};
-		
-		//!Setting new coordinates for an already existing 3D point:
-		void set(Storage_t const& x, Storage_t const& y, Storage_t const& z){
-			coord[0] = x;
-			coord[1] = y;
-			coord[2] = z;
-		};
-		
-		//! Setting new coordinates for an already existing nD point:
-		void set(std::array<Storage_t, dim> const& ppoint){
-			for(std::size_t i = 0; i < dim; i++)
-				coord[i] = ppoint[i];
+		void set(std::initializer_list<Storage_t> args){
+			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
+			//! manca eventuale gestione degli errori da parte dell'utente
+			int i=0;
+			for(init_list_it it = args.begin(); it != args.end(); ++it){
+				coord[i] = *it;
+				++i;
+			}			
 		};
 		
 };
 
-/*template<int dim, typename Storage_t>
-std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P){
-			for(int i=0; i < dim; ++i){
-				std::cout << P.coord[i] << " "; 
-			}
-		} */
-
-/*
-template <typename Storage_t = double>
-point<1, Storage_t>::point(const Storage_t& x = 0) : coord{{x}} {};
-
-template <typename Storage_t = double>
-point<2, Storage_t>::point(const Storage_t& x = 0, const Storage_t& y = 0) : coord{{x,y}} {};
-
-template <typename Storage_t = double>
-point<3, Storage_t>::point(const Storage_t& x = 0, , const Storage_t& y = 0, const Storage_t& z = 0) : coord{{x,y,z}} {};
-*/
 #endif // #ifnedf HH_GENERIC_POINT_HH
