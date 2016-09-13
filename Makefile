@@ -14,6 +14,11 @@ EXEC=$(exe_sources:.cpp=)
 
 # $(OBJS) : $(SRCS) $(HEADERS)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
+
+main: main.o
+	$(CXX) $(LDFLAGS) main.o -o $@ $(LIBS)
+main.o: main.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 	
 read_original_format : read_original_format.o
 	$(CXX) $(LDFLAGS) read_original_format.o -o $@ $(LIBS)
@@ -34,4 +39,5 @@ clean :
 	$(RM) $(OBJS)
 
 distclean : clean
-	$(RM) 
+	$(RM) $(OBJS)
+	$(RM) $(EXEC)

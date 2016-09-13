@@ -3,8 +3,19 @@
 
 #include<tuple>
 #include<boost/graph/adjacency_list.hpp>
-// #include<boost/graph/graph_traits.hpp>
 #include"edge_property.hpp"
+#include<string>
+#include<iostream>
+#include<sstream>
+#include<string>
+#include<fstream>
+#include<vector>
+#include<set>
+#include<utility>
+
+#include"generic_point.hpp"
+#include"edge_property.hpp"
+#include"io_graph.hpp"
 
 	template<typename Graph, typename Point>
 	void initialize_graph(const int src, const int tgt, Graph & G, double diam, double length, Point const & SRC, Point const & TGT){
@@ -36,5 +47,51 @@
 			{
 				G[tgt]=TGT;
 			}
+	}
+	
+		
+	template<typename Graph, typename Point>
+	void read_zunino_old_format(Graph & G, std::string file_name){ 
+
+	  /* I want to read from a file where data 
+	     is written as
+	     
+	     line1: description
+	     line2: description
+	     from line 3: no - source_v - target_v - diameter - length - source_coord - target_coord
+	  */
+	  std::ifstream file(file_name.c_str());
+	  
+	  Point SRC,TGT; //! they will store vertex coordinates
+	  
+	  int edge_num, src, tgt; // they will read the first 3 numbers of each line 
+	  double diam, length; // they will read the remaining 8
+
+	  // ignore the first two lines of the file
+	  std::string dummyLine;
+	  std::getline(file, dummyLine);
+	  std::getline(file, dummyLine);
+	  
+	  // Until I reach end of file
+	  while (!file.fail() && !file.eof()){
+	    std::string s;
+	    std::getline(file,s); // read the the whole line
+	    if(s.empty()) continue; // empty line
+	    std::istringstream tmp(s); // build an input sstream.
+	    tmp>>edge_num>>src>>tgt>>diam>>length>>SRC>>TGT; // read from the input stream
+	    if(!tmp.fail()){
+	    	//! initialize_graph
+	    	initialize_graph<Graph, point<3> >(src, tgt, G, diam, length, SRC, TGT);
+	    }
+	  }
+
+	  typename boost::graph_traits<Graph>::vertex_iterator vb, ve;
+	  for(tie(vb,ve) = vertices(G); vb != ve; ++vb)
+	  	std::cout << *vb << std::endl;
+	  
+	  //Plot degli archi:
+	  typename boost::graph_traits<Graph>::edge_iterator ebegin, eend;
+	  for( tie(ebegin, eend) = edges(G); ebegin != eend; ebegin++)
+	  	std::cout << *ebegin << std::endl;
 	}
 #endif
