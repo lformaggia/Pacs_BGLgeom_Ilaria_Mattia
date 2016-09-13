@@ -24,6 +24,7 @@ void initialize_graph(const int src, const int tgt, Graph & G, double diam, doub
 	
 	std::set<int> vertex_set; 		// it's a set in order to avoid multiple additions of the same vertex
 	bool inserted; 				//if FALSE the vertex I'm trying to add was already in the set 
+
 	std::pair<std::set<int>::iterator, bool> set_inserter;
 	std::set<int>::iterator it;
 	
@@ -32,7 +33,9 @@ void initialize_graph(const int src, const int tgt, Graph & G, double diam, doub
 	
 	//! create edge (src, tgt)
 	std::tie(e, edge_inserted) = boost::add_edge(src, tgt, G);
+	
 	G[e].capacity = diam;
+
 	G[e].length = length;
 	
 	// Inserting property of the source vertex, if the vertex wasn't inserted before
@@ -59,7 +62,8 @@ void read_zunino_old_format(Graph & G, std::string file_name){
   */
   
   std::ifstream file(file_name.c_str());
-  
+
+
   Point SRC,TGT; 				//! they will store vertex coordinates	  
   int edge_num, src, tgt; 			// they will read the first 3 numbers of each line 
   double diam, length; 				// they will read the remaining 8
