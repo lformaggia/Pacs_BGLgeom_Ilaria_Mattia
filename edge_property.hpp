@@ -5,9 +5,6 @@ struct edge_prop_t{
 	double diam;
 <<<<<<< HEAD
 	double length;
-=======
-	double lenght;
->>>>>>> point_wip
 };
 
 

@@ -2,7 +2,6 @@
 #include <iostream>
 
 int main(){
-<<<<<<< HEAD
 	point<2,int> punto1(0,2);
 	std::cout << "ok" << std::endl;
 	point<3,double> punto4;
@@ -26,7 +25,7 @@ int main(){
 	std::array<double,3> aaa = {{7,8,9}};
 	punto4.set(aaa);
 	punto4.print();
-=======
+
 	point<2,int> punto1{0,2};
 	std::cout << "ok" << std::endl;
 	point<3,double> punto4;
@@ -61,7 +60,7 @@ int main(){
 	//std::array<double,3> aaa = {{7,8,9}};
 	//punto4.set(aaa);
 	//punto4.print();
->>>>>>> point_wip
+
 	
 	return 0;
 };

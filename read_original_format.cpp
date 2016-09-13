@@ -7,13 +7,10 @@
 #include<set>
 #include<utility>
 #include<boost/graph/adjacency_list.hpp>
-<<<<<<< HEAD
 
 #include"generic_point.hpp"
 #include"edge_property.hpp"
 
-=======
->>>>>>> point_wip
 /*!
   @brief Reading from file with list of vertex_set and edges and associated properties
   
@@ -70,11 +67,8 @@ int main()
     	G[e].diam = diam;
     	G[e].length = length;
 	
-<<<<<<< HEAD
 	set_inserter = vertex_set.insert(src);
-=======
-	set_inserter = vertices.insert(src);
->>>>>>> point_wip
+
 	if(set_inserter.second)
 		{
 		 	G[src]=SRC;
@@ -86,7 +80,6 @@ int main()
 		}
     }
   }
-<<<<<<< HEAD
 
   graph_traits<Graph>::vertex_iterator vb, ve;
   for(tie(vb,ve) = vertices(G); vb != ve; ++vb)
@@ -99,11 +92,9 @@ int main()
   //and "<<edges.size()<<" edges from file rattm93a.txt:"<<std::endl;
   //std::cout<<"vertex_set:"<<std::endl;
   //for (it = vertex_set.begin(); it != vertex_set.end(); ++it) 
-=======
   //std::cout<<"I've read "<<vertices.size()<<" vertices and "<<edges.size()<<" edges from file rattm93a.txt:"<<std::endl;
   //std::cout<<"Vertices:"<<std::endl;
   //for (it = vertices.begin(); it != vertices.end(); ++it) 
->>>>>>> point_wip
   //	std::cout<<*it<<std::endl;
   //for (unsigned int i=0; i<edges.size(); ++i)
   //	std::cout<<"("<<edges[i].first<<","<<edges[i].second<<")"<<std::endl;

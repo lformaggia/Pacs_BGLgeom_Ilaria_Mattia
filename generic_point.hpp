@@ -51,17 +51,13 @@ class point {
 		//! Assignement operator:
 		point<dim, Storage_t>& operator=(const point<dim, Storage_t>& _point) = default;
 		
-<<<<<<< HEAD
-=======
 
->>>>>>> point_wip
 		//! operator << overloading
 		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const & P) {
 			for(int i=0; i < dim; ++i){
 				std::cout << P.coord[i] << " "; 
 			}
 		}
-<<<<<<< HEAD
 		
 		//! operator >> overloading
 		friend std::istream & operator >> (std::istream & in, point<dim,Storage_t> & P){
@@ -69,7 +65,6 @@ class point {
 				in >> P.coord[i];
 			}
 		}
-=======
 
 		//! Getting the first coordinate:
 		Storage_t x() const { return coord[0]; };
@@ -86,7 +81,6 @@ class point {
 		void set(Storage_t const& x){
 			coord[0] = x;
 		};
->>>>>>> point_wip
 		
 		//! Setting new coordinates for an already existing 2D point:
 		void set(Storage_t const& x, Storage_t const& y){
@@ -106,14 +100,6 @@ class point {
 			for(std::size_t i = 0; i < dim; i++)
 				coord[i] = ppoint[i];
 		};
-
-		
-		//! operator >> overloading
-		friend std::istream & operator >> (std::istream & in, point<dim,Storage_t> & P){
-			for (int i=0; i < dim; i++){
-				in >> P.coord[i];
-			}
-		}
 		
 };
 
