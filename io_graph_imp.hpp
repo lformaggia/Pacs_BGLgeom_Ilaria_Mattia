@@ -17,6 +17,8 @@
 #include"edge_property.hpp"
 #include"io_graph.hpp"
 
+#include"edge_property_max_flow.hpp"
+
 	template<typename Graph, typename Point>
 	void initialize_graph(const int src, const int tgt, Graph & G, double diam, double length, Point const & SRC, Point const & TGT){
 		
@@ -33,7 +35,7 @@
 		
     		//! create edge (src, tgt)
     		std::tie(e, edge_inserted) = boost::add_edge(src, tgt, G);
-    		G[e].diam = diam;
+    		G[e].capacity = diam;
     		G[e].length = length;
 	
 		set_inserter = vertex_set.insert(src);

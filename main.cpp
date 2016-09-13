@@ -3,6 +3,8 @@
 #include"io_graph.hpp"
 #include"generic_point.hpp"
 
+#include"edge_property_max_flow.hpp"
+
 using namespace boost;
 
 int main(){

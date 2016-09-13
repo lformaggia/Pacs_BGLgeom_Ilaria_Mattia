@@ -2,7 +2,7 @@
 #define HH_EDGE_PROPERTY_HH
 
 struct edge_prop_t{
-	double diam;
+	double capacity;
 	double length;
 };
 
