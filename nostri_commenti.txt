@@ -5,19 +5,18 @@
 - MAKEFILE da sistemare con wildcards e simili per cominciare ad averlo ordinato e completo --->
 			---> il Makefile è da rifare da capo. In Makefile.inc ho cominciato a mettere un po' di valore delle varie variabili.
 	   aggiungere comandi ALL, CLEAN, DISTCLEAN
-	   chiedere a Mattia cosa è BGLInc così la aggiungo anche io --->
-	   	---> mkBGLInc è la variabile globale dove ho definito il path alla cartella dove ho io la BGL.
+
 	   	
 - GENERIC_POINT.HPP : 
-		Un po' di casino coi constructor. Vanno messe exception per numero sbagliato di argomenti. 
-		Copy constructor non può essere default
-		Mancano metodi .x() .y() .z() per avere leggibili le coordinate e gli stream operator.
+		Vanno messe exception per numero sbagliato di argomenti. 
 		
 - DOMANDE PER PROF FORMAGGIA
 	input file?
 	gestione errori utente
 	
 	ci iscriviamo all'appello di settembre?
+	
+	gestione del programma generale: un .cpp per ogni funzione oppure un .cpp per un insieme di funzioni con stesso task?
 		
 	   
 
