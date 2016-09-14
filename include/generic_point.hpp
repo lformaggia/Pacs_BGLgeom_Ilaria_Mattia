@@ -72,10 +72,10 @@ class point {
 		Storage_t z() const { return coord[2]; };
 		
 		//! Gets the i-th coordinate:
-		Sotrage_t get(std::size_t i) { return coord[i]; }
+		Storage_t get(std::size_t i) const { return coord[i]; }
 		
 		//! Gets the dimension of the point:
-		std::size_t get_dim() {return coord.size(); };
+		std::size_t get_dim() const {return coord.size(); };
 		
 		//! Set method to assign coordinates to an already existing point. It can take an arbitrary number of coordinates thanks to initializer_list
 		void set(std::initializer_list<Storage_t> args){

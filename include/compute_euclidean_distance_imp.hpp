@@ -24,7 +24,7 @@ double compute_euclidean_distance(typename boost::graph_traits<Graph>::vertex_de
 				  				  typename boost::graph_traits<Graph>::vertex_descriptor b,
 				  				  Graph const& G){
 				  				  
-	unsigned int dim = G[a].get_dim(); // dim is the dimension of the points we are considering
+	const unsigned int dim = G[a].get_dim(); // dim is the dimension of the points we are considering
 	double distance = 0.0; //it's the return value and it will contain the euclidean distance
 	for(int i = 0; i < dim; ++i){
 		distance += (G[a].get(i) - G[b].get(i)) * (G[a].get(i) - G[b].get(i));
