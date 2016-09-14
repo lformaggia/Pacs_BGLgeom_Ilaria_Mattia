@@ -6,6 +6,8 @@
 			---> il Makefile è da rifare da capo. In Makefile.inc ho cominciato a mettere un po' di valore delle varie variabili.
 	   aggiungere comandi ALL, CLEAN, DISTCLEAN
 
+-SCELTE GENERALI: vecS può invalidare i vertex_descriptor se per caso si eliminano vertici, perché shifta ogni volta tutto in giù di uno gli indici
+					con listS non si dovrebbe avere questo problema.
 	   	
 - GENERIC_POINT.HPP : 
 		Vanno messe exception per numero sbagliato di argomenti. 
