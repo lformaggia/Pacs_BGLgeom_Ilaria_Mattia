@@ -18,11 +18,11 @@
 	
 	\detail This function find the maximum flow that can flow from node s to node t.
 */
-template<typename Graph>
+template<typename Graph, typename Edge_Descriptor_g>
 double maximum_flow	(Graph const & G, 
 					typename boost::graph_traits<Graph>::vertex_descriptor s,
 					typename boost::graph_traits<Graph>::vertex_descriptor t,
-					std::vector<double> & out_residual_capacity);
+					std::map<Edge_Descriptor_g, double> & out_residual_capacity);
 
 /*!
 	\brief Helper function for maximum_flow
@@ -42,10 +42,10 @@ void build_flow_graph	(Graph const& G,
 	\detail We use a vector. Next step: using a map<Edge_descripto, residual_capacity_value>
 */
 
-template <typename Graph, typename Flow_Graph>
+template <typename Graph, typename Flow_Graph, typename Edge_Descriptor_g>
 void store_residual_capacity	(Graph const& G,
 								Flow_Graph const & FG,
-								std::vector<double> & out_residual_capacity);
+								std::map<Edge_Descriptor_g, double> & out_residual_capacity);
 
 #include "maximum_flow_imp.hpp"
 

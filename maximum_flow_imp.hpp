@@ -24,11 +24,11 @@
 	
 	\detail This function find the maximum flow that can flow from node s to node t.
 */
-template<typename Graph>
+template<typename Graph, typename Edge_Descriptor_g>
 double maximum_flow	(Graph const &G, 
 					typename boost::graph_traits<Graph>::vertex_descriptor s,
 					typename boost::graph_traits<Graph>::vertex_descriptor t,
-					std::vector<double> & out_residual_capacity){		//comunque dovrei restituire una map<Edge_desc, res_cap>
+					std::map<Edge_Descriptor_g, double> & out_residual_capacity){		//comunque dovrei restituire una map<Edge_desc, res_cap>
 	
 	//Desumiamo i vari selettori dal grafo G preesistente:
 	typedef boost::adjacency_list	<typename Graph::out_edge_list_selector,
@@ -56,8 +56,9 @@ double maximum_flow	(Graph const &G,
 					boost::get(boost::vertex_index, FG)		//quest'ultimo parametro va messo sempre!!!
 					);
 					
-	//Salviamo le capacità residuali in un vector:		
-	store_residual_capacity<Graph, Flow_Graph> (G, FG, out_residual_capacity);
+	
+			
+	store_residual_capacity<Graph, Flow_Graph, Edge_Descriptor_g> (G, FG, out_residual_capacity);
 	
 	return out_max_flow;				
 } //max_flow;
@@ -85,8 +86,11 @@ void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg
 		std::tie(e, inserted) = boost::add_edge(u, v, FG);
 		//inizializziamo insieme capacity e residual_capacity allo stesso valore. Residual_cap = cap vuol dire che non c'è flusso lì.
 		FG[e].capacity = FG[e].residual_capacity = G[*e_it].capacity;		//questa capacità è il diam che leggiamo dal file di input Zunino.
+		FG[e].original_edge = true;		// keeps track of the edges which were in the original graph
 		std::tie(rev_e, inserted) = boost::add_edge(v, u, FG);
 		FG[rev_e].capacity = FG[rev_e].residual_capacity = 0.0;		//per specifiche dell'algoritmo, vanno messe a zero
+		FG[rev_e].original_edge = false;		// this edge is added just for this algorithm
+		
 		rev_map[e] = rev_e;
 		rev_map[rev_e] = e;	
 	}
@@ -102,34 +106,31 @@ void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg
 			right original edge of G. This is because FG is a utility in order to run the 
 			push_relabel algorithm and it is destroied after exiting this function.
 */
-template <typename Graph, typename Flow_Graph>
+template <typename Graph, typename Flow_Graph, typename Edge_Descriptor_g>
 void store_residual_capacity	(Graph const& G,
 								Flow_Graph const & FG,
-								std::vector<double> & out_residual_capacity){
+								std::map<Edge_Descriptor_g, double>& out_residual_capacity){
 
 	typedef typename boost::graph_traits<Flow_Graph>::edge_iterator Edge_iter_fg;
-	typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter_g;
 	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_g;
 	typedef typename boost::graph_traits<Flow_Graph>::vertex_descriptor Vertex_fg;
 	
-	Edge_iter_g e_it_g, e_end_g;
 	Edge_iter_fg e_it_fg, e_end_fg;
-	Vertex_g u, v;
-	Vertex_fg uu, vv;
-	std::size_t i = 0;
-	for( std::tie(e_it_g, e_end_g) = edges(G); e_it_g != e_end_g; e_it_g++){
-		u = boost::source(*e_it_g, G);
-		v = boost::target(*e_it_g, G);
-		for( std::tie(e_it_fg, e_end_fg) = edges(FG); e_it_fg != e_end_fg; e_it_fg++){
-			uu = boost::source(*e_it_fg, FG);
-			vv = boost::target(*e_it_fg, FG);
-			//se origine e target sono uguali, vuol dire che è lo stesso arco.
-			if( u == uu && v == vv){
-				out_residual_capacity[i] = FG[*e_it_fg].residual_capacity;
-				i++;
-				break;
-			}
-		}	
+	Edge_Descriptor_g e_g;
+	Vertex_fg src_fg, tgt_fg;  // flow_graph vertex descriptor
+	Vertex_g src_g, tgt_g;    //graph vertex descriptor
+	
+	for( std::tie(e_it_fg, e_end_fg) = boost::edges(FG); e_it_fg != e_end_fg; e_it_fg++){
+		if(FG[*e_it_fg].original_edge){
+			src_fg = source(*e_it_fg, FG);
+			tgt_fg = target(*e_it_fg, FG);
+			
+			src_g = src_fg; // we are sure that they are the same type because we built Flow_graph with the same vec and edge containers as Graph
+			tgt_g = tgt_fg;
+			
+			e_g = boost::edge(src_g, tgt_g, G).first; 
+			out_residual_capacity[e_g] = FG[*e_it_fg].residual_capacity;
+		}
 	}
 	
 }	//store_residual_capacity

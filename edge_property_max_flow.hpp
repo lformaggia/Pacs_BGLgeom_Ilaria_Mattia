@@ -3,7 +3,8 @@
 
 struct edge_prop_max_flow_t{
 	double capacity;
-	double residual_capacity;  
+	double residual_capacity; 
+	bool original_edge; 
 };
 
 #endif 
