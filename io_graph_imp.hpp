@@ -10,13 +10,10 @@
 
 #include<tuple>
 #include<boost/graph/adjacency_list.hpp>
-#include"edge_property.hpp"
-#include<string>
 #include<iostream>
 #include<sstream>
 #include<string>
 #include<fstream>
-#include<vector>
 #include<set>
 #include<utility>
 
