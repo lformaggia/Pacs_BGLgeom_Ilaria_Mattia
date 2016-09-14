@@ -1,22 +1,34 @@
+/*!
+	\file maximum_flow.hpp
+	\author Ilaria Speranza & Mattia Tantardini
+	\date Sep 14, 2016
+	\brief Header file for managing maximum_flow algorithm from BGL
+
+	\detail	
+*/
+
 #ifndef HH_MAXIMUM_FLOW_HH
 #define HH_MAXIMUM_FLOW_HH
 
 #include <map>
 
-/*
-	create a FlowGraph, made of generic_point as vertex_property and edge_property_max_flow as edge_property
-	copy in Flow Graph (which has "bidirectional" edges) the properties of Graph and add residual_capacity and rev_graph
-	run the algorithm max_flow on the flowGraph
-	print in a file residual capacities (or how can we save this data once we delete FlowGraph????)
-	output max flow
+/*!
+	\brief It runs push_relabel_max_flow algorithm on graph G
+	
+	\detail This function find the maximum flow that can flow from node s to node t.
 */
 template<typename Graph>
 double maximum_flow	(Graph const &G, 
 					typename boost::graph_traits<Graph>::vertex_descriptor s,
 					typename boost::graph_traits<Graph>::vertex_descriptor t);
 
-
-// Funzione di help per quella sopra:
+/*!
+	\brief Helper function for maximum_flow
+	
+	\detail This function build the flow graph associated to the input graph.
+			This is because we want not to modify the original Graph passed as input in maximum_flow,
+			and because the push_relabelmax_flow algorithm requires such a Graph.
+*/
 template<typename Graph, typename Flow_Graph, typename Edge_fg>
 void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg>& rev_map);
 

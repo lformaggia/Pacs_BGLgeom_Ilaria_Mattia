@@ -1,3 +1,9 @@
+/*!	\file maximum_flow_imp.hpp
+	\author Ilaria Speranza & Mattia Tantardini
+	\date Sep 14, 2016
+	\brief Implementations of the functions defined in maximum_flow.hpp
+*/
+
 #ifndef HH_MAXIMUM_FLOW_IMP_HH
 #define HH_MAXIMUM_FLOW_IMP_HH
 
@@ -11,6 +17,15 @@
 #include "generic_point.hpp"
 #include "edge_property_max_flow.hpp"
 
+/*!
+	\fn template<typename Graph>
+		double maximum_flow	(Graph const&,
+							boost::graph_traits<Graph>::vertex_descriptor,
+							boost::graph_traits<Graph>::vertex_descriptor)
+	\param G Graph const&;
+	\param s Source vertex;
+	\param t Sink Vertex;
+*/
 
 template<typename Graph>
 double maximum_flow	(Graph const &G, 
@@ -40,8 +55,8 @@ double maximum_flow	(Graph const &G,
 					boost::get(&edge_prop_max_flow_t::capacity, FG),	
 					boost::get(&edge_prop_max_flow_t::residual_capacity, FG),
 					boost::make_assoc_property_map(rev_map),
-					boost::get(boost::vertex_index, FG)
-					);		//manca l'ultimo parametro con la map dei vertex_index, che è default
+					boost::get(boost::vertex_index, FG)		//quest'ultimo parametro va messo sempre!!!
+					);
 	
 	return out_max_flow;
 				

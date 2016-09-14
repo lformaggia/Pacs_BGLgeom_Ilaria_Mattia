@@ -1,5 +1,5 @@
-/* 
-* \file io_graph.hpp
+/*!
+* \file io_graph_imp.hpp
 * \author Ilaria Speranza & Mattia Tantardini
 * \date Sep 14, 2016
 * \brief Declaration of functions related to input and output of the graph
@@ -25,7 +25,7 @@
 #include"io_graph.hpp"
 
 
-/*
+/*!
 * \brief Inserts a new edge and the corresponding vertices (only if they aren't already in the graph).
 *
 * The funcion inserts the edge (src,tgt) with its properties, then it checks whether src and tgt are in the graph: if not 
@@ -36,7 +36,7 @@ void fill_graph(const int src, const int tgt, Graph & G, double diam, double len
 	
 	typedef typename boost::graph_traits<Graph>::edge_descriptor edge_descriptor;
 	
-	std::set<int> vertex_set; 		/**< using a set, we can easily check if a vertex has already been added */
+	std::set<int> vertex_set; 		/*< using a set, we can easily check if a vertex has already been added */
 	bool inserted; 				
 
 	std::pair<std::set<int>::iterator, bool> set_inserter;
@@ -45,7 +45,7 @@ void fill_graph(const int src, const int tgt, Graph & G, double diam, double len
 	edge_descriptor e;
 	bool edge_inserted;	
 	
-	//! create edge (src, tgt)
+	// create edge (src, tgt)
 	std::tie(e, edge_inserted) = boost::add_edge(src, tgt, G);
 	
 	G[e].capacity = diam;
@@ -65,12 +65,12 @@ void fill_graph(const int src, const int tgt, Graph & G, double diam, double len
 
 
 	
-/*
+/*!
 * \brief Reads data about the graph from the input file given by professor Zunino
 *
-* The funcitions reads from a file where data is written as
-* line1: description of file
-* line2: description of file
+* The funcitions reads from a file where data is written as: \n
+* line1: description of file \n
+* line2: description of file \n
 * from line 3: line_number - source - target - diameter - length - source_coord - target_coord 
 * 
 */		
