@@ -6,6 +6,7 @@
 #include "io_graph.hpp"
 #include "generic_point.hpp"
 #include "maximum_flow.hpp"
+#include "compute_euclidean_distance.hpp"
 
 using namespace boost;
 
@@ -17,7 +18,7 @@ int main(){
 	 typedef Traits::edge_iterator Edge_Iterator;
 	 
 	 Graph G;
-	 read_zunino_old_format<Graph, point<3>> (G , "rat98p.txt");
+	 read_zunino_old_format<Graph, point<3>> (G , "rattm93a.txt");
 	 
 	 //chiamiamo:
 	 std::map<Edge_Descriptor, double> out_residual_capacity;
@@ -34,6 +35,13 @@ int main(){
 	 	std::cout << *e_it << " " << out_residual_capacity[*e_it] << std::endl;
 	 }
 	 
+	 double d12 = compute_euclidean_distance<Graph>(1,2,G);
+	 double d45 = compute_euclidean_distance<Graph>(4,5,G);
+	 double d13 = compute_euclidean_distance<Graph>(1,3,G);
+	 
+	 std::cout << "eudlidean distance 1_2 = " << d12 << std::endl;
+	 std::cout << "eudlidean distance 4_5 = " << d45 << std::endl;
+	 std::cout << "eudlidean distance 1_3 = " << d13 << std::endl;
 	 
 	return 0;
 }
