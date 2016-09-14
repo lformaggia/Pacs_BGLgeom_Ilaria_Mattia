@@ -32,7 +32,20 @@ double maximum_flow	(Graph const & G,
 			and because the push_relabelmax_flow algorithm requires such a Graph.
 */
 template<typename Graph, typename Flow_Graph, typename Edge_fg>
-void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg>& rev_map);
+void build_flow_graph	(Graph const& G,
+						Flow_Graph & FG,
+						std::map<Edge_fg, Edge_fg>& rev_map);
+
+/*!	
+	\brief Helper function that stores residual capacity on edges after computation of max flow
+	
+	\detail We use a vector. Next step: using a map<Edge_descripto, residual_capacity_value>
+*/
+
+template <typename Graph, typename Flow_Graph>
+void store_residual_capacity	(Graph const& G,
+								Flow_Graph const & FG,
+								std::vector<double> & out_residual_capacity);
 
 #include "maximum_flow_imp.hpp"
 

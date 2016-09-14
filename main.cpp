@@ -24,6 +24,9 @@ int main(){
 	 out_max_flow = maximum_flow<Graph>(G,s,t,out_residual_capacity);
 	 
 	 std::cout << "Abbiamo ottenuto: " << out_max_flow << std::endl;
+	 	
+	 for(std::size_t j = 0; j < out_residual_capacity.size(); j++)
+		std::cout << "Capacità residua: " << out_residual_capacity[j] << std::endl;
 	 
 	return 0;
 }
