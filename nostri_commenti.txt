@@ -10,6 +10,9 @@
 - GENERIC_POINT.HPP : 
 		Vanno messe exception per numero sbagliato di argomenti. 
 		
+- MAXIMUM_FLOW:
+	ci interessano anche i nodi che non fanno parte di alcun percorso tra s e t?
+		
 - DOMANDE PER PROF FORMAGGIA
 	input file?
 	gestione errori utente
