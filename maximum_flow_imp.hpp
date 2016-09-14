@@ -8,6 +8,7 @@
 #define HH_MAXIMUM_FLOW_IMP_HH
 
 #include <map>
+#include <vector>
 #include <tuple>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/push_relabel_max_flow.hpp>		//per push_relabel
@@ -30,7 +31,8 @@
 template<typename Graph>
 double maximum_flow	(Graph const &G, 
 					typename boost::graph_traits<Graph>::vertex_descriptor s,
-					typename boost::graph_traits<Graph>::vertex_descriptor t){
+					typename boost::graph_traits<Graph>::vertex_descriptor t,
+					std::vector<double> & out_residual_capacity){		//comunque dovrei restituire una map<Edge_desc, res_cap>
 	
 	//Desumiamo i vari selettori dal grafo G preesistente:
 	typedef boost::adjacency_list	<typename Graph::out_edge_list_selector,
@@ -57,7 +59,46 @@ double maximum_flow	(Graph const &G,
 					boost::make_assoc_property_map(rev_map),
 					boost::get(boost::vertex_index, FG)		//quest'ultimo parametro va messo sempre!!!
 					);
+					
+	//Salviamo le capacità residuali in un vector:
+	typedef typename boost::graph_traits<Flow_Graph>::edge_iterator Edge_iter_fg;
+	typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter_g;
+	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_g;
+	typedef typename boost::graph_traits<Flow_Graph>::vertex_descriptor Vertex_fg;
 	
+	Edge_iter_g e_it_g, e_end_g;
+	Edge_iter_fg e_it_fg, e_end_fg;
+	Vertex_g u, v;
+	Vertex_fg uu, vv;
+	std::size_t i = 0;
+	for( std::tie(e_it_g, e_end_g) = edges(G); e_it_g != e_end_g; e_it_g++){
+		u = boost::source(*e_it_g, G);
+		v = boost::target(*e_it_g, G);
+		for( std::tie(e_it_fg, e_end_fg) = edges(FG); e_it_fg != e_end_fg; e_it_fg++){
+			uu = boost::source(*e_it_fg, FG);
+			vv = boost::target(*e_it_fg, FG);
+			//se origine e target sono uguali, vuol dire che è lo stesso arco.
+			if( u == uu && v == vv){
+				out_residual_capacity[i] = FG[*e_it_fg].residual_capacity;
+				i++;
+				break;
+			}
+		}	
+	}
+	
+	for(std::size_t j = 0; j < out_residual_capacity.size(); j++)
+		std::cout << "Capacità residua: " << out_residual_capacity[j] << std::endl;
+	
+	
+	//Le capacità residue che mi interessano sono quelle che hanno capacità maggiore di zero!
+	
+	/*
+	// Stampo le capacità residuali di ogni arco: (comprende sia edge che rev_edge)
+	typename boost::graph_traits<Flow_Graph>::edge_iterator e_it, e_end;
+	for( std::tie(e_it, e_end) = boost::edges(FG); e_it != e_end; e_it++){
+			std::cout << "La capacità residua dell'arco " << *e_it << " è: " << FG[*e_it].residual_capacity << std::endl;
+	}
+	*/
 	return out_max_flow;
 				
 } //max_flow;
