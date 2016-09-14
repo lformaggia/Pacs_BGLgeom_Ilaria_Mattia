@@ -85,6 +85,9 @@ void read_zunino_old_format(Graph & G, std::string file_name){
     	initialize_graph<Graph, point<3> >(src, tgt, G, diam, length, SRC, TGT);
     }
   }	// while
+  
+  //Eliminiamo il vertice zero perché nei file di input non c'è, si parte dal vertice 1:
+  //remove_vertex(0, G);
 
   //Plot dei vertici:
   typename boost::graph_traits<Graph>::vertex_iterator vb, ve;
