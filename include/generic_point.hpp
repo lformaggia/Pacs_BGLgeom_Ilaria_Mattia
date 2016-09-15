@@ -71,6 +71,9 @@ class point {
 		//! Gets the third coordinate
 		Storage_t z() const { return coord[2]; };
 		
+		// Gets the i-th coordinate:
+		Sotrage_t get(std::size_t i) { return coord[i]; };
+		
 		//! Set method to assign coordinates to an already existing point. It can take an arbitrary number of coordinates thanks to initializer_list
 		void set(std::initializer_list<Storage_t> args){
 			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
