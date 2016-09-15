@@ -11,7 +11,6 @@
 #define HH_MAXIMUM_FLOW_HH
 
 #include <map>
-#include <vector>
 
 /*!
 	\brief It runs push_relabel_max_flow algorithm on graph G

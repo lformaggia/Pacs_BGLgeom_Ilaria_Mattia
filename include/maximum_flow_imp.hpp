@@ -8,7 +8,6 @@
 #define HH_MAXIMUM_FLOW_IMP_HH
 
 #include <map>
-#include <vector>
 #include <tuple>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/push_relabel_max_flow.hpp>		//per push_relabel
@@ -54,10 +53,9 @@ double maximum_flow	(Graph const &G,
 					boost::get(&edge_prop_max_flow_t::residual_capacity, FG),
 					boost::make_assoc_property_map(rev_map),
 					boost::get(boost::vertex_index, FG)		//quest'ultimo parametro va messo sempre!!!
-					);
-					
+					);	
 	
-			
+	//Associamo le capacità residue agli archi giusti:	
 	store_residual_capacity<Graph, Flow_Graph, Edge_Descriptor_g> (G, FG, out_residual_capacity);
 	
 	return out_max_flow;				
@@ -125,15 +123,14 @@ void store_residual_capacity	(Graph const& G,
 			src_fg = source(*e_it_fg, FG);
 			tgt_fg = target(*e_it_fg, FG);
 			
-			src_g = src_fg; // we are sure that they are the same type because we built Flow_graph with the same vec and edge containers as Graph
-			tgt_g = tgt_fg;
+			src_g = src_fg; //we are sure that they are the same type because we built Flow_graph with the same vec and edge containers as Graph
+			tgt_g = tgt_fg;	//this two assignment can be omitted. It works fine with only the FG descriptor, because they have the same descriptor type.
 			
-			e_g = boost::edge(src_g, tgt_g, G).first; 
+			e_g = boost::edge(src_fg, tgt_fg, G).first; 
 			out_residual_capacity[e_g] = FG[*e_it_fg].residual_capacity;
 		}
 	}
 	
 }	//store_residual_capacity
-
 
 #endif //HH_MAXIMUM_FLOW_IMP_HH
