@@ -39,5 +39,4 @@ clean :
 	$(RM) $(OBJS)
 
 distclean : clean
-	$(RM) $(OBJS)
 	$(RM) $(EXEC)
