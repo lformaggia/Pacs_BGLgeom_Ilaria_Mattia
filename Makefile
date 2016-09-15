@@ -1,7 +1,7 @@
 SRCS=$(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 HEADERS = $(wildcard *.hpp)
-CPPFLAGS ?= -I. -I./include -I$(mkBGLInc)
+CPPFLAGS ?= -I. -I$(mkBGLInc) -I./include
 LDFLAGS ?= 
 LIBS = 
 exe_sources=$(filter main%.cpp,$(SRCS))
