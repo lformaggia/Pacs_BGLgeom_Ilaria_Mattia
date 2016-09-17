@@ -9,7 +9,6 @@ EXEC=$(exe_sources:.cpp=)
 
 TARGET_DIR = bin
 BUILD_DIR = objs
-SOURCE_DIR = src
 
 -include Makefile.inc
 
@@ -19,28 +18,15 @@ SOURCE_DIR = src
 # $(OBJS) : $(SRCS) $(HEADERS)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 
-.PHONY: all clean distclean Zunino Formaggia
-
-all: Zunino Formaggia
-
-Zunino: main_Zunino
-
 main_Zunino: main_Zunino.o
-	$(CXX) $(LDFLAGS) $(BUILD_DIR)/main_Zunino.o -o $(TARGET_DIR)/$@ $(LIBS)
-main_Zunino.o: ./$(SOURCE_DIR)/main_Zunino.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $(BUILD_DIR)/$@
-	
-Formaggia: main_Formaggia
-
-main_Formaggia: main_Formaggia.o
-	$(CXX)
-main_Formaggia.o: main_Formaggia.cpp
-	$(CXX)
+	$(CXX) $(LDFLAGS) ../$(BUILD_DIR)/main_Zunino.o -o ../$(TARGET_DIR)/$@ $(LIBS)
+main_Zunino.o: main_Zunino.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o ../$(BUILD_DIR)/$@
 	
 doc:
 	doxygen $(DOXYFILE)
 
-
+.PHONY: clean distclean
 
 clean :
 	$(RM) $(OBJS)
