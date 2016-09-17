@@ -1,15 +1,3 @@
-SRCS=$(wildcard *.cpp)
-OBJS = $(SRCS:.cpp=.o)
-HEADERS = $(wildcard *.hpp)
-CPPFLAGS ?= -I$(mkBGLInc) -I/home/pacs_student/Mattia/Progetto/Pacs_project_Ilaria_Mattia/include
-LDFLAGS ?= 
-LIBS = 
-exe_sources=$(filter main%.cpp,$(SRCS))
-EXEC=$(exe_sources:.cpp=)
-
-TARGET_DIR = bin
-BUILD_DIR = objs
-SOURCE_DIR = src
 
 -include Makefile.inc
 
@@ -33,17 +21,15 @@ main_Zunino.o: ./$(SOURCE_DIR)/main_Zunino.cpp
 Formaggia: main_Formaggia
 
 main_Formaggia: main_Formaggia.o
-	$(CXX)
+	$(CXX) $(LDFLAGS) $(BUILD_DIR)/main_Formaggia.o -o $(TARGET_DIR)/$@ $(LIBS)
 main_Formaggia.o: main_Formaggia.cpp
-	$(CXX)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $(BUILD_DIR)/$@
 	
 doc:
 	doxygen $(DOXYFILE)
 
-
-
 clean :
-	$(RM) $(OBJS)
+	rm -rv $(OBJS)	
 
 distclean : clean
-	$(RM) $(EXEC)
+	rm -rv $(EXEC)
