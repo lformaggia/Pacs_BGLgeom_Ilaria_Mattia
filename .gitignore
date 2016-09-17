@@ -1,0 +1,16 @@
+
+# Bash scripts:
+*.sh
+
+# Compiled object files:
+*.o
+*.a
+
+# Temporary files: (the ones that end with tilde)
+*~
+
+# Folders:
+doc/*
+Dati Zunino/*
+bin/*
+objs/*
