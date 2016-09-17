@@ -1,3 +1,12 @@
+/*======================================================================
+                        "[nome_progetto]"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+
 /*!
 * \file io_graph_imp.hpp
 * \author Ilaria Speranza & Mattia Tantardini
@@ -8,18 +17,20 @@
 #ifndef HH_IO_GRAPH_IMP_HH
 #define HH_IO_GRAPH_IMP_HH
 
-#include<tuple>
-#include<boost/graph/adjacency_list.hpp>
-#include<iostream>
-#include<sstream>
-#include<string>
-#include<fstream>
-#include<set>
-#include<utility>
+#include <tuple>
+#include <boost/graph/adjacency_list.hpp>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <fstream>
+#include <set>
+#include <utility>
 
-#include"generic_point.hpp"
-#include"edge_property.hpp"
-#include"io_graph.hpp"
+#include "generic_point.hpp"
+#include "edge_property.hpp"
+#include "io_graph.hpp"
+#include "Forma_vertex_property.hpp"
+#include "Forma_edge_property.hpp"
 	
 /*!
 * \brief Reads data about the graph from the input file given by professor Zunino
@@ -76,7 +87,7 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 			set_inserter = vertex_set.insert(tgt);
 			if(set_inserter.second)
 				G[tgt] = TGT;
-    }	//if(!tmp.fail() ...)
+    }	//if(!tmp.fail())
   }	// while
     
 	//Eliminiamo il vertice zero perché nei file di input non c'è, si parte dal vertice 1:
@@ -92,4 +103,62 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 	for( tie(ebegin, eend) = edges(G); ebegin != eend; ebegin++)
 		std::cout << *ebegin << std::endl;
 }	//read_zunino_old_format
+
+/*
+	@brief Reads data from input file with Formaggia's format.
+	
+	@detail Until now the input file is:\n
+	- first three lines are dummy\n
+	- then there are three columns: fracture number, coordinates of origin node, coordinates of target node
+*/
+
+
+template <typename Graph>
+void read_Formaggia_format(Graph & G, std::string file_name){
+	
+	typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
+	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
+
+	std::ifstream file(file_name.c_str());
+	
+	//variables for storing data:
+	unsigned int frac_number;
+	point<2> SRC, TGT;
+	
+	//Ignoring the first lines:
+	std::string dummy_line;
+	std::getline(file, dummy_line);
+	std::getline(file, dummy_line);
+	std::getline(file, dummy_line);
+	
+	//Utilities for reading and constructing the Graph:
+	std::string s;
+	Edge_desc e;
+	bool inserted;
+	//creo due vertex_descriptor (non li ho ancora, quindi poi ci pensa lui ad indicizzarli) (a meno che ho già un indice in ingresso, nel qual caso bisognerebbe creare un id per ogni vertice per tenere traccia)
+	Vertex_desc u,v;
+	
+	//Reading:
+	while(!file.fail() && !file.eof()){
+		std::getline(file, s);
+		if(s.empty())
+			continue;
+		std::istringstream temp(s);
+		//Leggo i vari dati (ogni utente qui metterà il suo)
+		temp >> frac_number >> SRC >> TGT;
+		if(!temp.fail()){
+			//Qui ci va un altro if per capire se si intersecano. Se no, si procede come sotto, se sì, bisogna spezzare un arco, inserire due vertici in più nelle intersezioni, e riattaccare tutti gli archi.
+			
+			//creo l'arco
+			std::tie(e, inserted) = boost::add_edge(u, v, G);		//PROBLEMA QUI!!! sembra che non gli piaccia che assegno come vertex descriptor u e v perché li ho creati dentro la funzione, e dopo uscendo verranno distrutti.
+			//Assegno le proprietà.
+			G[u].coord = SRC;		//G[u] and G[v] are point<2>
+			G[v].coord = TGT;
+			G[u].is_external = true;		//o forse bisogna fare un ciclo alla fine della costruzione per vedere quali nodi hanno grado 1
+			G[v].is_external = true;
+			G[e].frac_num = frac_number;
+			
+		}	//if		
+	}	//while
+};	//read_Formaggia_format
 #endif
