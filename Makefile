@@ -22,7 +22,7 @@ Formaggia: main_Formaggia
 
 main_Formaggia: main_Formaggia.o
 	$(CXX) $(LDFLAGS) $(BUILD_DIR)/main_Formaggia.o -o $(TARGET_DIR)/$@ $(LIBS)
-main_Formaggia.o: main_Formaggia.cpp
+main_Formaggia.o: ./$(SOURCE_DIR)/main_Formaggia.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $(BUILD_DIR)/$@
 	
 doc:
