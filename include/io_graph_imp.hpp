@@ -25,6 +25,8 @@
 #include <fstream>
 #include <set>
 #include <utility>
+#include <cmath>
+#include <algorithm>
 
 #include "generic_point.hpp"
 #include "edge_property.hpp"
@@ -147,18 +149,107 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 		//Leggo i vari dati (ogni utente qui metterà il suo)
 		temp >> frac_number >> SRC >> TGT;
 		if(!temp.fail()){
-			//Qui ci va un altro if per capire se si intersecano. Se no, si procede come sotto, se sì, bisogna spezzare un arco, inserire due vertici in più nelle intersezioni, e riattaccare tutti gli archi.
+			// this function returns a vertex descriptor: a new one if not present in G, or the respctive and already existing vertex
+			u = vertex_insertion_or_identification(G, SRC); // o le mettiamo void e lo passiamo per reference?
+			v = vertex_insertion_or_identification(G, TGT); 
 			
-			//creo l'arco
-			std::tie(e, inserted) = boost::add_edge(u, v, G);		//PROBLEMA QUI!!! sembra che non gli piaccia che assegno come vertex descriptor u e v perché li ho creati dentro la funzione, e dopo uscendo verranno distrutti.
-			//Assegno le proprietà.
-			G[u].coord = SRC;		//G[u] and G[v] are point<2>
-			G[v].coord = TGT;
-			G[u].is_external = true;		//o forse bisogna fare un ciclo alla fine della costruzione per vedere quali nodi hanno grado 1
-			G[v].is_external = true;
-			G[e].frac_num = frac_number;
+			// find intersections with other edges
+			std::vector<std::pair<Point, Edge_desc> > intersections;
+			check_for_intersections(intersections, SRC, TGT, G); // checks for intersections with every edge in the graph and re-orders them
+			
+			refine_graph(G, intersections);
 			
 		}	//if		
 	}	//while
 };	//read_Formaggia_format
+
+
+template <typename Graph, typename Point>
+typename boost::graph_traits<Graph>::vertex_descriptor // return type
+vertex_insertion_or_identification(Graph const& G, Point const& P){
+
+	typename boost::graph_traits<Graph>::vertex_iterator v_it, v_end;
+	typename boost::graph_traits<Graph>::vertex_descriptor v;
+	
+	for(std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it){
+		double diff_x = std::abs(P.x() - G[*v_it].coord.x()); // absolute difference between x coordinates
+		double diff_y;
+		double toll = 0.001; // the threshold under which two points have two be considered the same point. From GetPot???
+		if(diff_x < toll){
+			diff_y = std::abs(P.y() - G[*v_it].coord.y()); 
+			if(diff_y < toll){
+				return *v_it;
+			}
+		}
+		else{
+			v = add_vertex(G);
+			G[v].coord = P;  // assign the property
+			G[v].is_external = true;
+			return v;
+		}
+	}
+	
+} // vertex_insertion_or_identification
+
+
+template <typename G, typename Point>
+void check_for_intersections(std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > & vect,
+							 typename Point const & SRC,
+							 typename Point const & TGT, 
+							 typename Graph const & G){
+
+	typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
+	typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter;	
+	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
+	
+	Edge_iter e_it, e_end;
+	Vertex_desc u,v;
+	std::pair<Point, Point> line1, line2;
+	line1 = std::make_pair(SRC, TGT);
+	
+	for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; e_it++){
+		u = boost::source(*e_it);
+		v = boost::target(*e_it);
+		line2 = std::make_pair(G[u].coord, G[v].coord);
+		
+		bool ok_intersection;
+		Point intersection_point;		
+		//Qua ci va la funzione del prof che calcola le intersezioni
+		std::tie(ok_intersection, new_Point) = are_intersected(line1, line2);		//prototipo di definizione di quella funzione.
+		
+		if(ok_intersection)		//se intersecano, inserisco il punto
+			vect.push_back(std::make_pair(intersection_point, *e_it));
+	}	//for
+	
+	
+	
+	// Re-ordering
+	enum {decreasing, increasing};
+	enum {xx,yy};
+	
+	if(SRC.x() < TGT.x())
+		std::sort(vect.begin(), vect.end(), compare<increasing,xx>);	//ordinare il vettore in modo crescente secondo le x dei punti
+	else if (SRC.x() > TGT.x())
+		std::sort(vect.begin(), vect.end(), compare<decreasing,xx>);	//ordinare il vettore in modo decrescente secondo le x dei punti
+	else if(SRC.y() < TGT.y())
+		std::sort(vect.begin(), vect.end(), compare<increasing,yy>);
+	else
+		std::sort(vect.begin(), vect.end(), compare<decreasing,yy>);	//(retta verticale) ordina per y decrescenti
+	
+	
+}	//check_for_intersection
+
+
+template<typename Graph, typename Point>
+void refine_graph(Graph & G, std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect){
+	
+	typedef std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> >::iterator Vector_iter;
+	
+	Vector_iter v_it = vect.begin();
+	Vector_iter v_end = vect.end();
+	
+	
+	
+}
+
 #endif

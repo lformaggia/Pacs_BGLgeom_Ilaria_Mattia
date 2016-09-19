@@ -22,6 +22,9 @@ class point {
 		std::array<Storage_t, dim> coord;
 	
 	public:
+		//! method to access the type Storage_t from outside
+		typedef Storage_t Storage_type;
+	
 		//! Default constructor
 		point(){
 			for(std::size_t i = 0; i < dim; i++)
@@ -89,5 +92,6 @@ class point {
 		};
 		
 };
+
 
 #endif // #ifnedf HH_GENERIC_POINT_HH
