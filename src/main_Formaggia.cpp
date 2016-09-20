@@ -31,7 +31,7 @@ int main(){
 	
 	Graph G;
 	
-	read_Formaggia_format<Graph> (G, "/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/data/input_Formaggia_prova.dat");
+	read_Formaggia_format<Graph> (G, "../data/input_Formaggia_prova.dat");
 	
 	Traits::edge_iterator e_it, e_end;
 	Traits::vertex_iterator v_it, v_end;
