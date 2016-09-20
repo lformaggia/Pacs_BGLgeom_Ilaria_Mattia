@@ -7,9 +7,9 @@
 # $(OBJS) : $(SRCS) $(HEADERS)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 
-.PHONY: all clean distclean Zunino Formaggia test
+.PHONY: all clean distclean doc Zunino Formaggia test
 
-all: Zunino Formaggia test
+all: doc Zunino Formaggia test
 
 test: test_generic_point
 
