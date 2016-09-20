@@ -1,3 +1,11 @@
+/*======================================================================
+                        "[nome_progetto]"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
 /*!	\file maximum_flow_imp.hpp
 	\author Ilaria Speranza & Mattia Tantardini
 	\date Sep 14, 2016
@@ -7,22 +15,6 @@
 #ifndef HH_MAXIMUM_FLOW_IMP_HH
 #define HH_MAXIMUM_FLOW_IMP_HH
 
-#include <map>
-#include <tuple>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/push_relabel_max_flow.hpp>		//per push_relabel
-#include <boost/property_map/property_map.hpp>
-#include <boost/graph/properties.hpp>					//per la definizione di vertex_index richiesta da push_relabel
-
-#include "generic_point.hpp"
-#include "edge_property_max_flow.hpp"
-
-
-/*!
-	\brief It runs push_relabel_max_flow algorithm on graph G
-	
-	\detail This function find the maximum flow that can flow from node s to node t.
-*/
 template<typename Graph, typename Edge_Descriptor_g>
 double maximum_flow	(Graph const &G, 
 					typename boost::graph_traits<Graph>::vertex_descriptor s,
@@ -61,13 +53,7 @@ double maximum_flow	(Graph const &G,
 	return out_max_flow;				
 } //max_flow;
 
-/*!
-	\brief Helper function for maximum_flow
-	
-	\detail This function build the flow graph associated to the input graph.
-			This is because we want not to modify the original Graph passed as input in maximum_flow,
-			and because the push_relabelmax_flow algorithm requires such a Graph.
-*/
+
 template<typename Graph, typename Flow_Graph, typename Edge_fg>
 void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg>& rev_map){
 
@@ -95,15 +81,7 @@ void build_flow_graph(Graph const& G, Flow_Graph & FG, std::map<Edge_fg, Edge_fg
 
 }	//build_flow_graph
 
-/*!	
-	\brief Helper function that stores residual capacity on edges after computation of max flow
-	
-	\detail We use a vector. Next step: using a map<Edge_descriptor, residual_capacity_value>
-			This function search in the flow graph which edges have the same sources and target
-			as the edges in G, so that we can associate the right residual capacity to the
-			right original edge of G. This is because FG is a utility in order to run the 
-			push_relabel algorithm and it is destroied after exiting this function.
-*/
+
 template <typename Graph, typename Flow_Graph, typename Edge_Descriptor_g>
 void store_residual_capacity	(Graph const& G,
 								Flow_Graph const & FG,
@@ -128,8 +106,8 @@ void store_residual_capacity	(Graph const& G,
 			
 			e_g = boost::edge(src_fg, tgt_fg, G).first; 
 			out_residual_capacity[e_g] = FG[*e_it_fg].residual_capacity;
-		}
-	}
+		}	//if
+	}	//for
 	
 }	//store_residual_capacity
 
