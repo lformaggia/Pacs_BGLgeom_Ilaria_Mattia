@@ -138,7 +138,7 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 	Edge_desc e;
 	bool inserted;
 	//creo due vertex_descriptor (non li ho ancora, quindi poi ci pensa lui ad indicizzarli) (a meno che ho già un indice in ingresso, nel qual caso bisognerebbe creare un id per ogni vertice per tenere traccia)
-	Vertex_desc u,v;
+	Vertex_desc src, tgt;
 	
 	//Reading:
 	while(!file.fail() && !file.eof()){
@@ -150,14 +150,14 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 		temp >> frac_number >> SRC >> TGT;
 		if(!temp.fail()){
 			// this function returns a vertex descriptor: a new one if not present in G, or the respctive and already existing vertex
-			u = vertex_insertion_or_identification(G, SRC); 
-			v = vertex_insertion_or_identification(G, TGT); 
+			src = vertex_insertion_or_identification(G, SRC); 
+			tgt = vertex_insertion_or_identification(G, TGT); 
 			
 			// find intersections with other edges
 			std::vector<std::pair<Point, Edge_desc> > intersections;
 			check_for_intersections(intersections, SRC, TGT, G); // checks for intersections with every edge in the graph and re-orders them
 			
-			refine_graph(G, intersections);
+			refine_graph(G, intersections, frac_number, src, tgt);
 			
 		}	//if		
 	}	//while
@@ -222,7 +222,6 @@ void check_for_intersections(std::vector<std::pair<point<2>, typename boost::gra
 	}	//for
 	
 	
-	
 	// Re-ordering
 	enum {src_greater_than_tgt, src_less_than_tgt};
 	
@@ -248,12 +247,58 @@ bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descr
 
 // removes old edges which have to be segmented and adds those betwwen the new intersections vertices
 template<typename Graph>
-void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect){
+void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect, 
+				  int frac_number,
+                  typename boost::graph_traits<Graph>::vertex_descriptor src,
+                  typename boost::graph_traits<Graph>::vertex_descriptor tgt){
 	
-	typedef std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> >::iterator Vector_iter;
+	typedef std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> >::iterator Vector_iter;
+	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
+	typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
 	
-	Vector_iter v_it = vect.begin();
-	Vector_iter v_end = vect.end();	
-}
+	Vector_iter vec_it = vect.begin();
+	Vector_iter vec_end = vect.end();
+	
+	Vertex_desc v_new, v_old;
+	Vertex_desc u, v; // this are the vertices connected by the edge which will be substitueted by two new edges 
+		
+	Edge_desc e, e_to_be_removed, e_new;
+	
+	int frac_num_old;
+	
+	v_old = src;
+	// we start connecting source and first point of intersection
+	do{
+		v_new = boost::add_vertex(G);	
+		G[v_new].coord = *vec_it.first;
+		
+		e = boost::add_edge(v_old, v_new, G).first; // we are not interested in the bool value
+		G[e].frac_num = frac_number;
+		
+		e_to_be_removed = *vec_it.second;
+		frac_num_old = G[e_to_be_removed].frac_num;  // we store this value because we have to assign it to the new created edges
+		
+		u = boost::source(e_to_be_removed, G);
+		v = boost::target(e_to_be_removed, G);
+		
+		// we remove the old edge which has to be replaced
+		boost::remove_edge(e_to_be_removed, G);
+		
+		// connect u and v to the intersection point
+		e_new = boost::add_edge(u, v_new, G).first;
+		G[e_new].frac_num = frac_num_old;
+		
+		e_new = boost::add_edge(v_new, v, G).first;
+		G[e_new].frac_num = frac_num_old;
+		
+		// we move v_new into v_old and we update the iterator
+		v_old = v_new;
+		++vec_it;	
+	}while (vec_it != v_end);
+	
+	// last thing: connect the last intersection point with tgt
+	e_new = boost::add_edge(v_new, tgt, G).first;
+	G[e_new].frac_num = frac_number;
+} // refine_graph
 
 #endif

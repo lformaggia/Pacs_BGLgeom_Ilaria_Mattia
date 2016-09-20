@@ -44,7 +44,10 @@ bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descr
 			 std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair2);
 
 template<typename Graph>
-void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect);
+void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect, 
+                  int frac_number,
+                  typename boost::graph_traits<Graph>::vertex_descriptor src,
+                  typename boost::graph_traits<Graph>::vertex_descriptor tgt);
 
 #include "io_graph_imp.hpp"	
 
