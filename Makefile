@@ -7,9 +7,16 @@
 # $(OBJS) : $(SRCS) $(HEADERS)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 
-.PHONY: all clean distclean Zunino Formaggia
+.PHONY: all clean distclean Zunino Formaggia test
 
-all: Zunino Formaggia
+all: Zunino Formaggia test
+
+test: test_generic_point
+
+test_generic_point: test_generic_point.o
+	$(CXX) $(LDFLAGS) $(BUILD_DIR)/test_generic_point.o -o $(TARGET_DIR)/$@ $(LIBS)
+test_generic_point.o: ./$(SOURCE_DIR)/test_generic_point.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $(BUILD_DIR)/$@
 
 Zunino: main_Zunino
 

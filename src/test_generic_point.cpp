@@ -21,6 +21,12 @@ int main(){
 	punto4.set({5.03,6,7});
 	
 	std::cout << punto4 << std::endl;
+	
+	point<2> punto7{1,2};
+	point<2> punto8{1,1};
+	
+	bool prova = (punto7 < punto8);
+	std::cout << prova << std::endl;
 
 	return 0;
 }
