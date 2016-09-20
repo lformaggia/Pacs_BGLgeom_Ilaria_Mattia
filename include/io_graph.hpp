@@ -23,12 +23,12 @@ void read_zunino_old_format(Graph & G, std::string file_name);
 template <typename Graph>
 void read_Formaggia_format(Graph & G, std::string file_name);
 
-template <typename Graph, typename Point>
+template <typename Graph>
 typename boost::graph_traits<Graph>::vertex_descriptor  // return type
-vertex_insertion_or_identification(Graph const& G, Point const& P);
+vertex_insertion_or_identification(Graph const& G, point<2> const& P);
 
-template <typename G, typename Point>
-void check_for_intersections(std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > & v,
+template <typename G>
+void check_for_intersections(std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > & v,
 							 typename Point const & SRC,
 							 typename Point const & TGT, 
 							 typename Graph const & G);
@@ -39,8 +39,12 @@ std::pair<bool, Point> are_intersected (std::pair<Point, Point> line1, std::pair
 	return std::make_pair(true,p);
 }
 
-template<typename Graph, typename Point>
-void refine_graph(Graph & G, std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect);
+template<typename Graph, bool src_less_than_tgt>
+bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair1,
+			 std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair2);
+
+template<typename Graph>
+void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect);
 
 #include "io_graph_imp.hpp"	
 

@@ -150,7 +150,7 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 		temp >> frac_number >> SRC >> TGT;
 		if(!temp.fail()){
 			// this function returns a vertex descriptor: a new one if not present in G, or the respctive and already existing vertex
-			u = vertex_insertion_or_identification(G, SRC); // o le mettiamo void e lo passiamo per reference?
+			u = vertex_insertion_or_identification(G, SRC); 
 			v = vertex_insertion_or_identification(G, TGT); 
 			
 			// find intersections with other edges
@@ -164,9 +164,9 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 };	//read_Formaggia_format
 
 
-template <typename Graph, typename Point>
+template <typename Graph>
 typename boost::graph_traits<Graph>::vertex_descriptor // return type
-vertex_insertion_or_identification(Graph const& G, Point const& P){
+vertex_insertion_or_identification(Graph const& G, point<2> const& P){
 
 	typename boost::graph_traits<Graph>::vertex_iterator v_it, v_end;
 	typename boost::graph_traits<Graph>::vertex_descriptor v;
@@ -192,8 +192,8 @@ vertex_insertion_or_identification(Graph const& G, Point const& P){
 } // vertex_insertion_or_identification
 
 
-template <typename G, typename Point>
-void check_for_intersections(std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > & vect,
+template <typename G>
+void check_for_intersections(std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > & vect,
 							 typename Point const & SRC,
 							 typename Point const & TGT, 
 							 typename Graph const & G){
@@ -224,32 +224,36 @@ void check_for_intersections(std::vector<std::pair<Point, typename boost::graph_
 	
 	
 	// Re-ordering
-	enum {decreasing, increasing};
-	enum {xx,yy};
+	enum {src_greater_than_tgt, src_less_than_tgt};
 	
-	if(SRC.x() < TGT.x())
-		std::sort(vect.begin(), vect.end(), compare<increasing,xx>);	//ordinare il vettore in modo crescente secondo le x dei punti
-	else if (SRC.x() > TGT.x())
-		std::sort(vect.begin(), vect.end(), compare<decreasing,xx>);	//ordinare il vettore in modo decrescente secondo le x dei punti
-	else if(SRC.y() < TGT.y())
-		std::sort(vect.begin(), vect.end(), compare<increasing,yy>);
+	if(SRC < TGT)
+		std::sort(vect.begin(), vect.end(), compare<Graph, src_less_than_tgt>);
 	else
-		std::sort(vect.begin(), vect.end(), compare<decreasing,yy>);	//(retta verticale) ordina per y decrescenti
-	
+		std::sort(vect.begin(), vect.end(), compare<Graph, src_greater_than_tgt>);
 	
 }	//check_for_intersection
 
 
-template<typename Graph, typename Point>
-void refine_graph(Graph & G, std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect){
+// compare function for the vector containing all the intersections on a single edge
+template<typename Graph, bool src_less_than_tgt>
+bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair1,
+			 std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair2){
+	
+	if(src_less_than_tgt)
+		return pair1.first < pair2.first;
+	else 
+		return pair1.first > pair2.first;
+}
+
+
+// removes old edges which have to be segmented and adds those betwwen the new intersections vertices
+template<typename Graph>
+void refine_graph(Graph & G, std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect){
 	
 	typedef std::vector<std::pair<Point, typename boost::graph_traits<Graph>::edge_descriptor> >::iterator Vector_iter;
 	
 	Vector_iter v_it = vect.begin();
-	Vector_iter v_end = vect.end();
-	
-	
-	
+	Vector_iter v_end = vect.end();	
 }
 
 #endif
