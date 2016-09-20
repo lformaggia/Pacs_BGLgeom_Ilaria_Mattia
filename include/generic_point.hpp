@@ -1,9 +1,16 @@
+/*======================================================================
+                        "[nome_progetto]"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
 /*!
 	@file generic_point.hpp
-	@brief Defining 2D or 3D coordition property (coordinates) for vertices.
-	
 	@author Ilaria Speranza and Mattia Tantardini
-
+	@date Sept, 2016
+	@brief Defining 2D or 3D coordition property (coordinates) for vertices.
 */
 
 #ifndef HH_GENERIC_POINT_HH
@@ -66,7 +73,6 @@ class point {
 			 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
 			 		 if they are equal, compare in the same waythe y coordinate, and so on.		
 		*/
-
 		bool operator< (point<dim, Storage_t> const& point2) const{
 			if(this->get_dim() != point2.get_dim())	//exception!!!
 				return false;
@@ -80,6 +86,11 @@ class point {
 			return false;		//if they are equal
 		};
 		
+		/*!
+			@brief Operator> overloading
+			
+			@detail It is the negation of operator<
+		*/
 		bool operator> (point<dim, Storage_t> const& point2)const{
 			return !(*this < point2);
 		};
@@ -110,7 +121,7 @@ class point {
 				coord[i] = *it;
 				++i;
 			}			
-		};
+		};	//set
 		
 };
 

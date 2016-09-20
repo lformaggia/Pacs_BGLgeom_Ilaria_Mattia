@@ -6,7 +6,6 @@
                   
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
-
 /*!
 * \file io_graph_imp.hpp
 * \author Ilaria Speranza & Mattia Tantardini
@@ -15,33 +14,9 @@
 */
 
 #ifndef HH_IO_GRAPH_IMP_HH
-#define HH_IO_GRAPH_IMP_HH
-
-#include <tuple>
-#include <boost/graph/adjacency_list.hpp>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <set>
-#include <utility>
-#include <cmath>
-#include <algorithm>
-
-#include "edge_property.hpp"
-#include "Forma_vertex_property.hpp"
-#include "Forma_edge_property.hpp"
+#define HH_IO_GRAPH_IMP_HH	
 	
-/*!
-* \brief Reads data about the graph from the input file given by professor Zunino
-*
-* The funcitions reads from a file where data is written as: \n
-* line1: description of file \n
-* line2: description of file \n
-* from line 3: line_number - source - target - diameter - length - source_coord - target_coord 
-* 
-*/		
-template<typename Graph, typename Point>			//eventualmente si può togliere Point come template parameter e definirli dentro
+template<typename Graph>
 void read_zunino_old_format(Graph & G, std::string file_name){ 
 	
 	typedef typename boost::graph_traits<Graph>::edge_descriptor edge_descriptor;
@@ -49,7 +24,7 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 	std::ifstream file(file_name.c_str());
 	
 	// variables for storing data
-	Point SRC,TGT; 													// they will store vertex coordinates	  
+	point<3> SRC,TGT; 													// they will store vertex coordinates	  
 	int src, tgt; 													// they will read source and target of eah edge
 	int edge_num;													// dummy variable;
 	double diam, length; 											// they will properties associated to edges
@@ -104,14 +79,6 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 		std::cout << *ebegin << std::endl;
 }	//read_zunino_old_format
 
-/*
-	@brief Reads data from input file with Formaggia's format.
-	
-	@detail Until now the input file is:\n
-	- first three lines are dummy\n
-	- then there are three columns: fracture number, coordinates of origin node, coordinates of target node
-*/
-
 
 template <typename Graph>
 void read_Formaggia_format(Graph & G, std::string file_name){
@@ -135,7 +102,7 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 	std::string s;
 	Edge_desc e;
 	bool inserted;
-	//creo due vertex_descriptor (non li ho ancora, quindi poi ci pensa lui ad indicizzarli) (a meno che ho già un indice in ingresso, nel qual caso bisognerebbe creare un id per ogni vertice per tenere traccia)
+	//creo due vertex_descriptor (non li ho ancora, quindi poi ci pensa lui ad indicizzarli)
 	Vertex_desc src, tgt;
 	
 	//Reading:
@@ -150,18 +117,17 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 		if(!temp.fail()){
 			// this function returns a vertex descriptor: a new one if not present in G, or the respctive and already existing vertex
 			src = vertex_insertion_or_identification(G, SRC); 
-			//std::cout << "ho letto vertice " << G[src].coord << std::endl;
 			tgt = vertex_insertion_or_identification(G, TGT);
-			//std::cout << "ho letto vertice " << G[tgt].coord << std::endl; 
 			
 			// find intersections with other edges
 			std::vector<std::pair<point<2>, Edge_desc> > intersections;
 			check_for_intersections(intersections, SRC, TGT, G); // checks for intersections with every edge in the graph and re-orders them
 			
-			refine_graph(G, intersections, frac_number, src, tgt);
-			
+			// if there are intersection points, refine the graph
+			refine_graph(G, intersections, frac_number, src, tgt);			
 		}	//if		
 	}	//while
+	
 };	//read_Formaggia_format
 
 
@@ -172,10 +138,11 @@ vertex_insertion_or_identification(Graph & G, point<2> const& P){
 	typename boost::graph_traits<Graph>::vertex_iterator v_it, v_end;
 	typename boost::graph_traits<Graph>::vertex_descriptor v;
 	
+	double diff_x, diff_y;
+	double toll = 0.001;	 // the threshold under which two points have two be considered the same point. From GetPot???
+	
 	for(std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it){
-		double diff_x = std::abs(P.x() - G[*v_it].coord.x()); // absolute difference between x coordinates
-		double diff_y;
-		double toll = 0.001; // the threshold under which two points have two be considered the same point. From GetPot???
+		diff_x = std::abs(P.x() - G[*v_it].coord.x()); 		// absolute difference between x coordinates
 		if(diff_x < toll){
 			diff_y = std::abs(P.y() - G[*v_it].coord.y()); 
 			if(diff_y < toll){
@@ -184,13 +151,14 @@ vertex_insertion_or_identification(Graph & G, point<2> const& P){
 			}
 		}
 	} //for
-	// if you arrive here it means the vertex you are considering isn't already in the graph so you add it
 	
+	// if you arrive here it means the vertex you are considering isn't already in the graph so you add it
 	v = boost::add_vertex(G);
 	std::cout << "new_vertex_created " << v << std::endl; 
 	G[v].coord = P;  // assign the property
-	G[v].is_external = true;
+	G[v].is_external = true;		//check if it is the right condition
 	return v;
+	
 } // vertex_insertion_or_identification
 
 
@@ -208,14 +176,14 @@ void check_for_intersections(std::vector<std::pair<point<2>, typename boost::gra
 	Vertex_desc u,v;
 	std::pair<point<2>, point<2> > line1, line2;
 	line1 = std::make_pair(SRC, TGT);
+	bool ok_intersection;				// output of are_intersected
+	point<2> intersection_point;		// output of are_intersected
 	
 	for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; e_it++){
 		u = boost::source(*e_it, G);
 		v = boost::target(*e_it, G);
-		line2 = std::make_pair(G[u].coord, G[v].coord);
-		
-		bool ok_intersection;
-		point<2> intersection_point;		
+		line2 = std::make_pair(G[u].coord, G[v].coord);		
+				
 		//Qua ci va la funzione del prof che calcola le intersezioni
 		std::tie(ok_intersection, intersection_point) = are_intersected(line1, line2);		//prototipo di definizione di quella funzione.
 		
@@ -234,7 +202,6 @@ void check_for_intersections(std::vector<std::pair<point<2>, typename boost::gra
 }	//check_for_intersection
 
 
-// compare function for the vector containing all the intersections on a single edge
 template<typename Graph, bool src_less_than_tgt>
 bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair1,
 			 std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair2){
@@ -243,10 +210,39 @@ bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descr
 		return pair1.first < pair2.first;
 	else 
 		return pair1.first > pair2.first;
-}
+}	//compare
 
 
-// removes old edges which have to be segmented and adds those betwwen the new intersections vertices
+
+std::pair<bool, point<2> > are_intersected 	(std::pair<point<2>, point<2> > line1,
+											 std::pair<point<2>, point<2> > line2){
+	point<2> p;
+	bool vertical1 = false;
+	bool vertical2 = false;
+	double x_intersect, y_intersect;
+	
+	if(line1.first.x() == line1.second.x()){
+		vertical1 = true;
+		x_intersect = line1.first.x();
+	}
+	else y_intersect = line1.first.y();
+	
+	if(line2.first.x() == line2.second.x()){
+		vertical2 = true;
+		x_intersect = line2.first.x();
+	}
+	else y_intersect = line2.first.y();
+	
+	if (vertical1 + vertical2 == 1){
+		p.set({x_intersect, y_intersect});
+		return std::make_pair(true,p);
+	}
+	else{
+		return std::make_pair(false, p);
+	}
+}	//are_intersected
+
+
 template<typename Graph>
 void refine_graph(Graph & G, 
 				  typename std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > const & vect, 
@@ -259,13 +255,10 @@ void refine_graph(Graph & G,
 	typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
 	
 	Vector_iter vec_it = vect.begin();
-	Vector_iter vec_end = vect.end();
-	
+	Vector_iter vec_end = vect.end();	
 	Vertex_desc v_new, v_old;
-	Vertex_desc u, v; // this are the vertices connected by the edge which will be substitueted by two new edges 
-		
-	Edge_desc e, e_to_be_removed, e_new;
-	
+	Vertex_desc u, v; // this are the vertices connected by the edge which will be substitueted by two new edges 		
+	Edge_desc e, e_to_be_removed, e_new;	
 	int frac_num_old;
 	
 	v_old = src;
@@ -275,30 +268,32 @@ void refine_graph(Graph & G,
 		G[v_new].coord = (*vec_it).first;
 		G[v_new].is_external = false;
 		
+		// Connecting old and new vertex:
 		e = boost::add_edge(v_old, v_new, G).first; // we are not interested in the bool value
 		G[e].frac_num = frac_number;
 		
+		// Storing informations of the edge we will remove
 		e_to_be_removed = (*vec_it).second;
 		frac_num_old = G[e_to_be_removed].frac_num;  // we store this value because we have to assign it to the new created edges
 		
+		// Storing source and target of the vertex we will remove, to create the new edges after
 		u = boost::source(e_to_be_removed, G);
 		v = boost::target(e_to_be_removed, G);
 		
 		// we remove the old edge which has to be replaced
 		boost::remove_edge(e_to_be_removed, G);
 		
-		// connect u and v to the intersection point
+		// connect u and v to the intersection point (so we broke the old edge into two new ones)
 		e_new = boost::add_edge(u, v_new, G).first;
-		G[e_new].frac_num = frac_num_old;
-		
+		G[e_new].frac_num = frac_num_old;		
 		e_new = boost::add_edge(v_new, v, G).first;
 		G[e_new].frac_num = frac_num_old;
 		
-		// we move v_new into v_old and we update the iterator
+		// we move v_new into v_old
 		v_old = v_new;
 	}
 	
-	// last thing: connect the last intersection point with tgt
+	// last thing: connect the last intersection point with tgt of the current edge
 	e_new = boost::add_edge(v_old, tgt, G).first;
 	G[e_new].frac_num = frac_number;
 } // refine_graph
