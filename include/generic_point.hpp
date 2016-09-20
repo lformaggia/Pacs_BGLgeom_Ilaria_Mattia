@@ -66,22 +66,21 @@ class point {
 			 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
 			 		 if they are equal, compare in the same waythe y coordinate, and so on.		
 		*/
-		bool operator< (point<dim, Storage_t> const& point2){
+		bool operator< (point<dim, Storage_t> const& point2) const{
 			if(this->get_dim() != point2.get_dim())	//exception!!!
 				return false;
 								
-			for(std::size_t i = 0; i < point1.get_dim(); i++){
+			for(std::size_t i = 0; i < point2.get_dim(); i++){
 				if(this->get(i) < point2.get(i))
 					return true;
 				else if (this->get(i) > point2.get(i))
 					return false;
 			}
-			
 			return false;		//if they are equal
 		};
 		
-		bool operator> (point<dim, Storage_t> const& point2){
-			return !(this < point2);
+		bool operator> (point<dim, Storage_t> const& point2)const{
+			return !(*this < point2);
 		};
 
 		//Anche qui controllo se c'è effettivamente la coordinata da recuperare.
