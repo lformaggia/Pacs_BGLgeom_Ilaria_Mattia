@@ -20,21 +20,27 @@ template<typename Graph>
 void read_zunino_old_format(Graph & G, std::string file_name){ 
 	
 	typedef typename boost::graph_traits<Graph>::edge_descriptor edge_descriptor;
-	
+
 	std::ifstream file(file_name.c_str());
 	
 	// variables for storing data
-	point<3> SRC,TGT; 													// they will store vertex coordinates	  
+	
+	//crei variabili per leggere dati (attributi della classe utente)
+	point<3> SRC,TGT; 												// they will store vertex coordinates	  
 	int src, tgt; 													// they will read source and target of eah edge
 	int edge_num;													// dummy variable;
 	double diam, length; 											// they will properties associated to edges
 
 	// ignore the first two lines of the file
+	
+	//Ignora intestazioni		R.ignore_dummy_lines(2,file);
 	std::string dummyLine;
 	std::getline(file, dummyLine);
 	std::getline(file, dummyLine);
 	
 	// Utilities for reading and constructing the Graph
+	
+	//volendo check doppioni
 	std::set<int> vertex_set; 		/*< using a set, we can easily check if a vertex has already been added */
 	std::pair<std::set<int>::iterator, bool> set_inserter;
 	std::string s;			
@@ -42,14 +48,24 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 	bool edge_inserted;
 	
 	while (!file.fail() && !file.eof()){
-	    std::getline(file,s); 													// reading the the whole line
+		std::getline(file,s); 													// reading the the whole line
 	    if(s.empty())
-	    	continue; 															// empty line
+	    	continue; 
+	    //leggi dalla riga tutte le variabili che mi interessano														// empty line
 	    std::istringstream tmp(s); 												// build an input sstream.
 	    tmp >> edge_num >> src >> tgt >> diam >> length >> SRC >> TGT;			// reading data from the istringstream
+	    
 	    if(!tmp.fail()){			
 			// create edge (src, tgt)
-			std::tie(e, edge_inserted) = boost::add_edge(src, tgt, G);			
+			
+			//crea nodi
+			
+			//associa proprietà ai nodi
+			
+			//crea arco?
+			std::tie(e, edge_inserted) = boost::add_edge(src, tgt, G);
+			
+			//associa le proprietà agli archi	
 			G[e].capacity = diam;
 			G[e].length = length;
 					
