@@ -28,7 +28,7 @@ int main(){
 	 typedef Traits::edge_iterator Edge_Iterator;
 	 
 	 Graph G;
-	 read_zunino_old_format<Graph, point<3>> (G , "/home/pacs_student/Mattia/Progetto/Pacs_project_Ilaria_Mattia/data/rattm93a.txt");
+	 read_zunino_old_format<Graph> (G , "../data/rattm93a.txt");
 	 
 	 //chiamiamo:
 	 std::map<Edge_Descriptor, double> out_residual_capacity;
