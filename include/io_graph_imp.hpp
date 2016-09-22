@@ -15,6 +15,27 @@
 
 #ifndef HH_IO_GRAPH_IMP_HH
 #define HH_IO_GRAPH_IMP_HH	
+
+template <typename Graph, typename Reader>
+void read_input_file(Graph & G, Reader & R, std::string file_name){
+	
+	// Open the file:
+	std::ifstream file(file_name.c_str());
+	
+	R.ignore_dummy_lines(file);
+	
+	
+	std::string s;
+	while(!file.fail() && !file.eof()){
+		std::getline(file, s);
+		if(s.empty())
+			continue;
+		std::istringstream temp(s);
+		R.read_data_from_line(temp);
+	};
+
+};
+
 	
 template<typename Graph>
 void read_zunino_old_format(Graph & G, std::string file_name){ 
