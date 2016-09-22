@@ -62,7 +62,8 @@ void read_Formaggia_format(Graph & G, std::string file_name);
 			(in this case it will be ignored) or if it isn't already present (in this case it will be inserted).
 	
 	@param G Graph we are constructing
-	@param P point we want to check if is present or not
+	@param P Point we want to check if is present or not
+	@return vertex_descriptor
 */
 template <typename Graph>
 typename boost::graph_traits<Graph>::vertex_descriptor     //return type
@@ -75,10 +76,11 @@ vertex_insertion_or_identification(Graph & G, point<2> const& P);
 	@detail This function checks if two lines (fractures) are intersected. If yes, it creates a vector with 
 			all the intersection points already ordered with the right direction (from source to target vertex)
 			
-	@param vect the vector that will be filled with the intersection points of each new edge
-	@param SRC source vertex of the current edge
-	@param TGT target vertex of the current edge
+	@param vect The vector that will be filled with the intersection points of each new edge
+	@param SRC Source vertex of the current edge
+	@param TGT Target vertex of the current edge
 	@param G Graph
+	@return void
 */
 template <typename Graph>
 void check_for_intersections(std::vector<std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> > & v,
@@ -97,6 +99,7 @@ void check_for_intersections(std::vector<std::pair<point<2>, typename boost::gra
 				by the second component of the pair
 	@param pair2 It is the intersection point between the current edge and the edge described 
 				by the second component of the pair
+	@return bool
 */
 template<typename Graph, bool src_less_than_tgt>
 bool compare(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> pair1,
@@ -118,11 +121,13 @@ std::pair<bool, point<2> > are_intersected 	(std::pair<point<2>, point<2> > line
 	@detail This function breaks old edges to create a refined graph according to the intersection
 			points found while inserting the current edge. It preserves the fracture number of each old
 			edge while creating the new ones.
+			
 	@param G Graph
 	@param vect The vector of the intersection points
 	@param frac_number The fracture number of the current edge
 	@param src Vertex descriptor of the source of the current edge
 	@param tgt Vertex descriptor of the target of the current edge
+	@return void
 */
 template<typename Graph>
 void refine_graph(Graph & G, 
