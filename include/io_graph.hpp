@@ -10,7 +10,7 @@
 /*!
 * \file io_graph.hpp
 * \author Ilaria Speranza & Mattia Tantardini
-* \date Sep 14, 2016
+* \date Sept, 2016
 * \brief Declaration of functions related to input and output of the graph 
 */
 
