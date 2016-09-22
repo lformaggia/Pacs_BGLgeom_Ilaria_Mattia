@@ -33,6 +33,9 @@
 #include "Forma_edge_property.hpp"
 #include "generic_point.hpp"
 
+template <typename Graph, typename Reader>
+void read_input_file(Graph & G, Reader R, std::string file_name);
+
 /*!
 * \brief Reads data about the graph from the input file given by professor Zunino
 *
