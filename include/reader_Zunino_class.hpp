@@ -13,6 +13,9 @@
 * \brief Implementation of the reader for Zunino file format
 */
 
+//Devo includere l'overloading di tutti i metodi = 0 in reader_base_class, anche se alcuni non li uso.
+
+
 #ifndef HH_READER_ZUNINO_CLASS_HH
 #define HH_READER_ZUNINO_CLASS_HH
 
@@ -57,10 +60,12 @@ class reader_Zunino final: public reader_base_class {
 			temp >> edge_num >> src >> tgt >> diam >> length >> SRC >> TGT;
 		};
 		
+		/*
 		//! It adds a new vertex in the graph
 		virtual void create_vertex(Vertex_desc & v){
 			v = 
 		};
+		*/
 		
 		//! It build the graph one edge at a time
 		virtual void build_graph(){
@@ -74,18 +79,17 @@ class reader_Zunino final: public reader_base_class {
 			}
 		};
 		
-		//! It adds the right properties to the vertices just added
+		//! It assign the right properties to the vertices just added
 		virtual void give_vertex_properties(Vertex_desc const& new_source, Vertex_desc const& new_target){
 			G[new_source] = SRC;
 			G[new_target] = TGT;
 		};
 		
+		//! It assign the properties to the edge just added
 		virtual void give_edge_properties(Edge_desc const& e){
 			G[e].capacity = diam;
 			G[e].length = length;
 		};
-
 };
-
 
 #endif 	//HH_READER_ZUNINO_CLASS_HH

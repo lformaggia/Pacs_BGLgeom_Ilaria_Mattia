@@ -30,13 +30,24 @@ class reader_base_class{
 		typedef typename graph_traits<Graph>::edge_descriptor Edge_desc;
 	
 		//! Default constructor
-		reader_base_class(): G(0), file_name(), num_dummy_lines(0), line() {};
+		reader_base_class(): G(0),
+							 file_name(),
+							 num_dummy_lines(0),
+							 line(),
+							 new_source(),
+							 new_target(),
+							 new_edge(),
+							 edge_inserted() {};
 		
 		//! Constructor: assign only num_dummy_lines, empty graph
 		reader_base_class(std::string _file_name, unsigned int _num_dummy_lines):	G(0),
-																					file_name(_file_name),
-																					num_dummy_lines(_num_dummy_lines),
-																					line() {};
+																					file_name(),
+																					num_dummy_lines(0),
+																					line(),
+																					new_source(),
+																					new_target(),
+																					new_edge(),
+																					edge_inserted() {};
 		
 		//! Default copy constructor
 		reader_base_class(reader_base_class const&) = default;
@@ -65,16 +76,16 @@ class reader_base_class{
 		virtual void read_data_from_line(std::istringstream const& temp) = 0;
 		
 		//! It adds a new vertex in the graph and returns the corrispondent vertex_descriptor by reference
-		virtual void create_vertex(Vertex_desc & v) = 0;
+		//virtual void create_vertex(Vertex_desc & v) = 0;
 		
 		//! It build the graph one edge at a time, called many times from an external loop
 		virtual void build_graph() = 0;
 		
 		virtual void give_vertex_properties(Vertex_desc const& new_source, Vertex_desc const& new_target) = 0;
 		
-		virtual void create_edge() = 0;
+		//virtual void create_edge() = 0;
 		
-		virtual void give_edge_property() = 0;
+		virtual void give_edge_property(Edge_desc const& e) = 0;
 		
 	protected:
 		Graph G;		//maybe pointer???
@@ -85,7 +96,7 @@ class reader_base_class{
 		Vertex_desc new_target;
 		Edge_desc new_edge;
 		bool edge_inserted;
-		bool vertices_index_already_present		//va inizializzato!		
+		//bool vertices_index_already_present		//va inizializzato!		
 };
 
 template <typename Graph>
@@ -110,10 +121,9 @@ void reader_base_class<Graph>::read_input_file(){
 			//creo i nodi
 			//this->create_vertex(source);
 			
-			this->give_vertex_properties();
-			this->give_edge_properties();
+			this->give_vertex_properties(new_source, new_target);
+			this->give_edge_properties(e);
 	}
-
 };
 
 #endif	//HH_READER_BASE_CLASS_HH

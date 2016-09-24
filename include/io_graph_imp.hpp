@@ -10,12 +10,14 @@
 * \file io_graph_imp.hpp
 * \author Ilaria Speranza & Mattia Tantardini
 * \date Sept, 2016
-* \brief Declaration of functions related to input and output of the graph
+* \brief Definition of functions related to input and output of the graph
 */
 
 #ifndef HH_IO_GRAPH_IMP_HH
 #define HH_IO_GRAPH_IMP_HH	
 
+
+/*
 template <typename Graph, typename Reader>
 void read_input_file(Graph & G, Reader & R, std::string file_name){
 	
@@ -35,7 +37,7 @@ void read_input_file(Graph & G, Reader & R, std::string file_name){
 	};
 
 };
-
+*/
 	
 template<typename Graph>
 void read_zunino_old_format(Graph & G, std::string file_name){ 
