@@ -58,6 +58,16 @@ class reader_base_class{
 		//! Destructor (needed?)
 		virtual ~reader_base_class(){};
 		
+		//! It allows to set the input file
+		virtual void set_input_file(std::string _file_name){
+			file_name = _file_name;
+		};
+		
+		//! It deletes the whole graph. This in order to free memory after the graph has been read.
+		virtual void release_graph(){
+			G.clear();
+		};
+		
 		//! Getting the graph (once built)
 		virtual Graph get_graph(){ return G; };		//così però lo passo per copia.. se è grosso?
 		
