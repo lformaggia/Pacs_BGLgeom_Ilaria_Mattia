@@ -6,7 +6,6 @@
 	@detail
 */
 
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,18 +16,30 @@
 #include "maximum_flow.hpp"
 #include "compute_euclidean_distance.hpp"
 #include "topological_distance.hpp"
+#include "reader_Zunino_class.hpp"
+#include "Zunino_edge_property.hpp"
 
 using namespace boost;
 
 int main(){
 
-	 typedef adjacency_list<vecS,vecS,directedS,point<3>,edge_prop_t> Graph;
+	 typedef adjacency_list<vecS,vecS,directedS,point<3>,Zunino_edge_property_t> Graph;
 	 typedef graph_traits<Graph> Traits;
 	 typedef Traits::edge_descriptor Edge_Descriptor;
 	 typedef Traits::edge_iterator Edge_Iterator;
 	 
+	 std::string filename("../data/rattm93a.txt");
+	 unsigned int dummy_lines = 2;
+	 
 	 Graph G;
-	 read_zunino_old_format<Graph> (G , "../data/rattm93a.txt");
+	 reader_Zunino<Graph> R(filename, 2);
+	 
+	 R.read_input_file();
+	 
+	 G = R.get_graph();
+	 
+	 
+	 //read_zunino_old_format<Graph> (G , "../data/rattm93a.txt");
 	 
 	 //chiamiamo:
 	 std::map<Edge_Descriptor, double> out_residual_capacity;
