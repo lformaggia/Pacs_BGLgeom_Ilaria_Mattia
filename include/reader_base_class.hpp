@@ -30,7 +30,7 @@ class reader_base_class{
 		typedef typename graph_traits<Graph>::edge_descriptor Edge_desc;
 	
 		//! Default constructor
-		reader_base_class(): G(0),
+		reader_base_class(): G(),
 							 file_name(),
 							 num_dummy_lines(0),
 							 line(),
@@ -40,9 +40,9 @@ class reader_base_class{
 							 edge_inserted() {};
 		
 		//! Constructor: assign only num_dummy_lines, empty graph
-		reader_base_class(std::string _file_name, unsigned int _num_dummy_lines):	G(0),
-																					file_name(),
-																					num_dummy_lines(0),
+		reader_base_class(std::string _file_name, unsigned int _num_dummy_lines):	G(),
+																					file_name(_file_name),
+																					num_dummy_lines(_num_dummy_lines),
 																					line(),
 																					new_source(),
 																					new_target(),
