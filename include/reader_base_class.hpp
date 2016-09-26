@@ -34,24 +34,26 @@ class reader_base_class{
 		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
 	
 		//! Default constructor
-		reader_base_class(): G(),
-							 file_name(),
-							 num_dummy_lines(0),
-							 line(),
-							 new_source(),
-							 new_target(),
-							 new_edge(),
-							 edge_inserted() {};
+		reader_base_class(Graph & _G):	G(_G),
+										file_name(),
+										num_dummy_lines(0),
+										line(),
+										new_source(),
+										new_target(),
+										new_edge(),
+										edge_inserted() {};
 		
 		//! Constructor: assign only num_dummy_lines, empty graph
-		reader_base_class(std::string _file_name, unsigned int _num_dummy_lines):	G(),
-																					file_name(_file_name),
-																					num_dummy_lines(_num_dummy_lines),
-																					line(),
-																					new_source(),
-																					new_target(),
-																					new_edge(),
-																					edge_inserted() {};
+		reader_base_class	(Graph & _G,
+							 std::string _file_name,
+							 unsigned int _num_dummy_lines):	G(_G),
+																file_name(_file_name),
+																num_dummy_lines(_num_dummy_lines),
+																line(),
+																new_source(),
+																new_target(),
+																new_edge(),
+																edge_inserted() {};
 		
 		//! Default copy constructor
 		reader_base_class(reader_base_class const&) = default;
@@ -98,7 +100,7 @@ class reader_base_class{
 		virtual void give_edge_properties() = 0;
 		
 	protected:
-		Graph G;		//maybe pointer???
+		Graph & G;		// Via reference!!! In this way I save memory inside the class, I'm building the graph that is already present outside
 		std::string file_name;
 		unsigned int num_dummy_lines;
 		std::string line;

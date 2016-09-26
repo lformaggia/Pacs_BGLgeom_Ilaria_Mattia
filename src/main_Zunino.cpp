@@ -32,12 +32,12 @@ int main(){
 	 unsigned int dummy_lines = 2;
 	 
 	 Graph G;
-	 reader_Zunino<Graph> R(filename, 2);
+	 reader_Zunino<Graph> R(G, filename, 2);
 	 
 	 R.read_input_file();
 	 
 	 G = R.get_graph();
-	 R.release_graph();		//brutto però... coi puntatori?
+	 //R.release_graph();		//brutto però... coi puntatori?
 	 
 	 
 	 //read_zunino_old_format<Graph> (G , "../data/rattm93a.txt");

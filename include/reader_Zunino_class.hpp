@@ -39,11 +39,12 @@ class reader_Zunino final: public reader_base_class<Graph> {
 		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
 		
 		//! Default constructor:
-		reader_Zunino(): reader_base_class<Graph>(), SRC(), TGT(), src(0), tgt(0), edge_num(0), diam(0.0), length(0.0) {};
+		reader_Zunino(Graph & _G): reader_base_class<Graph>(_G), SRC(), TGT(), src(0), tgt(0), edge_num(0), diam(0.0), length(0.0) {};
 		
 		//! COnstructor: it assigns value only to the variables in reader_base_class, the others in reader_Zunino are defaulted
-		reader_Zunino	(std::string _file_name,
-						unsigned int _num_dummy_lines): reader_base_class<Graph>(_file_name, _num_dummy_lines),
+		reader_Zunino	(Graph & _G,
+						std::string _file_name,
+						unsigned int _num_dummy_lines): reader_base_class<Graph>(_G, _file_name, _num_dummy_lines),
 														SRC(),
 														TGT(),
 														src(0),
