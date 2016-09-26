@@ -100,13 +100,21 @@ class reader_base_class{
 		virtual void give_edge_properties() = 0;
 		
 	protected:
+		//! A reference is used to represent the Graph. In this way we don't have to copy the graph outside the class once built. 
 		Graph & G;		// Via reference!!! In this way I save memory inside the class, I'm building the graph that is already present outside
+		//! The string in which is stored the name of the input file to read.
 		std::string file_name;
+		//! The numbers of initial lines (headers) that the reader has to skip to read useful data
 		unsigned int num_dummy_lines;
+		//! This will contain one line of the input file, to parse
 		std::string line;
+		//! The vertex descriptor for the source of the new edge added
 		Vertex_desc new_source;
+		//! The vertex descriptor for the target of the new edge added
 		Vertex_desc new_target;
+		//! The edge descriptor for the new edge
 		Edge_desc new_edge;
+		//! Utility used in add_edge function to perform controls
 		bool edge_inserted;
 		//bool vertices_index_already_present		//va inizializzato!		
 };
