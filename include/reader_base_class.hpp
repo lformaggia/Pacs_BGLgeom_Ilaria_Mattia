@@ -11,6 +11,10 @@
 * \author Ilaria Speranza & Mattia Tantardini
 * \date Sept, 2016
 * \brief Base abstract class to read input file and creating the graph
+* 
+* \detail It contains all the variables needed to read an input file and to
+*			store a graph. It allows to specify how to read the imput file 
+*			through the abrstract methods.
 */
 
 #ifndef HH_READER_BASE_CLASS_HH
@@ -87,10 +91,10 @@ class reader_base_class{
 		//! It build the graph one edge at a time, called many times from an external loop
 		virtual void build_graph() = 0;
 		
-		//! It assign properties to new vertices in the rigth way
+		//! It assign properties to new vertices in the rigth way. It has to be called in build_graph().
 		virtual void give_vertex_properties() = 0;
 		
-		//! It assign properties to the new edge in the rigth way
+		//! It assign properties to the new edge in the rigth way. It has to be called in build_graph().
 		virtual void give_edge_properties() = 0;
 		
 	protected:
@@ -120,11 +124,12 @@ void reader_base_class<Graph>::read_input_file(){
 			continue;
 		std::istringstream temp(line);
 		this->read_data_from_line(temp);
-		if(!temp.fail())
-			this->build_graph();
-			this->give_vertex_properties();
-			this->give_edge_properties();
-	}
+		if(!temp.fail()){
+			this->build_graph();		//le proprietà magari non riesco a darle di fila così lineari, vedi intersezioni di Formaggia.
+			//this->give_vertex_properties();
+			//this->give_edge_properties();
+		}	//if
+	}	//while
 };
 
 #endif	//HH_READER_BASE_CLASS_HH

@@ -11,11 +11,11 @@
 #include <vector>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "io_graph.hpp"
+//#include "io_graph.hpp"
 #include "generic_point.hpp"
 #include "maximum_flow.hpp"
 #include "compute_euclidean_distance.hpp"
-#include "topological_distance.hpp"
+//#include "topological_distance.hpp"
 #include "reader_Zunino_class.hpp"
 #include "Zunino_edge_property.hpp"
 

@@ -23,15 +23,15 @@
 
 #include "reader_base_class.hpp"
 #include "generic_point.hpp"
-#include "Zunino_edge_property.hpp"		//va inclusa o funziona anche senza?
+//#include "Zunino_edge_property.hpp"		//va inclusa o funziona anche senza? Funziona anche senza
 
 template <typename Graph>
 class reader_Zunino final: public reader_base_class<Graph> {
 	private:
-		point<3> SRC,TGT; 												// they will store vertex coordinates	  
-		unsigned int src, tgt; 													// they will read source and target of each edge
-		unsigned int edge_num;													// dummy variable;
-		double diam, length;													// they will store diameter and length of the edge		
+		point<3> SRC,TGT; 												// they will store vertices coordinates	  
+		unsigned int src, tgt; 											// they will read source and target of each edge
+		unsigned int edge_num;											// dummy variable;
+		double diam, length;											// they will store diameter and length of the edge		
 		
 	public:
 		
@@ -77,6 +77,8 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			if(!this->edge_inserted){
 				//succede qualcosa
 			}
+			this->give_vertex_properties();
+			this->give_edge_properties();
 		};
 		
 		//! It assign the right properties to the vertices just added
