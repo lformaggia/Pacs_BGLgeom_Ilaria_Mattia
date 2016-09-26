@@ -78,7 +78,7 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			if(!this->edge_inserted){
 				//succede qualcosa
 			}
-			this->give_vertex_properties();
+			this->give_vertex_properties();		//non c'è bisogno del this, ma magari meglio lasciarlo per chiarezza. non so.
 			this->give_edge_properties();
 		};
 		
