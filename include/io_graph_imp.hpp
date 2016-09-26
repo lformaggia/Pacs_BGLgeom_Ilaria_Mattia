@@ -16,29 +16,8 @@
 #ifndef HH_IO_GRAPH_IMP_HH
 #define HH_IO_GRAPH_IMP_HH	
 
+/*		//Implemented through the reader_Zunino_class
 
-/*
-template <typename Graph, typename Reader>
-void read_input_file(Graph & G, Reader & R, std::string file_name){
-	
-	// Open the file:
-	std::ifstream file(file_name.c_str());
-	
-	R.ignore_dummy_lines(file);
-	
-	
-	std::string s;
-	while(!file.fail() && !file.eof()){
-		std::getline(file, s);
-		if(s.empty())
-			continue;
-		std::istringstream temp(s);
-		R.read_data_from_line(temp);
-	};
-
-};
-*/
-	
 template<typename Graph>
 void read_zunino_old_format(Graph & G, std::string file_name){ 
 	
@@ -64,7 +43,7 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 	// Utilities for reading and constructing the Graph
 	
 	//volendo check doppioni
-	std::set<int> vertex_set; 		/*< using a set, we can easily check if a vertex has already been added */
+	std::set<int> vertex_set; 		//< using a set, we can easily check if a vertex has already been added 
 	std::pair<std::set<int>::iterator, bool> set_inserter;
 	std::string s;			
 	edge_descriptor e;
@@ -119,6 +98,10 @@ void read_zunino_old_format(Graph & G, std::string file_name){
 }	//read_zunino_old_format
 
 
+*/
+
+
+
 template <typename Graph>
 void read_Formaggia_format(Graph & G, std::string file_name){
 	
@@ -127,15 +110,21 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 
 	std::ifstream file(file_name.c_str());
 	
+	//variabili da mettere come attributi della classe reader_Formaggia_class
+	
 	//variables for storing data:
 	unsigned int frac_number;
 	point<2> SRC, TGT;
+	
+	//ignoring dummy lines
 	
 	//Ignoring the first lines:
 	std::string dummy_line;
 	std::getline(file, dummy_line);
 	std::getline(file, dummy_line);
 	std::getline(file, dummy_line);
+	
+	// Queste variabili per la lettura stanno in reader_base_class
 	
 	//Utilities for reading and constructing the Graph:
 	std::string s;
@@ -151,9 +140,13 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 			continue;
 		std::istringstream temp(s);
 		//Leggo i vari dati (ogni utente qui metterà il suo)
+		//read_data_from_line()
 		temp >> frac_number >> SRC >> TGT;
 		std::cout << SRC << "  " << TGT << std::endl;
 		if(!temp.fail()){
+			
+			//da qui ...
+			
 			// this function returns a vertex descriptor: a new one if not present in G, or the respctive and already existing vertex
 			src = vertex_insertion_or_identification(G, SRC); 
 			tgt = vertex_insertion_or_identification(G, TGT);
@@ -163,7 +156,10 @@ void read_Formaggia_format(Graph & G, std::string file_name){
 			check_for_intersections(intersections, SRC, TGT, G); // checks for intersections with every edge in the graph and re-orders them
 			
 			// if there are intersection points, refine the graph
-			refine_graph(G, intersections, frac_number, src, tgt);			
+			refine_graph(G, intersections, frac_number, src, tgt);
+			
+			// ... a qui va tutto in build_graph(). Le funzioni check_for intersections, e refine_graph saranno dei metodi aggiuntivi posseduti solo dalla classe reader_Formaggia.
+						
 		}	//if		
 	}	//while
 	

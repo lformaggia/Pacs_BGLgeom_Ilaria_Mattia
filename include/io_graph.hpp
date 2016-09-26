@@ -28,7 +28,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include "edge_property.hpp"
 #include "Forma_vertex_property.hpp"
 #include "Forma_edge_property.hpp"
 #include "generic_point.hpp"
