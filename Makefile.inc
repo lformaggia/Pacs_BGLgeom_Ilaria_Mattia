@@ -21,3 +21,5 @@ EXEC = $(wildcard $(TARGET_DIR)/*)		#used in make distclean
 
 # Documentation variables:
 DOXYFILE = Doxyfile
+LATEX_DOC_DIR = doc/latex
+#DOC_OUT_FILE = refman.pdf  #non serve!

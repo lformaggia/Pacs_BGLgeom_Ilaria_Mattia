@@ -39,6 +39,8 @@ main_Formaggia.o: ./$(SOURCE_DIR)/main_Formaggia.cpp
 	
 doc:
 	doxygen $(DOXYFILE)
+	make -C $(LATEX_DOC_DIR)
+# make -C per chiamare make nella cartella indicata
 
 clean :
 	rm -rv $(OBJS)	
