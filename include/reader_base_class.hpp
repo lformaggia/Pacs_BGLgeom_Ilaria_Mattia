@@ -7,14 +7,14 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-* \file reader_base_class.hpp
-* \author Ilaria Speranza & Mattia Tantardini
-* \date Sept, 2016
-* \brief Base abstract class to read input file and creating the graph
-* 
-* \detail It contains all the variables needed to read an input file and to
-*			store a graph. It allows to specify how to read the imput file 
-*			through the abrstract methods.
+	@file reader_base_class.hpp
+	@author Ilaria Speranza & Mattia Tantardini
+	@date Sept, 2016
+	@brief Base abstract class to read input file and creating the graph
+
+	@detail It contains all the variables needed to read an input file and to
+			store a graph. It allows to specify how to read the imput file 
+			through the abrstract methods.
 */
 
 #ifndef HH_READER_BASE_CLASS_HH
@@ -33,7 +33,7 @@ class reader_base_class{
 		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
 	
-		//! Default constructor
+		//! Default constructor (we need however to initialize the reference)
 		reader_base_class(Graph & _G):	G(_G),
 										file_name(),
 										num_dummy_lines(0),
@@ -93,15 +93,21 @@ class reader_base_class{
 		//! It build the graph one edge at a time, called many times from an external loop
 		virtual void build_graph() = 0;
 		
-		//! It assign properties to new vertices in the rigth way. It has to be called in build_graph().
+		//! It assign properties to new vertices in the rigth way. It has to be called in build_graph()!
 		virtual void give_vertex_properties() = 0;
 		
-		//! It assign properties to the new edge in the rigth way. It has to be called in build_graph().
+		//! It assign properties to the new edge in the rigth way. It has to be called in build_graph()!
 		virtual void give_edge_properties() = 0;
 		
 	protected:
-		//! A reference is used to represent the Graph. In this way we don't have to copy the graph outside the class once built. 
-		Graph & G;		// Via reference!!! In this way I save memory inside the class, I'm building the graph that is already present outside
+		/*!
+			@brief A reference is used to represent the Graph.
+			@detail Using a reference allows us not to copy the whole graph outside
+					 the class once finished to read data and to build the graph.
+					 In this way we build the pre-existent graph (created in the main)
+					 while reading the input file. We do not use extra memory.
+		*/
+		Graph & G;
 		//! The string in which is stored the name of the input file to read.
 		std::string file_name;
 		//! The numbers of initial lines (headers) that the reader has to skip to read useful data
@@ -114,7 +120,10 @@ class reader_base_class{
 		Vertex_desc new_target;
 		//! The edge descriptor for the new edge
 		Edge_desc new_edge;
-		//! Utility used in add_edge function to perform controls
+		/*! 
+			@brief Bool returned in a pair with an edge descriptor by add_edge function.
+			@detail It is true if the edge was succesfully inserted, false otherwise 
+		*/
 		bool edge_inserted;
 		//bool vertices_index_already_present		//va inizializzato!		
 };
