@@ -4,6 +4,7 @@ CXXFLAGS = -std=c++11
 CPPFLAGS ?= -I$(mkBGLInc) -I./include
 LDFLAGS ?= 
 LIBS = 
+#WARNS = -Wall
 
 # Directory variables:
 #Remember not to leave spaces after the name of the variable!
