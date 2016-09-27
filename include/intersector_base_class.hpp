@@ -41,7 +41,7 @@ class intersector_base_class {
 											intersections(),
 											intersection_point(),
 											Edge2_descriptor() {};
-		
+		/*		Penso non si useranno may, si setta tutto a mano mentre si fanno cicli, ecc.
 		//! Constructor with single points for line1
 		intersector_base_class	(Graph & _G,
 								point<2> const& _SRC,
@@ -59,7 +59,7 @@ class intersector_base_class {
 																	intersections(),
 																	intersection_point()
 																	Edge2_descriptor() {};
-		
+		*/
 		//! Copy constructor
 		intersector_base_class(intersector_base_class const&) = default;
 		
@@ -109,7 +109,7 @@ class intersector_base_class {
 					intersection_point the coordinates of the intersection found
 		*/
 		// Qui ci andrà la funzione di formaggia e non sarà più abstract!
-		virtual bool are_intersected() = 0;		
+		virtual bool are_intersected() = 0;
 		
 		//! It pushes back a new intersection point in the vector intersections
 		virtual void store_intersection(){
@@ -125,7 +125,7 @@ class intersector_base_class {
 			@detail It has to inteface with private attributes of the derived class in order
 					to set edge and vertex properties in the right way.
 		*/
-		void refine_graph() = 0;
+		virtual void refine_graph() = 0;
 		
 		//===================== SORTING UTILITIES =============================//
 		
