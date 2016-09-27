@@ -42,7 +42,8 @@ class intersector {
 									intersections(),
 									src_int_edge(), 
 									tgt_int_edge(),
-									intersection_point() {};
+									intersection_point(),
+									current_frac_number(0) {};
 		
 		//! Constructor with single points for line1
 		intersector	(Graph & _G,
@@ -53,7 +54,8 @@ class intersector {
 											intersections(),
 											src_int_edge(),
 											tgt_int_edge(),
-											intersection_point() {};
+											intersection_point(),
+											current_frac_number(0) {};
 		
 		//! Constructor with already a line
 		intersector(Graph & _G, Line _current_edge) : 	G(_G),
@@ -62,7 +64,8 @@ class intersector {
 														intersections(),
 														src_int_edge(),
 														tgt_int_edge(),
-														intersection_point() {};
+														intersection_point()
+														current_frac_number(0) {};
 		
 		//! Copy constructor
 		intersector(intersector const&) = default;
@@ -91,6 +94,11 @@ class intersector {
 		//! It sets current_edge from another Line
 		void set_intersection_edge(Line _L){
 			intersection_edge = _L;
+		};
+		
+		//! It allows to set the value of current_frac_number
+		void set_current_frac_number(unsigned int const& _frac_number){
+			current_frac_number = _frac_number;
 		};
 		
 		//solo con fratture orizzontali e verticali!!! Poi credo sarebbe da mettere fuori, non inline
@@ -126,7 +134,7 @@ class intersector {
 		//! It fills intersection_vector with all the intersections founded
 		void compute_intersections(){
 			Edge_iter e_it, e_end;
-			for(std::tie(e_it, e_end) = edged(G); e_it != e_end; ++e_it){
+			for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
 				//creting the intersection edge
 				src_int_edge = boost::source(*e_it, G);
 				tgt_int_edge = boost::target(*e_it, G);
@@ -140,21 +148,43 @@ class intersector {
 		//! It reorders the intersections point founded in order to create the new smaller edge in the right way.
 		void order_intersections(){
 			if(current_edge.first < current_edge.second)
-				std::sort(intersections.begin(), intersections.end(), this->sort_points<Graph, src_less_than_tgt>);
+				std::sort(intersections.begin(), intersections.end(), this->src_less_than_tgt);
 			else
-				std::sort(intersections.begin(), intersections.end(), this->sort_points<Graph, src_greater_than_tgt>);
+				std::sort(intersections.begin(), intersections.end(), this->src_greater_than_tgt);
+		};	//order_intersections
+		
+		//! Used to sort two elements of the vector intersections (when source is "less than" target)
+		bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+					 		 	 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
+			return intersection_vector_elem1.first < intersection_vector_elem2.first;
 		};
 		
+		//! Used to sort two elements of the vector intersections (when source is "greater than" target)
+		bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+					 		 	 	 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
+			return intersection_vector_elem1.first > intersection_vector_elem2.first;
+		};
+		
+		
+		/*
 		//! Used to sort in the right way two elements of the vector intersections
-		template<typename Graph, bool src_less_than_tgt>
-		bool sort_points	(std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> intersection_vector_elem1,
-					 		 std::pair<point<2>, typename boost::graph_traits<Graph>::edge_descriptor> intersection_vector_elem2){
-			
+		template<bool src_less_than_tgt>
+		bool sort_intersection_points	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+					 		 			 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
 			if(src_less_than_tgt)
 				return intersection_vector_elem1.first < intersection_vector_elem2.first;
 			else 
 				return intersection_vector_elem1.first > intersection_vector_elem2.first;
-		}	//sort_points
+		};	//sort_intersection_points
+		*/
+		
+		void refine_graph(){
+			
+			
+			
+			
+		};	//refine_graph
+		
 	
 	protected:
 		//! Graph of which we want to calculate intersections. By reference to save memory.
@@ -169,6 +199,8 @@ class intersector {
 		Vertex_desc src_int_edge, tgt_int_edge;
 		//! The intersection point between current_edge and intersection_edge
 		point<2> intersection_point;
+		//! Number of the fracture which the current edge belongs to
+		unsigned int current_frac_number;
 		
 };	//intersector
 
