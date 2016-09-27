@@ -14,7 +14,6 @@
 	@detail 
 */
 
-
 /// Ecco il trucco forse!!! Una volta stabilita tutta la geometria, questa classe dovrebbe funzionare sempre allo stesso modo. Cioè, tipo: le intersezioni si troveranno sempre nella stessa maniera, i punti e gli edge saranno tutti descritti alla stessa maniera, ecc.
 
 #ifndef HH_INTERSECTOR_BASE_CLASS_HH
@@ -35,17 +34,12 @@ class intersector_base_class {
 		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 		typedef std::pair<point<2>, point<2> > Line;
 		
-		//enum {src_greater_than_tgt, src_less_than_tgt};
-		
 		//! Default constructor (initialization of the reference to the graph needed)
 		intersector_base_class(Graph & _G):	G(_G),
 											line1(),
 											line2(),
 											intersections(),
-											src_int_edge(), 
-											tgt_int_edge(),
 											intersection_point(),
-											current_frac_number(0),
 											Edge2_descriptor() {};
 		
 		//! Constructor with single points for line1
@@ -55,10 +49,7 @@ class intersector_base_class {
 														Edge1(_SRC, _TGT),
 														Edge2(),
 														intersections(),
-														src_int_edge(),
-														tgt_int_edge(),
 														intersection_point(),
-														current_frac_number(0),
 														Edge2_descriptor() {};
 		
 		//! Constructor with already a line
@@ -66,10 +57,7 @@ class intersector_base_class {
 																	Edge1(_Edge1),
 																	Edge2(),
 																	intersections(),
-																	src_int_edge(),
-																	tgt_int_edge(),
 																	intersection_point()
-																	current_frac_number(0),
 																	Edge2_descriptor() {};
 		
 		//! Copy constructor
@@ -80,6 +68,8 @@ class intersector_base_class {
 		
 		//! Assignment operator
 		intersector_base_class & operator=(intersector_base_class const&) = default;
+		
+		//======================= ATTRIBUTES SETTING OPERATIONS ====================
 		
 		//! It sets Edge1 from two points
 		virtual void set_Edge1(point<2> const& P1, point<2> const& P2){
@@ -111,20 +101,23 @@ class intersector_base_class {
 			Edge2_descriptor = _Edge2_desc;
 		};
 		
+		//================ INTERSECTION OPERATIONS ======================
+		
 		/*! 
 			@brief It checks if Edge1 and Edge2 are actually intersected
 			@detail If the two edge are intersecating, this method must store in the class variable
 					intersection_point the coordinates of the intersection found
 		*/
+		// Qui ci andrà la funzione di formaggia e non sarà più abstract!
 		virtual bool are_intersected() = 0;		
 		
 		//! It pushes back a new intersection point in the vector intersections
 		virtual void store_intersection(){
-			intersections.push_back(std::make_pair(intersection_point, Edge2_descriptor);	
+			intersections.push_back(std::make_pair(intersection_point, Edge2_descriptor));	
 		};	//compute_intersections
 		
 		virtual void clear_intersections(){
-			
+			intersections.erase();
 		};
 		
 		/*!
@@ -157,23 +150,7 @@ class intersector_base_class {
 					user defined ordering) the target of Edge2
 		*/
 		virtual bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;
-		
-		
-		/*
-		//! Used to sort in the right way two elements of the vector intersections
-		template<bool src_less_than_tgt>
-		bool sort_intersection_points	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 			 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
-			if(src_less_than_tgt)
-				return intersection_vector_elem1.first < intersection_vector_elem2.first;
-			else 
-				return intersection_vector_elem1.first > intersection_vector_elem2.first;
-		};	//sort_intersection_points
-		*/
-		
-
-		
+					 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;				
 	
 	protected:
 		//! Graph of which we want to calculate intersections. By reference to save memory.
@@ -192,12 +169,8 @@ class intersector_base_class {
 		Line Edge2;
 		//!	Vector that will contains the intersection point and the edge descriptor of the edge with which the current edge is intersecating
 		std::vector<std::pair<point<2>, Edge_desc> > intersections;
-		//! Vertex_descriptor of the Edge2
-		Vertex_desc src_int_edge, tgt_int_edge;
 		//! The intersection point between Edge1 and Edge2 (if present) 
 		point<2> intersection_point;
-		//! Number of the fracture which the current edge belongs to
-		unsigned int current_frac_number;
 		/*!
 			@brief Edge descriptor of Edge2.
 			@detail If the user has to perform multiple intersections between Edge1 (fixed) and 
