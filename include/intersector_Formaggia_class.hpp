@@ -7,15 +7,15 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersector_class.hpp
+	@file intersector_Formaggia_class.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Class to handle intersections of edges in a graph with geometrical properties
 	@detail 
 */
 
-#ifndef HH_INTERSECTOR_CLASS_HH
-#define HH_INTERSECTOR_CLASS_HH
+#ifndef HH_INTERSECTOR_FORMAGGIA_CLASS_HH
+#define HH_INTERSECTOR_FORMAGGIA_CLASS_HH
 
 #include <vector>
 #include <tuple>
@@ -25,7 +25,7 @@
 #include "generic_point.hpp"
 
 template <typename Graph>
-class intersector {
+class intersector_Formaggia {
 	public:
 	
 		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
@@ -36,7 +36,7 @@ class intersector {
 		enum {src_greater_than_tgt, src_less_than_tgt};
 		
 		//! Default constructor (initialization of the reference to the graph needed)
-		intersector(Graph & _G):	G(_G),
+		intersector_Formaggia(Graph & _G):	G(_G),
 									line1(),
 									line2(),
 									intersections(),
@@ -46,7 +46,7 @@ class intersector {
 									current_frac_number(0) {};
 		
 		//! Constructor with single points for line1
-		intersector	(Graph & _G,
+		intersector_Formaggia	(Graph & _G,
 					point<2> const& _SRC,
 					point<2> const& _TGT) :	G(_G), 
 											current_edge(_SRC, _TGT),
@@ -58,7 +58,7 @@ class intersector {
 											current_frac_number(0) {};
 		
 		//! Constructor with already a line
-		intersector(Graph & _G, Line _current_edge) : 	G(_G),
+		intersector_Formaggia(Graph & _G, Line _current_edge) : 	G(_G),
 														current_edge(_current_edge),
 														intersection_edge(),
 														intersections(),
@@ -68,13 +68,13 @@ class intersector {
 														current_frac_number(0) {};
 		
 		//! Copy constructor
-		intersector(intersector const&) = default;
+		intersector_Formaggia(intersector_Formaggia const&) = default;
 		
 		//! Destructor
-		virtual ~intersector(){};
+		virtual ~intersector_Formaggia(){};
 		
 		//! Assignment operator
-		intersector & operator=(intersector const&) = default;
+		intersector_Formaggia & operator=(intersector_Formaggia const&) = default;
 		
 		//! It sets current_edge from two points
 		void set_current_edge(point<2> const& P1, point<2> const& P2){
@@ -141,7 +141,7 @@ class intersector {
 				this->set_intersection_edge(G[src_int_edge].coord, G[tgt_int_edge].coord);
 				
 				if(this->are_intersected())
-					intersections.push_back(std::make_pair(intersection_point, *e_it);				
+					intersections.push_back(std::make_pair(intersection_point, *e_it));				
 			}	//for
 		};	//compute_intersections
 		
@@ -202,6 +202,6 @@ class intersector {
 		//! Number of the fracture which the current edge belongs to
 		unsigned int current_frac_number;
 		
-};	//intersector
+};	//intersector_Formaggia
 
-#endif	//HH_INTERSECTOR_CLASS_HH
+#endif	//HH_intersector_Formaggia_CLASS_HH
