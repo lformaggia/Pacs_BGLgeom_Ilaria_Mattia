@@ -87,6 +87,11 @@ class reader_base_class{
 				std::getline(file, dummy);
 		};
 		
+		/*
+		//! It checks if a vertex that has to be inserted is already present in the graph.
+		virtual bool check_if_vertex_already_present() = 0;
+		*/
+		
 		//! It describes how to read each line in the input file, and in which variables to store the data
 		virtual void read_data_from_line(std::istringstream & temp) = 0;
 		

@@ -34,9 +34,11 @@ class reader_Zunino final: public reader_base_class<Graph> {
 		double diam, length;											// they will store diameter and length of the edge		
 		
 	public:
-		
+	/*
+		//Anche qui dovrebbero essere inutili, perché stiamo ereditando da reader_base_class dove questi typedef sono public, e quindi dovrei vederli anche qui
 		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
+		*/
 		
 		//! Default constructor (we need however to initialize the reference to the graph)
 		reader_Zunino(Graph & _G): reader_base_class<Graph>(_G), SRC(), TGT(), src(0), tgt(0), edge_num(0), diam(0.0), length(0.0) {};
