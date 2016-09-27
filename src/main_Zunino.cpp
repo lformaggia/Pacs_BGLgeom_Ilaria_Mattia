@@ -36,7 +36,7 @@ int main(){
 	 
 	 R.read_input_file();
 	 
-	 G = R.get_graph();
+	 //G = R.get_graph();
 	 //R.release_graph();		//brutto però... coi puntatori?
 	 
 	 
