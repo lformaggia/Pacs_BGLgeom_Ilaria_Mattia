@@ -17,6 +17,7 @@
 #define HH_READER_FORMAGGIA_CLASS_HH
 
 #include "reader_base_class.hpp"
+#include "intersector_class.hpp"
 #include "generic_point.hpp"
 
 template <typename Graph>
@@ -26,10 +27,12 @@ class reader_Formaggia final: public reader_base_class<Graph> {
 		unsigned int frac_number;
 		//! The coordinates of the extremes of the new edge
 		point<2> SRC, TGT;
+		//! The class that manages intersection while constructing the graph
+		intersector I;
 		
 	public:
 		//! Default constructor (we need however to initialize the reference to the graph)
-		reader_Formaggia(Graph & _G) : reader_base_class<Graph>(_G), frac_number(0), SRC(), TGT() {};
+		reader_Formaggia(Graph & _G) : reader_base_class<Graph>(_G), frac_number(0), SRC(), TGT(), I(_G) {};
 		
 		//! Constructor
 		reader_Formaggia	(Graph & _G,
@@ -37,7 +40,8 @@ class reader_Formaggia final: public reader_base_class<Graph> {
 							unsigned int _num_dummy_lines) : 	reader_base_class<Graph>(_G, _file_name, _num_dummy_lines),
 																frac_number(0),
 																SRC(),
-																TGT() {};
+																TGT(),
+																I(_G) {};
 		
 		//! Default copy constructor
 		reader_Formaggia(reader_Formaggia const&) = default;
@@ -72,7 +76,12 @@ class reader_Formaggia final: public reader_base_class<Graph> {
 			this->new_source = boost::add_vertex(G);
 			this->new_target = boost::add_vertex(G);
 			this->give_vertex_properties();
+			//costruisco la linea per l'arco corrente:
+			I.set_current_edge(SRC, TGT);
 			
+			for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
+			
+			};
 			
 		};
 		
