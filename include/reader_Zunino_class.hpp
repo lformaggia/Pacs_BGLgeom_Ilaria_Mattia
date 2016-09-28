@@ -15,7 +15,6 @@
 
 //Devo includere l'overloading di tutti i metodi = 0 in reader_base_class, anche se alcuni non li uso.
 
-
 #ifndef HH_READER_ZUNINO_CLASS_HH
 #define HH_READER_ZUNINO_CLASS_HH
 
@@ -23,7 +22,6 @@
 
 #include "reader_base_class.hpp"
 #include "generic_point.hpp"
-//#include "Zunino_edge_property.hpp"		//va inclusa o funziona anche senza? Funziona anche senza
 
 template <typename Graph>
 class reader_Zunino final: public reader_base_class<Graph> {
@@ -34,11 +32,9 @@ class reader_Zunino final: public reader_base_class<Graph> {
 		double diam, length;											// they will store diameter and length of the edge		
 		
 	public:
-	/*
-		//Anche qui dovrebbero essere inutili, perché stiamo ereditando da reader_base_class dove questi typedef sono public, e quindi dovrei vederli anche qui
-		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
-		typedef typename boost::graph_traits<Graph>::edge_descriptor Edge_desc;
-		*/
+
+		typedef typename reader_base_class<Graph>::Vertex_desc Vertex_desc;
+		typedef typename reader_base_class<Graph>::Edge_desc Edge_desc;
 		
 		//! Default constructor (we need however to initialize the reference to the graph)
 		reader_Zunino(Graph & _G): reader_base_class<Graph>(_G), SRC(), TGT(), src(0), tgt(0), edge_num(0), diam(0.0), length(0.0) {};
