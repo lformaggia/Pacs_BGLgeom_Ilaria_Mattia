@@ -74,18 +74,23 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			this->new_target = tgt; //idem come sopra
 			std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(this->new_source, this->new_target, this->G);
 			this->if_edge_not_inserted();		//controllo se l'edge è stato inserito o meno
-			this->give_vertex_properties();		//non c'è bisogno del this, ma magari meglio lasciarlo per chiarezza. non so.
-			this->give_edge_properties();
+			this->give_new_source_properties();		//non c'è bisogno del this, ma magari meglio lasciarlo per chiarezza. non so.
+			this->give_new_target_properties();
+			this->give_new_edge_properties();
 		};
 		
-		//! It assign the right properties to the vertices just added
-		virtual void give_vertex_properties(){
+		//! It assign the right properties to new_source just added
+		virtual void give_new_source_properties(){
 			this->G[this->new_source] = SRC;
+		};
+		
+		//! It assign the right properties to new_target just added
+		virtual void give_new_target_properties(){
 			this->G[this->new_target] = TGT;
 		};
 		
 		//! It assign the properties to the edge just added
-		virtual void give_edge_properties(){
+		virtual void give_new_edge_properties(){
 			this->G[this->new_edge].capacity = diam;
 			this->G[this->new_edge].length = length;
 		};

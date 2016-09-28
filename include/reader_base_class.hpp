@@ -72,6 +72,7 @@ class reader_base_class{
 			file_name = _file_name;
 		};
 		
+		//! It allows to set both num_dummy_lines and current_line_number (they must have the same value)
 		virtual void set_num_dummy_lines(unsigned int const& _num_dummy_lines){
 			num_dummy_lines = _num_dummy_lines;
 			current_line_number = _num_dummy_lines;
@@ -98,11 +99,14 @@ class reader_base_class{
 		//! It build the graph one edge at a time, called many times from an external loop
 		virtual void build_graph() = 0;
 		
-		//! It assign properties to new vertices in the rigth way. It has to be called in build_graph()!
-		virtual void give_vertex_properties() = 0;
+		//! It assigns properties to new_source in the rigth way. It has to be called in build_graph()!
+		virtual void give_new_source_properties() = 0;
 		
-		//! It assign properties to the new edge in the rigth way. It has to be called in build_graph()!
-		virtual void give_edge_properties() = 0;
+		//! It assigns properties to new_target in the right way. It has to be called in build_graph()!
+		virtual void give_new_target_properties() = 0;
+		
+		//! It assigns properties to new_edge in the rigth way. It has to be called in build_graph()!
+		virtual void give_new_edge_properties() = 0;
 		
 		/*!
 			@brief It deals with wrong insertion of an edge.
@@ -118,7 +122,7 @@ class reader_base_class{
 				std::cerr 	<< "Possible causes: it is already present the same edge, or it is a loop edge in an undirected Graph" 
 							<< std::endl;				
 			}	//if
-		};
+		};	//if_edge_not_inserted
 		
 	protected:
 		/*!
