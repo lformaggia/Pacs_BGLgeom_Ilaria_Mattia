@@ -31,6 +31,7 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		typedef typename reader_base_class<Graph>::Vertex_desc Vertex_desc;
 		typedef typename reader_base_class<Graph>::Edge_desc Edge_desc;
 		typedef typename intersector_base_class<Graph>::Edge_iter Edge_iter;
+		typedef typename intersector_base_class<Graph>::Intersections_type Intersections_type;
 	
 		//! Default constructor (we need however to initialize the reference to the graph)
 		reader_Formaggia(Graph & _G) :	reader_base_class<Graph>(_G),
@@ -38,8 +39,15 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 										frac_number(0),
 										SRC(),
 										TGT(),
+										frac_number_old(0),
 										src_temp(),
-										tgt_temp() {};
+										tgt_temp(),
+										e_to_be_removed(),
+										split_edge(),
+										intersection_new(),
+										intersection_old(),
+										vec_it(),
+										vec_end() {};
 		
 		//! Constructor
 		reader_Formaggia	(Graph & _G,
@@ -49,8 +57,15 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 																frac_number(0),
 																SRC(),
 																TGT(),
+																frac_number_old(0),
 																src_temp(),
-																tgt_temp() {};
+																tgt_temp(),
+																e_to_be_removed(),
+																split_edge(),
+																intersection_new(),
+																intersection_old(),
+																vec_it(),
+																vec_end() {};
 		
 		//! Default copy constructor
 		reader_Formaggia(reader_Formaggia const&) = default;
@@ -61,6 +76,29 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		//! Destructor
 		virtual ~reader_Formaggia(){};
 		
+		//=================== ATTRIBUTES SETTING METHODS ====================
+		//Really needed? Perché son tutte variabili che non userò e non vedrò mai fuori..
+		
+		//! It allows to set e_to_be_removed
+		void set_e_to_be_removed(Edge_desc const& _e_to_be_removed){
+			e_to_be_removed = _e_to_be_removed;
+		};
+		
+		//! It allows to set split_edge
+		void set_split_edge(Edge_desc const& _split_edge){
+			split_edge = _split_edge;
+		};
+		
+		//! It allows to set intersection_new
+		void set_intersection_new(Vertex_desc const& _intersection_new){
+			intersection_new = _intersection_new;
+		};
+		
+		//! It allows to set intersection_old
+		void set_intersection_old(Vertex_desc const& _intersection_old){
+			intersection_old = _intersection_old;
+		};
+		
 		//============= OVERRIDING OF reader_base_class METHODS ================
 		
 		//! This is the way to interpret the data form Formaggia data file
@@ -68,19 +106,38 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 			temp >> frac_number >> SRC >> TGT;
 		};
 		
-		//! Assigns properties to the vertices of the just read edge
-		virtual void give_vertex_properties(){
+		//! It assigns properties to new_source in the right way
+		virtual void give_new_source_properties(){
 			this->G[this->new_source].coord = SRC;
 			this->G[this->new_source].is_external = true;
+		};
+		
+		//! It assigns properties to new_target in the right way
+		virtual void give_new_target_properties(){
 			this->G[this->new_target].coord = TGT;
 			this->G[this->new_target].is_external = true;
 		};
 		
-		//! 
-		virtual void give_edge_properties(){ ; };
-		
+		//! Overriding of the abstract method. It assigns properties to new_edge in the right way
+		virtual void give_new_edge_properties(){
+			this->G[this->new_edge].frac_num = frac_number;
+		};
+				
 		//! The set of instruction for one single step in the building of the graph
 		virtual void build_graph();
+		
+		//============== EXTRA reader_Formaggia METHODS ====================
+		
+		//! Overriding of the abstrac method. It assigns properties to a new intersection point in the right way
+		void give_new_intersection_properties(){
+			this->G[intersection_new].coord = (*vec_it).first;
+			this->G[intersection_new].is_external = false;
+		};
+		
+		//! It assigns properties to split_edge in the right way
+		 void give_split_edge_properties(){
+			this->G[split_edge].frac_num = frac_number_old;
+		};
 				
 		//============ OVERRIDING OF intersector_base_class METHODS ==============
 		
@@ -100,16 +157,23 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		//! The coordinates of the extremes of the new edge
 		point<2> SRC, TGT;
 		
-	//=============== ATTRRIBUTES NEEDED TO BUILD THE GRAPH ===============		//Meglio metterle o creare e distruggere variabili ogni volta nei metodi?
+	//=============== ATTRRIBUTES NEEDED TO BUILD THE GRAPH ===============	//Meglio qui o creare e distruggere variabili ogni volta nei metodi?
 		//! Fracture number of the edge (Edge2) that will be refined
-		
+		unsigned int frac_number_old;	
 		//! Two vertex_descriptor that helps constructiong the graph
 		Vertex_desc	src_temp, tgt_temp;
-		//! Edge descriptor of the Edge"2 that will be removed and broken into two new edges
-		
-		//! Vector iterators to walk along vector intersections
-		//Vector_iter intersection_new, intersection_old;
-		
+		//! Edge descriptor of the Edge2 that will be removed and broken into two new edges
+		Edge_desc e_to_be_removed;
+		/*! 
+			@brief Edge descriptor used to store step by step the pieces of e_to_be_removed
+			@detail split_edge will be the descriptor of the pieces of Edge2/e_to_be_removed.
+					this->new_edge will be the descriptor of the pieces of Edge1.
+		*/
+		Edge_desc split_edge;
+		//! Vertex descriptor for intersection vertices. They are two beacause of the algorithm
+		Vertex_desc intersection_new, intersection_old;	
+		//!	Iterators to go through the vector intersections
+		typename Intersections_type::const_iterator vec_it, vec_end;
 				
 };		//reader_Formaggia
 
@@ -118,8 +182,9 @@ template <typename Graph>
 void reader_Formaggia<Graph>::build_graph(){
 	//per ora facciamo senza controllo su vertici molto vicini. Inserisco e basta assumendo che siano vertici diversi.
 	this->new_source = boost::add_vertex(this->G);
+	this->give_new_source_properties();
 	this->new_target = boost::add_vertex(this->G);
-	this->give_vertex_properties();
+	this->give_new_target_properties();
 	
 //riesco a racchiudere tutto in un unico metodo di una classe intersector abstract? Meglio di no e lasciare le singole operazioni spacchettate
 	
@@ -177,29 +242,21 @@ bool reader_Formaggia<Graph>::are_intersected(){
 template <typename Graph>
 void reader_Formaggia<Graph>::refine_graph(){
 	
-	typedef typename reader_base_class<Graph>::Edge_desc edge_desc;		//brutto, da 
+	typedef typename reader_base_class<Graph>::Edge_desc Edge_desc;		//brutto, da 
 	typedef typename std::vector<std::pair<point<2>, Edge_desc> >::const_iterator Vector_iter;
 
-	Vector_iter vec_it = this->intersections.begin();
-	Vector_iter vec_end = this->intersections.end();	
-	Vertex_desc intersection_new, intersection_old;		// We use these to track the new intersection vertex and the old one that has to be connected.
-	Edge_desc e_new, e_to_be_removed;
-	unsigned int frac_number_old;	
+	vec_it = this->intersections.begin();
+	vec_end = this->intersections.end();
 	
 	intersection_old = this->new_source;	// to connect in the right way new_source to the first intersection vertex	
 	for(; vec_it != vec_end; ++vec_it){
 		intersection_new = boost::add_vertex(this->G);
-		//this->give_vertex_properties();	
-		this->G[intersection_new].coord = (*vec_it).first;
-		this->G[intersection_new].is_external = false;
+		this->give_new_intersection_properties();		
 		
 		// Connecting intersection_old and intersection_new:
-		std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_old, intersection_new, this->G);
-		if(!this->edge_inserted){
-				//doing something, ERROR!
-		}
-		this->give_edge_properties();		//Da sistemare
-		//this->G[e_new].frac_num = frac_number;		//Cla fracture number di Edge1
+		std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(intersection_old, intersection_new, this->G);
+		this->if_edge_not_inserted();
+		this->give_new_edge_properties();		//Qui assegna la fracture number ddi Edge1
 		
 		// Storing properties of Edge2 which we will remove
 		e_to_be_removed = (*vec_it).second;
@@ -213,14 +270,12 @@ void reader_Formaggia<Graph>::refine_graph(){
 		boost::remove_edge(e_to_be_removed, this->G);
 		
 		// we connect src_temp and tgt_temp to the intersection point intersection_new (so we broke the old edge into two new ones)
-		std::tie(e_new, this->edge_inserted) = boost::add_edge(src_temp, intersection_new, this->G);
-		if(!this->edge_inserted)
-			//ERROR
-		//this->give_edge_properties();
-		this->G[e_new].frac_num = frac_number_old;
-				
-		std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_new, tgt_temp, this->G);
-		this->G[e_new].frac_num = frac_number_old;
+		std::tie(this->split_edge, this->edge_inserted) = boost::add_edge(src_temp, intersection_new, this->G);
+		this->if_edge_not_inserted();
+		this->give_split_edge_properties();				
+		std::tie(this->split_edge, this->edge_inserted) = boost::add_edge(intersection_new, tgt_temp, this->G);
+		this->if_edge_not_inserted();
+		this->give_split_edge_properties();
 		
 		// we move the new into old to do next loop step
 		intersection_old = intersection_new;
@@ -228,8 +283,8 @@ void reader_Formaggia<Graph>::refine_graph(){
 	
 	// last thing: connect the last intersection point with new_target of Edge1
 	// and this is also the add of Edge1 in the graph if there aren't intersections with other edges
-	std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_old, this->new_target, this->G);
-	this->G[e_new].frac_num = frac_number;	//the fracture number of Edge1
+	std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(intersection_old, this->new_target, this->G);
+	this->give_new_edge_properties();	//the fracture number of Edge1
 };	//refine_graph
 
 

@@ -33,7 +33,8 @@ class intersector_base_class {
 		typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter;
 		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 		typedef std::pair<point<2>, point<2> > Line;
-		//typedef typename std::vector<std::pair<point<2>, Edge_desc> > Intersections_container;
+		typedef typename std::vector<std::pair<point<2>, Edge_desc> > Intersections_type;
+		typedef typename std::pair<point<2>, Edge_desc>	Intersections_value_type;
 		
 		//! Default constructor (initialization of the reference to the graph needed)
 		intersector_base_class():	
@@ -118,6 +119,7 @@ class intersector_base_class {
 
 	protected:
 		//Non ho bisogno del grafo in realtà, qua si gestiscono solo le operazioni geometriche tra due edge qualsiasi, nn su tt il grafo
+		
 		/*!
 			@brief The first of the two edge that are (maybe) intersecating
 			@detail If the user has to perform multiple intersection between a fixed edge
@@ -131,7 +133,7 @@ class intersector_base_class {
 		*/
 		Line Edge2;
 		//!	Vector that will contains the intersection point and the edge descriptor of the edge with which the current edge is intersecating
-		std::vector<std::pair<point<2>, Edge_desc> > intersections;
+		Intersections_type intersections;
 		//! The intersection point between Edge1 and Edge2 (if present) 
 		point<2> intersection_point;
 		/*!
