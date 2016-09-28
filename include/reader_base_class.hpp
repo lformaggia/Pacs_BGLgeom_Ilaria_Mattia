@@ -77,14 +77,6 @@ class reader_base_class{
 			current_line_number = _num_dummy_lines;
 		};
 		
-		//! It deletes the whole graph. This in order to free memory after the graph has been read.
-		virtual void release_graph(){
-			G.clear();
-		};
-		
-		//! Getting the graph (once built)
-		virtual Graph get_graph(){ return G; };		//così però lo passo per copia.. se è grosso?
-		
 		//! Read the input file
 		virtual void read_input_file();
 		
