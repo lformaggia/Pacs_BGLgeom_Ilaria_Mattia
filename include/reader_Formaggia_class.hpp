@@ -27,7 +27,6 @@
 template <typename Graph>
 class reader_Formaggia final: public reader_base_class<Graph>, public intersector_base_class<Graph> {
 	public:
-		//credo inutile perché c'è già nel public di reader_base_class, e stiamo ereditando da lì
 		//Vanno fatti così i typedef. Non sono inutili.
 		typedef typename reader_base_class<Graph>::Vertex_desc Vertex_desc;
 		typedef typename reader_base_class<Graph>::Edge_desc Edge_desc;
@@ -78,63 +77,21 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		};
 		
 		//! 
-		virtual void give_edge_properties(){
-			bool a_caso;
-		};
+		virtual void give_edge_properties(){ ; };
 		
-		//!
-		virtual void build_graph(){
-			//per ora facciamo senza controllo su vertici molto vicini. Inserisco e basta assumendo che siano vertici diversi.
-			this->new_source = boost::add_vertex(this->G);
-			this->new_target = boost::add_vertex(this->G);
-			this->give_vertex_properties();
-			
-			//riesco a racchiudere tutta sta roba in un unico metodo di una classe intersector abstract? Meglio di no e lasciare le singole operazioni spacchettate
-			
-			//costruisco la linea per l'arco corrente:
-			this->set_Edge1(SRC, TGT);
-			//calcolo tutte le intersezioni:
-			Edge_iter e_it, e_end;
-			for(std::tie(e_it, e_end) = edges(this->G); e_it != e_end; ++e_it){
-				src_temp = boost::source(*e_it, this->G);
-				tgt_temp = boost::target(*e_it, this->G);
-				this->set_Edge2(this->G[src_temp].coord, this->G[tgt_temp].coord);
-				if(this->are_intersected()){
-					this->set_Edge2_descriptor(*e_it);
-					this->store_intersection();
-				}	//if
-			}	//for
-			//ordiniamo i punti di intersezione per collegare bene i nuovi archi
-			this->order_intersections();
-			// raffino il grafo date le intersezioni che ho appena calcolato
-			this->refine_graph();
-			// svuotiamo il vettore intersections
-			this->clear_intersections();			
-		};
+		//! The set of instruction for one single step in the building of the graph
+		virtual void build_graph();
 				
 		//============ OVERRIDING OF intersector_base_class METHODS ==============
 		
 		//! It checks if edges are intersected (only vertical or horizontal)
-		bool are_intersected();
+		virtual bool are_intersected();
 		
 		//! Boh
-		void refine_graph();
+		virtual void refine_graph();
 		
 		//! Bohboh
-		void order_intersections();
-		/*
-		//! BOH
-		bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
-			return intersection_vector_elem1.first < intersection_vector_elem2.first;
-		};	//src_less_than_tgt
-					 		 	 
-		//! BOOOOHHH
-		bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-			 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
-			return intersection_vector_elem1.first > intersection_vector_elem2.first;
-		};	//src_greater_than_tgt
-		*/
+		virtual void order_intersections();
 		
 	private:
 	//================== ATTRIBUTES TO STORE INPUT DATA =====================
@@ -143,7 +100,7 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		//! The coordinates of the extremes of the new edge
 		point<2> SRC, TGT;
 		
-	//=============== ATTRRIBUTES NEEDED TO BUILD THE GRAPH ===============
+	//=============== ATTRRIBUTES NEEDED TO BUILD THE GRAPH ===============		//Meglio metterle o creare e distruggere variabili ogni volta nei metodi?
 		//! Fracture number of the edge (Edge2) that will be refined
 		
 		//! Two vertex_descriptor that helps constructiong the graph
@@ -155,6 +112,37 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		
 				
 };		//reader_Formaggia
+
+
+template <typename Graph>
+void reader_Formaggia<Graph>::build_graph(){
+	//per ora facciamo senza controllo su vertici molto vicini. Inserisco e basta assumendo che siano vertici diversi.
+	this->new_source = boost::add_vertex(this->G);
+	this->new_target = boost::add_vertex(this->G);
+	this->give_vertex_properties();
+	
+//riesco a racchiudere tutto in un unico metodo di una classe intersector abstract? Meglio di no e lasciare le singole operazioni spacchettate
+	
+	//costruisco la linea per l'arco corrente:
+	this->set_Edge1(SRC, TGT);
+	//calcolo tutte le intersezioni:
+	Edge_iter e_it, e_end;
+	for(std::tie(e_it, e_end) = edges(this->G); e_it != e_end; ++e_it){
+		src_temp = boost::source(*e_it, this->G);
+		tgt_temp = boost::target(*e_it, this->G);
+		this->set_Edge2(this->G[src_temp].coord, this->G[tgt_temp].coord);
+		if(this->are_intersected()){
+			this->set_Edge2_descriptor(*e_it);
+			this->store_intersection();
+		}	//if
+	}	//for
+	//ordiniamo i punti di intersezione per collegare bene i nuovi archi
+	this->order_intersections();
+	// raffino il grafo date le intersezioni che ho appena calcolato
+	this->refine_graph();
+	// svuotiamo il vettore intersections
+	this->clear_intersections();			
+};	//build_graph
 
 
 template <typename Graph>
@@ -265,21 +253,5 @@ void reader_Formaggia<Graph>::order_intersections(){
 						{return intersection_vector_elem1.first > intersection_vector_elem2.first;}
 						);
 };	//order_intersections
-
-/*
-template <typename Graph>
-bool reader_Formaggia::src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 			 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
-	return intersection_vector_elem1.first < intersection_vector_elem2.first;
-};	//src_less_than_tgt
-
-
-template <typename Graph>
-bool reader_Formaggia::src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
-	return intersection_vector_elem1.first > intersection_vector_elem2.first;
-};	//src_greater_than_tgt
-
-*/
 
 #endif	//HH_READER_FORMAGGIA_CLASS_HH

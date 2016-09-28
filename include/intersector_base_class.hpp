@@ -42,25 +42,7 @@ class intersector_base_class {
 											intersections(),
 											intersection_point(),
 											Edge2_descriptor() {};
-		/*		Penso non si useranno may, si setta tutto a mano mentre si fanno cicli, ecc.
-		//! Constructor with single points for line1
-		intersector_base_class	(Graph & _G,
-								point<2> const& _SRC,
-								point<2> const& _TGT) :	G(_G), 
-														Edge1(_SRC, _TGT),
-														Edge2(),
-														intersections(),
-														intersection_point(),
-														Edge2_descriptor() {};
-		
-		//! Constructor with already a line
-		intersector_base_class(Graph & _G, Line _Edge1) : 	G(_G),
-																	Edge1(_Edge1),
-																	Edge2(),
-																	intersections(),
-																	intersection_point()
-																	Edge2_descriptor() {};
-		*/
+
 		//! Copy constructor
 		intersector_base_class(intersector_base_class const&) = default;
 		
@@ -91,12 +73,7 @@ class intersector_base_class {
 		virtual void set_Edge2(Line _L){
 			Edge2 = _L;
 		};
-		/*
-		//! It allows to set the value of current_frac_number
-		virtual void set_current_frac_number(unsigned int const& _frac_number){
-			current_frac_number = _frac_number;
-		};
-		*/
+		
 		//! It allows to set Edge2_descriptor
 		virtual void set_Edge2_descriptor(Edge_desc _Edge2_desc){
 			Edge2_descriptor = _Edge2_desc;
@@ -112,7 +89,7 @@ class intersector_base_class {
 		// Qui ci andrà la funzione di formaggia e non sarà più abstract!
 		virtual bool are_intersected() = 0;
 		
-		//! It pushes back a new intersection point in the vector intersections
+		//! It pushes back a new intersection point between Edge1 and Edge2, remembering the edge descriptor of Edge2
 		virtual void store_intersection(){
 			intersections.push_back(std::make_pair(intersection_point, Edge2_descriptor));	
 		};	//compute_intersections
@@ -138,26 +115,9 @@ class intersector_base_class {
 		virtual void order_intersections() = 0;
 		
 		//Not provided methods to give ordering, because it wouldn't work inside a std::sort. Use lambda functions instead
-		
-		/*!
-			@brief This is one possible method to compare teo element in the vector intersections
-			@detail It is thougth to be used when source of Edge1 is "less than" (according to the
-					user defined ordering) the target of Edge1
-		*/
-		//virtual bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-		//						 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;
-		
-		/*!
-			@brief This is one possible method to compare teo element in the vector intersections
-			@detail It is thougth to be used when source of Edge2 is "less than" (according to the
-					user defined ordering) the target of Edge2
-		*/
-		//virtual bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-		//			 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;				
-	
+
 	protected:
-		//! Graph of which we want to calculate intersections. By reference to save memory.
-		//Graph & G;	//Nn ne ho bisogno in realtà, qua si gestiscono solo le operazioni geometriche tra due edge qualsiasi, nn su tt il grafo
+		//Non ho bisogno del grafo in realtà, qua si gestiscono solo le operazioni geometriche tra due edge qualsiasi, nn su tt il grafo
 		/*!
 			@brief The first of the two edge that are (maybe) intersecating
 			@detail If the user has to perform multiple intersection between a fixed edge
