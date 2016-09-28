@@ -126,7 +126,7 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		//! The set of instruction for one single step in the building of the graph
 		virtual void build_graph();
 		
-		//============== EXTRA reader_Formaggia METHODS ====================
+		//========= EXTRA reader_Formaggia METHODS (NOT OVERRIDDEN) ===============
 		
 		//! Overriding of the abstrac method. It assigns properties to a new intersection point in the right way
 		void give_new_intersection_properties(){
