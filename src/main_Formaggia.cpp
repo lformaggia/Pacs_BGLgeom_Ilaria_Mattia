@@ -16,11 +16,13 @@
 */
 
 #include <iostream>
+#include <string>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "io_graph.hpp"
+//#include "io_graph.hpp"
 #include "Forma_vertex_property.hpp"
 #include "Forma_edge_property.hpp"
+#include "reader_Formaggia_class.hpp"
 
 using namespace boost;
 
@@ -29,9 +31,15 @@ int main(){
 	typedef adjacency_list <vecS, vecS, directedS, Forma_vertex_property_t, Forma_edge_property_t> Graph;
 	typedef graph_traits<Graph> Traits;
 	
-	Graph G;
+	std::string file_name("../data/input_Formaggia_prova.dat");
+	unsigned int dummy_lines = 3;
 	
-	read_Formaggia_format<Graph> (G, "../data/input_Formaggia_prova.dat");
+	Graph G;
+	reader_Formaggia<Graph> R(G, file_name, dummy_lines);
+	
+	R.read_input_file();
+	
+	//read_Formaggia_format<Graph> (G, "../data/input_Formaggia_prova.dat");
 	
 	Traits::edge_iterator e_it, e_end;
 	Traits::vertex_iterator v_it, v_end;

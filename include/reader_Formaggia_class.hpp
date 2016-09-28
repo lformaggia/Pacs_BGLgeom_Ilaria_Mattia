@@ -19,7 +19,7 @@
 #include <algorithm>		//per il sort in order_intersection
 
 #include "reader_base_class.hpp"
-#include "intersector_class.hpp"
+#include "intersector_base_class.hpp"
 #include "generic_point.hpp"
 
 // Per accere a tutti gli attributi e metodi di reader_base_class e intersector_base_class dovrò mettere this-> davanti
@@ -28,11 +28,14 @@ template <typename Graph>
 class reader_Formaggia final: public reader_base_class<Graph>, public intersector_base_class<Graph> {
 	public:
 		//credo inutile perché c'è già nel public di reader_base_class, e stiamo ereditando da lì
-		//typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
+		//Vanno fatti così i typedef. Non sono inutili.
+		typedef typename reader_base_class<Graph>::Vertex_desc Vertex_desc;
+		typedef typename reader_base_class<Graph>::Edge_desc Edge_desc;
+		typedef typename intersector_base_class<Graph>::Edge_iter Edge_iter;
 	
 		//! Default constructor (we need however to initialize the reference to the graph)
 		reader_Formaggia(Graph & _G) :	reader_base_class<Graph>(_G),
-										intersector_base_class<Graph>(_G),
+										intersector_base_class<Graph>(),
 										frac_number(0),
 										SRC(),
 										TGT(),
@@ -43,7 +46,7 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		reader_Formaggia	(Graph & _G,
 							std::string _file_name,
 							unsigned int _num_dummy_lines) : 	reader_base_class<Graph>(_G, _file_name, _num_dummy_lines),
-																intersector_base_class<Graph>(_G),
+																intersector_base_class<Graph>(),
 																frac_number(0),
 																SRC(),
 																TGT(),
@@ -71,37 +74,44 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 			this->G[this->new_source].coord = SRC;
 			this->G[this->new_source].is_external = true;
 			this->G[this->new_target].coord = TGT;
-			this->G[this->new_target].is-external = true;
+			this->G[this->new_target].is_external = true;
 		};
 		
 		//! 
 		virtual void give_edge_properties(){
-		
+			bool a_caso;
 		};
 		
 		//!
 		virtual void build_graph(){
 			//per ora facciamo senza controllo su vertici molto vicini. Inserisco e basta assumendo che siano vertici diversi.
-			this->new_source = boost::add_vertex(G);
-			this->new_target = boost::add_vertex(G);
+			this->new_source = boost::add_vertex(this->G);
+			this->new_target = boost::add_vertex(this->G);
 			this->give_vertex_properties();
 			
-			//riesco a racchiudere tutta sta roba in un unico metodo di una classe intersector abrstract?
+			//riesco a racchiudere tutta sta roba in un unico metodo di una classe intersector abstract? Meglio di no e lasciare le singole operazioni spacchettate
 			
 			//costruisco la linea per l'arco corrente:
 			this->set_Edge1(SRC, TGT);
-			//inizializzo il numero della frattura corrente
-			this->set_current_frac_number(frac_number);
 			//calcolo tutte le intersezioni:
-			this->compute_intersections();///!!!!!!NON C'é PIù!!!!
+			Edge_iter e_it, e_end;
+			for(std::tie(e_it, e_end) = edges(this->G); e_it != e_end; ++e_it){
+				src_temp = boost::source(*e_it, this->G);
+				tgt_temp = boost::target(*e_it, this->G);
+				this->set_Edge2(this->G[src_temp].coord, this->G[tgt_temp].coord);
+				if(this->are_intersected()){
+					this->set_Edge2_descriptor(*e_it);
+					this->store_intersection();
+				}	//if
+			}	//for
 			//ordiniamo i punti di intersezione per collegare bene i nuovi archi
 			this->order_intersections();
 			// raffino il grafo date le intersezioni che ho appena calcolato
 			this->refine_graph();
-			
+			// svuotiamo il vettore intersections
+			this->clear_intersections();			
 		};
-		
-		
+				
 		//============ OVERRIDING OF intersector_base_class METHODS ==============
 		
 		//! It checks if edges are intersected (only vertical or horizontal)
@@ -112,29 +122,43 @@ class reader_Formaggia final: public reader_base_class<Graph>, public intersecto
 		
 		//! Bohboh
 		void order_intersections();
-		
+		/*
 		//! BOH
 		bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 std::pair<point<2>, Edge_desc> intersection_vector_elem2);
+					 		 	 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
+			return intersection_vector_elem1.first < intersection_vector_elem2.first;
+		};	//src_less_than_tgt
 					 		 	 
 		//! BOOOOHHH
 		bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-			 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2)
-		
+			 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
+			return intersection_vector_elem1.first > intersection_vector_elem2.first;
+		};	//src_greater_than_tgt
+		*/
 		
 	private:
+	//================== ATTRIBUTES TO STORE INPUT DATA =====================
 		//! It stores the fracture number of the new edge
 		unsigned int frac_number;
 		//! The coordinates of the extremes of the new edge
 		point<2> SRC, TGT;
+		
+	//=============== ATTRRIBUTES NEEDED TO BUILD THE GRAPH ===============
+		//! Fracture number of the edge (Edge2) that will be refined
+		
 		//! Two vertex_descriptor that helps constructiong the graph
 		Vertex_desc	src_temp, tgt_temp;
+		//! Edge descriptor of the Edge"2 that will be removed and broken into two new edges
+		
+		//! Vector iterators to walk along vector intersections
+		//Vector_iter intersection_new, intersection_old;
+		
 				
 };		//reader_Formaggia
 
 
-tempalte <typename Graph>
-bool reader_Formaggia::are_intersected(){
+template <typename Graph>
+bool reader_Formaggia<Graph>::are_intersected(){
 	bool vertical1 = false;
 	bool vertical2 = false;
 	double x_intersect, y_intersect;
@@ -163,20 +187,86 @@ bool reader_Formaggia::are_intersected(){
 
 
 template <typename Graph>
-void reader_Formaggia::refine_graph(){
+void reader_Formaggia<Graph>::refine_graph(){
+	
+	typedef typename reader_base_class<Graph>::Edge_desc edge_desc;		//brutto, da 
+	typedef typename std::vector<std::pair<point<2>, Edge_desc> >::const_iterator Vector_iter;
 
+	Vector_iter vec_it = this->intersections.begin();
+	Vector_iter vec_end = this->intersections.end();	
+	Vertex_desc intersection_new, intersection_old;		// We use these to track the new intersection vertex and the old one that has to be connected.
+	Edge_desc e_new, e_to_be_removed;
+	unsigned int frac_number_old;	
+	
+	intersection_old = this->new_source;	// to connect in the right way new_source to the first intersection vertex	
+	for(; vec_it != vec_end; ++vec_it){
+		intersection_new = boost::add_vertex(this->G);
+		//this->give_vertex_properties();	
+		this->G[intersection_new].coord = (*vec_it).first;
+		this->G[intersection_new].is_external = false;
+		
+		// Connecting intersection_old and intersection_new:
+		std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_old, intersection_new, this->G);
+		if(!this->edge_inserted){
+				//doing something, ERROR!
+		}
+		this->give_edge_properties();		//Da sistemare
+		//this->G[e_new].frac_num = frac_number;		//Cla fracture number di Edge1
+		
+		// Storing properties of Edge2 which we will remove
+		e_to_be_removed = (*vec_it).second;
+		frac_number_old = this->G[e_to_be_removed].frac_num;  // we store this value because we have to assign it to the new created edges
+		
+		// Storing source and target of Edge2 that we will remove, to create the new edges after
+		src_temp = boost::source(e_to_be_removed, this->G);
+		tgt_temp = boost::target(e_to_be_removed, this->G);
+		
+		// we remove Edge2 which has to be replaced
+		boost::remove_edge(e_to_be_removed, this->G);
+		
+		// we connect src_temp and tgt_temp to the intersection point intersection_new (so we broke the old edge into two new ones)
+		std::tie(e_new, this->edge_inserted) = boost::add_edge(src_temp, intersection_new, this->G);
+		if(!this->edge_inserted)
+			//ERROR
+		//this->give_edge_properties();
+		this->G[e_new].frac_num = frac_number_old;
+				
+		std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_new, tgt_temp, this->G);
+		this->G[e_new].frac_num = frac_number_old;
+		
+		// we move the new into old to do next loop step
+		intersection_old = intersection_new;
+	}
+	
+	// last thing: connect the last intersection point with new_target of Edge1
+	// and this is also the add of Edge1 in the graph if there aren't intersections with other edges
+	std::tie(e_new, this->edge_inserted) = boost::add_edge(intersection_old, this->new_target, this->G);
+	this->G[e_new].frac_num = frac_number;	//the fracture number of Edge1
 };	//refine_graph
 
 
+// la funzione compare dev'essere un qualcosa che ha un call operator, o una funzione esterna a caso. Altrimenti una lambda function va bene.
 template <typename Graph>
-void reader_Formaggia::order_intersections(){
+void reader_Formaggia<Graph>::order_intersections(){
 	if(this->Edge1.first < this->Edge1.second)
-		std::sort(this->intersections.begin(), this->intersections.end(), this->src_less_than_tgt);
+		std::sort	(this->intersections.begin(),
+					this->intersections.end(),
+					//lambda function before named "src_less_than_tgt"
+					[] (std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+						std::pair<point<2>, Edge_desc> intersection_vector_elem2)
+						{return intersection_vector_elem1.first < intersection_vector_elem2.first;}
+						);
 	else
-		std::sort(this->intersections.begin(), this->intersections.end(), this->src_greater_than_tgt);
+		std::sort	(this->intersections.begin(),
+					this->intersections.end(),
+					//lambda function before named "src_greater_than_tgt"
+					[] (std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+						std::pair<point<2>, Edge_desc> intersection_vector_elem2)
+						{return intersection_vector_elem1.first > intersection_vector_elem2.first;}
+						);
 };	//order_intersections
 
-
+/*
 template <typename Graph>
 bool reader_Formaggia::src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
 					 		 	 			 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
@@ -189,5 +279,7 @@ bool reader_Formaggia::src_greater_than_tgt	(std::pair<point<2>, Edge_desc> inte
 					 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2){
 	return intersection_vector_elem1.first > intersection_vector_elem2.first;
 };	//src_greater_than_tgt
+
+*/
 
 #endif	//HH_READER_FORMAGGIA_CLASS_HH

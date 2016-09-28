@@ -33,11 +33,12 @@ class intersector_base_class {
 		typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter;
 		typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 		typedef std::pair<point<2>, point<2> > Line;
+		//typedef typename std::vector<std::pair<point<2>, Edge_desc> > Intersections_container;
 		
 		//! Default constructor (initialization of the reference to the graph needed)
-		intersector_base_class(Graph & _G):	G(_G),
-											line1(),
-											line2(),
+		intersector_base_class():	
+											Edge1(),
+											Edge2(),
 											intersections(),
 											intersection_point(),
 											Edge2_descriptor() {};
@@ -90,12 +91,12 @@ class intersector_base_class {
 		virtual void set_Edge2(Line _L){
 			Edge2 = _L;
 		};
-		
+		/*
 		//! It allows to set the value of current_frac_number
 		virtual void set_current_frac_number(unsigned int const& _frac_number){
 			current_frac_number = _frac_number;
 		};
-		
+		*/
 		//! It allows to set Edge2_descriptor
 		virtual void set_Edge2_descriptor(Edge_desc _Edge2_desc){
 			Edge2_descriptor = _Edge2_desc;
@@ -117,7 +118,7 @@ class intersector_base_class {
 		};	//compute_intersections
 		
 		virtual void clear_intersections(){
-			intersections.erase();
+			intersections.clear();
 		};
 		
 		/*!
@@ -136,25 +137,27 @@ class intersector_base_class {
 		*/
 		virtual void order_intersections() = 0;
 		
+		//Not provided methods to give ordering, because it wouldn't work inside a std::sort. Use lambda functions instead
+		
 		/*!
 			@brief This is one possible method to compare teo element in the vector intersections
 			@detail It is thougth to be used when source of Edge1 is "less than" (according to the
 					user defined ordering) the target of Edge1
 		*/
-		virtual bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-								 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;
+		//virtual bool src_less_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+		//						 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;
 		
 		/*!
 			@brief This is one possible method to compare teo element in the vector intersections
 			@detail It is thougth to be used when source of Edge2 is "less than" (according to the
 					user defined ordering) the target of Edge2
 		*/
-		virtual bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
-					 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;				
+		//virtual bool src_greater_than_tgt	(std::pair<point<2>, Edge_desc> intersection_vector_elem1,
+		//			 		 	 	 		 std::pair<point<2>, Edge_desc> intersection_vector_elem2) = 0;				
 	
 	protected:
 		//! Graph of which we want to calculate intersections. By reference to save memory.
-		Graph & G;
+		//Graph & G;	//Nn ne ho bisogno in realtà, qua si gestiscono solo le operazioni geometriche tra due edge qualsiasi, nn su tt il grafo
 		/*!
 			@brief The first of the two edge that are (maybe) intersecating
 			@detail If the user has to perform multiple intersection between a fixed edge
