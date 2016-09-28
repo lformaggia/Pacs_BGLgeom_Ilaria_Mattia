@@ -20,6 +20,7 @@
 #ifndef HH_READER_BASE_CLASS_HH
 #define HH_READER_BASE_CLASS_HH
 
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -41,7 +42,8 @@ class reader_base_class{
 										new_source(),
 										new_target(),
 										new_edge(),
-										edge_inserted() {};
+										edge_inserted(),
+										current_line_number(0) {};
 		
 		//! Constructor: assign only num_dummy_lines, empty graph
 		reader_base_class	(Graph & _G,
@@ -53,7 +55,8 @@ class reader_base_class{
 																new_source(),
 																new_target(),
 																new_edge(),
-																edge_inserted() {};
+																edge_inserted(),
+																current_line_number(_num_dummy_lines) {};
 		
 		//! Default copy constructor
 		reader_base_class(reader_base_class const&) = default;
@@ -67,6 +70,11 @@ class reader_base_class{
 		//! It allows to set the input file
 		virtual void set_input_file(std::string _file_name){
 			file_name = _file_name;
+		};
+		
+		virtual void set_num_dummy_lines(unsigned int const& _num_dummy_lines){
+			num_dummy_lines = _num_dummy_lines;
+			current_line_number = _num_dummy_lines;
 		};
 		
 		//! It deletes the whole graph. This in order to free memory after the graph has been read.
@@ -104,6 +112,22 @@ class reader_base_class{
 		//! It assign properties to the new edge in the rigth way. It has to be called in build_graph()!
 		virtual void give_edge_properties() = 0;
 		
+		/*!
+			@brief It deals with wrong insertion of an edge.
+			@detail It can be called only after a call to boost::add_edge with the pair
+					<Edge_desc, bool> as return value. In this way the value of edge_inserted
+					is set up.
+		*/
+		virtual void if_edge_not_inserted(){
+			if(!edge_inserted){
+				std::cerr << "Warning: edge not inserted!" << std::endl;
+				std::cerr 	<< "It was not inserted the edge described in line "
+							<< current_line_number << " of the input file" << std::endl;
+				std::cerr 	<< "Possible causes: it is already present the same edge, or it is a loop edge in an undirected Graph" 
+							<< std::endl;				
+			}	//if
+		};
+		
 	protected:
 		/*!
 			@brief A reference is used to represent the Graph.
@@ -127,9 +151,12 @@ class reader_base_class{
 		Edge_desc new_edge;
 		/*! 
 			@brief Bool returned in a pair with an edge descriptor by add_edge function.
-			@detail It is true if the edge was succesfully inserted, false otherwise 
+			@detail The value is assigned when trying to insert an edge in the graph.
+					It is set to true if the edge was succesfully inserted, false otherwise 
 		*/
 		bool edge_inserted;
+		//! It tracks the current line of the input file
+		unsigned int current_line_number;
 		//bool vertices_index_already_present		//va inizializzato!		
 };
 
@@ -143,6 +170,7 @@ void reader_base_class<Graph>::read_input_file(){
 	this->ignore_dummy_lines(file);
 	
 	while(!file.fail() && !file.eof()){
+		current_line_number++;	//aggiorno a quale linea del file di input sono arrivato
 		std::getline(file, line);
 		if(line.empty())
 			continue;

@@ -72,10 +72,8 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			// devo usare this->new_source perché new_source non è definita in reader_Zunino, quindi chimando solo new_source lui non vede niente. Ma siccome eredita da reader_base, new source è in quello, che è compreso qui in reader_Zunino, e quindi c'è e lo posso vedere chiamando this->new_source
 			this->new_source = src; //solo se scelgo vecS vecS nell'adjacency list
 			this->new_target = tgt; //idem come sopra
-			std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(this->new_source, this->new_target, this->G);		//add_edge(new_source, new_target, G)
-			if(!this->edge_inserted){
-				//succede qualcosa
-			}
+			std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(this->new_source, this->new_target, this->G);
+			this->if_edge_not_inserted();		//controllo se l'edge è stato inserito o meno
 			this->give_vertex_properties();		//non c'è bisogno del this, ma magari meglio lasciarlo per chiarezza. non so.
 			this->give_edge_properties();
 		};
