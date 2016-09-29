@@ -18,6 +18,7 @@
 //#include "topological_distance.hpp"
 #include "reader_Zunino_class.hpp"
 #include "Zunino_edge_property.hpp"
+#include "disjoint_components.hpp"
 
 using namespace boost;
 
@@ -27,6 +28,8 @@ int main(){
 	 typedef graph_traits<Graph> Traits;
 	 typedef Traits::edge_descriptor Edge_Descriptor;
 	 typedef Traits::edge_iterator Edge_Iterator;
+	 typedef Traits::vertex_descriptor Vertex_desc;
+	 
 	 
 	 std::string filename("../data/rattm93a.txt");
 	 unsigned int dummy_lines = 2;
@@ -64,6 +67,15 @@ int main(){
 	 std::cout << "eudlidean distance 1_2 = " << d12 << std::endl;
 	 std::cout << "eudlidean distance 4_5 = " << d45 << std::endl;
 	 std::cout << "eudlidean distance 1_3 = " << d13 << std::endl;
+	 
+	 std::map<Vertex_desc, int> rank = disjoint_components(G);
+	 
+	 std::cout << "Prova disjoint:" << std::endl;
+	 for(std::map<Vertex_desc,int>::iterator map_it = rank.begin(); map_it != rank.end(); ++map_it){
+	 	std::cout << (*map_it).first << " is in subgraph " << (*map_it).second << std::endl;
+	 }
+	 
+	 
 	 
 	return 0;
 }
