@@ -18,11 +18,13 @@
 #define HH_DISJOINT_COMPONENTS_HH
 
 #include <map>
+#include <tuple>
 
 #include <boost/graph/graph_traits.hpp>
-#include <boost/property_map/property_map.hpp>
-#include <boost/pending/disjoint_sets.hpp>
+//#include <boost/property_map/property_map.hpp>
+//#include <boost/pending/disjoint_sets.hpp>
 
+#include "our_disjoint_sets.hpp"
 
 /*! 
 	@detail Given a graph, this function checks whether there are fully disconnected subgraphs, i.e. subgraphs with no edge connecting each other.
