@@ -21,7 +21,7 @@
 #define HH_DISJOINT_COMPONENTS_IMP_HH
 
 template<typename Graph>
-std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_components(Graph const& G){
+void disjoint_components(Graph & G){
 
 	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
 	typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter;
@@ -45,23 +45,44 @@ std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_c
 	Vertex_desc src, tgt;
 	bool different_labels;
 	
-	
 	Label_t src_label;
+	Label_t tgt_label;
 	
 	for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
 		src = boost::source(*e_it, G);
 		tgt = boost::target(*e_it, G);
 		src_label = dsets.get_label(src);		//da usare per non richiamare ogni volta sempre questo metodo
+		tgt_label = dsets.get_label(tgt);	//per chiarezza e velocità se il grafo è grande, chiamo get_label 1 sola volta
 		//Check if aource and target already belong to the same component
-		if( src_label != dsests.get_label(tgt) )
+		if( src_label != dsets.get_label(tgt) )
 			different_labels = true;		//they are in different components
 		else
 			different_labels = false;	//they are in the same component	//continue?
 			
 		if(different_labels){
 			if( dsets.is_present_component(src_label) ){	//se quella componente c'è già
-				Label_t tgt_label = dsets.get_label(tgt);	//per chiarezza e velocità se il grafo è grande, chiamo get_label 1 sola volta
 				if( dsets.is_present_component(tgt_label) ){		//se c'è anche la componente di tgt, aggiungo tutti i nodi della componente di tgt nella componenete di src (compreso tgt, che è già dentro la componente)
+					dsets.insert_tgt_comp_in_src_comp(tgt_label, src_label);
+					
+					Comp_iter comp_it, comp_end;
+					for(std::tie(comp_it, comp_end) = dsets.get_iterator(tgt_label);
+						comp_it != comp_end;
+						++comp_it){	//scorro la lista
+							//dsets.insert_vertex_in_component(*comp_it, src_label);
+							dsets.set_label(*comp_it, src_label);				
+					}	//for
+					//cancello la componente di tgt, dopo aver spostato tutto nella componente di src:
+				
+					
+					dsets.erase_component(tgt_label);
+				} else {	//tgt è per conto suo, lo metto direttamente nella componente di src
+					dsets.insert_vertex_in_component(tgt, src_label);
+					dsets.set_label(tgt, src_label);
+				}	//else
+			} else {		//se quella componente non c'è ancora
+				dsets.new_component(src_label);
+				dsets.insert_vertex_in_component(src, src_label);
+				if( dsets.is_present_component(tgt_label) ){	//se c'è già la componente di tgt, la sposto in quella di src
 					Comp_iter comp_it, comp_end;
 					for(std::tie(comp_it, comp_end) = dsets.get_iterator(tgt_label);
 						comp_it != comp_end;
@@ -71,15 +92,11 @@ std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_c
 					}	//for
 					//cancello la componente di tgt, dopo aver spostato tutto nella componente di src:
 					dsets.erase_component(tgt_label);
-				} else {	//tgt è per conto suo, lo metto nella componente di src
-					dsets.insert_vertex_in_component(tgt, src_label);
-					dsets.set_label(tgt, src_label);
-				}	//else
-			} else {		//se quella componente non c'è ancora
-				dsets.new_component(src_label);
-				dsets.insert_vertex_in_component(src, src_label);
-				dsets.insert_vertex_in_component(tgt, src_label);	//metto tgt nella stessa componente di src, sempre
-				dsets.set_label(tgt, src_label);						//aggiorno l'etichetta
+				} else {		//altrimenti aggiungo subito tgt alla componente di src
+					dsets.insert_vertex_in_component(tgt, src_label);	//metto tgt nella stessa componente di src, sempre
+					dsets.set_label(tgt, src_label);						//aggiorno l'etichetta
+				}	//else			
+
 			}	//else
 		}	//if		
 	}	//for
@@ -99,7 +116,10 @@ std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_c
 	}
 	*/
 	
-	return rank_map;
+	//visualizzo i risultati, però questo dovrei farlo fuori. Ho fatto l'overload di << per our_disjoint_set.
+	std::cout << dsets << std::endl;
+	
+	//return dsets.get_components_map();
 }
 
 #endif
