@@ -116,6 +116,11 @@ class our_disjoint_sets{
 			//Usiamo at() e non [] così ci dà un'exception se non esiste quella chiave. Che però l'exception va raccolta
 			components_map.at(label_value).emplace_back(vertex);		//carica la lista.
 		};
+		
+		//! It removes from components_map the component with the given key (=label of the component)
+		void erase_component(Components_key_t const& label_value){
+			components_map.erase(label_value);
+		};
 	
 	
 	private:

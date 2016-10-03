@@ -24,7 +24,6 @@ template<typename Graph>
 std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_components(Graph const& G){
 
 	typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex_desc;
-	typedef typename boost::graph_traits<Graph>::vertex_iterator Vertex_iter;
 	typedef typename boost::graph_traits<Graph>::edge_iterator Edge_iter;
 	
 	typedef typename our_disjoint_sets<Graph>::Label_mapped_t Label_t;
@@ -61,42 +60,29 @@ std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_c
 			
 		if(different_labels){
 			if( dsets.is_present_component(src_label) ){	//se quella componente c'è già
-				if( dsets.is_present_component(dsets.get_label(tgt)) ){
+				Label_t tgt_label = dsets.get_label(tgt);	//per chiarezza e velocità se il grafo è grande, chiamo get_label 1 sola volta
+				if( dsets.is_present_component(tgt_label) ){		//se c'è anche la componente di tgt, aggiungo tutti i nodi della componente di tgt nella componenete di src (compreso tgt, che è già dentro la componente)
 					Comp_iter comp_it, comp_end;
-					for(std::tie(comp_it, comp_end) = dsets.get_iterator(dsets.get_label(tgt));
+					for(std::tie(comp_it, comp_end) = dsets.get_iterator(tgt_label);
 						comp_it != comp_end;
 						++comp_it){	//scorro la lista
-						
-					
-					
+							dsets.insert_vertex_in_component(*comp_it, src_label);
+							dsets.set_label(*comp_it, src_label);				
 					}	//for
+					//cancello la componente di tgt, dopo aver spostato tutto nella componente di src:
+					dsets.erase_component(tgt_label);
 				} else {	//tgt è per conto suo, lo metto nella componente di src
 					dsets.insert_vertex_in_component(tgt, src_label);
 					dsets.set_label(tgt, src_label);
-				}
+				}	//else
 			} else {		//se quella componente non c'è ancora
 				dsets.new_component(src_label);
 				dsets.insert_vertex_in_component(src, src_label);
 				dsets.insert_vertex_in_component(tgt, src_label);	//metto tgt nella stessa componente di src, sempre
 				dsets.set_label(tgt, src_label);						//aggiorno l'etichetta
 			}	//else
-		}	//if
-		
-		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		}	//if		
+	}	//for
 	
 	/*
 	
