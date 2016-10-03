@@ -7,11 +7,11 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*! 
-  @file   disjoint_components.hpp
-  @author Ilaria Speranza & Mattia Tantardini
-  @date   Sep 2016.
-  @brief  Identifies if there are fully disconnected subgraphs..
-  @detail
+	@file   disjoint_components.hpp
+	@author Ilaria Speranza & Mattia Tantardini
+	@date   Sep 2016.
+	@brief  Identifies if there are fully disconnected subgraphs..
+	@detail
 */
 
 #ifndef HH_DISJOINT_COMPONENTS_HH
@@ -19,6 +19,7 @@
 
 #include <map>
 #include <tuple>
+#include <iostream>
 
 #include <boost/graph/graph_traits.hpp>
 //#include <boost/property_map/property_map.hpp>
@@ -26,13 +27,14 @@
 
 #include "our_disjoint_sets.hpp"
 
+//typedef typename our_disjoint_sets<Graph>::Components_map_t Component_map_t;
+
 /*! 
 	@detail Given a graph, this function checks whether there are fully disconnected subgraphs, i.e. subgraphs with no edge connecting each other.
 		It returns a map which associates each vertex with an integer identifying the subgraph it belongs to.
 */
-
 template<typename Graph>
-std::map<typename boost::graph_traits<Graph>::vertex_descriptor, int> disjoint_components(Graph const& G); 
+void disjoint_components(Graph & G); 
 
 #include "disjoint_components_imp.hpp"
 

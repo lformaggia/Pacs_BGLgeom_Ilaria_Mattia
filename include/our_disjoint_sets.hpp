@@ -17,6 +17,7 @@
 #ifndef HH_OUR_DISJOINT_SETS_HH
 #define HH_OUR_DISJOINT_SETS_HH
 
+#include <iostream>
 #include <map>
 #include <tuple>
 #include <list>
@@ -44,7 +45,8 @@ class our_disjoint_sets{
 		typedef typename Label_map_t::key_type Label_key_t;
 		typedef typename Label_map_t::mapped_type Label_mapped_t;
 		typedef typename Components_map_t::key_type Components_key_t;
-		typedef typename Components_map_t::mapped_type Components_mapped_t;
+		typedef typename Components_map_t::mapped_type Components_mapped_t;	//è il tipo della lista;
+		typedef typename Components_mapped_t::value_type Comp_mapped_vertex_t;		//è Vertex_desc in sostanza, cioè il template di std::list
 		
 		//CI VUOLE UN ASSERT SE Label_map_t E Components_key_t SONO LO STESSO TIPO!!!		
 		
@@ -95,14 +97,11 @@ class our_disjoint_sets{
 		};
 		
 		//! It returns a pair containing the iterator to begin and end of the list that contains all the verteices of the given component
-		std::pair<Components_mapped_t::iterator, Components_mapped_t::iterator>
+		std::pair<typename Components_mapped_t::iterator, typename Components_mapped_t::iterator>
 		get_iterator(Components_key_t const& label_of_the_component){
 			return std::make_pair	(components_map[label_of_the_component].begin(),
 									components_map[label_of_the_component].end() );
-		};
-		
-		
-		
+		};		
 		
 		//! It creates a new component with the given label value as key in components_map
 		void new_component(Components_key_t const& label_value){
@@ -112,9 +111,19 @@ class our_disjoint_sets{
 		// new_component_with_insertion?
 		
 		//! It add the given vertex descriptor to the component with that label
-		void insert_vertex_in_component(Components_mapped_t const& vertex, Components_key_t const& label_value){
+		void insert_vertex_in_component(Comp_mapped_vertex_t const& vertex, Components_key_t const& label_value){
 			//Usiamo at() e non [] così ci dà un'exception se non esiste quella chiave. Che però l'exception va raccolta
-			components_map.at(label_value).emplace_back(vertex);		//carica la lista.
+			components_map.at(label_value).push_back(vertex);		//carica la lista.
+		};
+		
+		//! It insert the target component in the source component
+		void insert_tgt_comp_in_src_comp(Components_key_t const& tgt_label_value, Components_key_t const& src_label_value){
+			typedef typename our_disjoint_sets<Graph>::Components_mapped_t::iterator Comp_iter;
+			Comp_iter tgt_comp_begin, tgt_comp_end;
+			Comp_iter src_comp_begin, src_comp_end;
+			std::tie(tgt_comp_begin, tgt_comp_end) = this->get_iterator(tgt_label_value);
+			std::tie(src_comp_begin, src_comp_end) = this->get_iterator(src_label_value);
+			components_map[src_label_value].insert(src_comp_end, tgt_comp_begin, tgt_comp_end);
 		};
 		
 		//! It removes from components_map the component with the given key (=label of the component)
@@ -122,13 +131,31 @@ class our_disjoint_sets{
 			components_map.erase(label_value);
 		};
 	
+		//! It returns the components_map outside the class
+		Components_map_t get_components_map(){
+			return components_map;
+		};
+		
+		//! Overloading of operator<< to view components_map
+		friend std::ostream & operator<< (std::ostream & out, our_disjoint_sets & dsets){
+			typename Components_map_t::iterator map_it = dsets.get_components_map().begin();
+			typename Components_map_t::iterator map_end = dsets.get_components_map().end();
+			typename Components_mapped_t::iterator list_it, list_end;
+			out << "Size of components_map: " << (dsets.get_components_map()).size() << std::endl;
+			for( ; map_it != map_end; ++map_it){
+				dsets.get_components_map().at(map_it->first);
+				out << "Componente con etichetta " << map_it->first << " contiene i vertici: ";
+				for(std::tie(list_it, list_end) = dsets.get_iterator(map_it->first); list_it != list_end; ++list_it){
+					out << *list_it << " ";
+				}	//for
+				out <<  std::endl;
+			}	//for			
+		};
 	
 	private:
 		Graph & G;
 		Label_map_t	label_map;
-		Components_map_type	components_map;
-
+		Components_map_t components_map;
 };
-
 
 #endif	//HH_OUR_DISJOINT_SETS_HH
