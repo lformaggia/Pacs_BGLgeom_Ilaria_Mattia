@@ -10,11 +10,23 @@
 	@file generic_point.hpp
 	@author Ilaria Speranza and Mattia Tantardini
 	@date Sept, 2016
-	@brief Defining 2D or 3D coordition property (coordinates) for vertices.
+	@brief Wants to be an Abstract class including the needed method to deal with points in any space
 */
 
 #ifndef HH_GENERIC_POINT_HH
 #define HH_GENERIC_POINT_HH
+
+/*	//prova di classe astratta
+#include<array>
+
+
+class generic_point{
+	public:
+		//! Overload of operator[] to access the coordinates of the point
+		double operator[](std::size_t i) = 0; 
+};	//generic_point
+*/
+
 
 #include<array>
 #include<iostream>
