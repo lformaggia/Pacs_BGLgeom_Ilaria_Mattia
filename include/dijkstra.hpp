@@ -9,21 +9,22 @@
 /*! 
 	@file   dijkstra.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date   Sep 2016.
+	@date   Oct 2016.
 	@brief  Solves the single-source shortest-paths problem on a weighted, directed graph with non-negative edge weights.
-	@detail
+	@detail This function takes in input the graph, the source vertex and two vectors, one for the distance map and the other for the predecessor map, which will be filled with the results of the algorithm.
 */
 
 #ifndef HH_DIJKSTRA_HH
 #define HH_DIJKSTRA_HH
 
 #include "boost/graph/dijkstra_shortest_paths.hpp"
+#include "Zunino_edge_property.hpp"
 #include "dijkstra_imp.hpp"
 
 template<typename Graph>
-void dijkstra(typename boost::graph_traits<Graph>::vertex_descriptor v, property_maps...)
-
-
-
+void dijkstra(Graph const &G, 
+			  typename boost::graph_traits<Graph>::vertex_descriptor const & v, 
+			  std::vector<int> & distances, 
+			  std::vector<typename boost::graph_traits<Graph>::vertex_descriptor> & predecessors); 
 
 #endif
