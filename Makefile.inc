@@ -1,6 +1,6 @@
 # Compilation variables:
 CXX = g++
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++11 -g -O0
 CPPFLAGS ?= -I$(mkBGLInc) -I./include
 LDFLAGS ?= 
 LIBS = 
