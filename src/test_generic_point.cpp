@@ -1,32 +1,42 @@
-#include "generic_point.hpp"
+//#include "generic_point.hpp"
 #include <iostream>
 
+#include "point2D.hpp"
+#include "point3D.hpp" 
+
 int main(){
-	point<2,int> punto1{0,2};
-	std::cout << "ok" << std::endl;
-	point<3,double> punto4;
-		std::cout << "ok" << std::endl;
-	const point<3,int> punto2{0,1,2};
-		std::cout << "ok" << std::endl;
-	point<2,int> punto3{0,1};
-	std::cout << "ok" << std::endl;
-	point<1,int> punto5{4};
-		std::cout << "ok" << std::endl;
-	point<3,double> punto6(punto4);
-		std::cout << "ok" << std::endl;
-
-	int a = punto1.y();
-	std::cout << a << std::endl;
 	
-	punto4.set({5.03,6,7});
+	point2D P1;
+	std::cout << "P1: " << P1 << std::endl;
 	
-	std::cout << punto4 << std::endl;
+	point2D P2(3,5);
+	std::cout << "P2: " << P2 << std::endl;
+	P2.set_x(4);
+	std::cout << "P2: " << P2 << std::endl;
+	P2.set_y(4);
+	std::cout << "P2: " << P2 << std::endl;
+	P2.set(3,3);
+	std::cout << "P2: " << P2 << std::endl;
+	bool boh = P1 < P2;
+	std::cout << "P1 < P2: " << boh << std::endl;
 	
-	point<2> punto7{1,2};
-	point<2> punto8{1,1};
+	std::cout << std::endl << std::endl;
 	
-	bool prova = (punto7 < punto8);
-	std::cout << prova << std::endl;
-
+	point3D P3;
+	std::cout << "P3: " << P3 << std::endl;
+	
+	point3D P4(3,5,7);
+	std::cout << "P4: " << P4 << std::endl;
+	P4.set_x(4);
+	std::cout << "P4: " << P4 << std::endl;
+	P4.set_y(4);
+	std::cout << "P4: " << P4 << std::endl;
+	P4.set_z(4);
+	std::cout << "P4: " << P4 << std::endl;
+	P4.set(0,0,3);
+	std::cout << "P4: " << P4 << std::endl;
+	bool boh2 = P3 < P4;
+	std::cout << "P3 < P4: " << boh2 << std::endl;
+	
 	return 0;
 }
