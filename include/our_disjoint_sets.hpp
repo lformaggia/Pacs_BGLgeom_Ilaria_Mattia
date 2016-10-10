@@ -138,17 +138,19 @@ class our_disjoint_sets{
 		
 		//! Overloading of operator<< to view components_map
 		friend std::ostream & operator<< (std::ostream & out, our_disjoint_sets & dsets){
-			typename Components_map_t::iterator map_it = dsets.get_components_map().begin();
-			typename Components_map_t::iterator map_end = dsets.get_components_map().end();
+			auto&& map = dsets.get_components_map();
 			typename Components_mapped_t::iterator list_it, list_end;
 			out << "Size of components_map: " << (dsets.get_components_map()).size() << std::endl;
-			for( ; map_it != map_end; ++map_it){
+			
+			for(auto map_it = map.begin(); map_it != map.end(); ++map_it){
+				std::cout << "begin" << std::endl; 
 				dsets.get_components_map().at(map_it->first);
 				out << "Componente con etichetta " << map_it->first << " contiene i vertici: ";
 				for(std::tie(list_it, list_end) = dsets.get_iterator(map_it->first); list_it != list_end; ++list_it){
 					out << *list_it << " ";
 				}	//for
 				out <<  std::endl;
+				std::cout << "end" << std::endl; 
 			}	//for			
 		};
 	
