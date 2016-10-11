@@ -49,6 +49,10 @@ class point3D {
 		double operator[](std::size_t i){ return coord[i]; }
 		double operator[](std::size_t i) const { return coord[i]; }
 		
+		//! Get the whole point, so the container containing the coordinates
+		std::array<double,3> get_point(){ return coord; }
+		std::array<double,3> get_point() const { return coord; }
+		
 		//! Set coordinate x of the point, corresponding to coord[0]
 		void set_x(double const& x){ coord[0] = x; }
 		
@@ -83,10 +87,11 @@ class point3D {
 		}
 		
 		/*!
-			 @brief Operator< overloading
-			 
+			 @brief Operator< overloading			 
 			 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
-			 		 if they are equal, compare in the same way the y coordinate.		
+			 		 if they are equal, compare in the same way the y coordinate;
+			 		 if also the y coordinates are equal, compare in the same way the z coordinates. 
+			 		 (Lexicografic ordering)		
 		*/
 		bool operator< (point3D const& P2) const {
 			//controllo della dimensione dei punti con exception?
@@ -101,8 +106,7 @@ class point3D {
 		}
 				
 		/*!
-			@brief Operator> overloading
-			
+			@brief Operator> overloading			
 			@detail It is the negation of operator<
 		*/
 		bool operator> (point3D const& P2) const {
