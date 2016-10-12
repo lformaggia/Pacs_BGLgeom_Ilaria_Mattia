@@ -43,14 +43,30 @@ namespace{
 		return std::sqrt(dot(a,a));
 	}
 	
+	inline Vector operator+ (Vector const& a, Vector const& b){
+		return Vector{a[0]+b[0], a[1]+b[1]};
+	}
+	
 	//! Overloading of operator+ for std::array<double,2>
 	inline Vector operator+ (point2D const& P, point2D const& Q){
 		return Vector{P[0]+Q[0], P[1]+Q[1]};
 	}
 	
+	inline Vector operator+ (point2D const& P, Vector const& a){
+		return Vector{P[0]+a[0], P[1]+a[1]};
+	}
+	
+	inline Vector operator- (Vector const& a, Vector const& b){
+		return Vector{a[0]-b[0], a[1]-b[1]};
+	}
+	
 	//! Overloading of operator- for std::array<double,2>
 	inline Vector operator- (point2D const& P, point2D const& Q){
 		return Vector{P[0]-Q[0], P[1]-Q[1]};
+	}
+	
+	inline Vector operator- (point2D const& P, Vector const& a){
+		return Vector{P[0]-a[0], P[1]-a[1]};
 	}
 	
 	//Both the overloading needed!
@@ -87,7 +103,7 @@ namespace{
 }	//namespace
 
 
-namespace BGLgeom{
+namespace Geometry{
 	/*! 
 		@brief A simple class that hanlde a linear edge
 		@detail This class is thought to manage the description of the geometry
@@ -116,7 +132,10 @@ namespace BGLgeom{
 				extremes_are_set = true;
 			}
 			
-			//! Overloading of operator[] to access each of the two end points. Usefull in algorithms
+			/*! 
+				@brief Overloading of operator[] to access each of the two end points. Usefull in algorithms
+				@detail extremes[0] = source, extremes[1] = target of the edge
+			*/
 			point2D operator[](std::size_t i){ return extremes[i]; }
 			point2D operator[](std::size_t i) const { return extremes[i]; }
 					
@@ -189,12 +208,12 @@ namespace BGLgeom{
 				no need to rewrite it.
 		@note Piece of code provided by prof. Formaggia
 	*/
-	template <typename Edge_t = Linear_edge>
-	Intersection compute_intersection	(Edge_t const& Edge1,
-										Edge_t const& Edge2,
+	//template <typename Edge_rapresentation_t = Linear_edge>
+	Intersection compute_intersection	(Linear_edge const& Edge1,
+										Linear_edge const& Edge2,
 										double const tol = 20*std::numeric_limits<double>::epsilon()){
 								
-		Intersection out;
+	Intersection out;
     //[0][0] ->1
     //[0][1] ->2
     //[1][0] ->3
@@ -211,10 +230,10 @@ namespace BGLgeom{
     // First check if segments meets at the end
     for (unsigned int i=0;i<2;++i)
       {
-        auto const & P1=Edge1[i];
+        point2D const & P1=Edge1[i];
         for (unsigned int j=0;j<2;++j)
           {
-            auto const & P2=Edge2[j];
+            point2D const & P2=Edge2[j];
             auto dist=norm(P1-P2);
             if (dist<=tol_dist)
               {
@@ -248,10 +267,10 @@ namespace BGLgeom{
     std::array<std::array<double,2>,2> A;
     // to make life easier I call A and B the
     // ends of the two segmensts
-    auto const & A1=Edge1[0];
-    auto const & B1=Edge1[1];
-    auto const & A2=Edge2[0];
-    auto const & B2=Edge2[1];
+    point2D const & A1=Edge1[0];
+    point2D const & B1=Edge1[1];
+    point2D const & A2=Edge2[0];
+    point2D const & B2=Edge2[1];
     auto  V1 = B1-A1;
     auto  V2 = B2-A2;
     A[0][0]= dot(V1,V1);
@@ -426,13 +445,38 @@ namespace BGLgeom{
           }
       }
     return out;						
+	}	//xompute_intersection
 	
-	
-	
-	
-	
-	}
-	
+	std::ostream & operator << (std::ostream & out, Geometry::Intersection const & i){
+		out<<"*Segment intersections:"<<std::endl;
+		out<<"\tSegment intersects     :"<<std::boolalpha<<i.intersect<<std::endl;
+		if (!i.intersect) return out;
+		out<<"\tNumber of intersections:"<<i.numberOfIntersections<<std::endl;
+		for (auto j=0u;j<i.numberOfIntersections;++j)
+		{
+		    out<<"\t x["<<j<<"]="<<i.intersectionPoint[j][0];
+		    out<<"\t y["<<j<<"]="<<i.intersectionPoint[j][1];
+		    out<<std::endl;
+		}
+		out<<"\t Segments are identical:"<<std::boolalpha<<i.identical<<std::endl;
+		out<<"\t Segments are parallel :"<<std::boolalpha<<i.parallel<<std::endl;
+		out<<"\t Segments are collinear:"<<std::boolalpha<<i.collinear<<std::endl;
+		for (unsigned int j=0u;j<2;++j)
+		{
+		    for (unsigned int k=0u;k<2;++k)
+		    {
+		        if(i.endPointIsIntersection[j][k])
+		        {
+		            out<<"\t EndPoint "<<k<<" of segment "<<j<<" is intersection"<<std::endl;
+		            if(i.otherEdgePoint[j][k]!=-1)
+		            out<<"\t\t and it is joined to EdgePoint "<<i.otherEdgePoint[j][k]
+		                <<" of segment "<<j+1 %2<<std::endl;
+		        }
+		    }
+		    
+		}
+		return out;
+	}		//operator<<	
 	
 }	//BGLgeom
 
