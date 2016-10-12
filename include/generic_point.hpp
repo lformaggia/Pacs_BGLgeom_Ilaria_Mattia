@@ -49,6 +49,9 @@ class point {
 			}
 		}
 		
+		//! Constructor from a std::array<Storage_t,dim>
+		point(std::array<Storage_t,dim> const& P) : coord(P) {};
+		
 		//! Copy constructor
 		point(point<dim, Storage_t> const&) = default;
 		
