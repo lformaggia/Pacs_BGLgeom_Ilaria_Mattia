@@ -21,6 +21,8 @@
 #include<initializer_list>
 #include<type_traits>
 
+namespace BGLgeom{
+
 /*!
 	@brief Class template for storing the vertex coordinates in n-dimentional space.
 	
@@ -34,8 +36,8 @@ class point {
 	public:
 		//! Default constructor
 		point(){
-			for(std::size_t i = 0; i < dim; i++)
-				coord[i] = static_cast<Storage_t>(0);
+			for(auto & i : coord)
+				i = static_cast<Storage_t>(0);
 		}
 		
 		//! Constructor
@@ -80,10 +82,6 @@ class point {
 		Storage_t z(){ return coord[2]; }
 		Storage_t z() const { return coord[2]; }
 		
-		//! Overloading of operator[], to get the i-th coordinate
-		Storage_t operator[](std::size_t i){ return coord[i]; }
-		Storage_t operator[](std::size_t i) const { return coord[i]; }
-		
 		//! Gets the dimension of the point, and so the number of the coordinates
 		std::size_t get_dim(){ return coord.size(); }
 		std::size_t get_dim() const { return coord.size(); }
@@ -111,8 +109,12 @@ class point {
 			}			
 		}
 		
-		//! Overload of operator[] to set the i-th coord
-		//?????
+		//========================== OPERATOR[] =======================
+		
+		//! Overloading of operator[], to get the i-th coordinate or write in it.
+		Storage_t & operator[](std::size_t i){ return coord[i]; }
+		Storage_t & operator[](std::size_t i) const { return coord[i]; }
+		
 		
 		//================	I/O OPERATOR OVERLOADING ==================
 		
@@ -139,14 +141,14 @@ class point {
 			 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
 			 		 if they are equal, compare in the same waythe y coordinate, and so on.		
 		*/
-		bool operator< (point<dim, Storage_t> const& point2) const {
-			if(this->get_dim() != point2.get_dim())	//exception!!!
+		bool operator< (point<dim, Storage_t> const& P2) const {
+			if(this->get_dim() != P2.get_dim())	//exception!!!
 				return false;
 								
-			for(std::size_t i = 0; i < point2.get_dim(); i++){
-				if(this->get(i) < point2.get(i))
+			for(std::size_t i = 0; i < P2.get_dim(); i++){
+				if(this->operator[](i) < P2[i])
 					return true;
-				else if (this->get(i) > point2.get(i))
+				else if (this->operator[](i) > P2[i])
 					return false;
 			}			
 			return false;		//if they are equal
@@ -160,8 +162,69 @@ class point {
 			return !(*this < point2);
 		}
 		
+		//======================= ARITHMETIC OPERATOR =====================
+		
+		/*!
+			@brief Overloading of operator- for points
+			@return It returns an array that represent the distance in each coordinate
+					between the two points
+		*/
+		friend std::array<Storage_t,dim> operator- (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			return std::array<Storage_t,dim>{P[0]-Q[0], P[1]-Q[1]};
+		}
+		
+		/*! 
+			@brief Overload of operator-
+			@detail It defines difference between points and std::array, to define conversion
+					between this two similar classes
+			@return It returns an array that represent the distance in each coordinate
+					between the two points
+		*/
+		friend std::array<Storage_t,dim> operator- (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
+			return std::array<Storage_t,dim>{P[0]-a[0], P[1]-a[1]};
+		}
+		friend std::array<Storage_t,dim> operator- (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
+			return std::array<Storage_t,dim>{P[0]-a[0], P[1]-a[1]};
+		}
+		
+		/*!
+			@brief Overloading of operator+ for points
+			@return It returns an array that contains the components of the sum of the
+					two points seen as vectors
+		*/
+		friend std::array<Storage_t,dim> operator+ (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			return std::array<Storage_t,dim>{P[0]+Q[0], P[1]+Q[1]};
+		}
+		
+		/*! 
+			@brief Overload of operator+
+			@detail It defines sum between points and std::array, to define conversion
+					between this two similar classes
+			@return It returns an array that contains the components of the sum of the
+					two points seen as vectors
+		*/
+		friend std::array<Storage_t,dim> operator+ (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
+			return std::array<Storage_t,dim>{P[0]+a[0], P[1]+a[1]};
+		}
+		friend std::array<Storage_t,dim> operator+ (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
+			return std::array<Storage_t,dim>{P[0]+a[0], P[1]+a[1]};
+		}
+		
+		/*! 
+			@brief Overloading of operator*
+			@detail it represents the multiplication of the coordinates of a point for a scalar
+		*/
+		friend point<dim,Storage_t> operator* (double const& k, point<dim,Storage_t> const& P){
+			return point<dim,Storage_t>(k*P[0], k*P[1]);
+		}
+		friend point<dim,Storage_t> operator* (point<dim,Storage_t> const& P, double const& k){
+			return point<dim,Storage_t>(k*P[0], k*P[1]);
+		}
+		
 	private:
 		std::array<Storage_t, dim> coord;
 };	//point
+
+}	//BGLgeom
 
 #endif //HH_GENERIC_POINT_HH
