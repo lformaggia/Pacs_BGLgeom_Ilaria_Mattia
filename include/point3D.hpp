@@ -33,6 +33,13 @@ class point3D {
 		//! Assignment operator
 		point3D & operator=(point3D const&) = default;
 		
+		//! Overload of assigment operator that may be useful
+		point3D & operator=(std::array<double,3> const& P){
+			coord[0] = P[0];
+			coord[1] = P[1];
+			coord[2] = P[2];
+		}
+		
 		//! Get the x coordinate. More readable for the user
 		double x(){ return coord[0]; }
 		double x() const { return coord[0]; }
