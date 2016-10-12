@@ -27,7 +27,7 @@
 #include <boost/graph/graph_traits.hpp>
 
 #include "generic_point.hpp"
-#include "point2D.hpp"
+//#include "point2D.hpp"
 
 typedef std::array<double,2> Vector;
 
@@ -43,42 +43,20 @@ namespace{
 		return std::sqrt(dot(a,a));
 	}
 	
+	//! Overload of operator+ for std::array<double,2>
 	inline Vector operator+ (Vector const& a, Vector const& b){
 		return Vector{a[0]+b[0], a[1]+b[1]};
 	}
 	
-	//! Overloading of operator+ for std::array<double,2>
-	inline Vector operator+ (point2D const& P, point2D const& Q){
-		return Vector{P[0]+Q[0], P[1]+Q[1]};
-	}
-	
-	inline Vector operator+ (point2D const& P, Vector const& a){
-		return Vector{P[0]+a[0], P[1]+a[1]};
-	}
-	
+	//! Overload of operator- for std::array<double,2>
 	inline Vector operator- (Vector const& a, Vector const& b){
 		return Vector{a[0]-b[0], a[1]-b[1]};
-	}
-	
-	//! Overloading of operator- for std::array<double,2>
-	inline Vector operator- (point2D const& P, point2D const& Q){
-		return Vector{P[0]-Q[0], P[1]-Q[1]};
-	}
-	
-	inline Vector operator- (point2D const& P, Vector const& a){
-		return Vector{P[0]-a[0], P[1]-a[1]};
-	}
+	}	
 	
 	//Both the overloading needed!
 	//! Overloading of operator* to represent the multiplication of a vector for a scalar
 	inline Vector operator* (double const& k, Vector const& a){
 		return Vector{k*a[0], k*a[1]};
-	}
-	
-	//! Overloading of operator* to represent the multiplication of the coordinates of a point for a scalar
-	//Se qualcosa non funziona, provo a mettere Vector come tipo del valore restituito
-	inline point2D operator* (double const& k, point2D const& P){
-		return point2D(k*P[0], k*P[1]);
 	}
 	
 	//! Solves Ax=b
@@ -114,10 +92,10 @@ namespace Geometry{
 	class Linear_edge{
 		public:
 			//! Default constructor
-			Linear_edge() : extremes{point2D(), point2D()}, extremes_are_set(false) {};
+			Linear_edge() : extremes{point<2>(), point<2>()}, extremes_are_set(false) {};
 		
 			//! Constructor
-			Linear_edge(point2D const& SRC, point2D const& TGT) : extremes{SRC, TGT}, extremes_are_set(true) {};
+			Linear_edge(point<2> const& SRC, point<2> const& TGT) : extremes{SRC, TGT}, extremes_are_set(true) {};
 			
 			//! Copy constructor
 			Linear_edge(Linear_edge const&) = default;
@@ -126,7 +104,7 @@ namespace Geometry{
 			Linear_edge & operator=(Linear_edge const&) = default;
 			
 			//! Setting the two end points (extremes) of the edge
-			void set(point2D const& SRC, point2D const& TGT){
+			void set(point<2> const& SRC, point<2> const& TGT){
 				extremes[0] = SRC;
 				extremes[1] = TGT;
 				extremes_are_set = true;
@@ -136,12 +114,12 @@ namespace Geometry{
 				@brief Overloading of operator[] to access each of the two end points. Usefull in algorithms
 				@detail extremes[0] = source, extremes[1] = target of the edge
 			*/
-			point2D operator[](std::size_t i){ return extremes[i]; }
-			point2D operator[](std::size_t i) const { return extremes[i]; }
+			point<2> operator[](std::size_t i){ return extremes[i]; }
+			point<2> operator[](std::size_t i) const { return extremes[i]; }
 					
 		private:
 			//! This container contains coordinates of source (first row), coordinates of target (second row)
-			std::array<point2D,2> extremes;
+			std::array<point<2>,2> extremes;
 			//! Bool to track if the coordinates in the matrix is set
 			bool extremes_are_set;
 	};	//Linear_edge
@@ -168,7 +146,7 @@ namespace Geometry{
 	//! Number of intersections (max 2)
 	unsigned int numberOfIntersections = 0u;
 	//! Intersection points coordinates
-	std::array<point2D,2> intersectionPoint = std::array<point2D,2>{point2D(), point2D()};
+	std::array<point<2>,2> intersectionPoint = std::array<point<2>,2>{point<2>(), point<2>()};
 	/*! Intersection may be end point
 	    
 	    endPointIsIntersection[i][j]=true
@@ -208,7 +186,7 @@ namespace Geometry{
 				no need to rewrite it.
 		@note Piece of code provided by prof. Formaggia
 	*/
-	//template <typename Edge_rapresentation_t = Linear_edge>
+	template <typename Edge_rapresentation_t = Linear_edge>
 	Intersection compute_intersection	(Linear_edge const& Edge1,
 										Linear_edge const& Edge2,
 										double const tol = 20*std::numeric_limits<double>::epsilon()){
@@ -230,10 +208,10 @@ namespace Geometry{
     // First check if segments meets at the end
     for (unsigned int i=0;i<2;++i)
       {
-        point2D const & P1=Edge1[i];
+        point<2> const & P1=Edge1[i];
         for (unsigned int j=0;j<2;++j)
           {
-            point2D const & P2=Edge2[j];
+            point<2> const & P2=Edge2[j];
             auto dist=norm(P1-P2);
             if (dist<=tol_dist)
               {
@@ -267,10 +245,10 @@ namespace Geometry{
     std::array<std::array<double,2>,2> A;
     // to make life easier I call A and B the
     // ends of the two segmensts
-    point2D const & A1=Edge1[0];
-    point2D const & B1=Edge1[1];
-    point2D const & A2=Edge2[0];
-    point2D const & B2=Edge2[1];
+    point<2> const & A1=Edge1[0];
+    point<2> const & B1=Edge1[1];
+    point<2> const & A2=Edge2[0];
+    point<2> const & B2=Edge2[1];
     auto  V1 = B1-A1;
     auto  V2 = B2-A2;
     A[0][0]= dot(V1,V1);
@@ -447,6 +425,9 @@ namespace Geometry{
     return out;						
 	}	//xompute_intersection
 	
+	/*!
+		@brief Overload of operator<< to show the information contained in the strcut Intersection
+	*/
 	std::ostream & operator << (std::ostream & out, Geometry::Intersection const & i){
 		out<<"*Segment intersections:"<<std::endl;
 		out<<"\tSegment intersects     :"<<std::boolalpha<<i.intersect<<std::endl;
@@ -472,8 +453,7 @@ namespace Geometry{
 		            out<<"\t\t and it is joined to EdgePoint "<<i.otherEdgePoint[j][k]
 		                <<" of segment "<<j+1 %2<<std::endl;
 		        }
-		    }
-		    
+		    }		    
 		}
 		return out;
 	}		//operator<<	
