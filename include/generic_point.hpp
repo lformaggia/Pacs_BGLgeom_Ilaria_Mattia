@@ -121,7 +121,8 @@ class point {
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const& P) {
 			out << "(";
-			for(std::size_t i=0; i < dim-1; ++i){
+			std::size_t i=0;
+			for( ; i < dim-1; ++i){
 				out << P.coord[i] << ","; 
 			}
 			out << P.coord[i] << ")";
@@ -164,50 +165,58 @@ class point {
 		
 		//======================= ARITHMETIC OPERATOR =====================
 		
-		/*!
-			@brief Overloading of operator- for points
-			@return It returns an array that represent the distance in each coordinate
-					between the two points
-		*/
-		friend std::array<Storage_t,dim> operator- (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
-			return std::array<Storage_t,dim>{P[0]-Q[0], P[1]-Q[1]};
+	 	//! Overloading of operator- for points
+		friend point<dim,Storage_t> operator- (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = P[i] - Q[i];
+			return PPP;
 		}
 		
 		/*! 
 			@brief Overload of operator-
 			@detail It defines difference between points and std::array, to define conversion
 					between this two similar classes
-			@return It returns an array that represent the distance in each coordinate
-					between the two points
 		*/
-		friend std::array<Storage_t,dim> operator- (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
-			return std::array<Storage_t,dim>{P[0]-a[0], P[1]-a[1]};
+		friend point<dim,Storage_t> operator- (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = P[i] - a[i];
+			return PPP;
 		}
-		friend std::array<Storage_t,dim> operator- (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			return std::array<Storage_t,dim>{P[0]-a[0], P[1]-a[1]};
+		friend point<dim,Storage_t> operator- (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = a[i] - P[i];
+			return PPP;
 		}
 		
 		/*!
 			@brief Overloading of operator+ for points
-			@return It returns an array that contains the components of the sum of the
-					two points seen as vectors
 		*/
-		friend std::array<Storage_t,dim> operator+ (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
-			return std::array<Storage_t,dim>{P[0]+Q[0], P[1]+Q[1]};
+		friend point<dim,Storage_t> operator+ (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = P[i] + Q[i];
+			return PPP;
 		}
 		
 		/*! 
 			@brief Overload of operator+
 			@detail It defines sum between points and std::array, to define conversion
 					between this two similar classes
-			@return It returns an array that contains the components of the sum of the
-					two points seen as vectors
 		*/
-		friend std::array<Storage_t,dim> operator+ (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
-			return std::array<Storage_t,dim>{P[0]+a[0], P[1]+a[1]};
+		friend point<dim,Storage_t> operator+ (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = P[i] + a[i];
+			return PPP;
 		}
-		friend std::array<Storage_t,dim> operator+ (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			return std::array<Storage_t,dim>{P[0]+a[0], P[1]+a[1]};
+		friend point<dim,Storage_t> operator+ (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
+			point<dim,Storage_t> PPP;
+			for(std::size_t i = 0; i < dim; ++i)
+				PPP[i] = a[i] + P[i];
+			return PPP;
 		}
 		
 		/*! 

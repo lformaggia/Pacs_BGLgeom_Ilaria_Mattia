@@ -25,7 +25,7 @@ using namespace boost;
 
 int main(){
 
-	typedef adjacency_list<vecS,vecS,directedS,point<3>,Zunino_edge_property_t> Graph;
+	typedef adjacency_list<vecS,vecS,directedS,BGLgeom::point<3>,Zunino_edge_property_t> Graph;
 	typedef graph_traits<Graph> Traits;
 	typedef Traits::edge_descriptor Edge_desc;
 	typedef Traits::edge_iterator Edge_iter;
@@ -41,23 +41,23 @@ int main(){
 	R.read_input_file();
 
 	//maximum_flow:
-	/*
-	std::map<Edge_Desc, double> out_residual_capacity;
+	
+	std::map<Edge_desc, double> out_residual_capacity;
 	double out_max_flow;
 	Traits::vertex_descriptor s = 2;	//da leggere da qualche parte in qualche modo.
 	Traits::vertex_descriptor t = 14;
-	out_max_flow = maximum_flow<Graph, Edge_Desc>(G,s,t,out_residual_capacity);
+	out_max_flow = maximum_flow<Graph, Edge_desc>(G,s,t,out_residual_capacity);
 
 	std::cout << "Abbiamo ottenuto: " << out_max_flow << std::endl;
 
-	Edge_Iter e_it, e_end;  // print residual capacities
+	Edge_iter e_it, e_end;  // print residual capacities
 	std::cout << "Residual capacities:" << std::endl;
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
 		std::cout << *e_it << " " << out_residual_capacity[*e_it] << std::endl;
 	}
-	*/
-
-	/* 
+	
+	/*
+	
 	double d12 = compute_euclidean_distance<Graph>(1,2,G);
 	double d45 = compute_euclidean_distance<Graph>(4,5,G);
 	double d13 = compute_euclidean_distance<Graph>(1,3,G);
@@ -75,7 +75,7 @@ int main(){
 	disjoint_components<Graph>(G); 
 	*/
 	
-	//
+	/*
 	std::cout << "Graph characteristics:" << std::endl;
 	std::cout << num_vertices(G) << " vertices and " << num_edges(G) << " edges."<< std::endl << std::endl;
 	
@@ -136,6 +136,6 @@ int main(){
 		} //if
 
 	} //for
-
+	*/
 	return 0;
 }
