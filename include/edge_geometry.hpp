@@ -31,6 +31,8 @@ edge_geometry{
 	
 	virtual double
 	curvilinear_abscissa (double parameter) = 0;
+	
+	
 }
 
 #endif

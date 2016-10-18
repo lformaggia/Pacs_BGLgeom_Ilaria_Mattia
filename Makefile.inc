@@ -1,7 +1,7 @@
 # Compilation variables:
 CXX = g++
 CXXFLAGS = -std=c++11 -g -O0
-CPPFLAGS ?= -I$(mkBGLInc) -I./include
+CPPFLAGS ?= -I$(mkBGLInc)  -I./include
 LDFLAGS ?= 
 LIBS = 
 #WARNS = -Wall
