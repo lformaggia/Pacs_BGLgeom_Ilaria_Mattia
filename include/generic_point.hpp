@@ -42,11 +42,12 @@ class point {
 		
 		//! Constructor
 		point(std::initializer_list<Storage_t> args){
-			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
-			//! manca eventuale gestione degli errori da parte dell'utente
+			typename std::initializer_list<Storage_t>::iterator init_list_it, init_list_end;
+			init_list_it = args.begin();
+			init_list_end != args.end();
 			std::size_t i = 0;
-			for(init_list_it it = args.begin(); it != args.end(); ++it){
-				coord[i] = *it;
+			for( ; init_list_it != init_list_end; ++init_list_it){
+				coord[i] = *init_list_it;
 				++i;
 			}
 		}
@@ -100,11 +101,12 @@ class point {
 		
 		//! Set method to assign coordinates to an already existing point
 		void set(std::initializer_list<Storage_t> args){
-			using init_list_it = typename std::initializer_list<Storage_t>::iterator;
-			//! manca eventuale gestione degli errori da parte dell'utente
-			std::size_t i=0;
-			for(init_list_it it = args.begin(); it != args.end(); ++it){
-				coord[i] = *it;
+			typename std::initializer_list<Storage_t>::iterator init_list_it, init_list_end;
+			init_list_it = args.begin();
+			init_list_end != args.end();
+			std::size_t i = 0;
+			for( ; init_list_it != init_list_end; ++init_list_it){
+				coord[i] = *init_list_it;
 				++i;
 			}			
 		}
@@ -121,7 +123,7 @@ class point {
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, point<dim,Storage_t> const& P) {
 			out << "(";
-			std::size_t i=0;
+			std::size_t i = 0;
 			for( ; i < dim-1; ++i){
 				out << P.coord[i] << ","; 
 			}
@@ -167,10 +169,10 @@ class point {
 		
 	 	//! Overloading of operator- for points
 		friend point<dim,Storage_t> operator- (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
-			point<dim,Storage_t> PPP;
+			point<dim,Storage_t> _P;
 			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = P[i] - Q[i];
-			return PPP;
+				_P[i] = P[i] - Q[i];
+			return _P;
 		}
 		
 		/*! 
@@ -179,26 +181,23 @@ class point {
 					between this two similar classes
 		*/
 		friend point<dim,Storage_t> operator- (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
-			point<dim,Storage_t> PPP;
+			point<dim,Storage_t> _P;
 			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = P[i] - a[i];
-			return PPP;
+				_P[i] = P[i] - a[i];
+			return _P;
 		}
 		friend point<dim,Storage_t> operator- (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			point<dim,Storage_t> PPP;
-			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = a[i] - P[i];
-			return PPP;
+			return this->operator-(P,a);
 		}
 		
 		/*!
 			@brief Overloading of operator+ for points
 		*/
 		friend point<dim,Storage_t> operator+ (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
-			point<dim,Storage_t> PPP;
+			point<dim,Storage_t> _P;
 			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = P[i] + Q[i];
-			return PPP;
+				_P[i] = P[i] + Q[i];
+			return _P;
 		}
 		
 		/*! 
@@ -207,27 +206,36 @@ class point {
 					between this two similar classes
 		*/
 		friend point<dim,Storage_t> operator+ (point<dim,Storage_t> const& P, std::array<Storage_t,dim> const& a){
-			point<dim,Storage_t> PPP;
+			point<dim,Storage_t> _P;
 			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = P[i] + a[i];
-			return PPP;
+				_P[i] = P[i] + a[i];
+			return _P;
 		}
 		friend point<dim,Storage_t> operator+ (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			point<dim,Storage_t> PPP;
-			for(std::size_t i = 0; i < dim; ++i)
-				PPP[i] = a[i] + P[i];
-			return PPP;
+			return this->operator+(P,a);
 		}
 		
 		/*! 
 			@brief Overloading of operator*
-			@detail it represents the multiplication of the coordinates of a point for a scalar
+			@detail It represents the multiplication of the coordinates of a point for a scalar
 		*/
 		friend point<dim,Storage_t> operator* (double const& k, point<dim,Storage_t> const& P){
-			return point<dim,Storage_t>(k*P[0], k*P[1]);
+			point<dim,Storage_t> _P;
+			for(std::size_t i = 0; i < dim; ++i)
+				_P[i] = k * P[i];
+			return _P;
 		}
 		friend point<dim,Storage_t> operator* (point<dim,Storage_t> const& P, double const& k){
-			return point<dim,Storage_t>(k*P[0], k*P[1]);
+			return this->operator*(k,P);
+		}
+		
+		/*! 
+			@brief Overloading of operator/
+			@detail It represents the division of the coordinates of a point for a scalar.
+					Implemented using operator*
+		*/
+		friend point<dim,Storage_t> operator/ (point<dim,Storage_t> const& P, double const& k){
+			return this->operator*(static_cast<Storage_t>(1/k), P);
 		}
 		
 	private:
