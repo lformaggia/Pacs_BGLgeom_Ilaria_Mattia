@@ -20,13 +20,14 @@
 
 #include <tuple>
 
+#include <iostream>
 #include "reader_base_class.hpp"
 #include "generic_point.hpp"
 
 template <typename Graph>
 class reader_Zunino final: public reader_base_class<Graph> {
 	private:
-		point<3> SRC,TGT; 												// they will store vertices coordinates	  
+		BGLgeom::point<3> SRC,TGT; 												// they will store vertices coordinates	  
 		unsigned int src, tgt; 											// they will read source and target of each edge
 		unsigned int edge_num;											// dummy variable;
 		double diam, length;											// they will store diameter and length of the edge		
@@ -64,7 +65,7 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			temp >> edge_num >> src >> tgt >> diam >> length >> SRC >> TGT;
 		};
 		
-		//! It build the graph one edge at a time
+		//! It build 8the graph one edge at a time
 		virtual void build_graph(){
 			//if(vertices_index_already_present) ----> ????
 			//devo automatizzare in qualche modo le due linee sotto!
@@ -73,7 +74,9 @@ class reader_Zunino final: public reader_base_class<Graph> {
 			this->new_source = src; //solo se scelgo vecS vecS nell'adjacency list
 			this->new_target = tgt; //idem come sopra
 			std::tie(this->new_edge, this->edge_inserted) = boost::add_edge(this->new_source, this->new_target, this->G);
-			this->if_edge_not_inserted();		//controllo se l'edge è stato inserito o meno
+			std::cout << this->G[this->new_source] << std::endl;
+			std::cout << this->G[this->new_edge].capacity << std::endl;
+			this->if_edge_not_inserted();			//controllo se l'edge è stato inserito o meno
 			this->give_new_source_properties();		//non c'è bisogno del this, ma magari meglio lasciarlo per chiarezza. non so.
 			this->give_new_target_properties();
 			this->give_new_edge_properties();
