@@ -21,9 +21,12 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <iostream>
+#include <cstdlib>
+#include <exception>
 
-//! Forward declaration of the struct that will contain the data readed from a line
+//! Forward declaration of the struct that will contain the data read from a line
 struct data_from_line{};
 
 /*!
@@ -36,7 +39,12 @@ class new_reader_class{
 		
 		//! Constructor
 		new_reader_class(std::string _filename) : filename(_filename), file_is_opened(true) {
-			in_file.open(filename);
+			try{
+				in_file.open(filename);
+			} catch(std::exception & e) {
+				std::cerr << "Error while opening input file. In particular: " << e.what() << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		};
 		
 		//! Copy constructor
@@ -48,8 +56,12 @@ class new_reader_class{
 		//! Set the input file to read
 		virtual void set_input(std::string _filename){
 			filename = _filename;
-			in_file.open(filename);
-			file_is_opened = true;
+			try{
+				in_file.open(filename);
+			} catch(std::exception & e) {
+				std::cerr << "Error while opening input file. In particular: " << e.what() << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 		
 		/*! 
@@ -57,22 +69,40 @@ class new_reader_class{
 			@remark It sets the file stream n lines after the previous position
 		*/
 		virtual void ignore_dummy_lines(unsigned int const& n){
-			if(!file_is_opened){
-				std::cerr << "Error: input file not opened for reading" << std::endl;
-				return;
-			}
-			std::string dummy;
-			for(std::size_t i = 0; i < n; ++i)
-				std::getline(file, dummy);
+				std::string dummy;
+				for(std::size_t i = 0; i < n; ++i)
+					std::getline(in_file, dummy);
 		}
 		
-		//! Reads the data from one single line. It has to be specified by the user
-		virtual data_from_line read_line() = 0;
+		//! Reads one line and put it into a istringstream
+		virtual void read_line(){
+			std::getline(in_file, line);
+			iss_line.str(line);
+			if(iss_line.fail()){
+				std::cerr << "Error while transferring the line read into istringstream." << std::endl;
+				exit(EXIT_FAILURE);
+			}
+		}
+		
+		/*!
+			@brief Reads the data from one single line. It has to be specified by the user
+			@detail It reads data form the istringstream iss_line that is defined as an attribute
+					of the class and it is updated after every call of read_line(). \n
+					The user must use the iss_line to read data from, when defining his own reader
+					class
+		*/
+		virtual void get_data_from_line(data_from_line & D) = 0;
 	
 	protected:
+		//! The name of the file to be read
 		std::string filename;
+		//! File stream to handle the input file
 		std::ifstream in_file;
-		bool file_is_opened;
+		//! String in which the data read from a line are put
+		std::string line;
+		//! Data put in line are converted in istringstream to be got by the user
+		std::istringstream iss_line;
+		
 };	//new_reader_class
 
 #endif //HH_NEW_READER_CLASS_HH
