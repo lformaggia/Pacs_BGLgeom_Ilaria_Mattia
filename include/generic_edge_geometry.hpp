@@ -20,12 +20,13 @@
 #include<array>
 #include<functional>
 #include"generic_point.hpp"
+#include "edge_geometry.hpp"
 
 namespace BGLgeom{
 
-template <unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
+template <const unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
-generic_edge_geometry : public edge_geometry
+generic_edge_geometry : public BGLgeom::edge_geometry
 {
 	private:
 	
@@ -52,12 +53,13 @@ generic_edge_geometry : public edge_geometry
 	};	
 	
 	//! first derivative
-	std::vector<double> 
+	virtual std::vector<double> 
 	first_derivative(const double x)
 	{
 		//reads data from a data file
-		GetPot   ifl("data.pot");
-		double h = ifl("h", 0.001);
+		//GetPot   ifl("data.pot");
+		//double h = ifl("h", 0.001);
+		const double h = 0.001;
 		std::cout<<"Spacing "<<h<<std::endl;
 	
 		// Point where derivative is computed
@@ -87,12 +89,13 @@ generic_edge_geometry : public edge_geometry
 	
 	
 	//! second derivative
-	std::vector<double> 
+	virtual	std::vector<double> 
 	second_derivative(const double x)
 	{
 		//reads data from a data file
-		GetPot   ifl("data.pot");
-		double h = ifl("h", 0.05);
+		//GetPot   ifl("data.pot");
+		//double h = ifl("h", 0.05);
+		const double h = 0.001;
 		std::cout<<"Spacing "<<h<<std::endl;
 		
 		// Point where derivative is computed
@@ -102,13 +105,13 @@ generic_edge_geometry : public edge_geometry
 			
 		// Compute finite difference depending on the value x +_ h
 		if(x+h > 1)
-			point diff = (first_derivative_fun(x) - first_derivative_fun(x-h))/h;
+			point diff = (this->first_derivative_fun(x) - this->first_derivative_fun(x-h))/h;
 
 		else if(x-h < 0)
-			point diff = (first_derivative_fun(x+h) - first_derivative_fun(x))/h;
+			point diff = (this->first_derivative_fun(x+h) - this->first_derivative_fun(x))/h;
 
 		else 
-			point diff = half*(first_derivative_fun(x+h)-first_derivative_fun(x-h))/h;
+			point diff = half*(this->first_derivative_fun(x+h)-this->first_derivative_fun(x-h))/h;
 			
 		// Copy in a vector the coordinates of diff
 		std::vector<double> dn(diff.coord, diff.coord + dim); 
@@ -123,9 +126,12 @@ generic_edge_geometry : public edge_geometry
 
 	//! curvilinear abscissa
 
-
-	value (double parameter)
-	{return value_fun(parameter);};
+    //! returns value fun (parametrized between 0 and 1) in s between 0 and 1 
+	virtual point<dim> value (double const parameter)
+	{
+		//check if param belongs to 0->1
+		return value_fun(parameter);
+	};
 	
 	
 	
