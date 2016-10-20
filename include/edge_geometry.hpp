@@ -16,12 +16,13 @@
 
 #ifndef HH_EDGE_GEOMETRY_HH
 #define HH_EDGE_GEOMETRY_HH
+namespace BGLgeom{
 
-template <const unsigned int dim>
+template<unsigned int dim>
 class
 edge_geometry{
 	public:
-	virtual point<dim>
+	virtual BGLgeom::point<dim>
 	value (const double parameter) = 0;
 	
 	virtual std::vector<double>
@@ -34,6 +35,8 @@ edge_geometry{
 	curvilinear_abscissa (const double parameter) = 0;*/
 	
 	
-}
+}; //class
+
+} //namespace
 
 #endif
