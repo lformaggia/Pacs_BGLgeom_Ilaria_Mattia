@@ -26,13 +26,25 @@
 #include <cstdlib>
 #include <exception>
 
-//! Forward declaration of the struct that will contain the data read from a line
-struct data_from_line{};
+#include "data_structure.hpp"
 
 /*!
-	@brief Abstract class that implements the functionality to read a file
+	@brief Abstract class that implements the functionality to read a file and get data from it	
+	@detail The users has to specify, in the derived class, all variables he need in
+			order to store information read from the input file. Then, through the definition
+			of Edge_data_structure and Vertex_data_structure, he can get separately all the
+			information to put on edges and vertices
+	
+	@param Edge_data_structure A struct where the user has to define type and name
+								of the variables he needs to append to vertices as
+								vertex bundled property
+	@param Vertex_data_structure A struct where the user has to define type and name
+								of the variables he needs to append to edge as
+								edge bundled property
+	@pre It may be useful to declare a friend operator>> to help the reader read the data
 */
-class new_reader_class{
+template <typename Edge_data_structure, typename Vertex_data_structure>
+class new_reader_class {
 	public:
 		//! Default constructor
 		new_reader_class() : filename(), in_file(), file_is_opened(false) {};
@@ -45,7 +57,7 @@ class new_reader_class{
 				std::cerr << "Error while opening input file. In particular: " << e.what() << std::endl;
 				exit(EXIT_FAILURE);
 			}
-		};
+		}
 		
 		//! Copy constructor
 		new_reader_class(new_reader_class const&) = default;
@@ -87,11 +99,15 @@ class new_reader_class{
 		/*!
 			@brief Reads the data from one single line. It has to be specified by the user
 			@detail It reads data form the istringstream iss_line that is defined as an attribute
-					of the class and it is updated after every call of read_line(). \n
-					The user must use the iss_line to read data from, when defining his own reader
-					class
+					of the class and it is updated after every call of read_line().
 		*/
-		virtual void get_data_from_line(data_from_line & D) = 0;
+		virtual void get_data_from_line() = 0;
+		
+		//! A method to get the right data to append to an edge
+		virtual Edge_data_structure get_edge_data() = 0;
+		
+		//! A method to get the right data to append to a vertex
+		virtual Vertex_data_structure get_vertex_data() = 0;
 	
 	protected:
 		//! The name of the file to be read
