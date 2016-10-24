@@ -40,10 +40,10 @@ int main(){
 	//unsigned int dummy_lines = 2;
 
 	Graph G;
-	Zunino_reader<Graph, Zunino_source_data, Zunino_target_data, Zunino_edge_data, Zunino_topological_data> R(filename);
+	Zunino_reader<Zunino_vertex_data, Zunino_edge_data, Zunino_topological_data> R(filename);
 	Zunino_topological_data Topo;
-	Zunino_source_data S;
-	Zunino_target_data T;
+	Zunino_vertex_data S;		//Vertex data structure for the source
+	Zunino_vertex_data T;		//Vertex data structure for the target
 	Zunino_edge_data E;
 	Edge_desc e;
 	bool inserted;
@@ -51,25 +51,28 @@ int main(){
 	//reading data
 	R.ignore_dummy_lines(2);
 	while(!R.is_eof()){
-		R.read_line();
+		
 		R.get_data_from_line();
 		Topo = R.get_topological_data();
 		S = R.get_source_data();
 		T = R.get_target_data();
 		E = R.get_edge_data();
+		
+		//e = create_edge (G, Topo.src, Topo.tgt, E, S, T);
+		
 		std::tie(e, inserted) = add_edge(Topo.src, Topo.tgt, G);
 		give_edge_properties<Graph, Zunino_edge_data>(E, e, G); 
-		give_source_properties<Graph, Zunino_source_data>(S, Topo.src, G);
-		give_target_properties<Graph, Zunino_target_data>(T, Topo.tgt, G);		
+		give_source_properties<Graph, Zunino_vertex_data>(S, Topo.src, G);
+		give_target_properties<Graph, Zunino_vertex_data>(T, Topo.tgt, G);		
 	}	//while
 	
 	Vertex_iter v_it, v_end;
 	for(std::tie(v_it, v_end) = vertices(G); v_it != v_end; ++v_it)
-		std::cout << *v_it << " : " G[*v_it].SRC << std::endl;
+		std::cout << *v_it << " : " << G[*v_it].COORD << std::endl;
 	
 	Edge_iter e_it, e_end;
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)
-		std::cout << *e_it << " : " G[*e_it].capacity << std::endl;
+		std::cout << *e_it << " : " << G[*e_it].capacity << std::endl;
 	
 	//maximum_flow:
 	

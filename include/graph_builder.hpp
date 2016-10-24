@@ -48,7 +48,7 @@ class graph_builder{
 // The reference " & D" is correct? mmm...
 template <typename Graph, typename Source_data_structure>
 void give_source_properties	(Source_data_structure const& D,
-							boost::graph_traits<Graph>::vertex_descriptor const& v,
+							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
 							Graph & G){
 	G[v] = D;
 }	//give_source_properties
@@ -56,7 +56,7 @@ void give_source_properties	(Source_data_structure const& D,
 //! Giving to target node v all properties through assigning the Target_data_structure
 template <typename Graph, typename Target_data_structure>
 void give_target_properties	(Target_data_structure const& D,
-							boost::graph_traits<Graph>::vertex_descriptor const& v,
+							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
 							Graph & G){
 	G[v] = D;
 }	//give_target_properties
@@ -64,7 +64,7 @@ void give_target_properties	(Target_data_structure const& D,
 //! Giving to edge e all properties through assigning the Edge_data_structure
 template <typename Graph, typename Edge_data_structure>
 void give_edge_properties	(Edge_data_structure const& D,
-							boost::graph_traits<Graph>::edge_descriptor const& e,
+							typename boost::graph_traits<Graph>::edge_descriptor const& e,
 							Graph & G){
 	G[e] = D;
 }	//give_edge_properties
@@ -72,16 +72,16 @@ void give_edge_properties	(Edge_data_structure const& D,
 
 
 template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure,
-		 typename Intersections_container = std::vector<point<2>> >
+		 typename Intersections_container = std::vector<BGLgeom::point<2>> >
 void refine_graph	(Graph & G,
 					//Vertex_data_structure & V,
 					//Edge_data_structure & E,
 					Intersections_container const& I,
-					boost::graph_traits<Graph>::edge_descriptor edge1,
-					boost::graph_traits<Graph>::edge_descriptor edge2){
+					typename boost::graph_traits<Graph>::edge_descriptor edge1,
+					typename boost::graph_traits<Graph>::edge_descriptor edge2){
 	
-	using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
-	using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
+	using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
+	using Edge_desc = typename boost::graph_traits<Graph>::edge_descriptor;
 	
 	Vertex_desc src1, tgt1, src2, tgt2;
 	src1 = boost::source(edge1, G);

@@ -47,17 +47,17 @@ struct no_topological_data {};
 								edge bundled property
 	@pre It may be useful to declare a friend operator>> to help the reader read the data
 */
-template 	<typename Source_data_structure,
-			typename Target_data_structure,
+template 	<typename Vertex_data_structure,
+			//typename Target_data_structure,
 			typename Edge_data_structure,
 			typename Topological_data_structure = no_topological_data>
 class new_reader_class {
 	public:
 		//! Default constructor
-		new_reader_class() : filename(), in_file() {};
+		new_reader_class() : filename(), in_file(), line() {};
 		
 		//! Constructor
-		new_reader_class(std::string _filename) : filename(_filename) {
+		new_reader_class(std::string _filename) : filename(_filename), in_file(), line() {
 			try{
 				in_file.open(filename);
 			} catch(std::exception & e) {
@@ -93,14 +93,18 @@ class new_reader_class {
 					std::getline(in_file, dummy);
 		}
 		
-		//! Reads one line and put it into a istringstream
-		virtual void read_line(){
+		/*! 
+			@brief Reads one line and put the data read from the istringstream in the variables defined
+					in the attributes of the derived class defined by the user
+		*/		
+		virtual void get_data_from_line(){
 			std::getline(in_file, line);
-			iss_line.str(line);
+			std::istringstream iss_line(line);			
 			if(iss_line.fail()){
 				std::cerr << "Error while transferring the line read into istringstream." << std::endl;
 				exit(EXIT_FAILURE);
 			}
+			this->read_line(iss_line);	//non mi piace tanto... 
 		}
 		
 		//! To know outside the class if we have reached the end of file
@@ -114,19 +118,19 @@ class new_reader_class {
 		
 		/*!
 			@brief Reads the data from one single line. It has to be specified by the user
-			@detail It reads data form the istringstream iss_line that is defined as an attribute
-					of the class and it is updated after every call of read_line().
+			@detail It reads data from the istringstream iss_line that is created and
+					initialize in the method get_data_from_line() every time that method is called.
 		*/
-		virtual void get_data_from_line() = 0;
+		virtual void read_line(std::istringstream & iss_line) = 0;
 		
 		//! A method to get the right data to append to an edge
 		virtual Edge_data_structure get_edge_data() = 0;
 		
 		//! A method to get the right data to append to the source
-		virtual Source_data_structure get_source_data() = 0;
+		virtual Vertex_data_structure get_source_data() = 0;
 		
 		//! A method to get the right data to append to the target
-		virtual Target_data_structure get_target_data() = 0;
+		virtual Vertex_data_structure get_target_data() = 0;
 		
 		//! A method to get the right topological data from a line
 		virtual Topological_data_structure get_topological_data() = 0;
@@ -139,7 +143,7 @@ class new_reader_class {
 		//! String in which the data read from a line are put
 		std::string line;
 		//! Data put in line are converted in istringstream to be got by the user
-		std::istringstream iss_line;
+		//std::istringstream iss_line;
 		
 };	//new_reader_class
 
