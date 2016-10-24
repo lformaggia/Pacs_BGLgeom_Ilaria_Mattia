@@ -187,7 +187,7 @@ class point {
 			return _P;
 		}
 		friend point<dim,Storage_t> operator- (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			return this->operator-(P,a);
+			return P - a;
 		}
 		
 		/*!
@@ -212,7 +212,7 @@ class point {
 			return _P;
 		}
 		friend point<dim,Storage_t> operator+ (std::array<Storage_t,dim> const& a, point<dim,Storage_t> const& P){
-			return this->operator+(P,a);
+			return P + a;
 		}
 		
 		/*! 
@@ -226,7 +226,7 @@ class point {
 			return _P;
 		}
 		friend point<dim,Storage_t> operator* (point<dim,Storage_t> const& P, double const& k){
-			return this->operator*(k,P);
+			return k*P;
 		}
 		
 		/*! 
@@ -235,7 +235,7 @@ class point {
 					Implemented using operator*
 		*/
 		friend point<dim,Storage_t> operator/ (point<dim,Storage_t> const& P, double const& k){
-			return this->operator*(static_cast<Storage_t>(1/k), P);
+			return static_cast<Storage_t>(1/k) * P;
 		}
 		
 	private:
