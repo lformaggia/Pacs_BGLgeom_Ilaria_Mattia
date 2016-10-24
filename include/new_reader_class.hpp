@@ -26,7 +26,11 @@
 #include <cstdlib>
 #include <exception>
 
-#include "data_structure.hpp"
+/*! 
+	@brief An empty struct to handle the case the user do not need to store topological data
+	@detail Inside this the user may put data as vertex and edge descriptor for the connettivity of the graph
+*/
+struct no_topological_data {};
 
 /*!
 	@brief Abstract class that implements the functionality to read a file and get data from it	
@@ -43,7 +47,9 @@
 								edge bundled property
 	@pre It may be useful to declare a friend operator>> to help the reader read the data
 */
-template <typename Edge_data_structure, typename Vertex_data_structure>
+template 	<typename Edge_data_structure,
+			typename Vertex_data_structure,
+			typename Topological_data_structure = no_topological_data>
 class new_reader_class {
 	public:
 		//! Default constructor
@@ -108,6 +114,9 @@ class new_reader_class {
 		
 		//! A method to get the right data to append to a vertex
 		virtual Vertex_data_structure get_vertex_data() = 0;
+		
+		//! A method to get the right topological data from a line
+		virtual Topological_data_structure get_topological_data() = 0;
 	
 	protected:
 		//! The name of the file to be read
