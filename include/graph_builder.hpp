@@ -16,10 +16,12 @@
 #ifndef HH_GRAPH_BUILDER_HH
 #define HH_GRAPH_BUILDER_HH
 
+#include <vector>
 #include <boost/graph/graph_trais.hpp>
 
-//#include "new_reader_Formaggia.hpp"
+#include "generic_point.hpp"
 
+/*
 template <typename Graph>
 class graph_builder{
 	public:
@@ -35,11 +37,50 @@ class graph_builder{
 		Vertex_desc src, tgt;
 		Edge_desc e;
 };
+*/
 
+// Provo a fare solo non_member functions
 
-template <typename Graph>
-void give_vertex_properties(Graph & G, Vertex_desc const& v, data_from_line const& D){
+//using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
+//using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
 
+//! Giving to vertex v all properties through assigning the Vertex_data_structure
+// The reference " & D" is correct? mmm...
+template <typename Graph, typename Vertex_data_structure>
+void give_vertex_properties	(Graph & G,
+							boost::graph_traits<Graph>::vertex_descriptor const& v,
+							Vertex_data_structure const& D){
+	G[v] = D;
 }	//give_vertex_properties
+
+//! Giving to edge e all properties through assigning the Edge_data_structure
+template <typename Graph, typename Edge_data_structure>
+void give_edge_properties	(Graph & G,
+							boost::graph_traits<Graph>::edge_descriptor const& e,
+							Edge_data_structure const& D){
+	G[e] = D;
+}	//give_edge_properties
+
+
+
+template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure,
+		 typename Intersections_container = std::vector<point<2>> >
+void refine_graph	(Graph & G,
+					//Vertex_data_structure & V,
+					//Edge_data_structure & E,
+					Intersections_container const& I,
+					boost::graph_traits<Graph>::edge_descriptor edge1,
+					boost::graph_traits<Graph>::edge_descriptor edge2){
+	
+	using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
+	using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
+	
+	Vertex_desc src1, tgt1, src2, tgt2;
+	src1 = boost::source(edge1, G);
+	tgt1 = boost::target(edge1, G);
+	src2 = boost::source(edge2, G);
+	tgt2 = boost::target(edge2, G);
+	
+}	//refine_graph
 
 #endif	//HH_GRAPH_BUILDER_HH
