@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file generic_edge_geometry.hpp
+	@file generic_edge_geometry_srctgt.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
-	@brief class for the generic geometry of an edge
+	@brief edge geometry source&target dependent
 	@detail 
 */
 
@@ -26,12 +26,12 @@ namespace BGLgeom{
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
-generic_edge_geometry: public BGLgeom::edge_geometry<dim>
+linear_edge_geometry: public BGLgeom::generic_edge_geometry<dim>
 {
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;               //! stores the function which takes in input the "normalized" parametrization of the edge 
-															   //! s:[0,1] -> value_fun(s):[0,1]^dim 
+	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1. f: R -> R
+	
 
 	public:
 	
