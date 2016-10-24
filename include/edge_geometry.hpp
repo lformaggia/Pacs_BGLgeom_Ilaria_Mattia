@@ -16,23 +16,27 @@
 
 #ifndef HH_EDGE_GEOMETRY_HH
 #define HH_EDGE_GEOMETRY_HH
+namespace BGLgeom{
 
+template<unsigned int dim>
 class
 edge_geometry{
 	public:
-	virtual point
-	value (double parameter) = 0;
+	virtual BGLgeom::point<dim>
+	value (const double parameter) = 0;
 	
-	virtual std::vector<point>
-	first_derivatives (double parameter) = 0;
+	virtual std::vector<double>
+	first_derivatives (const double x) = 0;
 	
-	virtual std::vector<point>
-	second_derivatives (double parameter) = 0;
+	virtual std::vector<double>
+	second_derivatives (const double x) = 0;
 	
-	virtual double
-	curvilinear_abscissa (double parameter) = 0;
+	/*virtual double
+	curvilinear_abscissa (const double parameter) = 0;*/
 	
 	
-}
+}; //class
+
+} //namespace
 
 #endif

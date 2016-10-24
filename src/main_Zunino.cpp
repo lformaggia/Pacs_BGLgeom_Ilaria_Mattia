@@ -13,19 +13,20 @@
 
 //#include "io_graph.hpp"
 #include "generic_point.hpp"
-#include "maximum_flow.hpp"
-#include "compute_euclidean_distance.hpp"
+//#include "maximum_flow.hpp"
+//#include "compute_euclidean_distance.hpp"
 //#include "topological_distance.hpp"
 #include "reader_Zunino_class.hpp"
-#include "Zunino_edge_property.hpp"
-#include "disjoint_components.hpp"
-#include "dijkstra.hpp"
+//#include "Zunino_edge_property.hpp"
+#include "generic_edge_geometry.hpp"
+//#include "disjoint_components.hpp"
+//#include "dijkstra.hpp"
 
 using namespace boost;
 
 int main(){
 
-	typedef adjacency_list<vecS,vecS,directedS,BGLgeom::point<3>,Zunino_edge_property_t> Graph;
+	typedef adjacency_list<vecS,vecS,directedS,BGLgeom::point<3>,BGLgeom::generic_edge_geometry<3> > Graph;
 	typedef graph_traits<Graph> Traits;
 	typedef Traits::edge_descriptor Edge_desc;
 	typedef Traits::edge_iterator Edge_iter;
@@ -42,7 +43,7 @@ int main(){
 
 	//maximum_flow:
 	
-	std::map<Edge_desc, double> out_residual_capacity;
+/*	std::map<Edge_desc, double> out_residual_capacity;
 	double out_max_flow;
 	Traits::vertex_descriptor s = 2;	//da leggere da qualche parte in qualche modo.
 	Traits::vertex_descriptor t = 14;
@@ -74,6 +75,7 @@ int main(){
 	std::cout << "Prova disjoint:" << std::endl;
 	disjoint_components<Graph>(G); 
 	*/
+	
 	
 	/*
 	std::cout << "Graph characteristics:" << std::endl;

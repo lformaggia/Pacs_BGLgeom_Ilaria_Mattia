@@ -20,119 +20,135 @@
 #include<array>
 #include<functional>
 #include"generic_point.hpp"
+#include "edge_geometry.hpp"
 
 namespace BGLgeom{
 
-template <unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
+template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
-generic_edge_geometry : public edge_geometry
+generic_edge_geometry: public BGLgeom::edge_geometry<dim>
 {
 	private:
 	
-	std::function<point<dim>(double)> value_fun;               //! stores the N=dim functions which, given the parameter, return the dim-th component
-	std::function<std::vector(double)> first_derivative_fun;   //! stores the N=dim functions which, given the parameter, return the 1st derivative of the dim-th component
-	std::function<std::vector(double)> second_derivative_fun;  //! stores the N=dim functions which, given the parameter, return the 2nd derivative of the dim-th component
-	
-	std::function<double(double)> curvilinear_abscissa_fun;    //! stores the function which, given the parameter, returns the corresponding curvilinear abscissa 
-	
+	std::function<BGLgeom::point<dim>(double)> value_fun;               //! stores the function which takes in input the "normalized" parametrization of the edge 
+															   //! s:[0,1] -> value_fun(s):[0,1]^dim 
+
 	public:
 	
-	//! full constructor
+	//! constructor 
 	generic_edge_geometry
-	(std::function<point<dim>(double)> value_,
-	 std::function<std::vector<double>(double)>  first_derivatives_,
-	 std::function<std::vector<double>(double)>  second_derivatives_,
-	 std::function<double(double)> curvilinear_abscissa_) :
-	value_fun(value_),
-	first_derivatives_fun(first_derivatives_),
-	second_derivatives_fun(second_derivatives_),
-	curvilinear_abscissa_fun(curvilinear_abscissa_)
+	(std::function<BGLgeom::point<dim>(double)> value_) :
+	value_fun(value_)
 	{};
 	
-	//! constructor whith only value_fun passed (the other members are computed inside the constructor)
-	generic_edge_geometry
-	(std::array<std::function<double(double)>, dim> value_) :
-	value_fun(value_)
+	//! default constructor: linear edge (oppure defaultizzo già il fatto di chiamare sempre il linear_edge se non altrimenti specificato?)
+	generic_edge_geometry()
 	{
-		first_derivatives_fun = first_derivative;
-		second_derivatives_fun = second_derivative; 
+		value_fun = [](double s) -> BGLgeom::point<dim> 
+					{std::array<double,dim> coordinates(s);
+					 coordinates.fill(s); //x(s)=s; y(s)=s; ...
+					 BGLgeom::point<dim> p(coordinates);
+					 return p;
+					};
+	};	
 	
+	//! first derivative
+	virtual std::vector<double> 
+	first_derivatives(const double x)
+	{
+		//reads data from a data file
+		//GetPot   ifl("data.pot");
+		//double h = ifl("h", 0.001);
+		const double h = 0.001;
+		std::cout<<"Spacing "<<h<<std::endl;
+	
+		// Point where derivative is computed
+		std::cout<<"X value "<<x<<std::endl;
+
+		double constexpr half(0.5);
+		
+		BGLgeom::point<dim> diff; //! declare the point that will contain the result
+		
+		// Compute finite difference depending on the value x +_ h
+		if(x+h > 1)
+			diff = (value_fun(x) - value_fun(x-h))/h;
+
+		else if(x-h < 0)
+			diff = (value_fun(x+h) - value_fun(x))/h;
+
+		else 
+			diff = half*(value_fun(x+h)-value_fun(x-h))/h;
+		
+		// Copy in a vector the coordinates of diff
+		std::vector<double> dn(diff.coord, diff.coord + dim); 
+		
+		for(auto i: dn)
+			std::cout << i << " ";
+		std::cout << std::endl;
+		
+		return dn;	
+	}	
+	
+	
+	//! second derivative
+	virtual	std::vector<double> 
+	second_derivatives(const double x)
+	{
+		//reads data from a data file
+		//GetPot   ifl("data.pot");
+		//double h = ifl("h", 0.05);
+		const double h = 0.001;
+		std::cout<<"Spacing "<<h<<std::endl;
+		
+		// Point where derivative is computed
+		std::cout<<"X value "<<x<<std::endl;
+
+		double constexpr half(0.5);
+		
+		BGLgeom::point<dim> diff;
+			
+		// Compute finite difference depending on the value x +_ h
+		if(x+h > 1)
+			diff = (this->first_derivative_fun(x) - this->first_derivative_fun(x-h))/h;
+
+		else if(x-h < 0)
+			diff = (this->first_derivative_fun(x+h) - this->first_derivative_fun(x))/h;
+
+		else 
+			diff = half*(this->first_derivative_fun(x+h)-this->first_derivative_fun(x-h))/h;
+			
+		// Copy in a vector the coordinates of diff
+		std::vector<double> dn(diff.coord, diff.coord + dim); 
+			
+		for(auto i: dn)
+			std::cout << i << " ";
+		std::cout << std::endl;
+			
+		return dn;	
+	}
+	
+
+	//! curvilinear abscissa
+
+    //! returns value fun (parametrized between 0 and 1) in s between 0 and 1 
+	virtual BGLgeom::point<dim> value (const double parameter)
+	{
+		//check if param belongs to 0->1
+		return value_fun(parameter);
 	};
 	
-
-	value (double parameter)
-	{return value_fun(parameter);};
+	
 	
 
 	
-} //class
+}; //class
 
 
 } //namespace
 
 
-friend std::vector<double> first_derivative(const double x)
-{
-	//reads data from a data file
-	GetPot   ifl("data.pot");
-	double h = ifl("h", 0.05);
-	std::cout<<"Spacing "<<h<<std::endl;
-	
-	// Point where derivative is computed
-	std::cout<<"X value "<<x<<std::endl;
-
-	double constexpr half(0.5);
-		
-	// Compute finite difference depending on the value x +_ h
-	if(x+h > 1)
-		point diff = (value_fun(x) - value_fun(x-h))/h;
-
-	else if(x-h < 0)
-		point diff = (value_fun(x+h) - value_fun(x))/h;
-
-	else 
-		point diff = half*(value_fun(x+h)-value_fun(x-h))/h;
-		
-	// Copy in a vector the coordinates of diff
-	std::vector<double> dn(diff.coord, diff.coord + dim); 
-		
-	for(auto i: dn)
-		std::cout << i << " ";
-	std::cout << std::endl;
-		
-	return dn;	
-}
 
 
-friend std::vector<double> second_derivative(const double x)
-{
-	//reads data from a data file
-	GetPot   ifl("data.pot");
-	double h = ifl("h", 0.05);
-	std::cout<<"Spacing "<<h<<std::endl;
-	
-	// Point where derivative is computed
-	std::cout<<"X value "<<x<<std::endl;
 
-	double constexpr half(0.5);
-		
-	// Compute finite difference depending on the value x +_ h
-	if(x+h > 1)
-		point diff = (first_derivative_fun(x) - first_derivative_fun(x-h))/h;
 
-	else if(x-h < 0)
-		point diff = (first_derivative_fun(x+h) - first_derivative_fun(x))/h;
-
-	else 
-		point diff = half*(first_derivative_fun(x+h)-first_derivative_fun(x-h))/h;
-		
-	// Copy in a vector the coordinates of diff
-	std::vector<double> dn(diff.coord, diff.coord + dim); 
-		
-	for(auto i: dn)
-		std::cout << i << " ";
-	std::cout << std::endl;
-		
-	return dn;	
-}
 #endif
