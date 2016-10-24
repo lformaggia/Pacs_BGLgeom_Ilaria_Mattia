@@ -17,7 +17,7 @@
 #define HH_GRAPH_BUILDER_HH
 
 #include <vector>
-#include <boost/graph/graph_trais.hpp>
+#include <boost/graph/graph_traits.hpp>
 
 #include "generic_point.hpp"
 
@@ -44,20 +44,28 @@ class graph_builder{
 //using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
 //using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
 
-//! Giving to vertex v all properties through assigning the Vertex_data_structure
+//! Giving to source node v all properties through assigning the Source_data_structure
 // The reference " & D" is correct? mmm...
-template <typename Graph, typename Vertex_data_structure>
-void give_vertex_properties	(Graph & G,
+template <typename Graph, typename Source_data_structure>
+void give_source_properties	(Source_data_structure const& D,
 							boost::graph_traits<Graph>::vertex_descriptor const& v,
-							Vertex_data_structure const& D){
+							Graph & G){
 	G[v] = D;
-}	//give_vertex_properties
+}	//give_source_properties
+
+//! Giving to target node v all properties through assigning the Target_data_structure
+template <typename Graph, typename Target_data_structure>
+void give_target_properties	(Target_data_structure const& D,
+							boost::graph_traits<Graph>::vertex_descriptor const& v,
+							Graph & G){
+	G[v] = D;
+}	//give_target_properties
 
 //! Giving to edge e all properties through assigning the Edge_data_structure
 template <typename Graph, typename Edge_data_structure>
-void give_edge_properties	(Graph & G,
+void give_edge_properties	(Edge_data_structure const& D,
 							boost::graph_traits<Graph>::edge_descriptor const& e,
-							Edge_data_structure const& D){
+							Graph & G){
 	G[e] = D;
 }	//give_edge_properties
 

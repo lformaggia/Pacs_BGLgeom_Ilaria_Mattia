@@ -26,8 +26,12 @@
 #include "new_reader_class.hpp"
 #include "generic_point.hpp"
 
-struct Zunino_vertex_data{
-	BGLgeom::point<3> SRC, TGT;
+struct Zunino_source_data{
+	BGLgeom::point<3> SRC;
+};
+
+struct Zunino_target_data{
+	BGLgeom::point<3> TGT;
 };
 
 struct Zunino_edge_data{
@@ -39,7 +43,11 @@ struct Zunino_topological_data{
 	unsigned int src, tgt;
 };
 
-class Zunino_reader : public new_reader_class<Zunino_vertex_data, Zunino_edge_data, Zunino_topological_data> {
+template 	<typename Zunino_source_data,
+			typename Zunino_target_data,
+			typename Zunino_edge_data,
+			typename Zunino_topological_data>
+class Zunino_reader : public new_reader_class<Zunino_source_data, Zunino_target_data, Zunino_edge_data, Zunino_topological_data> {
 	private:
 		BGLgeom::point<3> SRC,TGT; 												// they will store vertices coordinates	  
 		unsigned int src, tgt; 											// they will read source and target of each edge
@@ -51,8 +59,12 @@ class Zunino_reader : public new_reader_class<Zunino_vertex_data, Zunino_edge_da
 			this->iss_line >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;
 		}
 		
-		virtual Zunino_vertex_data get_vertex_data(){
-			return Zunino_vertex_data{SRC, TGT};
+		virtual Zunino_source_data get_source_data(){
+			return Zunino_source_data{SRC};
+		}
+		
+		virtual Zunino_target_data get_target_data(){
+			return Zunino_target_data{TGT};
 		}
 		
 		virtual Zunino_edge_data get_edge_data(){

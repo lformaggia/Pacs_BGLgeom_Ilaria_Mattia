@@ -47,16 +47,17 @@ struct no_topological_data {};
 								edge bundled property
 	@pre It may be useful to declare a friend operator>> to help the reader read the data
 */
-template 	<typename Edge_data_structure,
-			typename Vertex_data_structure,
+template 	<typename Source_data_structure,
+			typename Target_data_structure,
+			typename Edge_data_structure,
 			typename Topological_data_structure = no_topological_data>
 class new_reader_class {
 	public:
 		//! Default constructor
-		new_reader_class() : filename(), in_file(), file_is_opened(false) {};
+		new_reader_class() : filename(), in_file() {};
 		
 		//! Constructor
-		new_reader_class(std::string _filename) : filename(_filename), file_is_opened(true) {
+		new_reader_class(std::string _filename) : filename(_filename) {
 			try{
 				in_file.open(filename);
 			} catch(std::exception & e) {
@@ -69,7 +70,7 @@ class new_reader_class {
 		new_reader_class(new_reader_class const&) = default;
 		
 		//! Assignment operator
-		new_reader_class & (new_reader_class const&) = default;
+		new_reader_class & operator=(new_reader_class const&) = default;
 		
 		//! Set the input file to read
 		virtual void set_input(std::string _filename){
@@ -102,6 +103,15 @@ class new_reader_class {
 			}
 		}
 		
+		//! To know outside the class if we have reached the end of file
+		virtual bool is_eof(){
+			if(in_file.eof()){
+				in_file.close();
+				return true;
+			} else
+				return false;
+		}
+		
 		/*!
 			@brief Reads the data from one single line. It has to be specified by the user
 			@detail It reads data form the istringstream iss_line that is defined as an attribute
@@ -112,8 +122,11 @@ class new_reader_class {
 		//! A method to get the right data to append to an edge
 		virtual Edge_data_structure get_edge_data() = 0;
 		
-		//! A method to get the right data to append to a vertex
-		virtual Vertex_data_structure get_vertex_data() = 0;
+		//! A method to get the right data to append to the source
+		virtual Source_data_structure get_source_data() = 0;
+		
+		//! A method to get the right data to append to the target
+		virtual Target_data_structure get_target_data() = 0;
 		
 		//! A method to get the right topological data from a line
 		virtual Topological_data_structure get_topological_data() = 0;
