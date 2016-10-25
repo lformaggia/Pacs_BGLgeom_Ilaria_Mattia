@@ -26,29 +26,33 @@ namespace BGLgeom{
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
-linear_edge_geometry: public BGLgeom::generic_edge_geometry<dim>
+generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 {
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1. f: R -> R
-	
+	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [src,tgt]
 
 	public:
 	
 	//! constructor 
-	generic_edge_geometry
-	(std::function<BGLgeom::point<dim>(double)> value_) :
-	value_fun(value_)
-	{};
+	generic_edge_geometry_srctgt
+	(std::function<BGLgeom::point<dim>(double)> value_, BGLgeom::point<dim> src, BGLgeom::point<dim> tgt)
+	{
+		value_fun = [](double s) -> BGLgeom::point<dim>
+					{
+						return (tgt - src)*value_(s) + src;
+					}
+	};
 	
-	//! default constructor: linear edge (oppure defaultizzo già il fatto di chiamare sempre il linear_edge se non altrimenti specificato?)
-	generic_edge_geometry()
+	//! default constructor: linear edge between source and target
+	generic_edge_geometry_srctgt
+	(BGLgeom::point<dim> src, BGLgeom::point<dim> tgt)
 	{
 		value_fun = [](double s) -> BGLgeom::point<dim> 
-					{std::array<double,dim> coordinates(s);
+					{std::array<double,dim> coordinates;
 					 coordinates.fill(s); //x(s)=s; y(s)=s; ...
 					 BGLgeom::point<dim> p(coordinates);
-					 return p;
+					 return (tgt - src)*p + src;
 					};
 	};	
 	
@@ -130,7 +134,7 @@ linear_edge_geometry: public BGLgeom::generic_edge_geometry<dim>
 
 	//! curvilinear abscissa
 
-    //! returns value fun (parametrized between 0 and 1) in s between 0 and 1 
+    //! returns the point corresponding to s=0:1 
 	virtual BGLgeom::point<dim> value (const double parameter)
 	{
 		//check if param belongs to 0->1
