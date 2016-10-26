@@ -66,8 +66,8 @@ class Zunino_reader : public new_reader_class<Zunino_vertex_data, Zunino_edge_da
 												SRC(), TGT(), src(), tgt(), edge_num(), capacity(), length() {};
 		
 	
-		virtual void read_line(std::istringstream & iss_line){
-			iss_line >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;
+		virtual void get_data_form_line(){
+			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;
 		}
 		
 		virtual Zunino_vertex_data get_source_data(){

@@ -97,23 +97,33 @@ class new_reader_class {
 			@brief Reads one line and put the data read from the istringstream in the variables defined
 					in the attributes of the derived class defined by the user
 		*/		
-		virtual void get_data_from_line(){
+		virtual void get_data_from_line() = 0;
+		/*{
+			std::istringstream iss_line(line);		
+			
 			std::getline(in_file, line);
-			std::istringstream iss_line(line);			
+				
 			if(iss_line.fail()){
 				std::cerr << "Error while transferring the line read into istringstream." << std::endl;
 				exit(EXIT_FAILURE);
 			}
+			
+			//char a_caso;
 			this->read_line(iss_line);	//non mi piace tanto... 
-		}
+			//in_file.get(a_caso);
+		}*/
 		
 		//! To know outside the class if we have reached the end of file
 		virtual bool is_eof(){
-			if(in_file.eof()){
+			char find_eof;		
+			in_file.get(find_eof);	//nell'ultima riga c'è end of line e poi eof, quindi devo leggere ogni volta due caratteri per sapere se sono in fondo
+			if(in_file.peek() == std::ifstream::traits_type::eof()){
 				in_file.close();
 				return true;
-			} else
+			} else {
+				in_file.seekg(-1, in_file.cur); 
 				return false;
+			}
 		}
 		
 		/*!
@@ -121,7 +131,7 @@ class new_reader_class {
 			@detail It reads data from the istringstream iss_line that is created and
 					initialize in the method get_data_from_line() every time that method is called.
 		*/
-		virtual void read_line(std::istringstream & iss_line) = 0;
+		//virtual void read_line(std::istringstream & iss_line) = 0;
 		
 		//! A method to get the right data to append to an edge
 		virtual Edge_data_structure get_edge_data() = 0;
