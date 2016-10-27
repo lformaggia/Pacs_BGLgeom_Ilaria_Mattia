@@ -26,11 +26,15 @@
 #include <cstdlib>
 #include <exception>
 
+#include "data_structure.hpp"
+
 /*! 
 	@brief An empty struct to handle the case the user do not need to store topological data
 	@detail Inside this the user may put data as vertex and edge descriptor for the connettivity of the graph
 */
 struct no_topological_data {};
+
+namespace BGLgeom{
 
 /*!
 	@brief Abstract class that implements the functionality to read a file and get data from it	
@@ -39,25 +43,27 @@ struct no_topological_data {};
 			of Edge_data_structure and Vertex_data_structure, he can get separately all the
 			information to put on edges and vertices
 	
-	@param Edge_data_structure A struct where the user has to define type and name
-								of the variables he needs to append to vertices as
-								vertex bundled property
 	@param Vertex_data_structure A struct where the user has to define type and name
 								of the variables he needs to append to edge as
 								edge bundled property
-	@pre It may be useful to declare a friend operator>> to help the reader read the data
+	@param Edge_data_structure A struct where the user has to define type and name
+								of the variables he needs to append to vertices as
+								vertex bundled property
+	@param Topological_data_structure A struct where the user has to define type and name
+										of the variables he needs to manage the topology
+										of the graph while building it
 */
-template 	<typename Vertex_data_structure,
+template 	<typename Vertex_data_structure = typename BGLgeom::BGLgeom_vertex_property<dim>,
 			//typename Target_data_structure,
-			typename Edge_data_structure,
+			typename Edge_data_structure = typename BGLgeom::BGLgeom_edge_property<dim>,
 			typename Topological_data_structure = no_topological_data>
 class new_reader_class {
 	public:
 		//! Default constructor
-		new_reader_class() : filename(), in_file(), line() {};
+		new_reader_class() : filename(), in_file() {};
 		
 		//! Constructor
-		new_reader_class(std::string _filename) : filename(_filename), in_file(), line() {
+		new_reader_class(std::string _filename) : filename(_filename), in_file() {
 			try{
 				in_file.open(filename);
 			} catch(std::exception & e) {
@@ -66,6 +72,7 @@ class new_reader_class {
 			}
 		}
 		
+		//magari questi fue comunque non servono...
 		//! Copy constructor
 		new_reader_class(new_reader_class const&) = default;
 		
@@ -115,9 +122,9 @@ class new_reader_class {
 		
 		//! To know outside the class if we have reached the end of file
 		virtual bool is_eof(){
-			char find_eof;		
+			char find_eof;		//magari da mettere come attributo protected	
 			in_file.get(find_eof);	//nell'ultima riga c'è end of line e poi eof, quindi devo leggere ogni volta due caratteri per sapere se sono in fondo
-			if(in_file.peek() == std::ifstream::traits_type::eof()){
+			if(find_eof == std::ifstream::traits_type::eof() || in_file.peek() == std::ifstream::traits_type::eof()){
 				in_file.close();
 				return true;
 			} else {
@@ -151,10 +158,12 @@ class new_reader_class {
 		//! File stream to handle the input file
 		std::ifstream in_file;
 		//! String in which the data read from a line are put
-		std::string line;
+		//std::string line;
 		//! Data put in line are converted in istringstream to be got by the user
 		//std::istringstream iss_line;
 		
 };	//new_reader_class
+
+}	//BGLgeom
 
 #endif //HH_NEW_READER_CLASS_HH

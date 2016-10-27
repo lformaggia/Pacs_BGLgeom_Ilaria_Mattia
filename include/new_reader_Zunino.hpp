@@ -26,11 +26,13 @@
 #include "new_reader_class.hpp"
 #include "generic_point.hpp"
 
+#include "data_structure"
+
 //The struct that will be used as property for vertices in the declaration of the adjacency list
 //It will have the same types of source_data or target_data, but with generic names
-struct Zunino_vertex_data{
-	BGLgeom::point<3> COORD;
-};
+//struct Zunino_vertex_data{
+//	BGLgeom::point<3> COORD;
+//};
 /*
 struct Zunino_source_data{
 	BGLgeom::point<3> SRC;
@@ -41,7 +43,8 @@ struct Zunino_target_data{
 };
 */
 
-struct Zunino_edge_data{
+template <unsigned int dim>
+struct Zunino_edge_data : public BGLgeom::BGLgeom_edge_property<dim>{
 	double capacity;
 	double length;
 };
@@ -54,20 +57,19 @@ template 	<typename Zunino_vertex_data,
 			//typename Zunino_target_data,
 			typename Zunino_edge_data,
 			typename Zunino_topological_data>
-class Zunino_reader : public new_reader_class<Zunino_vertex_data, Zunino_edge_data, Zunino_topological_data> {
+class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::BGLgeom_vertex_property, Zunino_edge_data, Zunino_topological_data> {
 	private:
 		BGLgeom::point<3> SRC,TGT; 												// they will store vertices coordinates	  
 		unsigned int src, tgt; 											// they will read source and target of each edge
 		unsigned int edge_num;											// dummy variable;
-		double capacity, length;											// they will store diameter and length of the edge
+		double capacity, length;										// they will store diameter and length of the edge
 		
 	public:
 		Zunino_reader(std::string _filename) : new_reader_class<Zunino_vertex_data, Zunino_edge_data, Zunino_topological_data>(_filename),
-												SRC(), TGT(), src(), tgt(), edge_num(), capacity(), length() {};
-		
+												SRC(), TGT(), src(), tgt(), edge_num(), capacity(), length() {};		
 	
-		virtual void get_data_form_line(){
-			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;
+		virtual void get_data_from_line(){
+			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT >> qualcosa;
 		}
 		
 		virtual Zunino_vertex_data get_source_data(){

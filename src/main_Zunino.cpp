@@ -61,7 +61,7 @@ int main(){
 		//e = create_edge (G, Topo.src, Topo.tgt, E, S, T);
 		
 		std::tie(e, inserted) = add_edge(Topo.src, Topo.tgt, G);
-		give_edge_properties<Graph, Zunino_edge_data>(E, e, G); 
+		give_edge_properties<Graph, Zunino_edge_data>(E, e, G);
 		give_source_properties<Graph, Zunino_vertex_data>(S, Topo.src, G);
 		give_target_properties<Graph, Zunino_vertex_data>(T, Topo.tgt, G);		
 	}	//while

@@ -1,0 +1,3 @@
+Source	Target	Parametrization
+x	y	x	y		x	y
+0	0	2	2		s	s^2+exp(s)
