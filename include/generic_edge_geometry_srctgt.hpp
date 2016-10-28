@@ -30,29 +30,26 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 {
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [src,tgt]
+	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [0,1]
+	BGLgeom::point<dim> src; //edge_source
+	BGLgeom::point<dim> tgt; //edge_target
+	
 
 	public:
 	
-	//! constructor 
+	//! full constructor
 	generic_edge_geometry_srctgt
-	(std::function<BGLgeom::point<dim>(double)> value_, BGLgeom::point<dim> src, BGLgeom::point<dim> tgt)
-	{
-		value_fun = [](double s) -> BGLgeom::point<dim>
-					{
-						return (tgt - src)*value_(s) + src;
-					}
-	};
+	(std::function<BGLgeom::point<dim>(double)> value_, BGLgeom::point<dim> src, BGLgeom::point<dim> tgt): value_fun(value_), src(src_), tgt(tgt_)
+	{};
 	
-	//! default constructor: linear edge between source and target
-	generic_edge_geometry_srctgt
-	(BGLgeom::point<dim> src, BGLgeom::point<dim> tgt)
+	//! default constructor: linear edge between 0-point (point with all components equal to 0) and 1-point(point with all components equal to 1)
+	generic_edge_geometry_srctgt()
 	{
 		value_fun = [](double s) -> BGLgeom::point<dim> 
 					{std::array<double,dim> coordinates;
 					 coordinates.fill(s); //x(s)=s; y(s)=s; ...
 					 BGLgeom::point<dim> p(coordinates);
-					 return (tgt - src)*p + src;
+					 return p;
 					};
 	};	
 	
@@ -75,13 +72,13 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		
 		// Compute finite difference depending on the value x +_ h
 		if(x+h > 1)
-			diff = (value_fun(x) - value_fun(x-h))/h;
+			diff = (this->value(x) - this->value(x-h))/h;
 
 		else if(x-h < 0)
-			diff = (value_fun(x+h) - value_fun(x))/h;
+			diff = (this->value(x+h) - this->value(x))/h;
 
 		else 
-			diff = half*(value_fun(x+h)-value_fun(x-h))/h;
+			diff = half*(this->value(x+h)-this->value(x-h))/h;
 		
 		// Copy in a vector the coordinates of diff
 		std::vector<double> dn(diff.coord, diff.coord + dim); 
@@ -133,12 +130,21 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	
 
 	//! curvilinear abscissa
-
+	
+	//! Sets the right value for the source (when initialized it has a dummy value, becuase at that point we don't have information about edge descriptor)
+	void set_source(BGLgeom::point<dim> src_){
+		src = src_; 
+	}
+	
+	void set_target(BGLgeom::point<dim> tgt_){
+		tgt = tgt_;
+	}
+ 
     //! returns the point corresponding to s=0:1 
 	virtual BGLgeom::point<dim> value (const double parameter)
 	{
 		//check if param belongs to 0->1
-		return value_fun(parameter);
+		return (tgt - src)*value_fun(parameter) + src;
 	};
 	
 }; //class
