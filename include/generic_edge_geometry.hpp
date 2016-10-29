@@ -128,7 +128,9 @@ generic_edge_geometry: public BGLgeom::edge_geometry<dim>
 	}
 	
 
+
 	//! curvilinear abscissa
+	
 
     //! returns value fun (parametrized between 0 and 1) in s between 0 and 1 
 	virtual BGLgeom::point<dim> value (const double parameter)

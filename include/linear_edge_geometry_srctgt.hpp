@@ -108,13 +108,6 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	{
 		return (tgt - src).norm()*(tgt - src).norm()*parameter;
 	};
-
-    //! returns the point corresponding to s=0:1 
-	virtual BGLgeom::point<dim> value (const double parameter)
-	{
-		//check if param belongs to 0->1
-		return (tgt - src) * value_fun(parameter) + src;
-	};
 	
 }; //class
 
