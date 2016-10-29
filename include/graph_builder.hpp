@@ -46,20 +46,12 @@ class graph_builder{
 
 //! Giving to source node v all properties through assigning the Source_data_structure
 // The reference " & D" is correct? mmm...
-template <typename Graph, typename Source_data_structure>
-void give_source_properties	(Source_data_structure const& D,
+template <typename Graph, typename Vertex_data_structure>
+void give_vertex_properties	(Vertex_data_structure const& D,
 							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
 							Graph & G){
 	G[v] = D;
-}	//give_source_properties
-
-//! Giving to target node v all properties through assigning the Target_data_structure
-template <typename Graph, typename Target_data_structure>
-void give_target_properties	(Target_data_structure const& D,
-							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
-							Graph & G){
-	G[v] = D;
-}	//give_target_properties
+}	//give_vertex_properties
 
 //! Giving to edge e all properties through assigning the Edge_data_structure
 template <typename Graph, typename Edge_data_structure>
