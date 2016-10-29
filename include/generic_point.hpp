@@ -20,6 +20,7 @@
 #include<iostream>
 #include<initializer_list>
 #include<type_traits>
+#include<math.h>
 
 namespace BGLgeom{
 
@@ -55,6 +56,11 @@ class point {
 		//! Constructor from a std::array<Storage_t,dim>
 		point(std::array<Storage_t,dim> const& P) : coord(P) {};
 		
+		//! Constructor from a double (initializes all the components to the inserted value)
+		point(double const x){
+			coord.fill(x);
+		}
+		
 		//! Copy constructor
 		point(point<dim, Storage_t> const&) = default;
 		
@@ -82,6 +88,9 @@ class point {
 		//! Gets the third coordinate
 		Storage_t z(){ return coord[2]; }
 		Storage_t z() const { return coord[2]; }
+		
+		//! Gets the array with the coordinates
+		std::array<Storage_t,dim> coordinates() {return coord;}
 		
 		//! Gets the dimension of the point, and so the number of the coordinates
 		std::size_t get_dim(){ return coord.size(); }
@@ -115,7 +124,7 @@ class point {
 		
 		//! Overloading of operator[], to get the i-th coordinate or write in it.
 		Storage_t & operator[](std::size_t i){ return coord[i]; }
-		Storage_t & operator[](std::size_t i) const { return coord[i]; }
+		const Storage_t & operator[](std::size_t i) const { return coord[i]; }
 		
 		
 		//================	I/O OPERATOR OVERLOADING ==================
@@ -190,6 +199,7 @@ class point {
 			return P - a;
 		}
 		
+		
 		/*!
 			@brief Overloading of operator+ for points
 		*/
@@ -216,8 +226,8 @@ class point {
 		}
 		
 		/*! 
-			@brief Overloading of operator*
-			@detail It represents the multiplication of the coordinates of a point for a scalar
+			@brief Overloading of operator* (point * scalar)
+			@detail It represents the multiplication of the coordinates of a point by a scalar
 		*/
 		friend point<dim,Storage_t> operator* (double const& k, point<dim,Storage_t> const& P){
 			point<dim,Storage_t> _P;
@@ -231,11 +241,35 @@ class point {
 		
 		/*! 
 			@brief Overloading of operator/
-			@detail It represents the division of the coordinates of a point for a scalar.
+			@detail It represents the division of the coordinates of a point by a scalar.
 					Implemented using operator*
 		*/
 		friend point<dim,Storage_t> operator/ (point<dim,Storage_t> const& P, double const& k){
 			return static_cast<Storage_t>(1/k) * P;
+		}
+		
+		/*!
+			@brief Overloading of operator* (point * point)
+			@detail It returns a point whose components are given by the multiplicaiton component by component
+		*/
+		friend point<dim,Storage_t> operator* (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			point<dim,Storage_t> _P;
+			for(auto i=0; i<dim; ++i){
+				_P[i] = P[i] * Q[i];
+			}
+			return _P;
+		
+		}
+		
+		/*!
+			@brief Norm of the "point", i.e. distance between the point and the origin
+		*/		
+		Storage_t norm(){
+			Storage_t norm = 0;
+			for(const int&& i: coord){
+				norm += i*i;
+			}
+			return sqrt(norm);
 		}
 		
 	private:

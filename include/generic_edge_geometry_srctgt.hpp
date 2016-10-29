@@ -14,13 +14,13 @@
 	@detail 
 */
 
-#ifndef HH_GENERIC_EDGE_GEOMETRY_HH
-#define HH_GENERIC_EDGE_GEOMETRY_HH
+#ifndef HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
+#define HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
 
 #include<array>
 #include<functional>
 #include"generic_point.hpp"
-#include "edge_geometry.hpp"
+#include"edge_geometry.hpp"
 
 namespace BGLgeom{
 
@@ -39,7 +39,7 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	
 	//! full constructor
 	generic_edge_geometry_srctgt
-	(std::function<BGLgeom::point<dim>(double)> value_, BGLgeom::point<dim> src, BGLgeom::point<dim> tgt): value_fun(value_), src(src_), tgt(tgt_)
+	(std::function<BGLgeom::point<dim>(double)> value_, BGLgeom::point<dim> src_, BGLgeom::point<dim> tgt_): value_fun(value_), src(src_), tgt(tgt_)
 	{};
 	
 	//! default constructor: linear edge between 0-point (point with all components equal to 0) and 1-point(point with all components equal to 1)
@@ -54,7 +54,7 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	};	
 	
 	//! first derivative
-	virtual std::vector<double> 
+	virtual std::array<double,dim> 
 	first_derivatives(const double x)
 	{
 		//reads data from a data file
@@ -62,9 +62,7 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		//double h = ifl("h", 0.001);
 		const double h = 0.001;
 		std::cout<<"Spacing "<<h<<std::endl;
-	
-		// Point where derivative is computed
-		std::cout<<"X value "<<x<<std::endl;
+
 
 		double constexpr half(0.5);
 		
@@ -80,19 +78,14 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		else 
 			diff = half*(this->value(x+h)-this->value(x-h))/h;
 		
-		// Copy in a vector the coordinates of diff
-		std::vector<double> dn(diff.coord, diff.coord + dim); 
-		
-		for(auto i: dn)
-			std::cout << i << " ";
-		std::cout << std::endl;
+		// exctract the array of the coordinates from the point
+		std::array<double,dim> dn(diff.coordinates());
 		
 		return dn;	
-	}	
-	
+	}		
 	
 	//! second derivative
-	virtual	std::vector<double> 
+	virtual	std::array<double,dim> 
 	second_derivatives(const double x)
 	{
 		//reads data from a data file
@@ -101,31 +94,22 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		const double h = 0.001;
 		std::cout<<"Spacing "<<h<<std::endl;
 		
-		// Point where derivative is computed
-		std::cout<<"X value "<<x<<std::endl;
-
-		double constexpr half(0.5);
-		
 		BGLgeom::point<dim> diff;
 			
 		// Compute finite difference depending on the value x +_ h
-		if(x+h > 1)
-			diff = (this->first_derivative_fun(x) - this->first_derivative_fun(x-h))/h;
+		if(x+h > 1) //bacward
+			diff = (this->value(x) - 2*this->value(x-h) + this->value(x-2*h))/(h*h);
 
-		else if(x-h < 0)
-			diff = (this->first_derivative_fun(x+h) - this->first_derivative_fun(x))/h;
+		else if(x-h < 0) //forward
+			diff = (this->value(x+2*h) - 2*this->value(x+h) + this->value(x))/(h*h);
 
-		else 
-			diff = half*(this->first_derivative_fun(x+h)-this->first_derivative_fun(x-h))/h;
+		else //central
+			diff = (this->value(x+h) - 2*this->value(x) + this->value(x-h))/(h*h);
 			
-		// Copy in a vector the coordinates of diff
-		std::vector<double> dn(diff.coord, diff.coord + dim); 
-			
-		for(auto i: dn)
-			std::cout << i << " ";
-		std::cout << std::endl;
-			
-		return dn;	
+		// exctract the array of the coordinates from the point
+		std::array<double,dim> dn(diff.coordinates());
+
+		return dn;		
 	}
 	
 
@@ -146,6 +130,43 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		//check if param belongs to 0->1
 		return (tgt - src)*value_fun(parameter) + src;
 	};
+	
+	
+	//! Overload of operator<<
+	friend std::ostream & operator << (std::ostream & out, generic_edge_geometry_srctgt<dim>& edge) {
+		out<<"Source: "<< edge.src<<std::endl;
+		out<<"Target: "<< edge.tgt<<std::endl;
+		out<<"Value in s=0: "<<edge.value(0)<<std::endl;
+		out<<"Value in s=0.5: "<<edge.value(0.5)<<std::endl;
+		out<<"Value in s=1: "<<edge.value(1)<<std::endl;
+		out<<"First derivatives in s=0: ";
+		for(const int&& i : edge.first_derivatives(0))
+			out<<i<<" ";
+		out<<std::endl;
+		out<<"First derivatives in s=0.5: ";
+		for(const int&& i : edge.first_derivatives(0.5))
+			out<<i<<" ";
+		out<<std::endl;
+		out<<"First derivatives in s=1: ";
+		for(const int&& i : edge.first_derivatives(1))
+			out<<i<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=0: ";
+		for(const int&& i : edge.second_derivatives(0))
+			out<<i<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=0.5: ";
+		for(const int&& i : edge.second_derivatives(0.5))
+			out<<i<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=1: ";
+		for(const int&& i : edge.second_derivatives(1))
+			out<<i<<" ";
+		out<<std::endl;			
+		//out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
+		//out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
+		//out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
+	}
 	
 }; //class
 

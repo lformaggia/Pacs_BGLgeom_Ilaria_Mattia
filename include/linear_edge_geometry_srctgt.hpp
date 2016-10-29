@@ -30,25 +30,59 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 {
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [src,tgt]
+	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [0,1]
+	BGLgeom::point<dim> src;
+	BGLgeom::point<dim> tgt;
 
 	public:
 	
 	//! constructor 
 	linear_edge_geometry_srctgt
-	(BGLgeom::point<dim> src, BGLgeom::point<dim> tgt)
+	(BGLgeom::point<dim> src_, BGLgeom::point<dim> tgt_):src(src_),tgt(tgt_)
 	{
 		value_fun = [](double s) -> BGLgeom::point<dim>
 					{
-						return (tgt - src)*s + src;
+						std::array<double,dim> coord;
+						coord.fill(s);
+						BGLgeom::point<dim> P;
+						return P;
 					}
+	};
+	
+	//! default constructor 
+	linear_edge_geometry_srctgt()
+	{
+		value_fun = [](double s) -> BGLgeom::point<dim>
+					{
+						std::array<double,dim> coord;
+						coord.fill(s);
+						BGLgeom::point<dim> P;
+						return P;
+					}
+	};
+	
+	
+	//! Sets the right value for the source (when initialized it has a dummy value, becuase at that point we don't have information about edge descriptor)
+	void set_source(BGLgeom::point<dim> src_){
+		src = src_; 
+	}
+	
+	void set_target(BGLgeom::point<dim> tgt_){
+		tgt = tgt_;
+	}
+ 
+    //! returns the point corresponding to s=0:1 
+	virtual BGLgeom::point<dim> value (const double parameter)
+	{
+		//check if param belongs to 0->1
+		return (tgt - src)*value_fun(parameter) + src;
 	};
 	
 	//! first derivative
 	virtual std::vector<double> 
 	first_derivatives(const double x = 0)
 	{
-		point diff(value_fun(1) - value_fun(0));		//! the value of the first derivative is tgt-src
+		point diff(this -> tgt - src);		
 		// Copy in a vector the coordinates of diff
 		std::vector<double> dn(diff); 
 		
@@ -72,14 +106,14 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	//! curvilinear abscissa
 	virtual double curvilinear_abscissa(const double parameter)
 	{
-	
+		return (tgt - src).norm()*(tgt - src).norm()*parameter;
 	};
 
     //! returns the point corresponding to s=0:1 
 	virtual BGLgeom::point<dim> value (const double parameter)
 	{
 		//check if param belongs to 0->1
-		return value_fun(parameter);
+		return (tgt - src) * value_fun(parameter) + src;
 	};
 	
 }; //class
