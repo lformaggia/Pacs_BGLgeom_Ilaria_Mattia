@@ -101,31 +101,37 @@ class MuParser_interface{
 					the geometric property of the edge as std::functional
 		*/
 		double operator()(double const& _value){
+			if(!expr_is_set){
+				std::cerr << "Attempt to evaluating a meaningless expression" << std::endl;
+				return .0;	//or exit()?
+			}
 			value = _value;
 			double result;
 			try{
 				result = M.Eval();
 			} catch(mu::Parser::exception_type &e){
-				std::cout << e.GetMsg() << std::endl;
+				std::cerr << e.GetMsg() << std::endl;
 			}
 			return result;
 		}
 		
+		/*
 		//! Overload of output operator. It shows infos on the state of the class
 		friend std::ostream & operator<<(std::ostream & out, MuParser_interface const& MPi){
-			if(expr_is_set){
-				out << "Expression to be evaluated: " << expr << std::endl;
-				out << "Current value of evaluation: " << value << std::endl;
+			if(MPi.expr_is_set){
+				out << "Expression to be evaluated: " << MPi.expr << std::endl;
+				out << "Current value of evaluation: " << MPi.value << std::endl;
 			} else
 				out << "Warning: any valid expression set" << std::endl;
 		}
 		
 		//! Overload of input operator
 		friend std::istream & operator>>(std:istream & in, MuParser_interface & MPi){
-			in >> expr;		//it reads only a string!
-			M.SetExpr(expr);
-			expr_is_set = true;
+			in >> MPi.expr;		//it reads only a string!
+			MPi.SetExpr(expr);
+			MPi.expr_is_set = true;
 		}
+		*/
 		
 	private:
 		//! The value of the variable in which the expression will be evaluated
