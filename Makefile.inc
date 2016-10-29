@@ -12,7 +12,6 @@ TARGET_DIR = bin
 BUILD_DIR = objs
 SOURCE_DIR = src
 INCLUDE_DIR = include
-LIBRARY_DIR = library
 
 # File variables:
 SRCS = $(wildcard $(SOURCE_DIR)/*.cpp)
