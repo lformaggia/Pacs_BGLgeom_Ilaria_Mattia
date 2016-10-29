@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <string>
-#include "muparser.h"
+#include "muParser.h"
 
 namespace My_muparser{
 
@@ -43,14 +43,14 @@ class MuParser_interface{
 		
 		//! Copy constructor
 		MuParser_interface(MuParser_interface const& MPi) : value(MPi.value), expr(MPi.expr), M(){
-			M.Definevar("s", &value);
+			M.DefineVar("s", &value);
 			M.SetExpr(expr);
 			expr == default_expr ? expr_is_set = false : expr_is_set = true;
 		}
 		
 		//! Move constructor
 		MuParser_interface(MuParser_interface && MPi) : value(MPi.value), expr(MPi.expr), M(){
-			M.Definevar("s", &value);
+			M.DefineVar("s", &value);
 			M.SetExpr(expr);
 			expr == default_expr ? expr_is_set = false : expr_is_set = true;
 		}
@@ -115,23 +115,22 @@ class MuParser_interface{
 			return result;
 		}
 		
-		/*
+		
 		//! Overload of output operator. It shows infos on the state of the class
 		friend std::ostream & operator<<(std::ostream & out, MuParser_interface const& MPi){
-			if(MPi.expr_is_set){
-				out << "Expression to be evaluated: " << MPi.expr << std::endl;
-				out << "Current value of evaluation: " << MPi.value << std::endl;
-			} else
-				out << "Warning: any valid expression set" << std::endl;
+			if(MPi.expr_is_set)
+				out << "Expression to be evaluated: " << MPi.expr;
+			else
+				out << "Warning: any valid expression set";
 		}
 		
 		//! Overload of input operator
-		friend std::istream & operator>>(std:istream & in, MuParser_interface & MPi){
+		friend std::istream & operator>>(std::istream & in, MuParser_interface & MPi){
 			in >> MPi.expr;		//it reads only a string!
-			MPi.SetExpr(expr);
+			MPi.M.SetExpr(MPi.expr);
 			MPi.expr_is_set = true;
 		}
-		*/
+		
 		
 	private:
 		//! The value of the variable in which the expression will be evaluated
@@ -141,7 +140,7 @@ class MuParser_interface{
 		//! The parser
 		mu::Parser M;
 		//! A flag to be sure the expression was set properly
-		bool expr_is_set
+		bool expr_is_set;
 };	//MuParser_interface
 
 }	//My_muparser
