@@ -81,7 +81,7 @@ struct Vertex_base_property{
 	Vertex_base_property & operator=(Vertex_base_property const&) = default;
 	
 	//! Move constructor
-};
+};	//Vertex_base_property
 
 /*!
 	@brief Minimal data structure for the edge geometrical properties
@@ -115,7 +115,14 @@ struct Edge_base_property{
 	Edge_base_property & operator=(Edge_base_property const&) = default;
 	
 	//! Move constructor
-};
+};	//Edge_base_property
+
+/*! 
+	@brief Empty struct for topological data
+	@detail The user may not need topological data. He can use this
+			empty struct as template parameter in the reader class
+*/
+struct no_topological_data {};
 
 }	//BGLgeom
 
