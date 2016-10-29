@@ -17,7 +17,7 @@
 #ifndef HH_EDGE_GEOMETRY_HH
 #define HH_EDGE_GEOMETRY_HH
 
-#include<vector>
+#include<array>
 #include"generic_point.hpp"
 
 namespace BGLgeom{

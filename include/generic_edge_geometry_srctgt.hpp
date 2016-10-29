@@ -17,12 +17,64 @@
 #ifndef HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
 #define HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
 
-#include<array>
-#include<functional>
-#include"generic_point.hpp"
-#include"edge_geometry.hpp"
+#include <array>
+#include <functional>
+
+#include "generic_point.hpp"
+#include "edge_geometry.hpp"
+#include "my_muparser_interface.hpp"
 
 namespace BGLgeom{
+
+//=============================== by Mattia =====================================
+
+template <unsigned int dim>
+class generic_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim>{
+	public:
+		//! Default constructor
+		generic_edge_geometry_srctgt(){
+			parametrization.fill(My_muparser::MuParser_interface());
+		}
+		
+		//! Constructor
+		generic_edge_geometry_srctgt()
+		
+		//! Copy constructor
+		generic_edge_geometry_srctgt
+		
+		//!Assignment operator
+		generic_edge_geometry_srctgt
+		
+		//! Overload if input operator
+		
+		//! Overload of output operator
+		
+		//! It evaluates the parametrization for a given parameter, returning the corresponding point
+		
+		//! First derivative
+		
+		//! Second derivative
+		
+	private:
+		//! An array holding a callable object rapresenting the parametrization of the edge along each component
+		std::array<std::functional<double(double const&)>, dim> parametrization;
+
+};	//generic_edge_geometry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//=============================== by Ilaria =====================================
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
@@ -170,12 +222,6 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	
 }; //class
 
-
 } //namespace
-
-
-
-
-
 
 #endif
