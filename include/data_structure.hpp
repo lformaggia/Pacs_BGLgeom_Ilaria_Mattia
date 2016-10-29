@@ -21,7 +21,16 @@
 			attached as vertex or edge properties in his graph, he can
 			define new struct by himself inheriting from these ones. In
 			this way he can continue using the geometrical structure of
-			the graph.
+			the graph. \n
+			All the data structures will be provided with a constructor,
+			a copy constructor, a move constructor and the assignment
+			operator. This because the idea is that the user can inherit
+			form them to create his own user-defined data structures. But
+			in this way, through inheritance, the user-defined class won't
+			be anymore aggragates, and thus their initialization through
+			the initializer list will be no longer available. We provide
+			constructor for this reason, to allow the user to create
+			and use properly his own data structures.
 		
 		@todo Updating BGLgeom_edge_property in order to contain mesh
 				generator and fem problems solutors
@@ -48,9 +57,24 @@ struct BGLgeom_vertex_property{
 
 	//! Coordinates of the vertex
 	//point_t P;
-	BGLgeom::point<dim> P;
+	point_t coordinates;
 	
 	//BC_type
+	
+	
+	//! Default constructor
+	BGLgeom_vertex_property() : coordinates() {};
+	
+	//! Constructor
+	BGLgeom_vertex_property(point_t _coordinates) : coordinates(_coordinates) {};
+	
+	//! Copy constructor
+	BGLgeom_vertex_property(BGLgeom_vertex_property const&) = default;
+	
+	//! Assignment operator
+	BGLgeom_vertex_property & operator=(BGLgeom_vertex_property const&) = default;
+	
+	//! Move constructor
 };
 
 /*!
@@ -62,7 +86,7 @@ struct BGLgeom_vertex_property{
 template <unsigned int dim>
 struct BGLgeom_edge_property{
 	//!Definition of some types which may be useful to see outside the struct
-	using edge_geometry_t = typename BGLgeom::generic_edge_geometry<dim>;
+	//using edge_geometry_t = typename BGLgeom::generic_edge_geometry<dim>;
 
 	//! The class handling the parameterization of the edge
 	//edge_geometry_t edge_geo;
@@ -70,6 +94,21 @@ struct BGLgeom_edge_property{
 	
 	//Mesh
 	//Solutore
+	
+	
+	//! Default constructor
+	BGLgeom_edge_property(){};
+	
+	//! Constructor
+	BGLgeom_edge_property(double a){};
+	
+	//! Copy constructor
+	BGLgeom_edge_property(BGLgeom_edge_property const&) = default;
+	
+	//! Assignment operator
+	BGLgeom_edge_property & operator=(BGLgeom_edge_property const&) = default;
+	
+	//! Move constructor
 };
 
 }	//BGLgeom

@@ -24,12 +24,15 @@
 //#include "dijkstra.hpp"
 #include "new_reader_Zunino.hpp"
 #include "graph_builder.hpp"
+#include "data_structure.hpp"
 
 using namespace boost;
 
 int main(){
 
-	typedef adjacency_list<vecS,vecS,directedS,Zunino_vertex_data,Zunino_edge_data > Graph;
+	using Vertex_prop = BGLgeom::BGLgeom_vertex_property<3>;
+
+	typedef adjacency_list<vecS,vecS,directedS, Vertex_prop, Zunino_edge_data<3> > Graph;
 	typedef graph_traits<Graph> Traits;
 	typedef Traits::edge_descriptor Edge_desc;
 	typedef Traits::edge_iterator Edge_iter;
@@ -40,11 +43,11 @@ int main(){
 	//unsigned int dummy_lines = 2;
 
 	Graph G;
-	Zunino_reader<Zunino_vertex_data, Zunino_edge_data, Zunino_topological_data> R(filename);
+	Zunino_reader<Zunino_edge_data<3>, Zunino_topological_data> R(filename);
 	Zunino_topological_data Topo;
-	Zunino_vertex_data S;		//Vertex data structure for the source
-	Zunino_vertex_data T;		//Vertex data structure for the target
-	Zunino_edge_data E;
+	Vertex_prop S;		//Vertex data structure for the source
+	Vertex_prop T;		//Vertex data structure for the target
+	Zunino_edge_data<3> E;
 	Edge_desc e;
 	bool inserted;
 	
@@ -61,14 +64,14 @@ int main(){
 		//e = create_edge (G, Topo.src, Topo.tgt, E, S, T);
 		
 		std::tie(e, inserted) = add_edge(Topo.src, Topo.tgt, G);
-		give_edge_properties<Graph, Zunino_edge_data>(E, e, G);
-		give_source_properties<Graph, Zunino_vertex_data>(S, Topo.src, G);
-		give_target_properties<Graph, Zunino_vertex_data>(T, Topo.tgt, G);		
+		give_edge_properties<Graph, Zunino_edge_data<3>>(E, e, G);
+		give_source_properties<Graph, Vertex_prop>(S, Topo.src, G);
+		give_target_properties<Graph, Vertex_prop>(T, Topo.tgt, G);		
 	}	//while
 	
 	Vertex_iter v_it, v_end;
 	for(std::tie(v_it, v_end) = vertices(G); v_it != v_end; ++v_it)
-		std::cout << *v_it << " : " << G[*v_it].COORD << std::endl;
+		std::cout << *v_it << " : " << G[*v_it].coordinates << std::endl;
 	
 	Edge_iter e_it, e_end;
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)

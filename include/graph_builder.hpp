@@ -84,9 +84,7 @@ void give_edge_properties	(Edge_data_structure const& D,
 template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure>
 void create_edge(Graph & G,
 				typename boost::graph_traits<Graph>::vertex_descriptor src,
-				typename boost::graph_traits<Graph>::vertex_descriptor tgt,
-				
-				)
+				typename boost::graph_traits<Graph>::vertex_descriptor tgt){}
 
 
 template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure,

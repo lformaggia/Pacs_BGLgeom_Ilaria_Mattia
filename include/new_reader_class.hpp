@@ -26,8 +26,6 @@
 #include <cstdlib>
 #include <exception>
 
-#include "data_structure.hpp"
-
 /*! 
 	@brief An empty struct to handle the case the user do not need to store topological data
 	@detail Inside this the user may put data as vertex and edge descriptor for the connettivity of the graph
@@ -53,9 +51,9 @@ namespace BGLgeom{
 										of the variables he needs to manage the topology
 										of the graph while building it
 */
-template 	<typename Vertex_data_structure = typename BGLgeom::BGLgeom_vertex_property<dim>,
+template 	<typename Vertex_data_structure,
 			//typename Target_data_structure,
-			typename Edge_data_structure = typename BGLgeom::BGLgeom_edge_property<dim>,
+			typename Edge_data_structure,
 			typename Topological_data_structure = no_topological_data>
 class new_reader_class {
 	public:
