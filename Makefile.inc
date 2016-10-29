@@ -1,9 +1,9 @@
 # Compilation variables:
 CXX = g++
 CXXFLAGS = -std=c++11 -g -O0
-CPPFLAGS ?= -I$(mkBGLInc)  -I./include
-LDFLAGS ?= 
-LIBS = 
+CPPFLAGS ?= -I$(mkBGLInc)  -I./include -I$(mkMuParserInc)
+LDFLAGS ?= -L$(mkMuParserLib) -Wl,-rpath=$(mkMuParserLib) -L. -Wl,-rpath=.
+LIBS = -lmuparser
 #WARNS = -Wall
 
 # Directory variables:
@@ -12,6 +12,7 @@ TARGET_DIR = bin
 BUILD_DIR = objs
 SOURCE_DIR = src
 INCLUDE_DIR = include
+LIBRARY_DIR = library
 
 # File variables:
 SRCS = $(wildcard $(SOURCE_DIR)/*.cpp)
