@@ -44,7 +44,7 @@ class point {
 		point(std::initializer_list<Storage_t> args){
 			typename std::initializer_list<Storage_t>::iterator init_list_it, init_list_end;
 			init_list_it = args.begin();
-			init_list_end != args.end();
+			init_list_end = args.end();
 			std::size_t i = 0;
 			for( ; init_list_it != init_list_end; ++init_list_it){
 				coord[i] = *init_list_it;
@@ -143,6 +143,7 @@ class point {
 				out << P.coord[i] << ","; 
 			}
 			out << P.coord[i] << ")";
+			return out;
 		}
 		
 		//! operator>> overloading
@@ -150,6 +151,7 @@ class point {
 			for (std::size_t i=0; i < dim; i++){
 				in >> P.coord[i];
 			}
+			return in;
 		}
 		
 		//======================== RELATIONAL OPERATOR =======================

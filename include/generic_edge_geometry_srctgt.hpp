@@ -19,6 +19,8 @@
 
 #include <array>
 #include <functional>
+#include <initializer_list>
+#include <iostream>
 
 #include "generic_point.hpp"
 #include "edge_geometry.hpp"
@@ -33,31 +35,85 @@ class generic_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim>{
 	public:
 		//! Default constructor
 		generic_edge_geometry_srctgt(){
-			parametrization.fill(My_muparser::MuParser_interface());
+			parameterization.fill(My_muparser::MuParser_interface());
 		}
 		
-		//! Constructor
-		generic_edge_geometry_srctgt()
+		//! Constructor (with initializer list)
+		generic_edge_geometry_srctgt(std::initializer_list<std::string> args){
+			typename std::initializer_list<std::string>::iterator init_list_it, init_list_end;
+			init_list_it = args.begin();
+			init_list_end = args.end();
+			std::size_t i = 0;
+			for( ; init_list_it != init_list_end; ++init_list_it){
+				parameterization[i] = *init_list_it;
+				++i;
+			}
+		}
+		
+		//! Constructor (with MuParser_interface)
+		generic_edge_geometry_srctgt(std::initializer_list<My_muparser::MuParser_interface> args){
+			typename std::initializer_list<std::string>::iterator init_list_it, init_list_end;
+			init_list_it = args.begin();
+			init_list_end = args.end();
+			std::size_t i = 0;
+			for( ; init_list_it != init_list_end; ++init_list_it){
+				parameterization[i] = *init_list_it;
+				++i;
+			}
+		}
+		
+		//! Constructor (with an array of string)
+		generic_edge_geometry_srctgt(std::array<std::string,dim> args){
+			for(std::size_t i = 0; i < dim; ++i)
+				parameterization[i] = My_muparser::MuParser_interface(args[i]);
+		}
 		
 		//! Copy constructor
-		generic_edge_geometry_srctgt
+		generic_edge_geometry_srctgt(generic_edge_geometry_srctgt const&) = default;
 		
 		//!Assignment operator
-		generic_edge_geometry_srctgt
+		generic_edge_geometry_srctgt & operator=(generic_edge_geometry const&) = default;
 		
 		//! Overload if input operator
+		friend std::istream & operator>>(std::istream & in, generic_edge_geometry_srctgt & edge){
+			std::string temp;
+			for(std::size_t i = 0; i < dim; ++i){
+				in >> temp;
+				edge[i] = My_muparser::MuParser_interface(temp);
+			}
+			return in;
+		}
 		
 		//! Overload of output operator
+		friend std::ostream & operator<<(std::ostream & out, generic_edge_geometry_srctgt const& edge){
+			out << "Parameterization of this edge: " << std::endl;
+			for(std::size_t i = 0; i < dim; ++i){
+				out << "Component " << i << ": " << edge[i] << std::endl;
+			}
+			return out;
+		}
 		
-		//! It evaluates the parametrization for a given parameter, returning the corresponding point
+		//! It evaluates the parameterization for a given parameter, returning the corresponding point
+		virtual BGLgeom::point<dim> value(double const& param){
+			BGLgeom::point<dim> result;
+			for(std::size_t i = 0; i < dim; ++)
+				result[i] = parameterization[i].operator()(param);
+			return rescale*result + trans;
+		}
 		
 		//! First derivative
 		
 		//! Second derivative
 		
+		//! Curvilinear abscissa
+		
 	private:
-		//! An array holding a callable object rapresenting the parametrization of the edge along each component
-		std::array<std::functional<double(double const&)>, dim> parametrization;
+		//! An array holding a callable object rapresenting the parameterization of the edge along each component
+		std::array<std::functional<double(double const&)/*MuParser_interface*/>, dim> parameterization;	
+		//! Rescaling parameter (it is a point to keep its array's nature)
+		BGLgeom::point<dim> rescale;
+		//! Translation parameter (idem come sopra)
+		BGLgeom::point<dim> trans;
 
 };	//generic_edge_geometry
 

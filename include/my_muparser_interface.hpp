@@ -122,6 +122,7 @@ class MuParser_interface{
 				out << "Expression to be evaluated: " << MPi.expr;
 			else
 				out << "Warning: any valid expression set";
+			return out;
 		}
 		
 		//! Overload of input operator
@@ -129,6 +130,7 @@ class MuParser_interface{
 			in >> MPi.expr;		//it reads only a string!
 			MPi.M.SetExpr(MPi.expr);
 			MPi.expr_is_set = true;
+			return in;
 		}
 		
 		
