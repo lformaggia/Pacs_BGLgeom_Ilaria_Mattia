@@ -30,7 +30,13 @@
 			be anymore aggragates, and thus their initialization through
 			the initializer list will be no longer available. We provide
 			constructor for this reason, to allow the user to create
-			and use properly his own data structures.
+			and use properly his own data structures. \n
+			For each data structure will be also provided the definitions
+			of all types inside that data structure, in such a way that 
+			they will be visible outside the class through the scope
+			resolution operator (::). As a rule, the defined type will
+			recall in the name that of the variable, to which will be 
+			append a "_t" (= _type) at the end
 		
 		@todo Updating BGLgeom_edge_property in order to contain mesh
 				generator and fem problems solutors
@@ -40,7 +46,7 @@
 #define HH_DATA_STRUCTURE_HH
 
 #include "generic_point.hpp"
-#include "edge_geometry.hpp"
+#include "generic_edge_geometry.hpp"
 
 namespace BGLgeom{
 
@@ -51,7 +57,7 @@ namespace BGLgeom{
 	@param dim Space dimension
 */
 template <unsigned int dim>
-struct BGLgeom_vertex_property{
+struct Vertex_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	using point_t = typename BGLgeom::point<dim>;
 
@@ -63,16 +69,16 @@ struct BGLgeom_vertex_property{
 	
 	
 	//! Default constructor
-	BGLgeom_vertex_property() : coordinates() {};
+	Vertex_base_property() : coordinates() {};
 	
 	//! Constructor
-	BGLgeom_vertex_property(point_t _coordinates) : coordinates(_coordinates) {};
+	Vertex_base_property(point_t _coordinates) : coordinates(_coordinates) {};
 	
 	//! Copy constructor
-	BGLgeom_vertex_property(BGLgeom_vertex_property const&) = default;
+	Vertex_base_property(Vertex_base_property const&) = default;
 	
 	//! Assignment operator
-	BGLgeom_vertex_property & operator=(BGLgeom_vertex_property const&) = default;
+	Vertex_base_property & operator=(Vertex_base_property const&) = default;
 	
 	//! Move constructor
 };
@@ -84,7 +90,7 @@ struct BGLgeom_vertex_property{
 	@param dim Space dimension
 */
 template <unsigned int dim>
-struct BGLgeom_edge_property{
+struct Edge_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	//using edge_geometry_t = typename BGLgeom::generic_edge_geometry<dim>;
 
@@ -97,16 +103,16 @@ struct BGLgeom_edge_property{
 	
 	
 	//! Default constructor
-	BGLgeom_edge_property(){};
+	Edge_base_property(){};
 	
 	//! Constructor
-	BGLgeom_edge_property(double a){};
+	Edge_base_property(double a){};
 	
 	//! Copy constructor
-	BGLgeom_edge_property(BGLgeom_edge_property const&) = default;
+	Edge_base_property(Edge_base_property const&) = default;
 	
 	//! Assignment operator
-	BGLgeom_edge_property & operator=(BGLgeom_edge_property const&) = default;
+	Edge_base_property & operator=(Edge_base_property const&) = default;
 	
 	//! Move constructor
 };

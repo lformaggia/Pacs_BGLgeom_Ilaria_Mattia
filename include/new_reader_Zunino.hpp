@@ -35,15 +35,15 @@
 
 /* Since I'm deriving from the base data strcuture provided by BGLgeom library, the new class Zunino_edge_data is no more an aggragate, and then it can't be initialized with an initializer list. It is needed to define a constructor, a copy constructor, or a move constructor within this class. */
 template <unsigned int dim>
-struct Zunino_edge_data : public BGLgeom::BGLgeom_edge_property<dim>{
+struct Zunino_edge_data : public BGLgeom::Edge_base_property<dim>{
 	double capacity;
 	double length;
 	
 	// Default constructor
-	Zunino_edge_data() : BGLgeom::BGLgeom_edge_property<dim>(), capacity(.0), length(.0) {};
+	Zunino_edge_data() : BGLgeom::Edge_base_property<dim>(), capacity(.0), length(.0) {};
 	
 	// Constructor
-	Zunino_edge_data(double _capacity, double _length) : BGLgeom::BGLgeom_edge_property<dim>(), capacity(_capacity), length(_length) {};
+	Zunino_edge_data(double _capacity, double _length) : BGLgeom::Edge_base_property<dim>(), capacity(_capacity), length(_length) {};
 	
 	// Assignment operator
 	Zunino_edge_data & operator=(Zunino_edge_data const&) = default;
@@ -60,15 +60,15 @@ struct Zunino_topological_data{
 };
 
 template <typename Edge_data, typename Topological_data>
-class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::BGLgeom_vertex_property<3>, Edge_data, Topological_data> {
+class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::Vertex_base_property<3>, Edge_data, Topological_data> {
 	private:
-		BGLgeom::BGLgeom_vertex_property<3>::point_t SRC,TGT; 			// they will store vertices coordinates	  
+		BGLgeom::Vertex_base_property<3>::point_t SRC,TGT; 			// they will store vertices coordinates	  
 		unsigned int src, tgt; 											// they will read source and target of each edge
 		unsigned int edge_num;											// dummy variable;
 		double capacity, length;										// they will store diameter and length of the edge
 		
 	public:
-		Zunino_reader(std::string _filename) : 	BGLgeom::new_reader_class	<BGLgeom::BGLgeom_vertex_property<3>,
+		Zunino_reader(std::string _filename) : 	BGLgeom::new_reader_class	<BGLgeom::Vertex_base_property<3>,
 																			Edge_data,
 																			Topological_data>(_filename),
 												SRC(),
@@ -83,12 +83,12 @@ class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::BGLgeom_vertex_p
 			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;
 		}
 		
-		virtual BGLgeom::BGLgeom_vertex_property<3> get_source_data(){
-			return BGLgeom::BGLgeom_vertex_property<3>(SRC);
+		virtual BGLgeom::Vertex_base_property<3> get_source_data(){
+			return BGLgeom::Vertex_base_property<3>(SRC);
 		}
 		
-		virtual BGLgeom::BGLgeom_vertex_property<3> get_target_data(){
-			return BGLgeom::BGLgeom_vertex_property<3>(TGT);
+		virtual BGLgeom::Vertex_base_property<3> get_target_data(){
+			return BGLgeom::Vertex_base_property<3>(TGT);
 		}
 		
 		virtual Edge_data get_edge_data(){
