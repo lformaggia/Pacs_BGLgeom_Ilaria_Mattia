@@ -29,6 +29,8 @@
 #ifndef HH_NEW_READER_ZUNINO_HH
 #define HH_NEW_READER_ZUNINO_HH
 
+#include <string>
+
 #include "new_reader_class.hpp"
 #include "generic_point.hpp"
 #include "data_structure.hpp"
