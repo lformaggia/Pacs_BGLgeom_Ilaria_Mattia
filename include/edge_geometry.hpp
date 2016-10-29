@@ -16,6 +16,10 @@
 
 #ifndef HH_EDGE_GEOMETRY_HH
 #define HH_EDGE_GEOMETRY_HH
+
+#include<vector>
+#include"generic_point.hpp"
+
 namespace BGLgeom{
 
 template<unsigned int dim>
@@ -25,10 +29,10 @@ edge_geometry{
 	virtual BGLgeom::point<dim>
 	value (const double parameter) = 0;
 	
-	virtual std::vector<double>
+	virtual std::array<double,dim>
 	first_derivatives (const double x) = 0;
 	
-	virtual std::vector<double>
+	virtual std::array<double,dim>
 	second_derivatives (const double x) = 0;
 	
 	/*virtual double

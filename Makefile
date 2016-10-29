@@ -13,6 +13,15 @@ all: doc Zunino Formaggia test
 
 test: test_generic_point test_graph_pointer
 
+###################
+# parte aggiunta per prova edge: da cancellare quando ho finito
+test_edge: test_edge.o
+	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_edge.o -o $(TARGET_DIR)/$@ $(LIBS)
+test_edge.o: ./$(SOURCE_DIR)/test_edge.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNS) -c $< -o $(BUILD_DIR)/$@
+
+###################
+
 test_generic_point: test_generic_point.o
 	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_generic_point.o -o $(TARGET_DIR)/$@ $(LIBS) 
 test_generic_point.o: ./$(SOURCE_DIR)/test_generic_point.cpp
