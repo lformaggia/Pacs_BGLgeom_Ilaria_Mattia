@@ -63,8 +63,14 @@ class point {
 		//! Copy constructor
 		point(point<dim, Storage_t> const&) = default;
 		
+		//! Move constructor
+		point(point<dim, Storage_t> &&) = default;
+		
 		//! Assignement operator
 		point<dim, Storage_t> & operator=(point<dim, Storage_t> const&) = default;
+		
+		//! Move assignment
+		point<dim, Storage_t> & operator=(point<dim, Storage_t> &&) = default;
 		
 		//! Overload of assignment operator to create conversion directly form std::array<Storage_t, dim>
 		point<dim, Storage_t> & operator=(std::array<Storage_t, dim> const& P){

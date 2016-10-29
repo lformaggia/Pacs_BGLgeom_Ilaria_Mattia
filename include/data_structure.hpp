@@ -77,10 +77,15 @@ struct Vertex_base_property{
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
 	
+	//! Move constructor
+	Vertex_base_property(Vertex_base_property &&) = default;
+	
 	//! Assignment operator
 	Vertex_base_property & operator=(Vertex_base_property const&) = default;
 	
-	//! Move constructor
+	//! Move assignment
+	Vertex_base_property & operator=(Vertex_base_property &&) = default;
+	
 };	//Vertex_base_property
 
 /*!
@@ -111,10 +116,15 @@ struct Edge_base_property{
 	//! Copy constructor
 	Edge_base_property(Edge_base_property const&) = default;
 	
+	//! Move_constructor
+	Edge_base_property(Edge_base_property &&) = default;
+	
 	//! Assignment operator
 	Edge_base_property & operator=(Edge_base_property const&) = default;
 	
-	//! Move constructor
+	//! Move assignment
+	Edge_base_property & operator=(Edge_base_property &&) = default;
+	
 };	//Edge_base_property
 
 }	//BGLgeom
@@ -122,7 +132,5 @@ struct Edge_base_property{
 #endif	//HH_DATA_STRUCTURE_HH
 
 //struct minimali da cui uno se vuole aggiungere roba poi eredita da queste
-
-//create edge e magari qualche utility per settare la generic edge property , una funzionalità in più per l'utente
 
 //Se non uso questa property, ma tipo no_property in adjacency list? va uguale?
