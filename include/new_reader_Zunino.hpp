@@ -77,7 +77,9 @@ class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::Vertex_base_prop
 												tgt(),
 												edge_num(),
 												capacity(),
-												length() {};		
+												length() {};	
+												
+		virtual void get_other_data(){};	
 	
 		virtual void get_data_from_line(){
 			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT;

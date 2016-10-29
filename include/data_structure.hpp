@@ -117,13 +117,6 @@ struct Edge_base_property{
 	//! Move constructor
 };	//Edge_base_property
 
-/*! 
-	@brief Empty struct for topological data
-	@detail The user may not need topological data. He can use this
-			empty struct as template parameter in the reader class
-*/
-struct no_topological_data {};
-
 }	//BGLgeom
 
 #endif	//HH_DATA_STRUCTURE_HH
