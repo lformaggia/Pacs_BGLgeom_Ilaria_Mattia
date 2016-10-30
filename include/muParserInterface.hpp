@@ -84,7 +84,7 @@ namespace MuParserInterface
 
 
   //! operator ()
-  double muParserInterface::operator()(double const t)
+  BGLgeom::point<dim> muParserInterface::operator()(double const t)
   {
     this->M_t=t;
     
