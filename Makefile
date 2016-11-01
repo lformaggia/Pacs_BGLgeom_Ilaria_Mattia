@@ -11,7 +11,7 @@
 
 all: doc Zunino Formaggia test
 
-test: test_generic_point test_graph_pointer
+test: test_generic_point test_graph_pointer test_muparser
 
 ###################
 # parte aggiunta per prova edge: da cancellare quando ho finito
@@ -21,6 +21,11 @@ test_edge.o: ./$(SOURCE_DIR)/test_edge.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNS) -c $< -o $(BUILD_DIR)/$@
 
 ###################
+
+test_muparser: test_muparser.o
+	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_muparser.o -o $(TARGET_DIR)/$@ $(LIBS)
+test_muparser.o: ./$(SOURCE_DIR)/test_muparser.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNS) -c $< -o $(BUILD_DIR)/$@
 
 test_generic_point: test_generic_point.o
 	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_generic_point.o -o $(TARGET_DIR)/$@ $(LIBS) 
