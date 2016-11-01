@@ -20,7 +20,7 @@
 #include<iostream>
 #include<initializer_list>
 #include<type_traits>
-#include<math.h>
+#include<cmath>
 
 namespace BGLgeom{
 
@@ -30,15 +30,14 @@ namespace BGLgeom{
 	@note Constructors and set method are implemented with std::initializer_list,
 			so they have to be called with: method({args})
 	@param dim Template argument that specifies the dimension of the space
-	@param Storage_t Template argument that specifies the precision type for the coordinates
+	@param Storage_t Template argument that specifies the precision type for the coordinates. Default: double
 */
 template <unsigned int dim, typename Storage_t = double>
 class point {
 	public:
 		//! Default constructor
 		point(){
-			for(auto & i : coord)
-				i = static_cast<Storage_t>(0);
+			coord.fill(static_cast<Storage_t>(0));
 		}
 		
 		//! Constructor
@@ -57,15 +56,21 @@ class point {
 		point(std::array<Storage_t,dim> const& P) : coord(P) {};
 		
 		//! Constructor from a double (initializes all the components to the inserted value)
-		point(double const x){
+		point(double const& x){
 			coord.fill(x);
 		}
 		
 		//! Copy constructor
 		point(point<dim, Storage_t> const&) = default;
 		
+		//! Move constructor
+		point(point<dim, Storage_t> &&) = default;
+		
 		//! Assignement operator
 		point<dim, Storage_t> & operator=(point<dim, Storage_t> const&) = default;
+		
+		//! Move assignment
+		point<dim, Storage_t> & operator=(point<dim, Storage_t> &&) = default;
 		
 		//! Overload of assignment operator to create conversion directly form std::array<Storage_t, dim>
 		point<dim, Storage_t> & operator=(std::array<Storage_t, dim> const& P){
@@ -90,7 +95,8 @@ class point {
 		Storage_t z() const { return coord[2]; }
 		
 		//! Gets the array with the coordinates
-		std::array<Storage_t,dim> coordinates() {return coord;}
+		std::array<Storage_t,dim> coordinates(){ return coord; }
+		std::array<Storage_t,dim> coordinates() const { return coord; }
 		
 		//! Gets the dimension of the point, and so the number of the coordinates
 		std::size_t get_dim(){ return coord.size(); }
@@ -250,15 +256,23 @@ class point {
 		
 		/*!
 			@brief Overloading of operator* (point * point)
-			@detail It returns a point whose components are given by the multiplicaiton component by component
+			@detail It returns a point whose components are given by the multiplication component by component
 		*/
 		friend point<dim,Storage_t> operator* (point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
 			point<dim,Storage_t> _P;
-			for(auto i=0; i<dim; ++i){
+			for(std::size_t i = 0; i < dim; ++i)
 				_P[i] = P[i] * Q[i];
-			}
-			return _P;
+			return _P;		
+		}
 		
+		//========================= GEOMETRIC OPERATIONS ========================
+		
+		//! Scalar product
+		friend Storage_t dot(point<dim,Storage_t> const& P, point<dim,Storage_t> const& Q){
+			Storage_t result = 0;
+			for(std::size_t i = 0; i < dim; ++i)
+				result += P[i] * Q[i];
+			return result;
 		}
 		
 		/*!
@@ -266,9 +280,8 @@ class point {
 		*/		
 		Storage_t norm(){
 			Storage_t norm = 0;
-			for(const int&& i: coord){
+			for(const auto&& i: coord)
 				norm += i*i;
-			}
 			return sqrt(norm);
 		}
 		

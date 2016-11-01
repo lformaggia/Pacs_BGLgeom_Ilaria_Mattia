@@ -26,13 +26,14 @@
 #include <cstdlib>
 #include <exception>
 
+namespace BGLgeom{
+
 /*! 
-	@brief An empty struct to handle the case the user do not need to store topological data
-	@detail Inside this the user may put data as vertex and edge descriptor for the connettivity of the graph
+	@brief Empty struct for topological data
+	@detail The user may not need topological data. He can use this
+			empty struct as template parameter in the reader class
 */
 struct no_topological_data {};
-
-namespace BGLgeom{
 
 /*!
 	@brief Abstract class that implements the functionality to read a file and get data from it	
@@ -49,7 +50,8 @@ namespace BGLgeom{
 								vertex bundled property
 	@param Topological_data_structure A struct where the user has to define type and name
 										of the variables he needs to manage the topology
-										of the graph while building it
+										of the graph while building it. Defaulted to an
+										empty struct
 */
 template 	<typename Vertex_data_structure,
 			//typename Target_data_structure,
@@ -58,10 +60,10 @@ template 	<typename Vertex_data_structure,
 class new_reader_class {
 	public:
 		//! Default constructor
-		new_reader_class() : filename(), in_file() {};
+		new_reader_class() : filename(), in_file(), find_eof() {};
 		
 		//! Constructor
-		new_reader_class(std::string _filename) : filename(_filename), in_file() {
+		new_reader_class(std::string _filename) : filename(_filename), in_file(), find_eof() {
 			try{
 				in_file.open(filename);
 			} catch(std::exception & e) {
@@ -93,10 +95,34 @@ class new_reader_class {
 			@remark It sets the file stream n lines after the previous position
 		*/
 		virtual void ignore_dummy_lines(unsigned int const& n){
+			if(in_file.is_open()){
 				std::string dummy;
 				for(std::size_t i = 0; i < n; ++i)
 					std::getline(in_file, dummy);
+			} else{
+				std::cerr << "Error: file not open!" << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
+		
+		//! To know outside the class if we have reached the end of file
+		virtual bool is_eof(){
+			in_file.get(find_eof);	//nell'ultima riga c'è end of line e poi eof, quindi devo leggere ogni volta due caratteri per sapere se sono in fondo
+			if(find_eof == std::ifstream::traits_type::eof() || in_file.peek() == std::ifstream::traits_type::eof()){
+				in_file.close();
+				return true;
+			} else {
+				in_file.seekg(-1, in_file.cur); 
+				return false;
+			}
+		}
+		
+		/*!
+			@brief Reads the data from one single line. It has to be specified by the user
+			@detail It reads data from the istringstream iss_line that is created and
+					initialize in the method get_data_from_line() every time that method is called.
+		*/
+		//virtual void read_line(std::istringstream & iss_line) = 0;
 		
 		/*! 
 			@brief Reads one line and put the data read from the istringstream in the variables defined
@@ -118,25 +144,16 @@ class new_reader_class {
 			//in_file.get(a_caso);
 		}*/
 		
-		//! To know outside the class if we have reached the end of file
-		virtual bool is_eof(){
-			char find_eof;		//magari da mettere come attributo protected	
-			in_file.get(find_eof);	//nell'ultima riga c'è end of line e poi eof, quindi devo leggere ogni volta due caratteri per sapere se sono in fondo
-			if(find_eof == std::ifstream::traits_type::eof() || in_file.peek() == std::ifstream::traits_type::eof()){
-				in_file.close();
-				return true;
-			} else {
-				in_file.seekg(-1, in_file.cur); 
-				return false;
-			}
-		}
-		
 		/*!
-			@brief Reads the data from one single line. It has to be specified by the user
-			@detail It reads data from the istringstream iss_line that is created and
-					initialize in the method get_data_from_line() every time that method is called.
+			@brief Another method to get data
+			@detail This second method is thougth to be used for reading data
+					which are not defined in one single line (so which do not
+					refer to a single edge, for instance). The user has to
+					provide a full definition on how to read those lines of
+					data. If not needed, the user has to define it as an empty
+					method (i.e. it does nothing)
 		*/
-		//virtual void read_line(std::istringstream & iss_line) = 0;
+		virtual void get_other_data() = 0;
 		
 		//! A method to get the right data to append to an edge
 		virtual Edge_data_structure get_edge_data() = 0;
@@ -155,6 +172,8 @@ class new_reader_class {
 		std::string filename;
 		//! File stream to handle the input file
 		std::ifstream in_file;
+		//! Helper variable to make the class read properly the end of file
+		char find_eof;
 		//! String in which the data read from a line are put
 		//std::string line;
 		//! Data put in line are converted in istringstream to be got by the user

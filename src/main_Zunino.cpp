@@ -30,7 +30,7 @@ using namespace boost;
 
 int main(){
 
-	using Vertex_prop = BGLgeom::BGLgeom_vertex_property<3>;
+	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 
 	typedef adjacency_list<vecS,vecS,directedS, Vertex_prop, Zunino_edge_data<3> > Graph;
 	typedef graph_traits<Graph> Traits;
@@ -40,7 +40,6 @@ int main(){
 	typedef Traits::vertex_iterator Vertex_iter;	 
 
 	std::string filename("../data/rattm93a.txt");
-	//unsigned int dummy_lines = 2;
 
 	Graph G;
 	Zunino_reader<Zunino_edge_data<3>, Zunino_topological_data> R(filename);
@@ -61,12 +60,13 @@ int main(){
 		T = R.get_target_data();
 		E = R.get_edge_data();
 		
-		//e = create_edge (G, Topo.src, Topo.tgt, E, S, T);
-		
+		create_edge(G, Topo.src, Topo.tgt, S, T, E);	//Non ho specificato i template ma va bene lo stesso!
+		/*
 		std::tie(e, inserted) = add_edge(Topo.src, Topo.tgt, G);
 		give_edge_properties<Graph, Zunino_edge_data<3>>(E, e, G);
-		give_source_properties<Graph, Vertex_prop>(S, Topo.src, G);
-		give_target_properties<Graph, Vertex_prop>(T, Topo.tgt, G);		
+		give_vertex_properties<Graph, Vertex_prop>(S, Topo.src, G);
+		give_vertex_properties<Graph, Vertex_prop>(T, Topo.tgt, G);	
+		*/	
 	}	//while
 	
 	Vertex_iter v_it, v_end;

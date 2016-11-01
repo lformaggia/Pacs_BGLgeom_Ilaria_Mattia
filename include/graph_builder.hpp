@@ -16,8 +16,9 @@
 #ifndef HH_GRAPH_BUILDER_HH
 #define HH_GRAPH_BUILDER_HH
 
+#include <iostream>
 #include <vector>
-#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "generic_point.hpp"
 
@@ -46,20 +47,12 @@ class graph_builder{
 
 //! Giving to source node v all properties through assigning the Source_data_structure
 // The reference " & D" is correct? mmm...
-template <typename Graph, typename Source_data_structure>
-void give_source_properties	(Source_data_structure const& D,
+template <typename Graph, typename Vertex_data_structure>
+void give_vertex_properties	(Vertex_data_structure const& D,
 							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
 							Graph & G){
 	G[v] = D;
-}	//give_source_properties
-
-//! Giving to target node v all properties through assigning the Target_data_structure
-template <typename Graph, typename Target_data_structure>
-void give_target_properties	(Target_data_structure const& D,
-							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
-							Graph & G){
-	G[v] = D;
-}	//give_target_properties
+}	//give_vertex_properties
 
 //! Giving to edge e all properties through assigning the Edge_data_structure
 template <typename Graph, typename Edge_data_structure>
@@ -80,11 +73,31 @@ void give_edge_properties	(Edge_data_structure const& D,
 	@brief Creates an edge giving the right properties to source and target vertex and to the edge itself
 	@detail Topological information, such as source and target vertices, has to be passed as
 			standard parameters of the function
+	@remark It looses some efficiency due to the creation of an edge iterator and a bool at
+			every call of the function. It also perfom an extra control (not needed in much
+			cases, see documentation of boost::add_edge)
 */
 template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure>
 void create_edge(Graph & G,
-				typename boost::graph_traits<Graph>::vertex_descriptor src,
-				typename boost::graph_traits<Graph>::vertex_descriptor tgt){}
+				typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+				typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+				Vertex_data_structure const& src_data,
+				Vertex_data_structure const& tgt_data,
+				Edge_data_structure const& e_data){
+	
+	bool inserted;
+	typename boost::graph_traits<Graph>::edge_descriptor e;
+	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
+	if(!inserted){
+		std::cerr << "Error while inserting edge!" << std::endl;
+		std::cerr << "Failed insertion for edge of extremes " << src << " and " << tgt << "." << std::endl;
+		std::cerr << "See documentation of the Boost Graph Library on function boost::add_edge." << std::endl;
+	}
+	G[src] = src_data;
+	G[tgt] = tgt_data;
+	G[e] = e_data;
+				
+}	//create_edge
 
 
 template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure,
