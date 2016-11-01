@@ -21,6 +21,9 @@
 #include<functional>
 #include"generic_point.hpp"
 #include"edge_geometry.hpp"
+#include"mesh.hpp"
+#include"numerical_integration.hpp"
+#include"numerical_rule.hpp"
 
 namespace BGLgeom{
 
@@ -112,8 +115,30 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		return dn;		
 	}
 	
-
 	//! curvilinear abscissa
+	double curvilinear_abscissa(double const x){
+  		int nint=1000; // quanto mettiamo il default? Lo leggiamo da GetPot?
+  		Geometry::Domain1D domain(0,x);  //estremi di integrazione
+  		Geometry::Mesh1D mesh(domain,nint); //definito in mesh.hpp
+  		
+  		//lambda functions that returns the integrand function, i.e. norm(first_derivative(t))^2
+  		auto abscissa_integrand = [&](double t)->double{
+  			double tmp=0; //here the result will be stored
+  			for(const int && i: this->first_derivatives(t)){
+  				tmp+= i*i;
+  			}
+  		};
+  		  
+  		NumericalIntegration::Quadrature s(NumericalIntegration::Simpson(),mesh);
+
+  		std::cout<<" Now the mesh has "<<mesh.numNodes()<<" nodes"<<std::endl; 
+
+  		double approxs=s.apply(abscissa_integrand); //restituisce il valore dell'integrale
+
+  		std::cout<<"Integral computed with Simpson's method. Result: "<<approxs<<std::endl;
+  		return approxs; 
+	}
+	
 	
 	//! Sets the right value for the source (when initialized it has a dummy value, becuase at that point we don't have information about edge descriptor)
 	void set_source(BGLgeom::point<dim> src_){
@@ -163,11 +188,12 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		for(const int&& i : edge.second_derivatives(1))
 			out<<i<<" ";
 		out<<std::endl;			
-		//out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
-		//out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
-		//out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
+		out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
+		out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
+		out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
 	}
 	
+
 }; //class
 
 
