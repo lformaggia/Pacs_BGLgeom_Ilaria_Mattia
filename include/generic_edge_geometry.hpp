@@ -127,8 +127,17 @@ generic_edge_geometry: public BGLgeom::edge_geometry<dim>
 		return dn;	
 	}
 	
+	//! helper function for curvilinear abscissa: returns the integrand function norm(first_derivatives(x))^2
+	double abscissa_integrand (const double x){
+		double tmp = 0; // here the result will be stored
+		for (const int && i: this -> first_derivatives(x)){
+			tmp += i*i;
+		}
+		return tmp;
+	}
 
 	//! curvilinear abscissa
+	
 
     //! returns value fun (parametrized between 0 and 1) in s between 0 and 1 
 	virtual BGLgeom::point<dim> value (const double parameter)
