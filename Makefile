@@ -15,10 +15,20 @@ test: test_generic_point test_graph_pointer test_muparser
 
 ###################
 # parte aggiunta per prova edge: da cancellare quando ho finito
-test_edge: test_edge.o
-	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_edge.o -o $(TARGET_DIR)/$@ $(LIBS)
+test_edge: test_edge.o mesh.o numerical_integration.o meshGenerators.o rk45.o numerical_rule.o
+	$(CXX) $(LDFLAGS) $(WARNS) $(BUILD_DIR)/test_edge.o $(BUILD_DIR)/mesh.o $(BUILD_DIR)/meshGenerators.o $(BUILD_DIR)/numerical_integration.o $(BUILD_DIR)/rk45.o $(BUILD_DIR)/numerical_rule.o -o $(TARGET_DIR)/$@ $(LIBS)
 test_edge.o: ./$(SOURCE_DIR)/test_edge.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNS) -c $< -o $(BUILD_DIR)/$@
+mesh.o: ./$(INCLUDE_DIR)/mesh.cpp ./$(INCLUDE_DIR)/mesh.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARN) -c $< -o $(BUILD_DIR)/$@
+rk45.o: ./$(INCLUDE_DIR)/rk45.cpp ./$(INCLUDE_DIR)/rk45.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARN) -c $< -o $(BUILD_DIR)/$@
+meshGenerators.o: ./$(INCLUDE_DIR)/meshGenerators.cpp ./$(INCLUDE_DIR)/meshGenerators.hpp 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARN) -c $< -o $(BUILD_DIR)/$@
+numerical_integration.o: ./$(INCLUDE_DIR)/numerical_integration.cpp ./$(INCLUDE_DIR)/numerical_integration.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARN) -c $< -o $(BUILD_DIR)/$@
+numerical_rule.o: ./$(INCLUDE_DIR)/numerical_rule.cpp ./$(INCLUDE_DIR)/numerical_rule.hpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARN) -c $< -o $(BUILD_DIR)/$@
 
 ###################
 

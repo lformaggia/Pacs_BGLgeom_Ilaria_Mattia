@@ -19,6 +19,7 @@
 
 #include<array>
 #include<functional>
+#include<cmath>
 #include"generic_point.hpp"
 #include"edge_geometry.hpp"
 #include"mesh.hpp"
@@ -28,7 +29,7 @@
 
 
 namespace BGLgeom{
-
+/*
 //=============================== by Mattia =====================================
 
 template <unsigned int dim>
@@ -110,7 +111,7 @@ class generic_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim>{
 		
 	private:
 		//! An array holding a callable object rapresenting the parameterization of the edge along each component
-		std::array<std::functional<double(double const&)/*MuParser_interface*/>, dim> parameterization;	
+		std::array<std::functional<double(double const&)/*MuParser_interface>, dim> parameterization;	<- 	QUI MANCA ASTERISCO STELLINA DOPO MUPARSER
 		//! Rescaling parameter (it is a point to keep its array's nature)
 		BGLgeom::point<dim> rescale;
 		//! Translation parameter (idem come sopra)
@@ -118,7 +119,7 @@ class generic_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim>{
 
 };	//generic_edge_geometry
 
-
+*/
 
 
 
@@ -170,8 +171,6 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 		//GetPot   ifl("data.pot");
 		//double h = ifl("h", 0.001);
 		const double h = 0.001;
-		std::cout<<"Spacing "<<h<<std::endl;
-
 
 		double constexpr half(0.5);
 		
@@ -233,6 +232,7 @@ generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
   			for(const int && i: this->first_derivatives(t)){
   				tmp+= i*i;
   			}
+  			return sqrt(tmp);
   		};
   		  
   		NumericalIntegration::Quadrature s(NumericalIntegration::Simpson(),mesh);
