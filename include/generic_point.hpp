@@ -21,6 +21,8 @@
 #include<initializer_list>
 #include<type_traits>
 #include<cmath>
+#include<Eigen/Dense>
+
 
 namespace BGLgeom{
 
@@ -34,6 +36,9 @@ namespace BGLgeom{
 */
 template <unsigned int dim, typename Storage_t = double>
 class point {
+
+	using Vector = Eigen::Matrix<Storage_t,dim,1>;
+
 	public:
 		//! Default constructor
 		point(){
@@ -288,7 +293,7 @@ class point {
 		}
 		
 	private:
-		std::array<Storage_t, dim> coord;
+		Vector coord;
 };	//point
 
 }	//BGLgeom
