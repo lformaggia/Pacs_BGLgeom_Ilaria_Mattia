@@ -32,9 +32,9 @@
 #include <string>
 
 #include "new_reader_class.hpp"
-#include "generic_point.hpp"
+//#include "generic_point.hpp"
 #include "data_structure.hpp"
-#include "boundary_conditions.hpp"
+//#include "boundary_conditions.hpp"
 
 /* Since I'm deriving from the base data strcuture provided by BGLgeom library, the new class Zunino_edge_data is no more an aggragate, and then it can't be initialized with an initializer list. It is needed to define a constructor, a copy constructor, or a move constructor within this class. */
 template <unsigned int dim>
@@ -69,7 +69,7 @@ class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::Vertex_base_prop
 		unsigned int src, tgt; 											// they will read source and target of each edge
 		unsigned int edge_num;											// dummy variable;
 		double capacity, length;										// they will store diameter and length of the edge
-		BGLgeom::boundary_condition<> BC_src, BC_tgt;
+		BGLgeom::Vertex_base_property<3>::bc_t BC_src, BC_tgt;
 		
 	public:
 		Zunino_reader(std::string _filename) : 	BGLgeom::new_reader_class	<BGLgeom::Vertex_base_property<3>,
@@ -85,7 +85,7 @@ class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::Vertex_base_prop
 												BC_src(),
 												BC_tgt() {};	
 												
-		virtual void get_other_data(){};	
+		virtual void get_other_data(){};
 	
 		virtual void get_data_from_line(){
 			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT >> BC_src >> BC_tgt;

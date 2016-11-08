@@ -56,6 +56,9 @@ namespace BGLgeom{
 	@detail
 	
 	@param dim Space dimension
+	@param num_bc Dimension of the array containing values of the boundary
+				condition. It is defaulted to one, since in general multiple
+				values are related to user-defined boundary conditions.
 */
 template <unsigned int dim, unsigned int num_bc = 1>
 struct Vertex_base_property{
@@ -64,9 +67,8 @@ struct Vertex_base_property{
 	using bc_t = typename BGLgeom::boundary_condition<num_bc>;	
 	
 	//! Coordinates of the vertex
-	//point_t P;
 	point_t coordinates;
-	bc_t BC;	
+	bc_t BC;
 	
 	//! Default constructor
 	Vertex_base_property() : coordinates(), BC() {};
@@ -130,7 +132,3 @@ struct Edge_base_property{
 }	//BGLgeom
 
 #endif	//HH_DATA_STRUCTURE_HH
-
-//struct minimali da cui uno se vuole aggiungere roba poi eredita da queste
-
-//Se non uso questa property, ma tipo no_property in adjacency list? va uguale?
