@@ -47,56 +47,33 @@
 
 #include "generic_point.hpp"
 #include "generic_edge_geometry.hpp"
-//#include "boundary_conditions.hpp"
+#include "boundary_conditions.hpp"
 
 namespace BGLgeom{
-
-/*!
-	@brief An enum defining the type of the boundary condition we want to add in the node
-	@detail The types of boundary conditions are: \n
-			- NONE: the vertex doesn't contain a boundary condition; \n
-			- DIR: Dirichlet boundary condition; \n
-			- NEU: Neumann boundary condition; \n
-			- MIX: Mixed boundary condition (for instance Robin or similar); \n
-			- OTHER: A boundary condition of type different from all the previous ones
-*/
-enum BC_type {NONE, DIR, NEU, MIX, OTHER};
 
 /*!
 	@brief Minimal data structure for the vertex geometrical properties
 	@detail
 	
 	@param dim Space dimension
-	@param Value_t Defaulted to double. It is templated because one may need to use
-					boundary conditions in which are needed more than one associated
-					value, for example:
-					\n
-					The user may use a vector or an array to rapresent this
 */
-template <unsigned int dim, typename Value_t = double>
+template <unsigned int dim, unsigned int num_bc = 1>
 struct Vertex_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	using point_t = typename BGLgeom::point<dim>;
-	using BC_t = BC_type;
-	using BC_value_t = Value_type;
-
+	using bc_t = typename BGLgeom::boundary_condition<num_bc>;	
+	
 	//! Coordinates of the vertex
 	//point_t P;
 	point_t coordinates;
-	BC_t type;
-	BC_value_t value;
-	
-	//BC_type
-	
+	bc_t BC;	
 	
 	//! Default constructor
-	Vertex_base_property() : coordinates(), type(NONE), value(0.) {};
-	
+	Vertex_base_property() : coordinates(), BC() {};
+								
 	//! Constructor
-	Vertex_base_property(point_t _coordinates, BC_t _type, BC_value_t _value) : coordinates(_coordinates),
-																				type(_type),
-																				value(_value) {};
-	
+	Vertex_base_property(point_t _coordinates, bc_t _BC) : coordinates(_coordinates), BC(_BC) {};
+
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
 	
