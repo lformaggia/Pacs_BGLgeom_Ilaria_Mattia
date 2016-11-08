@@ -20,7 +20,7 @@
 #include<array>
 #include<functional>
 #include<cmath>
-#include"generic_point.hpp"
+#include"point.hpp"
 #include"edge_geometry.hpp"
 #include"mesh.hpp"
 #include"numerical_integration.hpp"

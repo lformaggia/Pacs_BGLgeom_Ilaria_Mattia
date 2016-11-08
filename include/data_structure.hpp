@@ -45,9 +45,10 @@
 #ifndef HH_DATA_STRUCTURE_HH
 #define HH_DATA_STRUCTURE_HH
 
-#include "generic_point.hpp"
-#include "generic_edge_geometry.hpp"
+#include "point.hpp"
 #include "boundary_conditions.hpp"
+#include "generic_edge_geometry.hpp"
+
 
 namespace BGLgeom{
 
@@ -55,12 +56,12 @@ namespace BGLgeom{
 	@brief Minimal data structure for the vertex geometrical properties
 	@detail
 	
-	@param dim Space dimension
+	@param N Space dimension
 */
-template <unsigned int dim, unsigned int num_bc = 1>
+template <unsigned int N, unsigned int num_bc = 1>
 struct Vertex_base_property{
 	//!Definition of some types which may be useful to see outside the struct
-	using point_t = typename BGLgeom::point<dim>;
+	using point_t = typename BGLgeom::point<N>;
 	using bc_t = typename BGLgeom::boundary_condition<num_bc>;	
 	
 	//! Coordinates of the vertex
