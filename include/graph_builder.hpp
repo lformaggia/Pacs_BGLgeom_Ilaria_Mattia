@@ -104,8 +104,11 @@ void refine_graph	(Graph & G,
 	src2 = boost::source(edge2, G);
 	tgt2 = boost::target(edge2, G);
 	
-	intersection_new = boost::add_vertex(G);
-	G[intersection_new] = //dai properietà!
+	intersection_new = boost::add_vertex(G); 
+	//dai properietà! Magari meglio appoggiarsi a template e funzione give_vertex_properties che ho sopra.
+	G[intersection_new].coordinates = I_point;
+	G[intersection_new].BC.type = BGLgeom::NONE;
+	G[intersection_new].BC.value = 0.0;
 	
 	Edge_desc e11, e12, e21, e22;
 	bool inserted;
