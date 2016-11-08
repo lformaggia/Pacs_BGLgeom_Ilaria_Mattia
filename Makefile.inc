@@ -1,7 +1,7 @@
 # Compilation variables:
 CXX = g++
 CXXFLAGS = -std=c++11 -g -O0
-CPPFLAGS ?= -I$(mkBGLInc)  -I./include -I$(mkMuParserInc)
+CPPFLAGS ?= -I$(mkBGLInc)  -I./include -I$(mkMuParserInc) -I$(mkEigenInc)
 LDFLAGS ?= -L$(mkMuParserLib) -Wl,-rpath=$(mkMuParserLib) -L. -Wl,-rpath=.
 LIBS = -lmuparser
 #WARNS = -Wall
