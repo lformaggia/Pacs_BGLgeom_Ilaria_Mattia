@@ -39,7 +39,7 @@ int main(){
 	typedef Traits::vertex_descriptor Vertex_desc;
 	typedef Traits::vertex_iterator Vertex_iter;	 
 
-	std::string filename("../data/rattm93a.txt");
+	std::string filename("../data/rattm93a_bis.txt");
 
 	Graph G;
 	Zunino_reader<Zunino_edge_data<3>, Zunino_topological_data> R(filename);
@@ -71,7 +71,7 @@ int main(){
 	
 	Vertex_iter v_it, v_end;
 	for(std::tie(v_it, v_end) = vertices(G); v_it != v_end; ++v_it)
-		std::cout << *v_it << " : " << G[*v_it].coordinates << std::endl;
+		std::cout << *v_it << " : " << G[*v_it].coordinates << " " << G[*v_it].BC << std::endl;
 	
 	Edge_iter e_it, e_end;
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)

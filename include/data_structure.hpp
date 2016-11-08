@@ -47,6 +47,7 @@
 
 #include "generic_point.hpp"
 #include "generic_edge_geometry.hpp"
+#include "boundary_conditions.hpp"
 
 namespace BGLgeom{
 
@@ -56,24 +57,23 @@ namespace BGLgeom{
 	
 	@param dim Space dimension
 */
-template <unsigned int dim>
+template <unsigned int dim, unsigned int num_bc = 1>
 struct Vertex_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	using point_t = typename BGLgeom::point<dim>;
-
+	using bc_t = typename BGLgeom::boundary_condition<num_bc>;	
+	
 	//! Coordinates of the vertex
 	//point_t P;
 	point_t coordinates;
-	
-	//BC_type
-	
+	bc_t BC;	
 	
 	//! Default constructor
-	Vertex_base_property() : coordinates() {};
-	
+	Vertex_base_property() : coordinates(), BC() {};
+								
 	//! Constructor
-	Vertex_base_property(point_t _coordinates) : coordinates(_coordinates) {};
-	
+	Vertex_base_property(point_t _coordinates, bc_t _BC) : coordinates(_coordinates), BC(_BC) {};
+
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
 	
