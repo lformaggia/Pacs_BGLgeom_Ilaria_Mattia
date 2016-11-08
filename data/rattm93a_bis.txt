@@ -1,0 +1,4 @@
+  Segment  Node Node diam. length     node from           node to			BC_SRC			BC_TGT
+ No. name  from to                   x     y     z      x     y     z	type	value	type	value
+  1         1    2    90.0  200.0  1000.  560.  100.   840.  680.  100.	 DIR	 1.5	NONE	0
+  2         2    3    90.0  126.5   840.  680.  100.   800.  800.  100.	 NONE	 0		DIR		2.3
