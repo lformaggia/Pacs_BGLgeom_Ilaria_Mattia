@@ -23,32 +23,11 @@
 
 #include "generic_point.hpp"
 
-/*
-template <typename Graph>
-class graph_builder{
-	public:
-		using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
-		using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
-	
-		give_vertex_properties();	// = 0;
-		give_edge_properties();		// = 0;
-		void new_vertex();			//tecnicamente non ha senso, per aggiungere un vertex in senso topologico c'è già add_vertex
-		new_edge();					//idem
-		refine_graph();				// questa dovrei poterla definire io, ma anche qui ci sono le info sugli archi che è un casino
-	private:
-		Vertex_desc src, tgt;
-		Edge_desc e;
-};
-*/
-
-// Provo a fare solo non_member functions
-
-//using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
-//using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
-
-
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
+	@detail It prints an error message on the screen if the insertion of the
+			edge failed according to the scenarios described in the reference
+			for the function boost::add_edge. See its reference on BGL web page
 */
 template <typename Graph>
 void check_if_edge_inserted(typename boost::graph_traits<Graph>::edge_descriptor e, bool inserted){
@@ -74,13 +53,6 @@ template <typename Graph, typename Edge_data_structure>
 void give_edge_properties	(Edge_data_structure const& D,
 							typename boost::graph_traits<Graph>::edge_descriptor const& e,
 							Graph & G){
-							/*
-	if(D.edge_geometry.cattivo())
-	src = source(e,g)
-	tgt = target(e,g)
-	SRC = G[src].coord
-	TGT = G[tgt].coord
-	D.edge_geometry.set(SRC,TGT)*/
 	G[e] = D;
 }	//give_edge_properties
 
@@ -106,8 +78,7 @@ void create_edge(Graph & G,
 	check_if_edge_inserted<Graph>(e, inserted);
 	G[src] = src_data;
 	G[tgt] = tgt_data;
-	G[e] = e_data;
-				
+	G[e] = e_data;ù
 }	//create_edge
 
 /*!
@@ -152,7 +123,7 @@ void refine_graph	(Graph & G,
 	//idem
 	
 	boost::remove_edge(edge1, G);
-	boost::remove_edge(edge2, G)
+	boost::remove_edge(edge2, G);
 }	//refine_graph
 
 #endif	//HH_GRAPH_BUILDER_HH
