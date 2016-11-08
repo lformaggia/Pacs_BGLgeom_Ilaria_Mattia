@@ -22,22 +22,21 @@
 
 namespace BGLgeom{
 
-template<unsigned int dim>
+template<unsigned int N>
 class
 edge_geometry{
 	public:
-	virtual BGLgeom::point<dim>
-	value (const double parameter) = 0;
+	virtual BGLgeom::point<N>
+	value (const double & parameter) = 0;
 	
-	virtual std::array<double,dim>
-	first_derivatives (const double x) = 0;
+	virtual std::array<double,N>
+	first_derivatives (const double & x) = 0;
 	
-	virtual std::array<double,dim>
-	second_derivatives (const double x) = 0;
+	virtual std::array<double,N>
+	second_derivatives (const double & x) = 0;
 	
-	/*virtual double
-	curvilinear_abscissa (const double parameter) = 0;*/
-	
+	virtual double
+	curvilinear_abscissa (const double & parameter) = 0;
 	
 }; //class
 
