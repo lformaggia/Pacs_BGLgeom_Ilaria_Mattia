@@ -18,7 +18,8 @@
 
 #include <iostream>
 #include <vector>
-#include <boost/graph/adjacency_list.hpp>
+#include <tuple>
+#include <boost/graph/graph_traits.hpp>
 
 #include "generic_point.hpp"
 
@@ -45,8 +46,22 @@ class graph_builder{
 //using Vertex_desc = boost::graph_traits<Graph>::vertex_descriptor;
 //using Edge_desc = boost::graph_traits<Graph>::edge_descriptor;
 
+
+/*!
+	@breif Helper function to check if an edge is correctly inserted in graph
+*/
+template <typename Graph>
+void check_if_edge_inserted(typename boost::graph_traits<Graph>::edge_descriptor e, bool inserted){
+	if(!inserted){
+		std::cerr << "Error while inserting edge!" << std::endl;
+		std::cerr << "Failed insertion for edge " << e << "." << std::endl;
+		std::cerr << "See documentation of the Boost Graph Library on function boost::add_edge." << std::endl;
+	}
+}	//check_edge_inserted
+
+
+
 //! Giving to source node v all properties through assigning the Source_data_structure
-// The reference " & D" is correct? mmm...
 template <typename Graph, typename Vertex_data_structure>
 void give_vertex_properties	(Vertex_data_structure const& D,
 							typename boost::graph_traits<Graph>::vertex_descriptor const& v,
@@ -88,36 +103,56 @@ void create_edge(Graph & G,
 	bool inserted;
 	typename boost::graph_traits<Graph>::edge_descriptor e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	if(!inserted){
-		std::cerr << "Error while inserting edge!" << std::endl;
-		std::cerr << "Failed insertion for edge of extremes " << src << " and " << tgt << "." << std::endl;
-		std::cerr << "See documentation of the Boost Graph Library on function boost::add_edge." << std::endl;
-	}
+	check_if_edge_inserted<Graph>(e, inserted);
 	G[src] = src_data;
 	G[tgt] = tgt_data;
 	G[e] = e_data;
 				
 }	//create_edge
 
-
-template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure,
-		 typename Intersections_container = std::vector<BGLgeom::point<2>> >
+/*!
+	@brief This function refines a graph creating a new vertex where the edges intersect
+	@detail Given two edges intersecting the intersection point, the function creates new
+			vertices in the graph corresponding to the intersection	point. The old edges
+			are broken and they are rebuilt, respecting their directions, connecting old 
+			extreme vertices to the new one just created.
+	@remark This fucntion refers only to a two-dimensional setting.
+*/
+template <typename Graph>
 void refine_graph	(Graph & G,
-					//Vertex_data_structure & V,
-					//Edge_data_structure & E,
-					Intersections_container const& I,
-					typename boost::graph_traits<Graph>::edge_descriptor edge1,
-					typename boost::graph_traits<Graph>::edge_descriptor edge2){
+					BGLgeom::point<2> const& I_point,		//there is only one intersection point between two edges!
+					typename boost::graph_traits<Graph>::edge_descriptor & edge1,
+					typename boost::graph_traits<Graph>::edge_descriptor & edge2){
 	
 	using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
 	using Edge_desc = typename boost::graph_traits<Graph>::edge_descriptor;
 	
-	Vertex_desc src1, tgt1, src2, tgt2;
+	Vertex_desc src1, tgt1, src2, tgt2, intersection_new;
 	src1 = boost::source(edge1, G);
 	tgt1 = boost::target(edge1, G);
 	src2 = boost::source(edge2, G);
 	tgt2 = boost::target(edge2, G);
 	
+	intersection_new = boost::add_vertex(G);
+	G[intersection_new] = //dai properietà!
+	
+	Edge_desc e11, e12, e21, e22;
+	bool inserted;
+	std::tie(e11,inserted) = boost::add_edge(src1, intersection_new, G);
+	check_if_edge_inserted<Graph>(e11, inserted);
+	//properietà edge! e riscalamento parametrizzazione
+	std::tie(e12,inserted) = boost::add_edge(intersection_new, tgt1, G);
+	check_if_edge_inserted<Graph>(e12, inserted);
+	//idem
+	std::tie(e21,inserted) = boost::add_edge(src2, intersection_new, G);
+	check_if_edge_inserted<Graph>(e21, inserted);
+	//idem
+	std::tie(e22,inserted) = boost::add_edge(intersection_new, tgt2, G);
+	check_if_edge_inserted<Graph>(e22, inserted);
+	//idem
+	
+	boost::remove_edge(edge1, G);
+	boost::remove_edge(edge2, G)
 }	//refine_graph
 
 #endif	//HH_GRAPH_BUILDER_HH
