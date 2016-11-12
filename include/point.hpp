@@ -25,4 +25,6 @@ namespace BGLgeom{
 */
 template <unsigned int N>
 using point = Eigen::Matrix<double,N,1>;
+} //namespace
+
 #endif //HH_GENERIC_POINT_HH
