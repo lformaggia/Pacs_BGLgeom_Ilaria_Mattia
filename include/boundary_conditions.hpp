@@ -23,7 +23,7 @@
 
 namespace BGLgeom{
 /*!
-	@brief An enum defining the type of the boundary condition we want to add in the node
+	@brief An enum class defining the type of the boundary condition we want to add in the node
 	@detail The types of boundary conditions are: \n
 			- NONE: the vertex doesn't contain a boundary condition; \n
 			- DIR: Dirichlet boundary condition; \n
@@ -31,7 +31,7 @@ namespace BGLgeom{
 			- MIX: Mixed boundary condition (for instance Robin or similar); \n
 			- OTHER: A boundary condition of type different from all the previous ones
 */
-enum BC_type {NONE, DIR, NEU, MIX, OTHER};
+enum class BC_type {NONE, DIR, NEU, MIX, OTHER};
 
 /*!
 	@brief The struct defining a general boundary condition
@@ -55,7 +55,7 @@ struct boundary_condition{
 	std::array<double,num_bc> value;
 	
 	//! Default constructor
-	boundary_condition() : type(NONE){
+	boundary_condition() : type(BC_type::NONE){
 		value.fill(.0);
 	};
 	
@@ -79,29 +79,63 @@ struct boundary_condition{
 		std::string type;
 		in >> type;
 		if(type == "NONE"){	// we suppose that there is a zero after the type. However, we check
+			BC.type = BC_type::NONE;
 			for(std::size_t i = 0; i < num_bc; ++i){
 				in >> BC.value[i];
 				if(BC.value[i] != .0)
 					BC.value[i] = .0;
 			}
-			BC.type = NONE;
 			return in;
-		} else {
-			BC.type = DIR;		//da sistemare!!!
+		} else if(type == "DIR"){
+			BC.type = BC_type::DIR;
+			for(std::size_t i = 0; i < num_bc; ++i)
+				in >> BC.value[i];
+			return in;
+		} else if(type == "NEU"){
+			BC.type = BC_type::NEU;
+			for(std::size_t i = 0; i < num_bc; ++i)
+				in >> BC.value[i];
+			return in;
+		} else if(type == "MIX"){
+			BC.type = BC_type::MIX;
+			for(std::size_t i = 0; i < num_bc; ++i)
+				in >> BC.value[i];
+			return in;
+		} else if(type == "OTHER"){
+			BC.type = BC_type::OTHER;
 			for(std::size_t i = 0; i < num_bc; ++i)
 				in >> BC.value[i];
 			return in;
 		}
-	}
+	}	//operator>>
 
 	//! Overload of output operator
 	friend std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
-		out << "BC: type " << BC.type << ", value ";	//se faccio << BC.type stampa solo il numero. devo fare controlli per stampare stringa
-		for(std::size_t i = 0; i < num_bc; ++i)
+		if(BC.type == BC_type::NONE)
+			out << "BC: type NONE";	//se faccio << BC.type stampa solo il numero. devo fare controlli per stampare stringa
+		else if(BC.type == BC_type::DIR){
+			out << "BC: type DIRICHLET, value ";
+			for(std::size_t i = 0; i < num_bc; ++i)
 			out << BC.value[i] << " ";
-		return out;
-	}	
-};
+			return out;
+		} else if(BC.type == BC_type::NEU){
+			out << "BC: type NEUMANN, value ";
+			for(std::size_t i = 0; i < num_bc; ++i)
+			out << BC.value[i] << " ";
+			return out;
+		} else if(BC.type == BC_type::MIX){
+			out << "BC: type MIXED, value ";
+			for(std::size_t i = 0; i < num_bc; ++i)
+			out << BC.value[i] << " ";
+			return out;
+		} else if(BC.type == BC_type::OTHER){
+			out << "BC: type OTHER, value ";
+			for(std::size_t i = 0; i < num_bc; ++i)
+			out << BC.value[i] << " ";
+			return out;
+		}
+	}	//operator<<	
+};	//boundary_condition
 
 }	//BGLgeom
 #endif	//HH_BOUNDARY_CONDITION_HH
