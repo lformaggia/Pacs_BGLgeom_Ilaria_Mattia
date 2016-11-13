@@ -88,7 +88,10 @@ class Zunino_reader : public BGLgeom::new_reader_class<BGLgeom::Vertex_base_prop
 		virtual void get_other_data(){};
 	
 		virtual void get_data_from_line(){
-			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length >> SRC >> TGT >> BC_src >> BC_tgt;
+			this->in_file /*iss_line*/ >> edge_num >> src >> tgt >> capacity >> length;// >> SRC >> TGT >> BC_src >> BC_tgt;
+			BGLgeom::read_point(this->in_file, SRC);
+			BGLgeom::read_point(this->in_file, TGT);
+			this->in_file >> BC_src >> BC_tgt;
 		}
 		
 		virtual BGLgeom::Vertex_base_property<3> get_source_data(){
