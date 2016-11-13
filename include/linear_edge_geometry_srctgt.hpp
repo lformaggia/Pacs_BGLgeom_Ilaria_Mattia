@@ -19,8 +19,9 @@
 
 #include<array>
 #include<functional>
-#include"generic_point.hpp"
-#include "edge_geometry.hpp"
+#include<Eigen/Dense>
+#include"point.hpp"
+#include"edge_geometry.hpp"
 
 namespace BGLgeom{
 
@@ -30,7 +31,6 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 {
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function x_i(s) = f_i(s), i=1:dim, s=0:1, f: [0,1] -> [0,1]
 	BGLgeom::point<dim> src;
 	BGLgeom::point<dim> tgt;
 
@@ -39,75 +39,88 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	//! constructor 
 	linear_edge_geometry_srctgt
 	(BGLgeom::point<dim> src_, BGLgeom::point<dim> tgt_):src(src_),tgt(tgt_)
-	{
-		value_fun = [](double s) -> BGLgeom::point<dim>
-					{
-						std::array<double,dim> coord;
-						coord.fill(s);
-						BGLgeom::point<dim> P;
-						return P;
-					}
-	};
+	{};
 	
-	//! default constructor 
-	linear_edge_geometry_srctgt()
-	{
-		value_fun = [](double s) -> BGLgeom::point<dim>
-					{
-						std::array<double,dim> coord;
-						coord.fill(s);
-						BGLgeom::point<dim> P;
-						return P;
-					}
-	};
-	
-	
-	//! Sets the right value for the source (when initialized it has a dummy value, becuase at that point we don't have information about edge descriptor)
+	//! Sets the value for the source
 	void set_source(BGLgeom::point<dim> src_){
 		src = src_; 
 	}
 	
+	//! Sets the value for the target
 	void set_target(BGLgeom::point<dim> tgt_){
 		tgt = tgt_;
 	}
  
-    //! returns the point corresponding to s=0:1 
-	virtual BGLgeom::point<dim> value (const double parameter)
+    //! returns the point corresponding
+	virtual BGLgeom::point<dim> value (const double & x)
 	{
-		//check if param belongs to 0->1
-		return (tgt - src)*value_fun(parameter) + src;
+		BGLgeom::point<dim> P((tgt-src)*x+src); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
+		return P;
 	};
 	
 	//! first derivative
-	virtual std::vector<double> 
-	first_derivatives(const double x = 0)
+	virtual Eigen::Matrix<double,dim,1> 
+	first_derivatives(const double & x = 0)
 	{
-		point diff(this -> tgt - src);		
-		// Copy in a vector the coordinates of diff
-		std::vector<double> dn(diff); 
-		
-		for(auto i: dn)
-			std::cout << i << " ";
-		std::cout << std::endl;
-		
-		return dn;	
+		return tgt-src;	
 	}	
 	
 	
 	//! second derivative
-	virtual	std::vector<double> 					//! the second derivative is null along all the components
-	second_derivatives(const double x)
+	virtual	Eigen::Matrix<double,dim,1> 					//! the second derivative is null along all the components
+	second_derivatives(const double & x = 0)
 	{
-		std::vector<double> dn(dim,0);  		
-		return dn;	
+		Eigen::Matrix<double,dim,1> v;
+		v.fill(0.0);	
+		return v;	
 	}
 	
 
 	//! curvilinear abscissa
-	virtual double curvilinear_abscissa(const double parameter)
+	virtual double curvilinear_abscissa(const double & parameter)  // qui richiedo strettamente un parametro tra 0 e 1
 	{
-		return (tgt - src).norm()*(tgt - src).norm()*parameter;
+		return (tgt-src).norm()*parameter;
 	};
+	
+	//! Overload of operator<<
+	friend std::ostream & operator << (std::ostream & out, linear_edge_geometry_srctgt<dim>& edge) {
+		out<<"Source: "<<std::endl;
+		out<<edge.value(0)<<std::endl;
+		out<<std::endl;
+		out<<"Value in s=0.5: "<<std::endl;
+		out<<edge.value(0.5)<<std::endl;
+		out<<std::endl;
+		out<<"Target: "<<std::endl;
+		out<<edge.value(1)<<std::endl;
+		out<<std::endl;
+		out<<"First derivatives in s=0: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.first_derivatives(0))[i]<<" ";
+		out<<std::endl;
+		out<<"First derivatives in s=0.5: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.first_derivatives(0.5))[i]<<" ";
+		out<<std::endl;
+		out<<"First derivatives in s=1: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.first_derivatives(1))[i]<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=0: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.second_derivatives(0))[i]<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=0.5: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.second_derivatives(0.5))[i]<<" ";
+		out<<std::endl;		
+		out<<"Second derivatives in s=1: ";
+		for(int i=0; i<dim; ++i)
+			out<<(edge.second_derivatives(1))[i]<<" ";
+		out<<std::endl;			
+		out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
+		out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
+		out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
+	}
 	
 }; //class
 

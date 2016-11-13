@@ -18,21 +18,22 @@
 #define HH_EDGE_GEOMETRY_HH
 
 #include<array>
-#include"generic_point.hpp"
+#include<Eigen/Dense>
+#include"point.hpp"
 
 namespace BGLgeom{
 
-template<unsigned int N>
+template<unsigned int dim>
 class
 edge_geometry{
 	public:
-	virtual BGLgeom::point<N>
-	value (const double & parameter) = 0;
+	virtual BGLgeom::point<dim>
+	value (const double & x) = 0;
 	
-	virtual std::array<double,N>
+	virtual Eigen::Matrix<double,dim,1>
 	first_derivatives (const double & x) = 0;
 	
-	virtual std::array<double,N>
+	virtual Eigen::Matrix<double,dim,1>
 	second_derivatives (const double & x) = 0;
 	
 	virtual double
