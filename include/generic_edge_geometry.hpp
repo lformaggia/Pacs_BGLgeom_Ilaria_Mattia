@@ -19,7 +19,7 @@
 
 #include<array>
 #include<functional>
-#include"generic_point.hpp"
+#include"point.hpp"
 #include "edge_geometry.hpp"
 
 namespace BGLgeom{

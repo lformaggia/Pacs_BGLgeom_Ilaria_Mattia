@@ -21,7 +21,7 @@
 #include <tuple>
 #include <boost/graph/graph_traits.hpp>
 
-#include "generic_point.hpp"
+#include "point.hpp"
 
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
@@ -78,7 +78,7 @@ void create_edge(Graph & G,
 	check_if_edge_inserted<Graph>(e, inserted);
 	G[src] = src_data;
 	G[tgt] = tgt_data;
-	G[e] = e_data;ù
+	G[e] = e_data;
 }	//create_edge
 
 /*!
@@ -107,7 +107,7 @@ void refine_graph	(Graph & G,
 	intersection_new = boost::add_vertex(G); 
 	//dai properietà! Magari meglio appoggiarsi a template e funzione give_vertex_properties che ho sopra.
 	G[intersection_new].coordinates = I_point;
-	G[intersection_new].BC.type = BGLgeom::NONE;
+	G[intersection_new].BC.type = BGLgeom::BC_type::NONE;
 	G[intersection_new].BC.value = 0.0;
 	
 	Edge_desc e11, e12, e21, e22;
