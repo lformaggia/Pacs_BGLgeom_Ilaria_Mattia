@@ -24,7 +24,7 @@ namespace BGLgeom{
 	@brief Alias template: point<N> is the following Eigen::array
 */
 template <unsigned int N>
-using point = Eigen::Matrix<double,1,N>;
+using point = Eigen::Matrix<double,N,1>;
 
 /*
 template<typename Derived>
