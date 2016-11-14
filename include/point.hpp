@@ -57,8 +57,12 @@ std::istream & operator>>(std::istream & in, Eigen::Matrix<double,1,2> & P){
 //! Overload of operator>> for BGLgeom::point<3>
 std::istream & operator>>(std::istream & in, Eigen::Matrix<double,1,3> & P){
 	std::cout << P.rows() << ", " << P.cols() << std::endl;
-	for(std::size_t i = 0; i < P.cols(); ++i)
-		in >> P(0,i);
+	double a;
+	for(int i = 0; i < (int)P.cols(); ++i){
+		std::cout << in.peek() << std::endl;
+		in >> a;
+		P(0,i) = a;
+	}
 }
 
 /*	Funzionano, volendo
