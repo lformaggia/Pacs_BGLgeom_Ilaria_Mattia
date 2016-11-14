@@ -93,7 +93,7 @@ class generic_edge_geometry_srctgt {
 	double curvature(const double & s){
 		if( (this->first_derivatives(s)).norm() == 0) return 0; // altrimenti al denominatore ho 0 
 		double numerator( (this->first_derivative(s).cross(this->second_derivatives(s))).norm() );
-		double denominator( pow(this->first_derivatives(s),3) );
+		double denominator( this->first_derivatives(s) * this->first_derivatives(s) * this->first_derivatives(s) );
 		return numerator/denominator;
 	}
 	 
