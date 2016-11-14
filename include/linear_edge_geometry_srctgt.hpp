@@ -36,10 +36,9 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 
 	public:
 	
-	//! constructor 
+	//! Constructor 
 	linear_edge_geometry_srctgt
-	(BGLgeom::point<dim> src_, BGLgeom::point<dim> tgt_):src(src_),tgt(tgt_)
-	{};
+	(BGLgeom::point<dim> src_, BGLgeom::point<dim> tgt_) : src(src_), tgt(tgt_){};
 	
 	//! Sets the value for the source
 	void set_source(BGLgeom::point<dim> src_){
@@ -54,8 +53,7 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
     //! returns the point corresponding
 	virtual BGLgeom::point<dim> value (const double & x)
 	{
-		BGLgeom::point<dim> P((tgt-src)*x+src); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
-		return P;
+		return BGLgeom::point<dim>((tgt-src)*x+src); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
 	};
 	
 	//! first derivative
@@ -83,7 +81,7 @@ linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
 	};
 	
 	//! Overload of operator<<
-	friend std::ostream & operator << (std::ostream & out, linear_edge_geometry_srctgt<dim>& edge) {
+	friend std::ostream & operator << (std::ostream & out, linear_edge_geometry_srctgt<dim> & edge) {
 		out<<"Source: "<<std::endl;
 		out<<edge.value(0)<<std::endl;
 		out<<std::endl;
