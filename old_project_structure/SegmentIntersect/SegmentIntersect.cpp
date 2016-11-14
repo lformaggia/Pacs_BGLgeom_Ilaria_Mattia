@@ -26,7 +26,7 @@ std::ostream & operator << (std::ostream & out, Geometry::Intersection const & i
               out<<"\t EndPoint "<<k<<" of segment "<<j<<" is intersection"<<std::endl;
               if(i.otherEdgePoint[j][k]!=-1)
                 out<<"\t\t and it is joined to EdgePoint "<<i.otherEdgePoint[j][k]
-                   <<" of segment "<<j+1 %2<<std::endl;
+                   <<" of segment "<<(j+1)%2<<std::endl;
             }
         }
       
