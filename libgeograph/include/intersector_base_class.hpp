@@ -423,7 +423,7 @@ namespace Geometry{
           }
       }
     return out;						
-	}	//xompute_intersection
+	}	//compute_intersection
 	
 	/*!
 		@brief Overload of operator<< to show the information contained in the strcut Intersection
@@ -451,7 +451,7 @@ namespace Geometry{
 		            out<<"\t EndPoint "<<k<<" of segment "<<j<<" is intersection"<<std::endl;
 		            if(i.otherEdgePoint[j][k]!=-1)
 		            out<<"\t\t and it is joined to EdgePoint "<<i.otherEdgePoint[j][k]
-		                <<" of segment "<<j+1 %2<<std::endl;
+		                <<" of segment "<<(j+1)%2<<std::endl;
 		        }
 		    }		    
 		}
