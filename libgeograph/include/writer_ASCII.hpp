@@ -18,6 +18,7 @@
 #ifndef HH_WRITER_ASCII_HH
 #define HH_WRITER_ASCII_HH
 
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <cstdlib>
@@ -25,7 +26,7 @@
 #include <tuple>
 #include <boost/graph/adjacency_list.hpp>
 
-namespace BGLgeom{
+namespace geograph{
 
 /*!
 	@brief Class handling output operations for a tabular type file
