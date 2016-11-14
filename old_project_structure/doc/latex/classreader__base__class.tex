@@ -1,0 +1,156 @@
+\hypertarget{classreader__base__class}{
+\section{reader\_\-base\_\-class$<$ Graph $>$ Class Template Reference}
+\label{classreader__base__class}\index{reader\_\-base\_\-class@{reader\_\-base\_\-class}}
+}
+Inheritance diagram for reader\_\-base\_\-class$<$ Graph $>$::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{classreader__base__class}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classreader__base__class_add6b9a1702836a61d46c8484c34bc93a}{
+typedef boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor {\bfseries Vertex\_\-desc}}
+\label{classreader__base__class_add6b9a1702836a61d46c8484c34bc93a}
+
+\item 
+\hypertarget{classreader__base__class_a4f5b7d229edcf52020b99bacb402e7ba}{
+typedef boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor {\bfseries Edge\_\-desc}}
+\label{classreader__base__class_a4f5b7d229edcf52020b99bacb402e7ba}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classreader__base__class_a43fc72713a7023fce7eaa15266b6fb6f}{
+\hyperlink{classreader__base__class_a43fc72713a7023fce7eaa15266b6fb6f}{reader\_\-base\_\-class} (Graph \&\_\-G)}
+\label{classreader__base__class_a43fc72713a7023fce7eaa15266b6fb6f}
+
+\begin{DoxyCompactList}\small\item\em Default constructor (we need however to initialize the reference). \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_aa24f5907deb19cfc75480de9f6535fe2}{
+\hyperlink{classreader__base__class_aa24f5907deb19cfc75480de9f6535fe2}{reader\_\-base\_\-class} (Graph \&\_\-G, std::string \_\-file\_\-name, unsigned int \_\-num\_\-dummy\_\-lines)}
+\label{classreader__base__class_aa24f5907deb19cfc75480de9f6535fe2}
+
+\begin{DoxyCompactList}\small\item\em Constructor: assign only num\_\-dummy\_\-lines, empty graph. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a37c8eda56c3b51c2e5aa1b09fc689503}{
+\hyperlink{classreader__base__class_a37c8eda56c3b51c2e5aa1b09fc689503}{reader\_\-base\_\-class} (\hyperlink{classreader__base__class}{reader\_\-base\_\-class} const \&)}
+\label{classreader__base__class_a37c8eda56c3b51c2e5aa1b09fc689503}
+
+\begin{DoxyCompactList}\small\item\em Default copy constructor. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a7629888633c2f453b792d2e63adad1d8}{
+\hyperlink{classreader__base__class}{reader\_\-base\_\-class} \& \hyperlink{classreader__base__class_a7629888633c2f453b792d2e63adad1d8}{operator=} (\hyperlink{classreader__base__class}{reader\_\-base\_\-class} const \&)}
+\label{classreader__base__class_a7629888633c2f453b792d2e63adad1d8}
+
+\begin{DoxyCompactList}\small\item\em Assignement operator. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a001ba0a21c6099f0fc58acabe8852491}{
+virtual \hyperlink{classreader__base__class_a001ba0a21c6099f0fc58acabe8852491}{$\sim$reader\_\-base\_\-class} ()}
+\label{classreader__base__class_a001ba0a21c6099f0fc58acabe8852491}
+
+\begin{DoxyCompactList}\small\item\em Destructor (needed?). \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a5020c9b926b79bf1d9958215498d9e50}{
+virtual void \hyperlink{classreader__base__class_a5020c9b926b79bf1d9958215498d9e50}{set\_\-input\_\-file} (std::string \_\-file\_\-name)}
+\label{classreader__base__class_a5020c9b926b79bf1d9958215498d9e50}
+
+\begin{DoxyCompactList}\small\item\em It allows to set the input file. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ac30077974d31badd9205f39f928e085f}{
+virtual void \hyperlink{classreader__base__class_ac30077974d31badd9205f39f928e085f}{set\_\-num\_\-dummy\_\-lines} (unsigned int const \&\_\-num\_\-dummy\_\-lines)}
+\label{classreader__base__class_ac30077974d31badd9205f39f928e085f}
+
+\begin{DoxyCompactList}\small\item\em It allows to set both num\_\-dummy\_\-lines and current\_\-line\_\-number (they must have the same value). \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ac6d07ef07127e4b172ccfac4e7aabda3}{
+virtual void \hyperlink{classreader__base__class_ac6d07ef07127e4b172ccfac4e7aabda3}{read\_\-input\_\-file} ()}
+\label{classreader__base__class_ac6d07ef07127e4b172ccfac4e7aabda3}
+
+\begin{DoxyCompactList}\small\item\em Read the input file. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_aced9ab4a76f00617de238ded83d4f873}{
+virtual void \hyperlink{classreader__base__class_aced9ab4a76f00617de238ded83d4f873}{ignore\_\-dummy\_\-lines} (std::ifstream \&file)}
+\label{classreader__base__class_aced9ab4a76f00617de238ded83d4f873}
+
+\begin{DoxyCompactList}\small\item\em It ignores the first n lines, that are headers, in the input file. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a87b9c0f6d6100bab6c8d8ccf0c3a1e7e}{
+virtual void \hyperlink{classreader__base__class_a87b9c0f6d6100bab6c8d8ccf0c3a1e7e}{read\_\-data\_\-from\_\-line} (std::istringstream \&temp)=0}
+\label{classreader__base__class_a87b9c0f6d6100bab6c8d8ccf0c3a1e7e}
+
+\begin{DoxyCompactList}\small\item\em It describes how to read each line in the input file, and in which variables to store the data. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a536131b6cc6f007b87735626c29650c6}{
+virtual void \hyperlink{classreader__base__class_a536131b6cc6f007b87735626c29650c6}{build\_\-graph} ()=0}
+\label{classreader__base__class_a536131b6cc6f007b87735626c29650c6}
+
+\begin{DoxyCompactList}\small\item\em It build the graph one edge at a time, called many times from an external loop. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_af9dd018f3818e2ec25ab4de7ab1d1275}{
+virtual void \hyperlink{classreader__base__class_af9dd018f3818e2ec25ab4de7ab1d1275}{give\_\-new\_\-source\_\-properties} ()=0}
+\label{classreader__base__class_af9dd018f3818e2ec25ab4de7ab1d1275}
+
+\begin{DoxyCompactList}\small\item\em It assigns properties to new\_\-source in the rigth way. It has to be called in \hyperlink{classreader__base__class_a536131b6cc6f007b87735626c29650c6}{build\_\-graph()}! \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ab98ff4a8a406effb25f0bc4ce89ae3df}{
+virtual void \hyperlink{classreader__base__class_ab98ff4a8a406effb25f0bc4ce89ae3df}{give\_\-new\_\-target\_\-properties} ()=0}
+\label{classreader__base__class_ab98ff4a8a406effb25f0bc4ce89ae3df}
+
+\begin{DoxyCompactList}\small\item\em It assigns properties to new\_\-target in the right way. It has to be called in \hyperlink{classreader__base__class_a536131b6cc6f007b87735626c29650c6}{build\_\-graph()}! \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_add3be7869df5b87ba40080897a5d9f1a}{
+virtual void \hyperlink{classreader__base__class_add3be7869df5b87ba40080897a5d9f1a}{give\_\-new\_\-edge\_\-properties} ()=0}
+\label{classreader__base__class_add3be7869df5b87ba40080897a5d9f1a}
+
+\begin{DoxyCompactList}\small\item\em It assigns properties to new\_\-edge in the rigth way. It has to be called in \hyperlink{classreader__base__class_a536131b6cc6f007b87735626c29650c6}{build\_\-graph()}! \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a7cdc6fe09127ebba4a91dcbec6e774c2}{
+virtual void \hyperlink{classreader__base__class_a7cdc6fe09127ebba4a91dcbec6e774c2}{if\_\-edge\_\-not\_\-inserted} ()}
+\label{classreader__base__class_a7cdc6fe09127ebba4a91dcbec6e774c2}
+
+\begin{DoxyCompactList}\small\item\em It deals with wrong insertion of an edge.  It can be called only after a call to boost::add\_\-edge with the pair $<$Edge\_\-desc, bool$>$ as return value. In this way the value of edge\_\-inserted is set up. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classreader__base__class_a8453e0babb48c829551ed86a076990a0}{
+Graph \& \hyperlink{classreader__base__class_a8453e0babb48c829551ed86a076990a0}{G}}
+\label{classreader__base__class_a8453e0babb48c829551ed86a076990a0}
+
+\begin{DoxyCompactList}\small\item\em A reference is used to represent the Graph.  Using a reference allows us not to copy the whole graph outside the class once finished to read data and to build the graph. In this way we build the pre-\/existent graph (created in the main) while reading the input file. We do not use extra memory. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ace1598042648e8af4275063a53bb2dc9}{
+std::string \hyperlink{classreader__base__class_ace1598042648e8af4275063a53bb2dc9}{file\_\-name}}
+\label{classreader__base__class_ace1598042648e8af4275063a53bb2dc9}
+
+\begin{DoxyCompactList}\small\item\em The string in which is stored the name of the input file to read. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a68001946415ed68d9bd2b8e5fd01cbc3}{
+unsigned int \hyperlink{classreader__base__class_a68001946415ed68d9bd2b8e5fd01cbc3}{num\_\-dummy\_\-lines}}
+\label{classreader__base__class_a68001946415ed68d9bd2b8e5fd01cbc3}
+
+\begin{DoxyCompactList}\small\item\em The numbers of initial lines (headers) that the reader has to skip to read useful data. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_adf0049e509e246a1de1a9076255ab69a}{
+std::string \hyperlink{classreader__base__class_adf0049e509e246a1de1a9076255ab69a}{line}}
+\label{classreader__base__class_adf0049e509e246a1de1a9076255ab69a}
+
+\begin{DoxyCompactList}\small\item\em This will contain one line of the input file, to parse. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a22708fe953f4e0221270f28f309f80f4}{
+Vertex\_\-desc \hyperlink{classreader__base__class_a22708fe953f4e0221270f28f309f80f4}{new\_\-source}}
+\label{classreader__base__class_a22708fe953f4e0221270f28f309f80f4}
+
+\begin{DoxyCompactList}\small\item\em The vertex descriptor for the source of the new edge added. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a3215bc334e6f5e7ca1601529150e4ce7}{
+Vertex\_\-desc \hyperlink{classreader__base__class_a3215bc334e6f5e7ca1601529150e4ce7}{new\_\-target}}
+\label{classreader__base__class_a3215bc334e6f5e7ca1601529150e4ce7}
+
+\begin{DoxyCompactList}\small\item\em The vertex descriptor for the target of the new edge added. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ab002060e56625ce5d422e811015ae90e}{
+Edge\_\-desc \hyperlink{classreader__base__class_ab002060e56625ce5d422e811015ae90e}{new\_\-edge}}
+\label{classreader__base__class_ab002060e56625ce5d422e811015ae90e}
+
+\begin{DoxyCompactList}\small\item\em The edge descriptor for the new edge. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_a59220f3fd7d9ed4effa57d0175f1d420}{
+bool \hyperlink{classreader__base__class_a59220f3fd7d9ed4effa57d0175f1d420}{edge\_\-inserted}}
+\label{classreader__base__class_a59220f3fd7d9ed4effa57d0175f1d420}
+
+\begin{DoxyCompactList}\small\item\em Bool returned in a pair with an edge descriptor by add\_\-edge function.  The value is assigned when trying to insert an edge in the graph. It is set to true if the edge was succesfully inserted, false otherwise. \item\end{DoxyCompactList}\item 
+\hypertarget{classreader__base__class_ab2b9bc60ece613cb7de32b02dae65f15}{
+unsigned int \hyperlink{classreader__base__class_ab2b9bc60ece613cb7de32b02dae65f15}{current\_\-line\_\-number}}
+\label{classreader__base__class_ab2b9bc60ece613cb7de32b02dae65f15}
+
+\begin{DoxyCompactList}\small\item\em It tracks the current line of the input file. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{template$<$typename Graph$>$ class reader\_\-base\_\-class$<$ Graph $>$}
+
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{reader__base__class_8hpp}{reader\_\-base\_\-class.hpp}\end{DoxyCompactItemize}

@@ -1,0 +1,121 @@
+\hypertarget{classpoint}{
+\section{point$<$ dim, Storage\_\-t $>$ Class Template Reference}
+\label{classpoint}\index{point@{point}}
+}
+
+
+Class template for storing the vertex coordinates in n-\/dimentional space.  
+
+
+{\ttfamily \#include $<$generic\_\-point.hpp$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classpoint_a6760c0eaac9d6b3d1d1591f942d389c0}{
+\hyperlink{classpoint_a6760c0eaac9d6b3d1d1591f942d389c0}{point} ()}
+\label{classpoint_a6760c0eaac9d6b3d1d1591f942d389c0}
+
+\begin{DoxyCompactList}\small\item\em Default constructor. \item\end{DoxyCompactList}\item 
+\hyperlink{classpoint_a0fb87b56e4911071c175143175d8750e}{point} (std::initializer\_\-list$<$ Storage\_\-t $>$ args)
+\begin{DoxyCompactList}\small\item\em Constructor that takes a variable number of input parameters, thanks to initializer\_\-list. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_a89e69647cb648d886b0755114be83f57}{
+\hyperlink{classpoint_a89e69647cb648d886b0755114be83f57}{point} (\hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ const \&\_\-point)}
+\label{classpoint_a89e69647cb648d886b0755114be83f57}
+
+\begin{DoxyCompactList}\small\item\em Copy constructor. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_aa8dbad958ee3117f85a092f7327b3020}{
+\hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ \& \hyperlink{classpoint_aa8dbad958ee3117f85a092f7327b3020}{operator=} (const \hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ \&\_\-point)}
+\label{classpoint_aa8dbad958ee3117f85a092f7327b3020}
+
+\begin{DoxyCompactList}\small\item\em Assignement operator. \item\end{DoxyCompactList}\item 
+bool \hyperlink{classpoint_a0debd4bc2cf38b82fd14ebe15f142a9c}{operator$<$} (\hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ const \&point2) const 
+\begin{DoxyCompactList}\small\item\em Operator$<$ overloading. \item\end{DoxyCompactList}\item 
+bool \hyperlink{classpoint_a8baf3445a84302a9f290ff6c71648ced}{operator$>$} (\hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ const \&point2) const 
+\begin{DoxyCompactList}\small\item\em Operator$>$ overloading. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_a161efef7e37b857fe2e3d611b7162e73}{
+Storage\_\-t \hyperlink{classpoint_a161efef7e37b857fe2e3d611b7162e73}{x} () const }
+\label{classpoint_a161efef7e37b857fe2e3d611b7162e73}
+
+\begin{DoxyCompactList}\small\item\em Gets the first coordinate. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_af1ada06a70921219470c90bedffed1ae}{
+Storage\_\-t \hyperlink{classpoint_af1ada06a70921219470c90bedffed1ae}{y} () const }
+\label{classpoint_af1ada06a70921219470c90bedffed1ae}
+
+\begin{DoxyCompactList}\small\item\em Gets the second coordinate. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_ac93caee7267fcf940818d2dbdc81a642}{
+Storage\_\-t \hyperlink{classpoint_ac93caee7267fcf940818d2dbdc81a642}{z} () const }
+\label{classpoint_ac93caee7267fcf940818d2dbdc81a642}
+
+\begin{DoxyCompactList}\small\item\em Gets the third coordinate. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_a12902b2e7d0bb663a70d26575f0bc7b5}{
+Storage\_\-t \hyperlink{classpoint_a12902b2e7d0bb663a70d26575f0bc7b5}{get} (std::size\_\-t i) const }
+\label{classpoint_a12902b2e7d0bb663a70d26575f0bc7b5}
+
+\begin{DoxyCompactList}\small\item\em Gets the i-\/th coordinate:. \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_a14969f2ce0d2b251efdce294e2f3c982}{
+std::size\_\-t \hyperlink{classpoint_a14969f2ce0d2b251efdce294e2f3c982}{get\_\-dim} () const }
+\label{classpoint_a14969f2ce0d2b251efdce294e2f3c982}
+
+\begin{DoxyCompactList}\small\item\em Gets the dimension of the \hyperlink{classpoint}{point}:. \item\end{DoxyCompactList}\item 
+void \hyperlink{classpoint_adf5774c5279be365241693d6da0aaf8c}{set} (std::initializer\_\-list$<$ Storage\_\-t $>$ args)
+\begin{DoxyCompactList}\small\item\em Set method to assign coordinates to an already existing \hyperlink{classpoint}{point}. It can take an arbitrary number of coordinates thanks to initializer\_\-list. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classpoint_ad6901581113dba74a3f4dd1b97674abc}{
+std::ostream \& \hyperlink{classpoint_ad6901581113dba74a3f4dd1b97674abc}{operator$<$$<$} (std::ostream \&out, \hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ const \&P)}
+\label{classpoint_ad6901581113dba74a3f4dd1b97674abc}
+
+\begin{DoxyCompactList}\small\item\em operator$<$$<$ overloading \item\end{DoxyCompactList}\item 
+\hypertarget{classpoint_a857310f166ea07855140beb33d8d024f}{
+std::istream \& \hyperlink{classpoint_a857310f166ea07855140beb33d8d024f}{operator$>$$>$} (std::istream \&in, \hyperlink{classpoint}{point}$<$ dim, Storage\_\-t $>$ \&P)}
+\label{classpoint_a857310f166ea07855140beb33d8d024f}
+
+\begin{DoxyCompactList}\small\item\em operator$>$$>$ overloading \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$int dim, typename Storage\_\-t = double$>$ class point$<$ dim, Storage\_\-t $>$}
+
+Class template for storing the vertex coordinates in n-\/dimentional space. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpoint_a0fb87b56e4911071c175143175d8750e}{
+\index{point@{point}!point@{point}}
+\index{point@{point}!point@{point}}
+\subsubsection[{point}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim, typename Storage\_\-t = double$>$ {\bf point}$<$ dim, Storage\_\-t $>$::{\bf point} (std::initializer\_\-list$<$ Storage\_\-t $>$ {\em args})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classpoint_a0fb87b56e4911071c175143175d8750e}
+
+
+Constructor that takes a variable number of input parameters, thanks to initializer\_\-list. 
+
+manca eventuale gestione degli errori da parte dell'utente 
+
+\subsection{Member Function Documentation}
+\hypertarget{classpoint_a0debd4bc2cf38b82fd14ebe15f142a9c}{
+\index{point@{point}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!point@{point}}
+\subsubsection[{operator$<$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim, typename Storage\_\-t = double$>$ bool {\bf point}$<$ dim, Storage\_\-t $>$::operator$<$ ({\bf point}$<$ dim, Storage\_\-t $>$ const \& {\em point2}) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classpoint_a0debd4bc2cf38b82fd14ebe15f142a9c}
+
+
+Operator$<$ overloading. Point1 $<$ Point2 if Point1.x is smaller than Point2.x; if they are equal, compare in the same waythe y coordinate, and so on. \hypertarget{classpoint_a8baf3445a84302a9f290ff6c71648ced}{
+\index{point@{point}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!point@{point}}
+\subsubsection[{operator$>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim, typename Storage\_\-t = double$>$ bool {\bf point}$<$ dim, Storage\_\-t $>$::operator$>$ ({\bf point}$<$ dim, Storage\_\-t $>$ const \& {\em point2}) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classpoint_a8baf3445a84302a9f290ff6c71648ced}
+
+
+Operator$>$ overloading. It is the negation of operator$<$ \hypertarget{classpoint_adf5774c5279be365241693d6da0aaf8c}{
+\index{point@{point}!set@{set}}
+\index{set@{set}!point@{point}}
+\subsubsection[{set}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dim, typename Storage\_\-t = double$>$ void {\bf point}$<$ dim, Storage\_\-t $>$::set (std::initializer\_\-list$<$ Storage\_\-t $>$ {\em args})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classpoint_adf5774c5279be365241693d6da0aaf8c}
+
+
+Set method to assign coordinates to an already existing \hyperlink{classpoint}{point}. It can take an arbitrary number of coordinates thanks to initializer\_\-list. 
+
+manca eventuale gestione degli errori da parte dell'utente 
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{generic__point_8hpp}{generic\_\-point.hpp}\end{DoxyCompactItemize}

@@ -1,0 +1,108 @@
+\indexentry{circular\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{circular\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{9}
+\indexentry{data\_\discretionary {-}{}{}structure@{data\_\discretionary {-}{}{}structure}|hyperpage}{10}
+\indexentry{edge\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure@{edge\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure}|hyperpage}{11}
+\indexentry{BGLgeom::edge\_\discretionary {-}{}{}geometry@{BGLgeom::edge\_\discretionary {-}{}{}geometry}|hyperpage}{12}
+\indexentry{edge\_\discretionary {-}{}{}parametrization@{edge\_\discretionary {-}{}{}parametrization}|hyperpage}{13}
+\indexentry{edge\_\discretionary {-}{}{}prop\_\discretionary {-}{}{}max\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}t@{edge\_\discretionary {-}{}{}prop\_\discretionary {-}{}{}max\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}t}|hyperpage}{14}
+\indexentry{final@{final}|hyperpage}{15}
+\indexentry{Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t@{Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t}|hyperpage}{18}
+\indexentry{Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t@{Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t}|hyperpage}{19}
+\indexentry{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{20}
+\indexentry{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}!generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{20}
+\indexentry{generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}!BGLgeom::generic_edge_geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{20}
+\indexentry{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}!first\_\discretionary {-}{}{}derivatives@{first\_\discretionary {-}{}{}derivatives}|hyperpage}{20}
+\indexentry{first\_\discretionary {-}{}{}derivatives@{first\_\discretionary {-}{}{}derivatives}!BGLgeom::generic_edge_geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{20}
+\indexentry{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}!value@{value}|hyperpage}{21}
+\indexentry{value@{value}!BGLgeom::generic_edge_geometry@{BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}|hyperpage}{21}
+\indexentry{Geometry::Intersection@{Geometry::Intersection}|hyperpage}{22}
+\indexentry{Geometry::Intersection@{Geometry::Intersection}!endPointIsIntersection@{endPointIsIntersection}|hyperpage}{23}
+\indexentry{endPointIsIntersection@{endPointIsIntersection}!Geometry::Intersection@{Geometry::Intersection}|hyperpage}{23}
+\indexentry{Geometry::Intersection@{Geometry::Intersection}!intersect@{intersect}|hyperpage}{23}
+\indexentry{intersect@{intersect}!Geometry::Intersection@{Geometry::Intersection}|hyperpage}{23}
+\indexentry{Geometry::Intersection@{Geometry::Intersection}!otherEdgePoint@{otherEdgePoint}|hyperpage}{23}
+\indexentry{otherEdgePoint@{otherEdgePoint}!Geometry::Intersection@{Geometry::Intersection}|hyperpage}{23}
+\indexentry{intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class@{intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class}|hyperpage}{24}
+\indexentry{Geometry::Linear\_\discretionary {-}{}{}edge@{Geometry::Linear\_\discretionary {-}{}{}edge}|hyperpage}{26}
+\indexentry{my\_\discretionary {-}{}{}edge@{my\_\discretionary {-}{}{}edge}|hyperpage}{27}
+\indexentry{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class@{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class}|hyperpage}{28}
+\indexentry{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class@{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class}!ignore\_\discretionary {-}{}{}dummy\_\discretionary {-}{}{}lines@{ignore\_\discretionary {-}{}{}dummy\_\discretionary {-}{}{}lines}|hyperpage}{29}
+\indexentry{ignore\_\discretionary {-}{}{}dummy\_\discretionary {-}{}{}lines@{ignore\_\discretionary {-}{}{}dummy\_\discretionary {-}{}{}lines}!new_reader_class@{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class}|hyperpage}{29}
+\indexentry{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class@{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class}!set\_\discretionary {-}{}{}input@{set\_\discretionary {-}{}{}input}|hyperpage}{29}
+\indexentry{set\_\discretionary {-}{}{}input@{set\_\discretionary {-}{}{}input}!new_reader_class@{new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class}|hyperpage}{29}
+\indexentry{no\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data@{no\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data}|hyperpage}{31}
+\indexentry{our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets@{our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets}|hyperpage}{32}
+\indexentry{BGLgeom::point@{BGLgeom::point}|hyperpage}{34}
+\indexentry{reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class@{reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class}|hyperpage}{37}
+\indexentry{vertex\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure@{vertex\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure}|hyperpage}{40}
+\indexentry{Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}data@{Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}data}|hyperpage}{41}
+\indexentry{Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t@{Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t}|hyperpage}{42}
+\indexentry{Zunino\_\discretionary {-}{}{}reader@{Zunino\_\discretionary {-}{}{}reader}|hyperpage}{43}
+\indexentry{Zunino\_\discretionary {-}{}{}source\_\discretionary {-}{}{}data@{Zunino\_\discretionary {-}{}{}source\_\discretionary {-}{}{}data}|hyperpage}{44}
+\indexentry{Zunino\_\discretionary {-}{}{}target\_\discretionary {-}{}{}data@{Zunino\_\discretionary {-}{}{}target\_\discretionary {-}{}{}data}|hyperpage}{45}
+\indexentry{Zunino\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data@{Zunino\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data}|hyperpage}{46}
+\indexentry{include/compute\_\discretionary {-}{}{}euclidean\_\discretionary {-}{}{}distance.hpp@{include/compute\_\discretionary {-}{}{}euclidean\_\discretionary {-}{}{}distance.hpp}|hyperpage}{47}
+\indexentry{include/data\_\discretionary {-}{}{}structure.hpp@{include/data\_\discretionary {-}{}{}structure.hpp}|hyperpage}{48}
+\indexentry{include/dijkstra.hpp@{include/dijkstra.hpp}|hyperpage}{49}
+\indexentry{include/dijkstra\_\discretionary {-}{}{}imp.hpp@{include/dijkstra\_\discretionary {-}{}{}imp.hpp}|hyperpage}{50}
+\indexentry{include/disjoint\_\discretionary {-}{}{}components.hpp@{include/disjoint\_\discretionary {-}{}{}components.hpp}|hyperpage}{51}
+\indexentry{disjoint\_\discretionary {-}{}{}components.hpp@{disjoint\_\discretionary {-}{}{}components.hpp}!disjoint\_\discretionary {-}{}{}components@{disjoint\_\discretionary {-}{}{}components}|hyperpage}{51}
+\indexentry{disjoint\_\discretionary {-}{}{}components@{disjoint\_\discretionary {-}{}{}components}!disjoint_components.hpp@{disjoint\_\discretionary {-}{}{}components.hpp}|hyperpage}{51}
+\indexentry{include/disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp@{include/disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp}|hyperpage}{52}
+\indexentry{disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp@{disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp}!disjoint\_\discretionary {-}{}{}components@{disjoint\_\discretionary {-}{}{}components}|hyperpage}{52}
+\indexentry{disjoint\_\discretionary {-}{}{}components@{disjoint\_\discretionary {-}{}{}components}!disjoint_components_imp.hpp@{disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp}|hyperpage}{52}
+\indexentry{include/edge\_\discretionary {-}{}{}geometry.hpp@{include/edge\_\discretionary {-}{}{}geometry.hpp}|hyperpage}{53}
+\indexentry{include/Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp@{include/Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp}|hyperpage}{54}
+\indexentry{include/Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property.hpp@{include/Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property.hpp}|hyperpage}{55}
+\indexentry{include/generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry.hpp@{include/generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry.hpp}|hyperpage}{56}
+\indexentry{include/generic\_\discretionary {-}{}{}point.hpp@{include/generic\_\discretionary {-}{}{}point.hpp}|hyperpage}{57}
+\indexentry{include/graph\_\discretionary {-}{}{}builder.hpp@{include/graph\_\discretionary {-}{}{}builder.hpp}|hyperpage}{58}
+\indexentry{include/intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp@{include/intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp}|hyperpage}{59}
+\indexentry{include/io\_\discretionary {-}{}{}graph.hpp@{include/io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{61}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!are\_\discretionary {-}{}{}intersected@{are\_\discretionary {-}{}{}intersected}|hyperpage}{62}
+\indexentry{are\_\discretionary {-}{}{}intersected@{are\_\discretionary {-}{}{}intersected}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{62}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections@{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}|hyperpage}{62}
+\indexentry{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections@{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{62}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!compare@{compare}|hyperpage}{62}
+\indexentry{compare@{compare}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{62}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!read\_\discretionary {-}{}{}zunino\_\discretionary {-}{}{}old\_\discretionary {-}{}{}format@{read\_\discretionary {-}{}{}zunino\_\discretionary {-}{}{}old\_\discretionary {-}{}{}format}|hyperpage}{63}
+\indexentry{read\_\discretionary {-}{}{}zunino\_\discretionary {-}{}{}old\_\discretionary {-}{}{}format@{read\_\discretionary {-}{}{}zunino\_\discretionary {-}{}{}old\_\discretionary {-}{}{}format}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{63}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!refine\_\discretionary {-}{}{}graph@{refine\_\discretionary {-}{}{}graph}|hyperpage}{63}
+\indexentry{refine\_\discretionary {-}{}{}graph@{refine\_\discretionary {-}{}{}graph}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{63}
+\indexentry{io\_\discretionary {-}{}{}graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}!vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification@{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}|hyperpage}{63}
+\indexentry{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification@{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}!io_graph.hpp@{io\_\discretionary {-}{}{}graph.hpp}|hyperpage}{63}
+\indexentry{include/io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{include/io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{65}
+\indexentry{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}!are\_\discretionary {-}{}{}intersected@{are\_\discretionary {-}{}{}intersected}|hyperpage}{66}
+\indexentry{are\_\discretionary {-}{}{}intersected@{are\_\discretionary {-}{}{}intersected}!io_graph_imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{66}
+\indexentry{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}!check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections@{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}|hyperpage}{66}
+\indexentry{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections@{check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}!io_graph_imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{66}
+\indexentry{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}!compare@{compare}|hyperpage}{66}
+\indexentry{compare@{compare}!io_graph_imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{66}
+\indexentry{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}!refine\_\discretionary {-}{}{}graph@{refine\_\discretionary {-}{}{}graph}|hyperpage}{66}
+\indexentry{refine\_\discretionary {-}{}{}graph@{refine\_\discretionary {-}{}{}graph}!io_graph_imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{66}
+\indexentry{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}!vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification@{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}|hyperpage}{67}
+\indexentry{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification@{vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}!io_graph_imp.hpp@{io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp}|hyperpage}{67}
+\indexentry{include/maximum\_\discretionary {-}{}{}flow.hpp@{include/maximum\_\discretionary {-}{}{}flow.hpp}|hyperpage}{68}
+\indexentry{maximum\_\discretionary {-}{}{}flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}!build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph@{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}|hyperpage}{69}
+\indexentry{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph@{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}!maximum_flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}|hyperpage}{69}
+\indexentry{maximum\_\discretionary {-}{}{}flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}!maximum\_\discretionary {-}{}{}flow@{maximum\_\discretionary {-}{}{}flow}|hyperpage}{69}
+\indexentry{maximum\_\discretionary {-}{}{}flow@{maximum\_\discretionary {-}{}{}flow}!maximum_flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}|hyperpage}{69}
+\indexentry{maximum\_\discretionary {-}{}{}flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}!store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity@{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}|hyperpage}{69}
+\indexentry{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity@{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}!maximum_flow.hpp@{maximum\_\discretionary {-}{}{}flow.hpp}|hyperpage}{69}
+\indexentry{include/maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp@{include/maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}|hyperpage}{70}
+\indexentry{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}!build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph@{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}|hyperpage}{70}
+\indexentry{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph@{build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}!maximum_flow_imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}|hyperpage}{70}
+\indexentry{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}!maximum\_\discretionary {-}{}{}flow@{maximum\_\discretionary {-}{}{}flow}|hyperpage}{70}
+\indexentry{maximum\_\discretionary {-}{}{}flow@{maximum\_\discretionary {-}{}{}flow}!maximum_flow_imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}|hyperpage}{70}
+\indexentry{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}!store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity@{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}|hyperpage}{71}
+\indexentry{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity@{store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}!maximum_flow_imp.hpp@{maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp}|hyperpage}{71}
+\indexentry{include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class.hpp@{include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class.hpp}|hyperpage}{72}
+\indexentry{include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}Zunino.hpp@{include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}Zunino.hpp}|hyperpage}{73}
+\indexentry{include/our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets.hpp@{include/our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets.hpp}|hyperpage}{74}
+\indexentry{include/reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp@{include/reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp}|hyperpage}{75}
+\indexentry{include/reader\_\discretionary {-}{}{}Formaggia\_\discretionary {-}{}{}class.hpp@{include/reader\_\discretionary {-}{}{}Formaggia\_\discretionary {-}{}{}class.hpp}|hyperpage}{76}
+\indexentry{include/reader\_\discretionary {-}{}{}Zunino\_\discretionary {-}{}{}class.hpp@{include/reader\_\discretionary {-}{}{}Zunino\_\discretionary {-}{}{}class.hpp}|hyperpage}{77}
+\indexentry{include/topological\_\discretionary {-}{}{}distance.hpp@{include/topological\_\discretionary {-}{}{}distance.hpp}|hyperpage}{78}
+\indexentry{include/topological\_\discretionary {-}{}{}distance\_\discretionary {-}{}{}imp.hpp@{include/topological\_\discretionary {-}{}{}distance\_\discretionary {-}{}{}imp.hpp}|hyperpage}{79}
+\indexentry{include/Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp@{include/Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp}|hyperpage}{80}
+\indexentry{src/main\_\discretionary {-}{}{}Formaggia.cpp@{src/main\_\discretionary {-}{}{}Formaggia.cpp}|hyperpage}{81}
+\indexentry{src/main\_\discretionary {-}{}{}Zunino.cpp@{src/main\_\discretionary {-}{}{}Zunino.cpp}|hyperpage}{82}

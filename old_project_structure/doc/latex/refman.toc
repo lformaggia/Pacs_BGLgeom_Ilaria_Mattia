@@ -1,0 +1,137 @@
+\contentsline {chapter}{\numberline {1}Todo List}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}Class Index}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Class Hierarchy}{3}{section.2.1}
+\contentsline {chapter}{\numberline {3}Class Index}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Class List}{5}{section.3.1}
+\contentsline {chapter}{\numberline {4}File Index}{7}{chapter.4}
+\contentsline {section}{\numberline {4.1}File List}{7}{section.4.1}
+\contentsline {chapter}{\numberline {5}Class Documentation}{9}{chapter.5}
+\contentsline {section}{\numberline {5.1}circular\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry Class Reference}{9}{section.5.1}
+\contentsline {section}{\numberline {5.2}data\_\discretionary {-}{}{}structure$<$ Edge\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure, Vertex\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure $>$ Class Template Reference}{10}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Detailed Description}{10}{subsection.5.2.1}
+\contentsline {section}{\numberline {5.3}edge\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure$<$ dim $>$ Struct Template Reference}{11}{section.5.3}
+\contentsline {section}{\numberline {5.4}BGLgeom::edge\_\discretionary {-}{}{}geometry$<$ dim $>$ Class Template Reference}{12}{section.5.4}
+\contentsline {section}{\numberline {5.5}edge\_\discretionary {-}{}{}parametrization Class Reference}{13}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Detailed Description}{13}{subsection.5.5.1}
+\contentsline {section}{\numberline {5.6}edge\_\discretionary {-}{}{}prop\_\discretionary {-}{}{}max\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}t Struct Reference}{14}{section.5.6}
+\contentsline {section}{\numberline {5.7}final$<$ Graph $>$ Class Template Reference}{15}{section.5.7}
+\contentsline {section}{\numberline {5.8}Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t Struct Reference}{18}{section.5.8}
+\contentsline {section}{\numberline {5.9}Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t Struct Reference}{19}{section.5.9}
+\contentsline {subsection}{\numberline {5.9.1}Detailed Description}{19}{subsection.5.9.1}
+\contentsline {section}{\numberline {5.10}BGLgeom::generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry$<$ dim $>$ Class Template Reference}{20}{section.5.10}
+\contentsline {subsection}{\numberline {5.10.1}Constructor \& Destructor Documentation}{20}{subsection.5.10.1}
+\contentsline {subsubsection}{\numberline {5.10.1.1}generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry}{20}{subsubsection.5.10.1.1}
+\contentsline {subsection}{\numberline {5.10.2}Member Function Documentation}{20}{subsection.5.10.2}
+\contentsline {subsubsection}{\numberline {5.10.2.1}first\_\discretionary {-}{}{}derivatives}{20}{subsubsection.5.10.2.1}
+\contentsline {subsubsection}{\numberline {5.10.2.2}value}{21}{subsubsection.5.10.2.2}
+\contentsline {section}{\numberline {5.11}Geometry::Intersection Struct Reference}{22}{section.5.11}
+\contentsline {subsection}{\numberline {5.11.1}Detailed Description}{22}{subsection.5.11.1}
+\contentsline {subsection}{\numberline {5.11.2}Member Data Documentation}{23}{subsection.5.11.2}
+\contentsline {subsubsection}{\numberline {5.11.2.1}endPointIsIntersection}{23}{subsubsection.5.11.2.1}
+\contentsline {subsubsection}{\numberline {5.11.2.2}intersect}{23}{subsubsection.5.11.2.2}
+\contentsline {subsubsection}{\numberline {5.11.2.3}otherEdgePoint}{23}{subsubsection.5.11.2.3}
+\contentsline {section}{\numberline {5.12}intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class$<$ Graph $>$ Class Template Reference}{24}{section.5.12}
+\contentsline {section}{\numberline {5.13}Geometry::Linear\_\discretionary {-}{}{}edge Class Reference}{26}{section.5.13}
+\contentsline {subsection}{\numberline {5.13.1}Detailed Description}{26}{subsection.5.13.1}
+\contentsline {section}{\numberline {5.14}my\_\discretionary {-}{}{}edge Struct Reference}{27}{section.5.14}
+\contentsline {section}{\numberline {5.15}new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class$<$ Source\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure, Target\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure, Edge\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure, Topological\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure $>$ Class Template Reference}{28}{section.5.15}
+\contentsline {subsection}{\numberline {5.15.1}Detailed Description}{29}{subsection.5.15.1}
+\contentsline {subsection}{\numberline {5.15.2}Member Function Documentation}{29}{subsection.5.15.2}
+\contentsline {subsubsection}{\numberline {5.15.2.1}ignore\_\discretionary {-}{}{}dummy\_\discretionary {-}{}{}lines}{29}{subsubsection.5.15.2.1}
+\contentsline {subsubsection}{\numberline {5.15.2.2}set\_\discretionary {-}{}{}input}{30}{subsubsection.5.15.2.2}
+\contentsline {section}{\numberline {5.16}no\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data Struct Reference}{31}{section.5.16}
+\contentsline {subsection}{\numberline {5.16.1}Detailed Description}{31}{subsection.5.16.1}
+\contentsline {section}{\numberline {5.17}our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets$<$ Graph $>$ Class Template Reference}{32}{section.5.17}
+\contentsline {subsection}{\numberline {5.17.1}Detailed Description}{33}{subsection.5.17.1}
+\contentsline {section}{\numberline {5.18}BGLgeom::point$<$ dim, Storage\_\discretionary {-}{}{}t $>$ Class Template Reference}{34}{section.5.18}
+\contentsline {subsection}{\numberline {5.18.1}Detailed Description}{36}{subsection.5.18.1}
+\contentsline {section}{\numberline {5.19}reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class$<$ Graph $>$ Class Template Reference}{37}{section.5.19}
+\contentsline {section}{\numberline {5.20}vertex\_\discretionary {-}{}{}data\_\discretionary {-}{}{}structure$<$ dim $>$ Struct Template Reference}{40}{section.5.20}
+\contentsline {section}{\numberline {5.21}Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}data Struct Reference}{41}{section.5.21}
+\contentsline {section}{\numberline {5.22}Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property\_\discretionary {-}{}{}t Struct Reference}{42}{section.5.22}
+\contentsline {section}{\numberline {5.23}Zunino\_\discretionary {-}{}{}reader$<$ Zunino\_\discretionary {-}{}{}source\_\discretionary {-}{}{}data, Zunino\_\discretionary {-}{}{}target\_\discretionary {-}{}{}data, Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}data, Zunino\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data $>$ Class Template Reference}{43}{section.5.23}
+\contentsline {section}{\numberline {5.24}Zunino\_\discretionary {-}{}{}source\_\discretionary {-}{}{}data Struct Reference}{44}{section.5.24}
+\contentsline {section}{\numberline {5.25}Zunino\_\discretionary {-}{}{}target\_\discretionary {-}{}{}data Struct Reference}{45}{section.5.25}
+\contentsline {section}{\numberline {5.26}Zunino\_\discretionary {-}{}{}topological\_\discretionary {-}{}{}data Struct Reference}{46}{section.5.26}
+\contentsline {chapter}{\numberline {6}File Documentation}{47}{chapter.6}
+\contentsline {section}{\numberline {6.1}include/compute\_\discretionary {-}{}{}euclidean\_\discretionary {-}{}{}distance.hpp File Reference}{47}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Detailed Description}{47}{subsection.6.1.1}
+\contentsline {section}{\numberline {6.2}include/data\_\discretionary {-}{}{}structure.hpp File Reference}{48}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Detailed Description}{48}{subsection.6.2.1}
+\contentsline {section}{\numberline {6.3}include/dijkstra.hpp File Reference}{49}{section.6.3}
+\contentsline {subsection}{\numberline {6.3.1}Detailed Description}{49}{subsection.6.3.1}
+\contentsline {section}{\numberline {6.4}include/dijkstra\_\discretionary {-}{}{}imp.hpp File Reference}{50}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}Detailed Description}{50}{subsection.6.4.1}
+\contentsline {section}{\numberline {6.5}include/disjoint\_\discretionary {-}{}{}components.hpp File Reference}{51}{section.6.5}
+\contentsline {subsection}{\numberline {6.5.1}Detailed Description}{51}{subsection.6.5.1}
+\contentsline {subsection}{\numberline {6.5.2}Function Documentation}{51}{subsection.6.5.2}
+\contentsline {subsubsection}{\numberline {6.5.2.1}disjoint\_\discretionary {-}{}{}components}{51}{subsubsection.6.5.2.1}
+\contentsline {section}{\numberline {6.6}include/disjoint\_\discretionary {-}{}{}components\_\discretionary {-}{}{}imp.hpp File Reference}{52}{section.6.6}
+\contentsline {subsection}{\numberline {6.6.1}Detailed Description}{52}{subsection.6.6.1}
+\contentsline {subsection}{\numberline {6.6.2}Function Documentation}{52}{subsection.6.6.2}
+\contentsline {subsubsection}{\numberline {6.6.2.1}disjoint\_\discretionary {-}{}{}components}{52}{subsubsection.6.6.2.1}
+\contentsline {section}{\numberline {6.7}include/edge\_\discretionary {-}{}{}geometry.hpp File Reference}{53}{section.6.7}
+\contentsline {subsection}{\numberline {6.7.1}Detailed Description}{53}{subsection.6.7.1}
+\contentsline {section}{\numberline {6.8}include/Forma\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp File Reference}{54}{section.6.8}
+\contentsline {subsection}{\numberline {6.8.1}Detailed Description}{54}{subsection.6.8.1}
+\contentsline {section}{\numberline {6.9}include/Forma\_\discretionary {-}{}{}vertex\_\discretionary {-}{}{}property.hpp File Reference}{55}{section.6.9}
+\contentsline {subsection}{\numberline {6.9.1}Detailed Description}{55}{subsection.6.9.1}
+\contentsline {section}{\numberline {6.10}include/generic\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}geometry.hpp File Reference}{56}{section.6.10}
+\contentsline {subsection}{\numberline {6.10.1}Detailed Description}{56}{subsection.6.10.1}
+\contentsline {section}{\numberline {6.11}include/generic\_\discretionary {-}{}{}point.hpp File Reference}{57}{section.6.11}
+\contentsline {subsection}{\numberline {6.11.1}Detailed Description}{57}{subsection.6.11.1}
+\contentsline {section}{\numberline {6.12}include/graph\_\discretionary {-}{}{}builder.hpp File Reference}{58}{section.6.12}
+\contentsline {subsection}{\numberline {6.12.1}Detailed Description}{58}{subsection.6.12.1}
+\contentsline {section}{\numberline {6.13}include/intersector\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp File Reference}{59}{section.6.13}
+\contentsline {subsection}{\numberline {6.13.1}Detailed Description}{59}{subsection.6.13.1}
+\contentsline {section}{\numberline {6.14}include/io\_\discretionary {-}{}{}graph.hpp File Reference}{61}{section.6.14}
+\contentsline {subsection}{\numberline {6.14.1}Detailed Description}{62}{subsection.6.14.1}
+\contentsline {subsection}{\numberline {6.14.2}Function Documentation}{62}{subsection.6.14.2}
+\contentsline {subsubsection}{\numberline {6.14.2.1}are\_\discretionary {-}{}{}intersected}{62}{subsubsection.6.14.2.1}
+\contentsline {subsubsection}{\numberline {6.14.2.2}check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}{62}{subsubsection.6.14.2.2}
+\contentsline {subsubsection}{\numberline {6.14.2.3}compare}{63}{subsubsection.6.14.2.3}
+\contentsline {subsubsection}{\numberline {6.14.2.4}read\_\discretionary {-}{}{}zunino\_\discretionary {-}{}{}old\_\discretionary {-}{}{}format}{63}{subsubsection.6.14.2.4}
+\contentsline {subsubsection}{\numberline {6.14.2.5}refine\_\discretionary {-}{}{}graph}{63}{subsubsection.6.14.2.5}
+\contentsline {subsubsection}{\numberline {6.14.2.6}vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}{64}{subsubsection.6.14.2.6}
+\contentsline {section}{\numberline {6.15}include/io\_\discretionary {-}{}{}graph\_\discretionary {-}{}{}imp.hpp File Reference}{65}{section.6.15}
+\contentsline {subsection}{\numberline {6.15.1}Detailed Description}{65}{subsection.6.15.1}
+\contentsline {subsection}{\numberline {6.15.2}Function Documentation}{66}{subsection.6.15.2}
+\contentsline {subsubsection}{\numberline {6.15.2.1}are\_\discretionary {-}{}{}intersected}{66}{subsubsection.6.15.2.1}
+\contentsline {subsubsection}{\numberline {6.15.2.2}check\_\discretionary {-}{}{}for\_\discretionary {-}{}{}intersections}{66}{subsubsection.6.15.2.2}
+\contentsline {subsubsection}{\numberline {6.15.2.3}compare}{66}{subsubsection.6.15.2.3}
+\contentsline {subsubsection}{\numberline {6.15.2.4}refine\_\discretionary {-}{}{}graph}{67}{subsubsection.6.15.2.4}
+\contentsline {subsubsection}{\numberline {6.15.2.5}vertex\_\discretionary {-}{}{}insertion\_\discretionary {-}{}{}or\_\discretionary {-}{}{}identification}{67}{subsubsection.6.15.2.5}
+\contentsline {section}{\numberline {6.16}include/maximum\_\discretionary {-}{}{}flow.hpp File Reference}{68}{section.6.16}
+\contentsline {subsection}{\numberline {6.16.1}Detailed Description}{68}{subsection.6.16.1}
+\contentsline {subsection}{\numberline {6.16.2}Function Documentation}{69}{subsection.6.16.2}
+\contentsline {subsubsection}{\numberline {6.16.2.1}build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}{69}{subsubsection.6.16.2.1}
+\contentsline {subsubsection}{\numberline {6.16.2.2}maximum\_\discretionary {-}{}{}flow}{69}{subsubsection.6.16.2.2}
+\contentsline {subsubsection}{\numberline {6.16.2.3}store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}{69}{subsubsection.6.16.2.3}
+\contentsline {section}{\numberline {6.17}include/maximum\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}imp.hpp File Reference}{70}{section.6.17}
+\contentsline {subsection}{\numberline {6.17.1}Detailed Description}{70}{subsection.6.17.1}
+\contentsline {subsection}{\numberline {6.17.2}Function Documentation}{70}{subsection.6.17.2}
+\contentsline {subsubsection}{\numberline {6.17.2.1}build\_\discretionary {-}{}{}flow\_\discretionary {-}{}{}graph}{70}{subsubsection.6.17.2.1}
+\contentsline {subsubsection}{\numberline {6.17.2.2}maximum\_\discretionary {-}{}{}flow}{71}{subsubsection.6.17.2.2}
+\contentsline {subsubsection}{\numberline {6.17.2.3}store\_\discretionary {-}{}{}residual\_\discretionary {-}{}{}capacity}{71}{subsubsection.6.17.2.3}
+\contentsline {section}{\numberline {6.18}include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}class.hpp File Reference}{72}{section.6.18}
+\contentsline {subsection}{\numberline {6.18.1}Detailed Description}{72}{subsection.6.18.1}
+\contentsline {section}{\numberline {6.19}include/new\_\discretionary {-}{}{}reader\_\discretionary {-}{}{}Zunino.hpp File Reference}{73}{section.6.19}
+\contentsline {subsection}{\numberline {6.19.1}Detailed Description}{73}{subsection.6.19.1}
+\contentsline {section}{\numberline {6.20}include/our\_\discretionary {-}{}{}disjoint\_\discretionary {-}{}{}sets.hpp File Reference}{74}{section.6.20}
+\contentsline {subsection}{\numberline {6.20.1}Detailed Description}{74}{subsection.6.20.1}
+\contentsline {section}{\numberline {6.21}include/reader\_\discretionary {-}{}{}base\_\discretionary {-}{}{}class.hpp File Reference}{75}{section.6.21}
+\contentsline {subsection}{\numberline {6.21.1}Detailed Description}{75}{subsection.6.21.1}
+\contentsline {section}{\numberline {6.22}include/reader\_\discretionary {-}{}{}Formaggia\_\discretionary {-}{}{}class.hpp File Reference}{76}{section.6.22}
+\contentsline {subsection}{\numberline {6.22.1}Detailed Description}{76}{subsection.6.22.1}
+\contentsline {section}{\numberline {6.23}include/reader\_\discretionary {-}{}{}Zunino\_\discretionary {-}{}{}class.hpp File Reference}{77}{section.6.23}
+\contentsline {subsection}{\numberline {6.23.1}Detailed Description}{77}{subsection.6.23.1}
+\contentsline {section}{\numberline {6.24}include/topological\_\discretionary {-}{}{}distance.hpp File Reference}{78}{section.6.24}
+\contentsline {subsection}{\numberline {6.24.1}Detailed Description}{78}{subsection.6.24.1}
+\contentsline {section}{\numberline {6.25}include/topological\_\discretionary {-}{}{}distance\_\discretionary {-}{}{}imp.hpp File Reference}{79}{section.6.25}
+\contentsline {subsection}{\numberline {6.25.1}Detailed Description}{79}{subsection.6.25.1}
+\contentsline {section}{\numberline {6.26}include/Zunino\_\discretionary {-}{}{}edge\_\discretionary {-}{}{}property.hpp File Reference}{80}{section.6.26}
+\contentsline {subsection}{\numberline {6.26.1}Detailed Description}{80}{subsection.6.26.1}
+\contentsline {section}{\numberline {6.27}src/main\_\discretionary {-}{}{}Formaggia.cpp File Reference}{81}{section.6.27}
+\contentsline {subsection}{\numberline {6.27.1}Detailed Description}{81}{subsection.6.27.1}
+\contentsline {section}{\numberline {6.28}src/main\_\discretionary {-}{}{}Zunino.cpp File Reference}{82}{section.6.28}
+\contentsline {subsection}{\numberline {6.28.1}Detailed Description}{82}{subsection.6.28.1}

@@ -1,0 +1,38 @@
+\hypertarget{maximum__flow_8hpp_source}{
+\section{maximum\_\-flow.hpp}
+}
+
+
+\begin{footnotesize}\begin{alltt}
+00001 \textcolor{preprocessor}{#ifndef HH\_MAXIMUM\_FLOW\_HH}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define HH\_MAXIMUM\_FLOW\_HH}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#include <map>}
+00005 
+00007 \textcolor{comment}{/*}
+00008 \textcolor{comment}{        create a FlowGraph, made of generic\_point as vertex\_property and edge\_pro
+      perty\_max\_flow as edge\_property}
+00009 \textcolor{comment}{        copy in Flow Graph (which has "bidirectional" edges) the properties of Gr
+      aph and add residual\_capacity and rev\_graph}
+00010 \textcolor{comment}{        run the algorithm max\_flow on the flowGraph}
+00011 \textcolor{comment}{        print in a file residual capacities (or how can we save this data once we
+       delete FlowGraph????)}
+00012 \textcolor{comment}{        output max flow}
+00013 \textcolor{comment}{*/}
+00014 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Graph>
+00015 \textcolor{keywordtype}{double} maximum\_flow     (Graph \textcolor{keyword}{const} &G, 
+00016                                         \textcolor{keyword}{typename} boost::graph\_traits<Graph>::vert
+      ex\_descriptor s,
+00017                                         \textcolor{keyword}{typename} boost::graph\_traits<Graph>::vert
+      ex\_descriptor t);
+00018 
+00019 
+00020 \textcolor{comment}{// Funzione di help per quella sopra:}
+00021 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Graph, \textcolor{keyword}{typename} Flow\_Graph, \textcolor{keyword}{typename} Edge\_fg>
+00022 \textcolor{keywordtype}{void} build\_flow\_graph(Graph \textcolor{keyword}{const}& G, Flow\_Graph & FG, std::map<Edge\_fg, Edge\_fg>
+      & rev\_map);
+00023 
+00024 \textcolor{preprocessor}{#include "maximum\_flow\_imp.hpp"}
+00025 
+00026 \textcolor{preprocessor}{#endif //HH\_MAXIMUM\_FLOW\_HH}
+\end{alltt}\end{footnotesize}

@@ -1,0 +1,68 @@
+\hypertarget{classGeometry_1_1Linear__edge}{
+\section{Geometry::Linear\_\-edge Class Reference}
+\label{classGeometry_1_1Linear__edge}\index{Geometry::Linear\_\-edge@{Geometry::Linear\_\-edge}}
+}
+
+
+A simple class that hanlde a linear edge  This class is thought to manage the description of the geometry of a linear edge, in order to compute intersections.  
+
+
+{\ttfamily \#include $<$intersector\_\-base\_\-class.hpp$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classGeometry_1_1Linear__edge_a7bc8e67881017b2f3a60b513f81aa45f}{
+\hyperlink{classGeometry_1_1Linear__edge_a7bc8e67881017b2f3a60b513f81aa45f}{Linear\_\-edge} ()}
+\label{classGeometry_1_1Linear__edge_a7bc8e67881017b2f3a60b513f81aa45f}
+
+\begin{DoxyCompactList}\small\item\em Default constructor. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_a2a06df3a5dcb107522b4cafb8b1794d2}{
+{\bfseries extremes\_\-are\_\-set} (false)}
+\label{classGeometry_1_1Linear__edge_a2a06df3a5dcb107522b4cafb8b1794d2}
+
+\item 
+\hypertarget{classGeometry_1_1Linear__edge_ac3cb6d63d81f758cae11b315c81acc6e}{
+\hyperlink{classGeometry_1_1Linear__edge_ac3cb6d63d81f758cae11b315c81acc6e}{Linear\_\-edge} (point$<$ 2 $>$ const \&SRC, point$<$ 2 $>$ const \&TGT)}
+\label{classGeometry_1_1Linear__edge_ac3cb6d63d81f758cae11b315c81acc6e}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_a6f209351de4a6d48f16f01ca7fd72633}{
+{\bfseries extremes\_\-are\_\-set} (true)}
+\label{classGeometry_1_1Linear__edge_a6f209351de4a6d48f16f01ca7fd72633}
+
+\item 
+\hypertarget{classGeometry_1_1Linear__edge_af3a8b762ff05d8db1a3c976e2985ebb2}{
+\hyperlink{classGeometry_1_1Linear__edge_af3a8b762ff05d8db1a3c976e2985ebb2}{Linear\_\-edge} (\hyperlink{classGeometry_1_1Linear__edge}{Linear\_\-edge} const \&)}
+\label{classGeometry_1_1Linear__edge_af3a8b762ff05d8db1a3c976e2985ebb2}
+
+\begin{DoxyCompactList}\small\item\em Copy constructor. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_ab1cab14e36cf0e1d51bc68dea4c736a3}{
+\hyperlink{classGeometry_1_1Linear__edge}{Linear\_\-edge} \& \hyperlink{classGeometry_1_1Linear__edge_ab1cab14e36cf0e1d51bc68dea4c736a3}{operator=} (\hyperlink{classGeometry_1_1Linear__edge}{Linear\_\-edge} const \&)}
+\label{classGeometry_1_1Linear__edge_ab1cab14e36cf0e1d51bc68dea4c736a3}
+
+\begin{DoxyCompactList}\small\item\em Assignment operator. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_a567dadf0feb7d130903b7d2aaebfdf08}{
+void \hyperlink{classGeometry_1_1Linear__edge_a567dadf0feb7d130903b7d2aaebfdf08}{set} (point$<$ 2 $>$ const \&SRC, point$<$ 2 $>$ const \&TGT)}
+\label{classGeometry_1_1Linear__edge_a567dadf0feb7d130903b7d2aaebfdf08}
+
+\begin{DoxyCompactList}\small\item\em Setting the two end points (extremes) of the edge. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_a93a04309b0e46c40eb803a60d213a527}{
+point$<$ 2 $>$ \hyperlink{classGeometry_1_1Linear__edge_a93a04309b0e46c40eb803a60d213a527}{operator\mbox{[}$\,$\mbox{]}} (std::size\_\-t i)}
+\label{classGeometry_1_1Linear__edge_a93a04309b0e46c40eb803a60d213a527}
+
+\begin{DoxyCompactList}\small\item\em Overloading of operator\mbox{[}\mbox{]} to access each of the two end points. Usefull in algorithms  extremes\mbox{[}0\mbox{]} = source, extremes\mbox{[}1\mbox{]} = target of the edge. \item\end{DoxyCompactList}\item 
+\hypertarget{classGeometry_1_1Linear__edge_ab575249c0388c9c335b3d121d98f27b3}{
+point$<$ 2 $>$ {\bfseries operator\mbox{[}$\,$\mbox{]}} (std::size\_\-t i) const }
+\label{classGeometry_1_1Linear__edge_ab575249c0388c9c335b3d121d98f27b3}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A simple class that hanlde a linear edge  This class is thought to manage the description of the geometry of a linear edge, in order to compute intersections. \begin{DoxyRemark}{Remarks}
+The class must have an overload of operator\mbox{[}\mbox{]} in order to run in the function that computes intersections 
+\end{DoxyRemark}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{intersector__base__class_8hpp}{intersector\_\-base\_\-class.hpp}\end{DoxyCompactItemize}

@@ -1,0 +1,62 @@
+\hypertarget{maximum__flow__imp_8hpp}{
+\section{include/maximum\_\-flow\_\-imp.hpp File Reference}
+\label{maximum__flow__imp_8hpp}\index{include/maximum\_\-flow\_\-imp.hpp@{include/maximum\_\-flow\_\-imp.hpp}}
+}
+
+
+Implementations of the functions defined in \hyperlink{maximum__flow_8hpp}{maximum\_\-flow.hpp}.  
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Graph , typename Edge\_\-Descriptor\_\-g $>$ }\\double \hyperlink{maximum__flow__imp_8hpp_a96c43e089d974ef6e94a5e939159f4b4}{maximum\_\-flow} (Graph const \&G, typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor s, typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor t, std::map$<$ Edge\_\-Descriptor\_\-g, double $>$ \&out\_\-residual\_\-capacity)
+\begin{DoxyCompactList}\small\item\em It runs push\_\-relabel\_\-max\_\-flow algorithm on graph G. \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Graph , typename Flow\_\-Graph , typename Edge\_\-fg $>$ }\\void \hyperlink{maximum__flow__imp_8hpp_a9eb280b278f5c68bf857146abfbb0578}{build\_\-flow\_\-graph} (Graph const \&G, Flow\_\-Graph \&FG, std::map$<$ Edge\_\-fg, Edge\_\-fg $>$ \&rev\_\-map)
+\begin{DoxyCompactList}\small\item\em Helper function for maximum\_\-flow. \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Graph , typename Flow\_\-Graph , typename Edge\_\-Descriptor\_\-g $>$ }\\void \hyperlink{maximum__flow__imp_8hpp_a4fa083772791ed469ba5786aeb3a619e}{store\_\-residual\_\-capacity} (Graph const \&G, Flow\_\-Graph const \&FG, std::map$<$ Edge\_\-Descriptor\_\-g, double $>$ \&out\_\-residual\_\-capacity)
+\begin{DoxyCompactList}\small\item\em Helper function that stores residual capacity on edges after computation of max flow. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementations of the functions defined in \hyperlink{maximum__flow_8hpp}{maximum\_\-flow.hpp}. \begin{DoxyAuthor}{Author}
+Ilaria Speranza \& Mattia Tantardini 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sep 14, 2016 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{maximum__flow__imp_8hpp_a9eb280b278f5c68bf857146abfbb0578}{
+\index{maximum\_\-flow\_\-imp.hpp@{maximum\_\-flow\_\-imp.hpp}!build\_\-flow\_\-graph@{build\_\-flow\_\-graph}}
+\index{build\_\-flow\_\-graph@{build\_\-flow\_\-graph}!maximum_flow_imp.hpp@{maximum\_\-flow\_\-imp.hpp}}
+\subsubsection[{build\_\-flow\_\-graph}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph , typename Flow\_\-Graph , typename Edge\_\-fg $>$ void build\_\-flow\_\-graph (Graph const \& {\em G}, \/  Flow\_\-Graph \& {\em FG}, \/  std::map$<$ Edge\_\-fg, Edge\_\-fg $>$ \& {\em rev\_\-map})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{maximum__flow__imp_8hpp_a9eb280b278f5c68bf857146abfbb0578}
+
+
+Helper function for maximum\_\-flow. This function build the flow graph associated to the input graph. This is because we want not to modify the original Graph passed as input in maximum\_\-flow, and because the push\_\-relabelmax\_\-flow algorithm requires such a Graph. 
+\begin{DoxyParams}{Parameters}
+\item[{\em G}]Graph \item[{\em FG}]Flow graph that will be built inside the function. We need to build a new graph with a special structure in order to accomplish the requirments of boost::push\_\-relabel\_\-max\_\-flow \item[{\em rev\_\-map}]Map that stores the reverse edge for each edge in the graph. It is needed to build Flow Graph. \end{DoxyParams}
+\hypertarget{maximum__flow__imp_8hpp_a96c43e089d974ef6e94a5e939159f4b4}{
+\index{maximum\_\-flow\_\-imp.hpp@{maximum\_\-flow\_\-imp.hpp}!maximum\_\-flow@{maximum\_\-flow}}
+\index{maximum\_\-flow@{maximum\_\-flow}!maximum_flow_imp.hpp@{maximum\_\-flow\_\-imp.hpp}}
+\subsubsection[{maximum\_\-flow}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph , typename Edge\_\-Descriptor\_\-g $>$ double maximum\_\-flow (Graph const \& {\em G}, \/  typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor {\em s}, \/  typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor {\em t}, \/  std::map$<$ Edge\_\-Descriptor\_\-g, double $>$ \& {\em out\_\-residual\_\-capacity})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{maximum__flow__imp_8hpp_a96c43e089d974ef6e94a5e939159f4b4}
+
+
+It runs push\_\-relabel\_\-max\_\-flow algorithm on graph G. This function find the maximum flow that can flow from node s to node t.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em G}]Graph \item[{\em s}]Source vertex chosen for the maximum flow problem \item[{\em t}]Target vertex chosen for the maximum flow problem \item[{\em out\_\-residual\_\-capacity}]Map that stores the residual capacity left in each edge \end{DoxyParams}
+\hypertarget{maximum__flow__imp_8hpp_a4fa083772791ed469ba5786aeb3a619e}{
+\index{maximum\_\-flow\_\-imp.hpp@{maximum\_\-flow\_\-imp.hpp}!store\_\-residual\_\-capacity@{store\_\-residual\_\-capacity}}
+\index{store\_\-residual\_\-capacity@{store\_\-residual\_\-capacity}!maximum_flow_imp.hpp@{maximum\_\-flow\_\-imp.hpp}}
+\subsubsection[{store\_\-residual\_\-capacity}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph , typename Flow\_\-Graph , typename Edge\_\-Descriptor\_\-g $>$ void store\_\-residual\_\-capacity (Graph const \& {\em G}, \/  Flow\_\-Graph const \& {\em FG}, \/  std::map$<$ Edge\_\-Descriptor\_\-g, double $>$ \& {\em out\_\-residual\_\-capacity})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{maximum__flow__imp_8hpp_a4fa083772791ed469ba5786aeb3a619e}
+
+
+Helper function that stores residual capacity on edges after computation of max flow. We use a vector. Next step: using a map$<$Edge\_\-descriptor, residual\_\-capacity\_\-value$>$ This function search in the flow graph which edges have the same sources and target as the edges in G, so that we can associate the right residual capacity to the right original edge of G. This is because FG is a utility in order to run the push\_\-relabel algorithm and it is destroied after exiting this function.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em G}]Graph \item[{\em FG}]Flow Graph \item[{\em out\_\-residual\_\-capacity}]Map that stores the residual capacity left in each edge \end{DoxyParams}

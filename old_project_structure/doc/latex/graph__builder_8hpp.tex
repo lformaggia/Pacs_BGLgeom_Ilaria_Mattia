@@ -1,0 +1,42 @@
+\hypertarget{graph__builder_8hpp}{
+\section{include/graph\_\-builder.hpp File Reference}
+\label{graph__builder_8hpp}\index{include/graph\_\-builder.hpp@{include/graph\_\-builder.hpp}}
+}
+
+
+Utilities to build a graph.  
+{\ttfamily \#include $<$vector$>$}\par
+{\ttfamily \#include $<$boost/graph/graph\_\-traits.hpp$>$}\par
+{\ttfamily \#include \char`\"{}generic\_\-point.hpp\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{graph__builder_8hpp_a9ace6a37932f7a74fd2445b4dac6d0e5}{
+{\footnotesize template$<$typename Graph , typename Source\_\-data\_\-structure $>$ }\\void \hyperlink{graph__builder_8hpp_a9ace6a37932f7a74fd2445b4dac6d0e5}{give\_\-source\_\-properties} (Source\_\-data\_\-structure const \&D, boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor const \&v, Graph \&G)}
+\label{graph__builder_8hpp_a9ace6a37932f7a74fd2445b4dac6d0e5}
+
+\begin{DoxyCompactList}\small\item\em Giving to source node v all properties through assigning the Source\_\-data\_\-structure. \item\end{DoxyCompactList}\item 
+\hypertarget{graph__builder_8hpp_a8ded846b7c184caa0b3e7dd4c9ac57d9}{
+{\footnotesize template$<$typename Graph , typename Target\_\-data\_\-structure $>$ }\\void \hyperlink{graph__builder_8hpp_a8ded846b7c184caa0b3e7dd4c9ac57d9}{give\_\-target\_\-properties} (Target\_\-data\_\-structure const \&D, boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor const \&v, Graph \&G)}
+\label{graph__builder_8hpp_a8ded846b7c184caa0b3e7dd4c9ac57d9}
+
+\begin{DoxyCompactList}\small\item\em Giving to target node v all properties through assigning the Target\_\-data\_\-structure. \item\end{DoxyCompactList}\item 
+\hypertarget{graph__builder_8hpp_a04b083d8a1c981b08b29bee5129cfb46}{
+{\footnotesize template$<$typename Graph , typename Edge\_\-data\_\-structure $>$ }\\void \hyperlink{graph__builder_8hpp_a04b083d8a1c981b08b29bee5129cfb46}{give\_\-edge\_\-properties} (Edge\_\-data\_\-structure const \&D, boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor const \&e, Graph \&G)}
+\label{graph__builder_8hpp_a04b083d8a1c981b08b29bee5129cfb46}
+
+\begin{DoxyCompactList}\small\item\em Giving to edge e all properties through assigning the Edge\_\-data\_\-structure. \item\end{DoxyCompactList}\item 
+\hypertarget{graph__builder_8hpp_a1423898277cf920ca76dbf8c2f49432b}{
+{\footnotesize template$<$typename Graph , typename Vertex\_\-data\_\-structure , typename Edge\_\-data\_\-structure , typename Intersections\_\-container  = std::vector$<$point$<$2$>$$>$$>$ }\\void {\bfseries refine\_\-graph} (Graph \&G, Intersections\_\-container const \&I, boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor edge1, boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor edge2)}
+\label{graph__builder_8hpp_a1423898277cf920ca76dbf8c2f49432b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Utilities to build a graph. \begin{DoxyAuthor}{Author}
+Ilaria Speranza \& Mattia Tantardini 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sept, 2016 
+\end{DoxyDate}

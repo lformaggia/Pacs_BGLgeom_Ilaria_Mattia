@@ -1,0 +1,121 @@
+\hypertarget{io__graph__imp_8hpp_source}{
+\section{io\_\-graph\_\-imp.hpp}
+}
+
+
+\begin{footnotesize}\begin{alltt}
+00001 \textcolor{preprocessor}{#ifndef HH\_IO\_GRAPH\_IMP\_HH}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define HH\_IO\_GRAPH\_IMP\_HH}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#include<tuple>}
+00005 \textcolor{preprocessor}{#include<boost/graph/adjacency\_list.hpp>}
+00006 \textcolor{preprocessor}{#include"edge\_property.hpp"}
+00007 \textcolor{preprocessor}{#include<string>}
+00008 \textcolor{preprocessor}{#include<iostream>}
+00009 \textcolor{preprocessor}{#include<sstream>}
+00010 \textcolor{preprocessor}{#include<string>}
+00011 \textcolor{preprocessor}{#include<fstream>}
+00012 \textcolor{preprocessor}{#include<vector>}
+00013 \textcolor{preprocessor}{#include<set>}
+00014 \textcolor{preprocessor}{#include<utility>}
+00015 
+00016 \textcolor{preprocessor}{#include"\hyperlink{generic__point_8hpp}{generic_point.hpp}"}
+00017 \textcolor{preprocessor}{#include"edge\_property.hpp"}
+00018 \textcolor{preprocessor}{#include"io\_graph.hpp"}
+00019 
+00020 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Graph, \textcolor{keyword}{typename} Po\textcolor{keywordtype}{int}>
+00021 \textcolor{keywordtype}{void} initialize\_graph(\textcolor{keyword}{const} \textcolor{keywordtype}{int} src, \textcolor{keyword}{const} \textcolor{keywordtype}{int} tgt, Graph & G, \textcolor{keywordtype}{double} diam, \textcolor{keywordtype}{doubl
+      e} length, Point \textcolor{keyword}{const} & SRC, Point \textcolor{keyword}{const} & TGT)\{
+00022         
+00023         \textcolor{keyword}{typedef} \textcolor{keyword}{typename} boost::graph\_traits<Graph>::edge\_descriptor edge\_descrip
+      tor;
+00024         
+00025         std::set<int> vertex\_set;               \textcolor{comment}{// it's a set in order to avoid m
+      ultiple additions of the same vertex}
+00026         \textcolor{keywordtype}{bool} inserted;                          \textcolor{comment}{//if FALSE the vertex I'm trying 
+      to add was already in the set }
+00027 
+00028         std::pair<std::set<int>::iterator, \textcolor{keywordtype}{bool}> set\_inserter;
+00029         std::set<int>::iterator it;
+00030         
+00031         edge\_descriptor e;
+00032         \textcolor{keywordtype}{bool} edge\_inserted;     
+00033         
+00035         std::tie(e, edge\_inserted) = boost::add\_edge(src, tgt, G);
+00036         
+00037         G[e].capacity = diam;
+00038 
+00039         G[e].length = length;
+00040         
+00041         \textcolor{comment}{// Inserting property of the source vertex, if the vertex wasn't inserted
+       before}
+00042         set\_inserter = vertex\_set.insert(src);
+00043         \textcolor{keywordflow}{if}(set\_inserter.second)
+00044                 G[src]=SRC;
+00045 
+00046         \textcolor{comment}{// Inserting property of the target vertex, if the vertex wasn't inserted
+       before         }
+00047         set\_inserter = vertex\_set.insert(tgt);
+00048         \textcolor{keywordflow}{if}(set\_inserter.second)
+00049                 G[tgt]=TGT;
+00050 \}       \textcolor{comment}{//initialize\_graph}
+00051         
+00052                 
+00053 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Graph, \textcolor{keyword}{typename} Po\textcolor{keywordtype}{int}>
+00054 \textcolor{keywordtype}{void} read\_zunino\_old\_format(Graph & G, std::string file\_name)\{ 
+00055 
+00056   \textcolor{comment}{/* I want to read from a file where data }
+00057 \textcolor{comment}{     is written as}
+00058 \textcolor{comment}{     }
+00059 \textcolor{comment}{     line1: description}
+00060 \textcolor{comment}{     line2: description}
+00061 \textcolor{comment}{     from line 3: no - source\_v - target\_v - diameter - length - source\_coord - t
+      arget\_coord}
+00062 \textcolor{comment}{  */}
+00063   
+00064   std::ifstream file(file\_name.c\_str());
+00065 
+00066 
+00067   Point SRC,TGT;                                
+00068   \textcolor{keywordtype}{int} edge\_num, src, tgt;                       \textcolor{comment}{// they will read the first 3 num
+      bers of each line }
+00069   \textcolor{keywordtype}{double} diam, length;                          \textcolor{comment}{// they will read the remaining 8
+      }
+00070 
+00071   \textcolor{comment}{// ignore the first two lines of the file}
+00072   std::string dummyLine;
+00073   std::getline(file, dummyLine);
+00074   std::getline(file, dummyLine);
+00075   
+00076   \textcolor{comment}{// Until I reach end of file}
+00077   \textcolor{keywordflow}{while} (!file.fail() && !file.eof())\{
+00078     std::string s;
+00079     std::getline(file,s);                                                                               \textcolor{comment}{/
+      / read the the whole line}
+00080     \textcolor{keywordflow}{if}(s.empty()) \textcolor{keywordflow}{continue};                                                                     \textcolor{comment}{/
+      / empty line}
+00081     std::istringstream tmp(s);                                                                  \textcolor{comment}{/
+      / build an input sstream.}
+00082     tmp>>edge\_num>>src>>tgt>>diam>>length>>SRC>>TGT;                     \textcolor{comment}{// read 
+      from the input stream}
+00083     \textcolor{keywordflow}{if}(!tmp.fail())\{
+00085         initialize\_graph<Graph, point<3> >(src, tgt, G, diam, length, SRC, TGT);
+00086     \}
+00087   \}     \textcolor{comment}{// while}
+00088   
+00089   \textcolor{comment}{//Eliminiamo il vertice zero perché nei file di input non c'è, si parte dal v
+      ertice 1:}
+00090   \textcolor{comment}{//remove\_vertex(0, G);}
+00091 
+00092   \textcolor{comment}{//Plot dei vertici:}
+00093   \textcolor{keyword}{typename} boost::graph\_traits<Graph>::vertex\_iterator vb, ve;
+00094   \textcolor{keywordflow}{for}(tie(vb,ve) = vertices(G); vb != ve; ++vb)
+00095         std::cout << *vb << std::endl;
+00096   
+00097   \textcolor{comment}{//Plot degli archi:}
+00098   \textcolor{keyword}{typename} boost::graph\_traits<Graph>::edge\_iterator ebegin, eend;
+00099   \textcolor{keywordflow}{for}( tie(ebegin, eend) = edges(G); ebegin != eend; ebegin++)
+00100         std::cout << *ebegin << std::endl;
+00101 \}       \textcolor{comment}{//read\_zunino\_old\_format}
+00102 \textcolor{preprocessor}{#endif}
+\end{alltt}\end{footnotesize}

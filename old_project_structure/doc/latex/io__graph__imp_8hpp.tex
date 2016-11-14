@@ -1,0 +1,104 @@
+\hypertarget{io__graph__imp_8hpp}{
+\section{include/io\_\-graph\_\-imp.hpp File Reference}
+\label{io__graph__imp_8hpp}\index{include/io\_\-graph\_\-imp.hpp@{include/io\_\-graph\_\-imp.hpp}}
+}
+
+
+Definition of functions related to input and output of the graph.  
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{io__graph__imp_8hpp_ae6c267eee83d36eb093630f97a7727a0}{
+{\footnotesize template$<$typename Graph $>$ }\\void {\bfseries read\_\-Formaggia\_\-format} (Graph \&G, std::string file\_\-name)}
+\label{io__graph__imp_8hpp_ae6c267eee83d36eb093630f97a7727a0}
+
+\item 
+{\footnotesize template$<$typename Graph $>$ }\\boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor \hyperlink{io__graph__imp_8hpp_af9e99050d5dc188308a06e263f5f0734}{vertex\_\-insertion\_\-or\_\-identification} (Graph \&G, point$<$ 2 $>$ const \&P)
+\begin{DoxyCompactList}\small\item\em Helper function for read\_\-Formaggia\_\-format. \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Graph $>$ }\\void \hyperlink{io__graph__imp_8hpp_a94cf30803f090f25893b56f7e4d5ee71}{check\_\-for\_\-intersections} (std::vector$<$ std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ $>$ \&vect, point$<$ 2 $>$ const \&SRC, point$<$ 2 $>$ const \&TGT, Graph const \&G)
+\begin{DoxyCompactList}\small\item\em Helper function for read\_\-Formaggia\_\-format. \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Graph , bool src\_\-less\_\-than\_\-tgt$>$ }\\bool \hyperlink{io__graph__imp_8hpp_ac1e2c5a4da2bb9a065a62edee3307dfd}{compare} (std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ pair1, std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ pair2)
+\begin{DoxyCompactList}\small\item\em Helper function for check\_\-for intersection. \item\end{DoxyCompactList}\item 
+std::pair$<$ bool, point$<$ 2 $>$ $>$ \hyperlink{io__graph__imp_8hpp_adb2201a64aba745c13af37639fa1660f}{are\_\-intersected} (std::pair$<$ point$<$ 2 $>$, point$<$ 2 $>$ $>$ line1, std::pair$<$ point$<$ 2 $>$, point$<$ 2 $>$ $>$ line2)
+\begin{DoxyCompactList}\small\item\em helper function for check\_\-for\_\-intersection \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Graph $>$ }\\void \hyperlink{io__graph__imp_8hpp_a264e7d9a57840e37b36b6649c3964c25}{refine\_\-graph} (Graph \&G, typename std::vector$<$ std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ $>$ const \&vect, int frac\_\-number, typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor src, typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor tgt)
+\begin{DoxyCompactList}\small\item\em Helper function for read\_\-Formaggia\_\-format. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Definition of functions related to input and output of the graph. \begin{DoxyAuthor}{Author}
+Ilaria Speranza \& Mattia Tantardini 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sept, 2016 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{io__graph__imp_8hpp_adb2201a64aba745c13af37639fa1660f}{
+\index{io\_\-graph\_\-imp.hpp@{io\_\-graph\_\-imp.hpp}!are\_\-intersected@{are\_\-intersected}}
+\index{are\_\-intersected@{are\_\-intersected}!io_graph_imp.hpp@{io\_\-graph\_\-imp.hpp}}
+\subsubsection[{are\_\-intersected}]{\setlength{\rightskip}{0pt plus 5cm}std::pair$<$bool, point$<$2$>$ $>$ are\_\-intersected (std::pair$<$ point$<$ 2 $>$, point$<$ 2 $>$ $>$ {\em line1}, \/  std::pair$<$ point$<$ 2 $>$, point$<$ 2 $>$ $>$ {\em line2})}}
+\label{io__graph__imp_8hpp_adb2201a64aba745c13af37639fa1660f}
+
+
+helper function for check\_\-for\_\-intersection we assume the fractures can only be vertical or horizontal. It compute the coordinates of the intersection point, if present. \hypertarget{io__graph__imp_8hpp_a94cf30803f090f25893b56f7e4d5ee71}{
+\index{io\_\-graph\_\-imp.hpp@{io\_\-graph\_\-imp.hpp}!check\_\-for\_\-intersections@{check\_\-for\_\-intersections}}
+\index{check\_\-for\_\-intersections@{check\_\-for\_\-intersections}!io_graph_imp.hpp@{io\_\-graph\_\-imp.hpp}}
+\subsubsection[{check\_\-for\_\-intersections}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph $>$ void check\_\-for\_\-intersections (std::vector$<$ std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ $>$ \& {\em v}, \/  point$<$ 2 $>$ const \& {\em SRC}, \/  point$<$ 2 $>$ const \& {\em TGT}, \/  Graph const \& {\em G})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{io__graph__imp_8hpp_a94cf30803f090f25893b56f7e4d5ee71}
+
+
+Helper function for read\_\-Formaggia\_\-format. This function checks if two lines (fractures) are intersected. If yes, it creates a vector with all the intersection points already ordered with the right direction (from source to target vertex)
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em vect}]The vector that will be filled with the intersection points of each new edge \item[{\em SRC}]Source vertex of the current edge \item[{\em TGT}]Target vertex of the current edge \item[{\em G}]Graph \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{io__graph__imp_8hpp_ac1e2c5a4da2bb9a065a62edee3307dfd}{
+\index{io\_\-graph\_\-imp.hpp@{io\_\-graph\_\-imp.hpp}!compare@{compare}}
+\index{compare@{compare}!io_graph_imp.hpp@{io\_\-graph\_\-imp.hpp}}
+\subsubsection[{compare}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph , bool src\_\-less\_\-than\_\-tgt$>$ bool compare (std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ {\em pair1}, \/  std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ {\em pair2})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{io__graph__imp_8hpp_ac1e2c5a4da2bb9a065a62edee3307dfd}
+
+
+Helper function for check\_\-for intersection. Given a couple of points, this function orders the intersection points according to the template parameter src\_\-less\_\-than\_\-tgt. The ordering is needed in order to craete the new edges in the right way, preserving the direction of the fractures.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em pair1}]It is the intersection point between the current edge and the edge described by the second component of the pair \item[{\em pair2}]It is the intersection point between the current edge and the edge described by the second component of the pair \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\hypertarget{io__graph__imp_8hpp_a264e7d9a57840e37b36b6649c3964c25}{
+\index{io\_\-graph\_\-imp.hpp@{io\_\-graph\_\-imp.hpp}!refine\_\-graph@{refine\_\-graph}}
+\index{refine\_\-graph@{refine\_\-graph}!io_graph_imp.hpp@{io\_\-graph\_\-imp.hpp}}
+\subsubsection[{refine\_\-graph}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph $>$ void refine\_\-graph (Graph \& {\em G}, \/  typename std::vector$<$ std::pair$<$ point$<$ 2 $>$, typename boost::graph\_\-traits$<$ Graph $>$::edge\_\-descriptor $>$ $>$ const \& {\em vect}, \/  int {\em frac\_\-number}, \/  typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor {\em src}, \/  typename boost::graph\_\-traits$<$ Graph $>$::vertex\_\-descriptor {\em tgt})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{io__graph__imp_8hpp_a264e7d9a57840e37b36b6649c3964c25}
+
+
+Helper function for read\_\-Formaggia\_\-format. This function breaks old edges to create a refined graph according to the intersection points found while inserting the current edge. It preserves the fracture number of each old edge while creating the new ones.
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em G}]Graph \item[{\em vect}]The vector of the intersection points \item[{\em frac\_\-number}]The fracture number of the current edge \item[{\em src}]Vertex descriptor of the source of the current edge \item[{\em tgt}]Vertex descriptor of the target of the current edge \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{io__graph__imp_8hpp_af9e99050d5dc188308a06e263f5f0734}{
+\index{io\_\-graph\_\-imp.hpp@{io\_\-graph\_\-imp.hpp}!vertex\_\-insertion\_\-or\_\-identification@{vertex\_\-insertion\_\-or\_\-identification}}
+\index{vertex\_\-insertion\_\-or\_\-identification@{vertex\_\-insertion\_\-or\_\-identification}!io_graph_imp.hpp@{io\_\-graph\_\-imp.hpp}}
+\subsubsection[{vertex\_\-insertion\_\-or\_\-identification}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph $>$ boost::graph\_\-traits$<$Graph$>$::vertex\_\-descriptor vertex\_\-insertion\_\-or\_\-identification (Graph \& {\em G}, \/  point$<$ 2 $>$ const \& {\em P})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{io__graph__imp_8hpp_af9e99050d5dc188308a06e263f5f0734}
+
+
+Helper function for read\_\-Formaggia\_\-format. The function checks if the vertex we are trying to insert is already present in the graph, (in this case it will be ignored) or if it isn't already present (in this case it will be inserted).
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em G}]Graph we are constructing \item[{\em P}]Point we want to check if is present or not \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vertex\_\-descriptor 
+\end{DoxyReturn}

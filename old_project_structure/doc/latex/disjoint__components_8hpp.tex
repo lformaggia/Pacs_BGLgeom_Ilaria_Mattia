@@ -1,0 +1,36 @@
+\hypertarget{disjoint__components_8hpp}{
+\section{include/disjoint\_\-components.hpp File Reference}
+\label{disjoint__components_8hpp}\index{include/disjoint\_\-components.hpp@{include/disjoint\_\-components.hpp}}
+}
+
+
+Identifies if there are fully disconnected subgraphs.. .  
+{\ttfamily \#include $<$map$>$}\par
+{\ttfamily \#include $<$tuple$>$}\par
+{\ttfamily \#include $<$iostream$>$}\par
+{\ttfamily \#include $<$boost/graph/graph\_\-traits.hpp$>$}\par
+{\ttfamily \#include \char`\"{}our\_\-disjoint\_\-sets.hpp\char`\"{}}\par
+{\ttfamily \#include \char`\"{}disjoint\_\-components\_\-imp.hpp\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Graph $>$ }\\void \hyperlink{disjoint__components_8hpp_a098a633d00c11d9e718e8aae256351fa}{disjoint\_\-components} (Graph \&G)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Identifies if there are fully disconnected subgraphs.. . \begin{DoxyAuthor}{Author}
+Ilaria Speranza \& Mattia Tantardini 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sep 2016. 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{disjoint__components_8hpp_a098a633d00c11d9e718e8aae256351fa}{
+\index{disjoint\_\-components.hpp@{disjoint\_\-components.hpp}!disjoint\_\-components@{disjoint\_\-components}}
+\index{disjoint\_\-components@{disjoint\_\-components}!disjoint_components.hpp@{disjoint\_\-components.hpp}}
+\subsubsection[{disjoint\_\-components}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph $>$ void disjoint\_\-components (Graph \& {\em G})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{disjoint__components_8hpp_a098a633d00c11d9e718e8aae256351fa}
+Given a graph, this function checks whether there are fully disconnected subgraphs, i.e. subgraphs with no edge connecting each other. It returns a map which associates each vertex with an integer identifying the subgraph it belongs to. 

@@ -1,0 +1,59 @@
+\hypertarget{data__structure_8hpp}{
+\section{include/data\_\-structure.hpp File Reference}
+\label{data__structure_8hpp}\index{include/data\_\-structure.hpp@{include/data\_\-structure.hpp}}
+}
+
+
+Declaration of generic data structure to represent vertex and edge properties.  
+{\ttfamily \#include \char`\"{}user\_\-data\_\-structure.hpp\char`\"{}}\par
+{\ttfamily \#include $<$string$>$}\par
+{\ttfamily \#include \char`\"{}generic\_\-edge\_\-geometry.hpp\char`\"{}}\par
+{\ttfamily \#include \char`\"{}generic\_\-point.hpp\char`\"{}}\par
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{structdata__structure}{data\_\-structure$<$ Edge\_\-data\_\-structure, Vertex\_\-data\_\-structure $>$}
+\begin{DoxyCompactList}\small\item\em An abstract class to handle the user definition data structure  The users has to specify, in the derived class, all variables he need in order to store information read from the input file. Then, through the definition of Edge\_\-data\_\-structure and Vertex\_\-data\_\-structure, he can get separately all the information to put on edges and vertices. \item\end{DoxyCompactList}\item 
+struct \hyperlink{structmy__edge}{my\_\-edge}
+\item 
+struct \hyperlink{structedge__data__structure}{edge\_\-data\_\-structure$<$ dim $>$}
+\item 
+struct \hyperlink{structvertex__data__structure}{vertex\_\-data\_\-structure$<$ dim $>$}
+\item 
+class \hyperlink{structdata__structure}{data\_\-structure$<$ Edge\_\-data\_\-structure, Vertex\_\-data\_\-structure $>$}
+\begin{DoxyCompactList}\small\item\em An abstract class to handle the user definition data structure  The users has to specify, in the derived class, all variables he need in order to store information read from the input file. Then, through the definition of Edge\_\-data\_\-structure and Vertex\_\-data\_\-structure, he can get separately all the information to put on edges and vertices. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{data__structure_8hpp_a07f7ad9a2dd195a85015db7be6b19777}{
+{\bfseries get\_\-data\_\-from\_\-line} (std::ifstream \&in, \hyperlink{structdata__structure}{data\_\-structure} \&D)}
+\label{data__structure_8hpp_a07f7ad9a2dd195a85015db7be6b19777}
+
+\item 
+\hypertarget{data__structure_8hpp_a227e3176fb34375a1d6f20a7723503f4}{
+virtual read\_\-file \hyperlink{structmy__edge}{my\_\-edge} {\bfseries get\_\-edge\_\-data} ()}
+\label{data__structure_8hpp_a227e3176fb34375a1d6f20a7723503f4}
+
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{data__structure_8hpp_a6bb17dfa9d209fa07ee291676a748b7f}{
+struct \hyperlink{structmy__edge}{my\_\-edge} {\bfseries length}}
+\label{data__structure_8hpp_a6bb17dfa9d209fa07ee291676a748b7f}
+
+\item 
+\hypertarget{data__structure_8hpp_a16be187ac405f3bb61930a342b444253}{
+point {\bfseries coord}}
+\label{data__structure_8hpp_a16be187ac405f3bb61930a342b444253}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Declaration of generic data structure to represent vertex and edge properties. \begin{DoxyAuthor}{Author}
+Ilaria Speranza \& Mattia Tantardini 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Sept, 2016 
+\end{DoxyDate}
