@@ -10,8 +10,8 @@
 	@file generic_edge_geometry_srctgt.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
-	@brief edge geometry source&target dependent
-	@detail 
+	@brief The most generic edge. 
+	@detail The user must provide the function describing the edge and those describing forst and second derivative, all parametrized with paramenter between 0 and 1), 
 */
 
 #ifndef HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
@@ -21,7 +21,6 @@
 #include<functional>
 #include<cmath>
 #include"point.hpp"
-#include"edge_geometry.hpp"
 #include"mesh.hpp"
 #include"numerical_integration.hpp"
 #include"numerical_rule.hpp"
@@ -31,7 +30,7 @@
 namespace BGLgeom{
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
-class generic_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>{
+class generic_edge_geometry_srctgt {
 
 	using vector = Eigen::Matrix<double,dim,1>;
 

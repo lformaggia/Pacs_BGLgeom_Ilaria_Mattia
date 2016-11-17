@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file generic_edge_geometry_srctgt.hpp
+	@file linear_edge_geometry_srctgt.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
-	@brief edge geometry source&target dependent
+	@brief linear geometry for the edge
 	@detail 
 */
 
@@ -21,13 +21,12 @@
 #include<functional>
 #include<Eigen/Dense>
 #include"point.hpp"
-#include"edge_geometry.hpp"
 
 namespace BGLgeom{
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class
-linear_edge_geometry_srctgt: public BGLgeom::edge_geometry<dim>
+linear_edge_geometry_srctgt
 {
 	private:
 	
