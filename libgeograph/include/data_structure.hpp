@@ -47,7 +47,7 @@
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
-#include "generic_edge_geometry.hpp"
+#include "linear_edge_geometry_srctgt.hpp"
 
 
 namespace BGLgeom{
@@ -97,7 +97,7 @@ struct Vertex_base_property{
 	
 	@param dim Space dimension
 */
-template <unsigned int dim>
+template <unsigned int dim, typename Edge_T>
 struct Edge_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	//using edge_geometry_t = typename BGLgeom::generic_edge_geometry<dim>;

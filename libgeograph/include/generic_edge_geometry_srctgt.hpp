@@ -48,21 +48,21 @@ class generic_edge_geometry_srctgt {
 	{};
 
     //! returns the point corresponding to s=0:1 
-	virtual BGLgeom::point<dim> value (const double & x)
+	BGLgeom::point<dim> value (const double & x)
 	{
 		//check if param belongs to 0->1
 		return value_fun(x);
 	};		
 	
 	//! first derivative
-	virtual vector 
+	vector 
 	first_derivatives(const double & x)
 	{
 		return first_derivatives_fun(x);	
 	};
 	
 	//! second derivative
-	virtual vector 
+	vector 
 	second_derivatives(const double & x)
 	{
 		return second_derivatives_fun(x);	
@@ -87,6 +87,14 @@ class generic_edge_geometry_srctgt {
 
   		std::cout<<"Integral computed with Simpson's method. Result: "<<approxs<<std::endl;
   		return approxs; 
+	}
+	
+	//! curvature
+	double curvature(const double & s){
+		if( (this->first_derivatives(s)).norm() == 0) return 0; // altrimenti al denominatore ho 0 
+		double numerator( (this->first_derivative(s).cross(this->second_derivatives(s))).norm() );
+		double denominator( pow(this->first_derivatives(s),3) );
+		return numerator/denominator;
 	}
 	 
 	

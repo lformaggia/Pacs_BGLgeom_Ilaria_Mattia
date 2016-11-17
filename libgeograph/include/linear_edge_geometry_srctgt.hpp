@@ -50,13 +50,13 @@ linear_edge_geometry_srctgt
 	}
  
     //! returns the point corresponding
-	virtual BGLgeom::point<dim> value (const double & x)
+	BGLgeom::point<dim> value (const double & x)
 	{
 		return BGLgeom::point<dim>((tgt-src)*x+src); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
 	};
 	
 	//! first derivative
-	virtual Eigen::Matrix<double,dim,1> 
+	Eigen::Matrix<double,dim,1> 
 	first_derivatives(const double & x = 0)
 	{
 		return tgt-src;	
@@ -64,7 +64,7 @@ linear_edge_geometry_srctgt
 	
 	
 	//! second derivative
-	virtual	Eigen::Matrix<double,dim,1> 					//! the second derivative is null along all the components
+	Eigen::Matrix<double,dim,1> 					//! the second derivative is null along all the components
 	second_derivatives(const double & x = 0)
 	{
 		Eigen::Matrix<double,dim,1> v;
@@ -74,10 +74,15 @@ linear_edge_geometry_srctgt
 	
 
 	//! curvilinear abscissa
-	virtual double curvilinear_abscissa(const double & parameter)  // qui richiedo strettamente un parametro tra 0 e 1
+	double curvilinear_abscissa(const double & parameter)  // qui richiedo strettamente un parametro tra 0 e 1
 	{
 		return (tgt-src).norm()*parameter;
 	};
+	
+	//! curvature
+	double curvature(const double & s){
+		return 0;
+	}
 	
 	//! Overload of operator<<
 	friend std::ostream & operator << (std::ostream & out, linear_edge_geometry_srctgt<dim> & edge) {
