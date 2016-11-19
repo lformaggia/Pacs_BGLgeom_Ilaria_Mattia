@@ -11,3 +11,11 @@
 
 # Folders:
 old_project_structure/*
+libBGLgeom/doc/*
+libBGLgeom/obj/*
+fracture_intersection/doc/*
+fracture_intersection/obj/*
+fracture_intersection/bin/*
+network_diffusion/doc/*
+network_diffusion/obj/*
+network_diffusion/bin/*
