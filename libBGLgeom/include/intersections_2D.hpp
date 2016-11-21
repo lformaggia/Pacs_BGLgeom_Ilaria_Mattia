@@ -132,6 +132,30 @@ class linear_edge_interface{
 };	//linear_edge_interface
 
 
+/*!
+	@brief An enum class to identify the intersection situation
+	@detail We need to identify how the edges are located in the plane and
+			how the intersect. In this way we can perform the correct actions
+			at the graph level to intersect topologically the edges
+	
+	@param X Simple cross intersection. We are happy
+	@param T_new The new edge intersects in one of its extremes the old edge
+	@param T_old The old edge intersects in one of its extremes the new edge
+	@param Overlap_outside The new edge is overlapped to the old one and it is larger
+	@param Overlap_inside The new edge is overlapped to the old one and it is smaller
+	@param Overlap The new edge overlap in some part (not all) the old edge
+	@param Overlap_extreme_inside The new edge (larger) is overlappes to the old one and coincides in one extreme
+	@param Overlap_extreme_outside The new edge (smaller) is overlappes to the old one and coincides in one extreme
+	@param Identical The two edges are the same
+	@param Common_extreme The two edges have only one extreme in common
+	@param Something_went_wrong Error in computing the intersection
+	@param No_intersection There are no intersection between the edges
+*/
+enum class intersection_type	{X, T_new, T_old, Overlap_outside, Overlap_inside, Overlap,
+								Overlap_extreme_inside, Overlap_extreme_outside, Identical,
+								Common_extreme, Something_went_wrong, No_intersection};
+
+
 //! A simple struct that contains the result of the intersection test
 /*!
 	To be able to treat the most general case each segment is allowed
@@ -145,6 +169,8 @@ class linear_edge_interface{
 struct Intersection {
 	//! Segments interects! True if there is intersection
 	bool intersect = false;
+	//! How the two segments intersect
+	intersection_type how;
 	//! Number of intersections (max 2, rapresenting the case in which the segments overlap)
 	unsigned int numberOfIntersections = 0u;
 	//! Intersection points coordinates
@@ -193,193 +219,25 @@ Another scaled tolerance is used to test ir edges are parallel.
 @par tol A tolerance,it should greater than epsilon for doubles
 @return Intersection. A data structure containing the info about the intersection
 */
-Intersection segmentIntersect	(linear_edge_geometry_srctgt const& S1,
-								linear_edge_geometry_srctgt const& S2,
-                           		double const
-                            	tol=20*std::numeric_limits<double>::epsilon()) {
-	Intersection out;
-	auto v1= S1[1]-S1[0];
-	auto v2= S2[1]-S2[0];
-	auto len1 = norm(v1);
-	auto len2 = norm(v2);
-	// Tolerance for distances
-	double tol_dist=tol*std::max(len1,len2);
-	// I need to scale the tolerance to check parallelism correctly
-	auto tol_sys=2.0*tol*len1*len1*len2*len2;
-	// First check if segments meets at the end
-	for (unsigned int i=0;i<2;++i){
-	    auto const & P1=S1[i];
-	    for (unsigned int j=0;j<2;++j){
-	        auto const & P2=S2[j];
-	        auto dist=norm(P1-P2);
-	        if (dist<=tol_dist){
-	            if(out.numberOfIntersections>=2){
-	                std::cerr<<
-	                    "Something wrong, cannot have more that 2 intersections"
-	                            <<std::endl;
-	                out.good=false;
-	                return out;
-	            }
-	            out.intersect=true;
-	            out.intersectionPoint[out.numberOfIntersections++]=P1;
-	            out.endPointIsIntersection[0][i]=true;
-	            out.endPointIsIntersection[1][j]=true;
-	            out.otherEdgePoint[0][i]=j;
-	            out.otherEdgePoint[1][j]=i;
-	        }
-	    }
-	}
-	// Handle the case where the two edges are identical!
-	if (out.numberOfIntersections==2u){
-	    out.identical=true;
-	    out.parallel=true;
-	    out.collinear=true;
-	    return out;
-	}
-	// Now solve the linear system that returns the parametric coordinates of the intersection
-	std::array<std::array<double,2>,2> A;
-	// to make life easier I call A and B the ends of the two segmensts
-	auto const & A1=S1[0];
-	auto const & B1=S1[1];
-	auto const & A2=S2[0];
-	auto const & B2=S2[1];
-	auto  V1 = B1-A1;
-	auto  V2 = B2-A2;
-	A[0][0]= dot(V1,V1);
-	A[0][1]=-dot(V1,V2);
-	A[1][0]= A[0][1];
-	A[1][1]= dot(V2,V2);
-	std::array<double,2> b;
-	b[0]=    dot(A2-A1,V1);
-	b[1]=    dot(A1-A2,V2);
-	// find parametric coordinate of the intersection
-	auto result=solve(A,b,tol_sys);
-	// Standard case, the two lines are not parallel
-	if(result.first==true){
-	    auto const & t = result.second;
-	    // Make a stupid check (only in debugging phase)
-	#ifndef NDEBUG
-	    auto P1 = A1+ t[0]*(B1-A1);
-	    auto P2 = A2+ t[1]*(B2-A2);
-	    if(norm(P1-P2)>tol_dist)
-	        std::cerr<<" Something strange, intersection points not coincident. Distance= "<<norm(P1-P2);
-	#endif        
-	    // The two lines intersect.
-	    // Check whether we are inside the segments
-	    double const & t1=result.second[0];
-	    double const & t2=result.second[1];
-	    //double tol1=tol/len1;
-	    //double tol2=tol/len2;
-	    bool inside =v(t1>=-0.5*tol) && (t1<= 1.0+0.5*tol) && (t2>=-0.5*tol) && (t2<= 1.0+0.5*tol);
-	    if (!inside){
-	        // No intersecion, end here
-	        return out;
-	    } else {
-	        out.intersect=true;
-	        // I coud have used the mean
-	        if (std::abs(t1    )<= tol){
-	            if(out.endPointIsIntersection[0][0]){
-	                // already found. End here
-	                return out;
-	            } else {
-	                out.endPointIsIntersection[0][0]=true;
-	            }
-	        }
-	        if (std::abs(t1-1.0)<= tol){
-	            if(out.endPointIsIntersection[0][1]){
-	                // already found. End here
-	                return out;
-	            } else {
-	                out.endPointIsIntersection[0][1]=true;
-	            }
-	        }
-	        if (std::abs(t2    )<= tol){
-	            if(out.endPointIsIntersection[1][0]){
-	                // already found. End here
-	                return out;
-	            } else {
-	                out.endPointIsIntersection[1][0]=true;
-	            }
-	        }
-	        if (std::abs(t2-1.0)<= tol){
-	            if(out.endPointIsIntersection[1][1]){
-	                // already found. End here
-	                return out;
-	            } else {
-	                out.endPointIsIntersection[1][1]=true;
-	            }
-	        }
-	        out.intersectionPoint[out.numberOfIntersections++]=A1+ t1*(B1-A1);
-	        return out;
-	    }
-	} else {
-	    out.parallel=true;
-	    // Compute distance between the two lines
-	    /*
-	    (x-s1(0,0))(s1(1,1)-s1(0,1))-(s1(1,0)*s1(0,0))*(y-s1(0,1))=0
-	    (s1(1,1)-s1(0,1))x+(s1(0,0)*s1(1,0))y+s1(0,1)(s1(1,0)*s1(0,0))-
-	    (s1(1,1)-s1(0,1))s1(0,0)=0
-	    */
-	    double factor=dot(B1-A1,A2-A1)/(len1*len1);
-	    auto distVect = (A1-A2) + factor*(B1-A1);
-	    double distance = norm(distVect);
-	    out.distance=distance;
-	    // Maybe here you want to use a different tolerance?
-	    if (distance>tol_dist){
-	        // The two segments are separated
-	        // No intersection.
-	        return out;
-	    } else {
-	        out.collinear=true;
-	        double t;
-	        // Segments are collinear! We need to consider all the cases!
-	        // IS A2 on S1? Maybe I have already considered it earlier
-	        if(!out.endPointIsIntersection[1][0]){
-	            t=dot((A2-A1),(B1-A1))/(len1*len1);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
-	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=A2;
-	                out.endPointIsIntersection[1][0]=true;
-	                if(out.numberOfIntersections==2)return out;
-	            }
-	        }
-	        // IS B2 on S1? Maybe I have already considered it earlier
-	        if(!out.endPointIsIntersection[1][1]){
-	            t=dot((B2-A1),(B1-A1))/(len1*len1);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
-	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=B2;
-	                out.endPointIsIntersection[1][1]=true;
-	                if(out.numberOfIntersections==2)return out;
-	            }
-	        }
-	        // IS A1 on S2? Maybe I have already considered it earlier
-	        if(!out.endPointIsIntersection[0][0]){
-	            t=dot((A1-A2),(B2-A2))/(len2*len2);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
-	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=A1;
-	                out.endPointIsIntersection[0][0]=true;
-	                if(out.numberOfIntersections==2)return out;
-	            }
-	        }
-	        // IS B1 on S2? Maybe I have already considered it earlier
-	        if(!out.endPointIsIntersection[0][1]){
-	            t=dot((B1-A2),(B2-A2))/(len2*len2);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
-	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=B1;
-	                out.endPointIsIntersection[0][1]=true;
-	                if(out.numberOfIntersections==2)return out;
-	            }
-	        }
-	    }
-	}
-	return out;
-}	//compute_intersection
-	
-	
-	
+Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
+								linear_edge_geometry_srctgt const& edge2,
+                           		double const& tol=20*std::numeric_limits<double>::epsilon());
+                           		
+/*
+	@brief Overload of operator<< to show the infos obtained by the function
+*/
+std::ostream & operator<< (std::ostream & out, Intersection const& I);
+
+
+
+
+/*!
+	@brief A struct containing all the information needed to refine the graph
+*/
+struct Useful_intersection{
+	intersection_type situation;
+};	//Useful_intersection
+
 
 };	//BGLgeom
 
