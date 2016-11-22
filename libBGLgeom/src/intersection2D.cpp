@@ -225,15 +225,24 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 			out.how	= X;
 			return out;
 		}
-		//Common_extreme
-		if(out.collinear == false && numEndPointIntersections == 2){
-			out.how = Common_extreme;
-			return out;
-		}
-		//T_new, T_old
+		//T_new, T_old, Common_extreme
 		if(out.collinear == false && numEndPointIntersections == 1){
-			if
+			//edge 1 interseca con uno dei suoi due estremi (0 o 1)
+			if(endPointIsIntersection[1][0] || endPointIsIntersection[1][1]){
+				out.how = T_new;
+				return out;
+			}
+			//edge 0 interseca con uno dei suoi due estremi (0 o 1)
+			if(endPointIsIntersection[0][0] || endPointIsIntersection[0][1]){
+				out.how = T_old;
+				return out;
+			}
+			// Common_edge; se non sono entrato nei casi percedenti finisco comunque qui
+			out.how = Common_extreme;
+			return ou;
 		}
+	} else {		//2 intersezioni, ovvero collinear = true
+		
 	}
 	
 	return out;
