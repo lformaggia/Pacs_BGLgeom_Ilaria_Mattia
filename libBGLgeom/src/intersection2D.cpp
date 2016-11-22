@@ -218,15 +218,16 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 				numEndPointIntersections++;
 		}
 	}
-	//Comincio a distinguere i casi
+	//Comincio a distinguere i casi. numIntersection == 0 already treated in the previous code
 	if(out.numberOfIntersections == 1){
+		//with only one intersection, of course edge are not collinear
 		// X intersection
-		if(out.collinear == false && numEndPointIntersections == 0){
+		if(numEndPointIntersections == 0){
 			out.how	= X;
 			return out;
 		}
-		//T_new, T_old, Common_extreme
-		if(out.collinear == false && numEndPointIntersections == 1){
+		//T_new, T_old
+		if(numEndPointIntersections == 1){
 			//edge 1 interseca con uno dei suoi due estremi (0 o 1)
 			if(endPointIsIntersection[1][0] || endPointIsIntersection[1][1]){
 				out.how = T_new;
@@ -237,11 +238,50 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 				out.how = T_old;
 				return out;
 			}
-			// Common_edge; se non sono entrato nei casi percedenti finisco comunque qui
+		}
+		//Common_extreme; There are two end points (one for each edge) that meets
+		if(numEndPointIntersections == 2){
 			out.how = Common_extreme;
 			return ou;
 		}
 	} else {		//2 intersezioni, ovvero collinear = true
+		//Overlap_outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)
+		if(endPointIsIntersection[0][0] && endPointIsIntersection[0][1]){
+			out.how = Overla_outside;
+			return out;
+		}
+		//Overlap_inside; edge 1 (new) intersects in both its extremes (0 and 1) edge 0 (old)
+		if(endPointIsIntersection[1][0] && endPointIsIntersection[1][1]){
+			out.how = Overlap_inside;
+			return out;
+		}
+		//Overlap; Con solo due intersezioni segnalate sono sicuro di essere in questo caso
+		if(	numEndPointIntersections == 2 && 
+			(endPointIsIntersection[0][0] && endPointIsIntersection[1][0]) ||
+			(endPointIsIntersection[0][0] && endPointIsIntersection[1][1]) ||
+			(endPointIsIntersection[0][1] && endPointIsIntersection[1][0]) ||
+			(endPointIsIntersection[0][1] && endPointIsIntersection[1][1])	){
+				out.how = Overlap;
+				return out;
+		}
+		//Overlap_extreme_...	; se si sovrappone un estremo, mi segnala tre intersezioni
+		if(numEndPointIntersections == 3){
+			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dello stesso edge
+			if( (endPointIsIntersection[0][0] && endPointIsIntersection[0][1]) ||
+				(endPointIsIntersection[1][0] && endPointIsIntersection[1][1])	){
+					out.how = Overlap_extreme_inside;
+					return out;	
+			}
+			/*Overlap_extreme_outside; AHHHHHH, non si può distinguere da overlap_extreme_inside!
+			Provare per credere: mettere nel test di SegmentIntersect gli edge:
+			edge1 : 0,3 ; 0,0  ------ edge2: 0,1 ; 0,0
+			edge1 : 0,3 ; 0,0 ------- edge2: 0,4 ; 0,0
+			Mi dà lo stesso identico output, a parte le coordinate delle intersezioni!
+			O fare un match appunto sulla coordinate delle intersezioni, o cercare fuori
+			di gestire i due casi circa alla stessa maniera
+			*/
+			
+		}
 		
 	}
 	
