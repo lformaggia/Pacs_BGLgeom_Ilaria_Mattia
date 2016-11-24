@@ -112,24 +112,24 @@ struct boundary_condition{
 	//! Overload of output operator
 	friend std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
 		if(BC.type == BC_type::NONE)
-			out << "BC: type NONE";	//se faccio << BC.type stampa solo il numero. devo fare controlli per stampare stringa
+			out << "BC NONE";	//se faccio << BC.type stampa solo il numero. devo fare controlli per stampare stringa
 		else if(BC.type == BC_type::DIR){
-			out << "BC: type DIRICHLET, value ";
+			out << "BC DIR ";
 			for(std::size_t i = 0; i < num_bc; ++i)
 			out << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::NEU){
-			out << "BC: type NEUMANN, value ";
+			out << "BC NEU ";
 			for(std::size_t i = 0; i < num_bc; ++i)
 			out << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::MIX){
-			out << "BC: type MIXED, value ";
+			out << "BC MIX ";
 			for(std::size_t i = 0; i < num_bc; ++i)
 			out << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::OTHER){
-			out << "BC: type OTHER, value ";
+			out << "BC OTHER ";
 			for(std::size_t i = 0; i < num_bc; ++i)
 			out << BC.value[i] << " ";
 			return out;
