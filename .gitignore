@@ -13,6 +13,7 @@
 old_project_structure/*
 libBGLgeom/doc/*
 libBGLgeom/obj/*
+libBGLgeom/bspline_curve/*
 fracture_intersection/doc/*
 fracture_intersection/obj/*
 fracture_intersection/bin/*
