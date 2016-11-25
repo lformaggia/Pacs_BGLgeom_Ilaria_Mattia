@@ -1,5 +1,5 @@
 #include "domain.hpp"
-
+/*
 namespace Geometry
 {
   Domain1D::Domain1D(double const & a, double const & b):
@@ -11,3 +11,4 @@ namespace Geometry
     return std::abs(M_b-M_a);
   }
 }// end namespace
+*/
