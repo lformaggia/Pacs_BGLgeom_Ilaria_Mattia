@@ -7,20 +7,21 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file linear_edge_geometry_SRCTGT.hpp
+	@file linear_edge_geometry_srctgt.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief linear geometry for the edge
 	@detail 
 */
 
-#ifndef HH_GENERIC_EDGE_GEOMETRY_HH
-#define HH_GENERIC_EDGE_GEOMETRY_HH
+#ifndef HH_LINEAR_EDGE_GEOMETRY_HH
+#define HH_LINEAR_EDGE_GEOMETRY_HH
 
-#include<array>
-#include<functional>
-#include<Eigen/Dense>
-#include"point.hpp"
+#include <array>
+#include <functional>
+#include <Eigen/Dense>
+#include "point.hpp"
+#include "edge_geometry.hpp"
 
 namespace BGLgeom{
 
@@ -30,8 +31,8 @@ namespace BGLgeom{
 	
 	@param dim Dimension of the space
 */
-template<unsigned int dim>
-class linear_edge_geometry_srctgt : public edge_geometry<dim> {
+template <unsigned int dim>
+class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 	private:
 		//! Coordinates of the source of the edge
 		BGLgeom::point<dim> SRC;

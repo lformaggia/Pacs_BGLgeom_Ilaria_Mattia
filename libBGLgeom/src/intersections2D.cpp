@@ -7,7 +7,7 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersections_2D.cpp
+	@file intersections2D.cpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Classes and functions to compute intersections between two linear edges. Implementation
@@ -15,15 +15,15 @@
 	@detail
 */
 
-#include "intersection2D.cpp"
+#include "intersections2D.hpp"
 #include <iostream>
 #include <iomanip>
 
 using namespace BGLgeom;
 
-Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
-								linear_edge_geometry_srctgt const& edge2,
-                           		double const& tol=20*std::numeric_limits<double>::epsilon()){
+Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
+									linear_edge_geometry_srctgt<2> const& edge2,
+	                           		double tol=20*std::numeric_limits<double>::epsilon()){
 	Intersection out;
 	linear_edge_interface S1(edge1);
 	linear_edge_interface S2(edge2);
@@ -45,7 +45,7 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 	            if(out.numberOfIntersections>=2){
 	                std::cerr << "Something wrong, cannot have more that 2 intersections" << std::endl;
 	                out.good=false;
-	                out.how = Something_went_wrong;
+	                out.how = intersection_type::Something_went_wrong;
 	                return out;
 	            }
 	            out.intersect=true;
@@ -62,7 +62,7 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 	    out.identical=true;
 	    out.parallel=true;
 	    out.collinear=true;
-	    out.how = Identical;
+	    out.how = intersection_type::Identical;
 	    return out;
 	}
 	// Now solve the linear system that returns the parametric coordinates of the intersection
@@ -99,10 +99,10 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 	    double const & t2=result.second[1];
 	    //double tol1=tol/len1;
 	    //double tol2=tol/len2;
-	    bool inside =v(t1>=-0.5*tol) && (t1<= 1.0+0.5*tol) && (t2>=-0.5*tol) && (t2<= 1.0+0.5*tol);
+	    bool inside = (t1>=-0.5*tol) && (t1<= 1.0+0.5*tol) && (t2>=-0.5*tol) && (t2<= 1.0+0.5*tol);
 	    if (!inside){
 	        // No intersecion, end here
-	        out.how = No_intersection;
+	        out.how = intersection_type::No_intersection;
 	        return out;
 	    } else {
 	        out.intersect=true;
@@ -158,7 +158,7 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 	    if (distance>tol_dist){
 	        // The two segments are separated
 	        // No intersection.
-	        out.how = No_intersection;
+	        out.how = intersection_type::No_intersection;
 	        return out;
 	    } else {
 	        out.collinear=true;
@@ -223,53 +223,53 @@ Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
 		//with only one intersection, of course edge are not collinear
 		// X intersection
 		if(numEndPointIntersections == 0){
-			out.how	= X;
+			out.how	= intersection_type::X;
 			return out;
 		}
 		//T_new, T_old
 		if(numEndPointIntersections == 1){
 			//edge 1 interseca con uno dei suoi due estremi (0 o 1)
-			if(endPointIsIntersection[1][0] || endPointIsIntersection[1][1]){
-				out.how = T_new;
+			if(out.endPointIsIntersection[1][0] || out.endPointIsIntersection[1][1]){
+				out.how = intersection_type::T_new;
 				return out;
 			}
 			//edge 0 interseca con uno dei suoi due estremi (0 o 1)
-			if(endPointIsIntersection[0][0] || endPointIsIntersection[0][1]){
-				out.how = T_old;
+			if(out.endPointIsIntersection[0][0] || out.endPointIsIntersection[0][1]){
+				out.how = intersection_type::T_old;
 				return out;
 			}
 		}
 		//Common_extreme; There are two end points (one for each edge) that meets
 		if(numEndPointIntersections == 2){
-			out.how = Common_extreme;
-			return ou;
+			out.how = intersection_type::Common_extreme;
+			return out;
 		}
 	} else {		//2 intersezioni, ovvero collinear = true
 		//Overlap_outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)
-		if(endPointIsIntersection[0][0] && endPointIsIntersection[0][1]){
-			out.how = Overla_outside;
+		if(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){
+			out.how = intersection_type::Overlap_outside;
 			return out;
 		}
 		//Overlap_inside; edge 1 (new) intersects in both its extremes (0 and 1) edge 0 (old)
-		if(endPointIsIntersection[1][0] && endPointIsIntersection[1][1]){
-			out.how = Overlap_inside;
+		if(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1]){
+			out.how = intersection_type::Overlap_inside;
 			return out;
 		}
 		//Overlap; Con solo due intersezioni segnalate sono sicuro di essere in questo caso
 		if(	numEndPointIntersections == 2 && 
-			(endPointIsIntersection[0][0] && endPointIsIntersection[1][0]) ||
-			(endPointIsIntersection[0][0] && endPointIsIntersection[1][1]) ||
-			(endPointIsIntersection[0][1] && endPointIsIntersection[1][0]) ||
-			(endPointIsIntersection[0][1] && endPointIsIntersection[1][1])	){
-				out.how = Overlap;
+			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][0]) ||
+			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][1]) ||
+			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][0]) ||
+			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][1])	){
+				out.how = intersection_type::Overlap;
 				return out;
 		}
 		//Overlap_extreme_...	; se si sovrappone un estremo, mi segnala tre intersezioni
 		if(numEndPointIntersections == 3){
 			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dello stesso edge
-			if( (endPointIsIntersection[0][0] && endPointIsIntersection[0][1]) ||
-				(endPointIsIntersection[1][0] && endPointIsIntersection[1][1])	){
-					out.how = Overlap_extreme_inside;
+			if( (out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]) ||
+				(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1])	){
+					out.how = intersection_type::Overlap_extreme_inside;
 					return out;	
 			}
 			/*Overlap_extreme_outside; AHHHHHH, non si può distinguere da overlap_extreme_inside!

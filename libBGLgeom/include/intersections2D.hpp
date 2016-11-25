@@ -7,7 +7,7 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersections_2D.hpp
+	@file intersections2D.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Classes and functions to compute intersections between two linear edges
@@ -98,9 +98,13 @@ namespace BGLgeom{
 class linear_edge_interface{
 	public:
 		//! Default constructor
-		linear_edge_interface	(linear_edge_geometry_srctgt const& edge) : 
-								 		extremes{ {edge.get_source()(0,0), edge.get_source()(0,1)},
-								 				{edge.get_target()(0,0), edge.get_target()(0,1)} } {};
+		linear_edge_interface	(BGLgeom::linear_edge_geometry_srctgt<2> edge){
+			extremes[0][0] = edge.get_source()(0,0);
+			extremes[0][1] = edge.get_source()(0,1);
+			extremes[1][0] = edge.get_target()(0,0);
+			extremes[1][1] = edge.get_target()(0,1);
+		
+		}
 	
 		//! Constructor
 		//linear_edge_interface(BGLgeom::point<2> const& SRC, BGLgeom::point<2> const& TGT) : extremes{SRC, TGT}, extremes_are_set(true) {};
@@ -174,7 +178,7 @@ struct Intersection {
 	//! Number of intersections (max 2, rapresenting the case in which the segments overlap)
 	unsigned int numberOfIntersections = 0u;
 	//! Intersection points coordinates
-	std::array<point<2>,2> intersectionPoint = std::array<point<2>,2>{point<2>(), point<2>()};
+	std::array<std::array<double,2>,2> intersectionPoint = std::array<std::array<double,2>,2>{std::array<double,2>(), std::array<double,2>()};
 	/*! Intersection may be end point:	    
 	    endPointIsIntersection[i][j]=true
 	    then end j of edge i is at the intersection
@@ -219,9 +223,9 @@ Another scaled tolerance is used to test ir edges are parallel.
 @par tol A tolerance,it should greater than epsilon for doubles
 @return Intersection. A data structure containing the info about the intersection
 */
-Intersection segmentIntersect	(linear_edge_geometry_srctgt const& edge1,
-								linear_edge_geometry_srctgt const& edge2,
-                           		double const& tol=20*std::numeric_limits<double>::epsilon());
+Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
+									linear_edge_geometry_srctgt<2> const& edge2,
+                           			double tol=20*std::numeric_limits<double>::epsilon());
                            		
 /*
 	@brief Overload of operator<< to show the infos obtained by the function
