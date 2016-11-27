@@ -2,7 +2,7 @@
 #Vedi makefile.inc in Example della pacs_repository
 
 # Directory where the library resides
-PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia	#che è la mia, l'utente la cambia
+PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia#che è la mia, l'utente la cambia
 
 # Directories for needed library
 EIGEN_INC_DIR=$(mkEigenInc)
@@ -43,7 +43,7 @@ ALL_INC_DIR= $(OTHER_INC_DIR) $(EIGEN_INC_DIR) #$(MUPARSER_INC_DIR)
 # Così credo che ci appiccichi davanti -I ad ognuna
 includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc) )
 # E ora creo una variabile che mi permette di chiamarle tutte insieme
-INCLUDES = -I. -I/include $(includes)
+INCLUDES += -I. -I./include $(includes)
 
 export CPPFLAGS = $(INCLUDES)
 export CXXFLAGS = $(STDFLAG) $(WARNS) $(OPT)
