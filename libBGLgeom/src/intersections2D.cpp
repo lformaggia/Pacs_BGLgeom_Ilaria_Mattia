@@ -256,11 +256,12 @@ Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
 			return out;
 		}
 		//Overlap; Con solo due intersezioni segnalate sono sicuro di essere in questo caso
-		if(	numEndPointIntersections == 2 && 
+		if(	numEndPointIntersections == 2 && (
 			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][0]) ||
 			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][1]) ||
 			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][0]) ||
-			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][1])	){
+			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][1])	 )
+			){
 				out.how = intersection_type::Overlap;
 				return out;
 		}

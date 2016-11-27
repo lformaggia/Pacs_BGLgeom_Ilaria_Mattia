@@ -131,7 +131,8 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			out<<std::endl;			
 			out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
 			out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
-			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
+			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
+			return out;
 		}
 	
 }; //class
