@@ -1,4 +1,4 @@
-#include"generic_edge_geometry_srctgt.hpp"
+//#include"generic_edge_geometry_srctgt.hpp"
 #include"linear_edge_geometry_srctgt.hpp"
 #include"point.hpp"
 #include<cmath>
@@ -6,6 +6,7 @@
 #include<algorithm>
 
 int main(){
+	/*
 	//generic edge
   	auto fun = [](double x) -> BGLgeom::point<3>{
 		BGLgeom::point<3> P(pow(x,3),pow(x,2),x);
@@ -24,6 +25,8 @@ int main(){
   	
 	BGLgeom::generic_edge_geometry_srctgt<3> edge(fun, fun1, fun2);		
 	std::cout << edge << std::endl;
+	*/
+	
 	
 	//linear edge
 	BGLgeom::point<3> SRC(0,0,0);
@@ -40,7 +43,7 @@ int main(){
 	std::cout << "Now edges are:" << std::endl;
 	std::cout << edge_lin << std::endl << edge_lin2 << std::endl;
 	
-	
+	/*
 	std::cout << "Trying with generic edge rapresenting a semicirconferenza:" << std::endl;
 	auto circ = [](double teta) -> BGLgeom::point<2>{
 		return BGLgeom::point<2>(cos(teta), sin(teta));
@@ -66,7 +69,9 @@ int main(){
 	std::cout << "D'(pi/2): " << semi_circ.first_derivatives(half_pi) << std::endl;
 	
 	std::cout << "D''(0): " << semi_circ.second_derivatives(0) << std::endl;
-	std::cout << "D''(pi/2): " << semi_circ.second_derivatives(half_pi) << std::endl;
+	std::cout << "D''(pi/2): " << semi_circ.second_derivatives(half_pi) << std::endl;	
+	*/
+	
 	
 	return 0;
 }

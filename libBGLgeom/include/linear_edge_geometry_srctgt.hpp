@@ -17,8 +17,10 @@
 #ifndef HH_LINEAR_EDGE_GEOMETRY_HH
 #define HH_LINEAR_EDGE_GEOMETRY_HH
 
-#include <array>
+#include <iostream>
+#include <vector>
 #include <functional>
+#include <cmath>
 #include <Eigen/Dense>
 #include "point.hpp"
 #include "edge_geometry.hpp"
@@ -27,7 +29,7 @@ namespace BGLgeom{
 
 /*!
 	@brief The class handling the linear geometry for an edge
-	@detail
+	@detail It is parametrized using the curvilinear abscissa
 	
 	@param dim Dimension of the space
 */
@@ -42,56 +44,83 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 	public:
 	
 		//! Constructor 
-		linear_edge_geometry_srctgt
-		(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
+		linear_edge_geometry_srctgt(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
 		
 		//! Sets the value for the source
-		void set_source(BGLgeom::point<dim> SRC_) { SRC = SRC_; }
+		void
+		set_source(BGLgeom::point<dim> SRC_) { SRC = SRC_; }
 		
 		//! Sets the value for the target
-		void set_target(BGLgeom::point<dim> TGT_) {	TGT = TGT_;	}
+		void
+		set_target(BGLgeom::point<dim> TGT_) {	TGT = TGT_;	}
 		
 		//! Getting source's coordinates
-		BGLgeom::point<dim> get_source() { return SRC; }
-		BGLgeom::point<dim> get_source() const { return SRC; }
+		BGLgeom::point<dim>	get_source() { return SRC; }
+		BGLgeom::point<dim>	get_source() const { return SRC; }
 		
 		//! Getting target's coordinates
 		BGLgeom::point<dim> get_target() { return TGT; }
 		BGLgeom::point<dim> get_target() const { return TGT; }
+		
+		//! Computing the length of the edge
+		double length() { return (TGT-SRC).norm(); }
+		double length() const { return (TGT-SRC).norm(); }
 	 
 	    //! returns the point corresponding
-		BGLgeom::point<dim> value (const double & x)
-		{
+		BGLgeom::point<dim>
+		value (const double & x){
 			return BGLgeom::point<dim>((TGT-SRC)*x+SRC); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
 		};
 		
 		//! first derivative
 		Eigen::Matrix<double,dim,1> 
-		first_derivatives(const double & x = 0)
-		{
-			return TGT-SRC;	
-		}	
-		
+		first_derivatives(const double & x = 0)	{ return TGT-SRC; }		
 		
 		//! second derivative
 		Eigen::Matrix<double,dim,1> 					//! the second derivative is null along all the components
-		second_derivatives(const double & x = 0)
-		{
-			Eigen::Matrix<double,dim,1> v;
-			v.fill(0.0);	
-			return v;	
-		}
-		
+		second_derivatives(const double & x = 0) {
+			return Eigen::Matrix<double,dim,1>::Zero();	
+		}		
 
-		//! curvilinear abscissa
-		double curvilinear_abscissa(const double & parameter)  // qui richiedo strettamente un parametro tra 0 e 1
-		{
-			return (TGT-SRC).norm()*parameter;
+		/*! 
+			@brief Curvilinear abscissa. We require a parameter between 0 and 1
+			@detail If the parameter is out of bound, the method sets it to the nearest
+					extreme value and continues the computation
+		*/
+		double
+		curvilinear_abscissa(const double & x) {
+			if(x > 1 || x < 0){
+				std::cerr << "Curvilinear abscissa: parameter value out of bound" << std::endl;
+				if(x > 1)	//x=1
+					return (TGT-SRC).norm();
+				else	//x=0
+					return 0;;
+			}
+			return (TGT-SRC).norm() * x;
 		};
 		
 		//! curvature
-		double curvature(const double & s){
-			return 0;
+		double
+		curvature(const double & x) { return 0; }
+		
+		/*! 
+			@brief Creating a mesh on the edge
+			@detail SRC and TGT are included in the mesh points
+			@param h Spacing between the points of the mesh (uniform mesh) in terms of spatial length.
+		*/
+		std::vector<BGLgeom::point<dim>>
+		create_mesh(double const& h = 0.01) {
+			unsigned int n_points = std::ceil(this->length()/h);
+			double h_abscissa = 1./n_points;
+			double s = 0;
+			std::vector<BGLgeom::point<dim>> retval;
+			retval.push_back(SRC);
+			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
+				s += h_abscissa;
+				retval.emplace_back(BGLgeom::point<dim>(this->value(s)));
+			}
+			retval.push_back(TGT);
+			return retval;			
 		}
 		
 		//! Overload of operator<<
@@ -105,6 +134,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			out<<"Target: "<<std::endl;
 			out<<edge.value(1)<<std::endl;
 			out<<std::endl;
+			out << "Length: " << edge.length() << std::endl;
 			out<<"First derivatives in s=0: ";
 			for(int i=0; i<dim; ++i)
 				out<<(edge.first_derivatives(0))[i]<<" ";
@@ -132,6 +162,11 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
 			out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
 			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
+			out<<"Mesh on the edge:" << std::endl;
+			std::vector<BGLgeom::point<dim>> mesh = edge.create_mesh(0.1);
+			for(std::size_t i=0; i<mesh.size(); ++i)
+				out << mesh[i] << ", ";
+			out << std::endl;
 			return out;
 		}
 	
