@@ -24,7 +24,6 @@
 #include"mesh.hpp"
 #include"numerical_integration.hpp"
 #include"numerical_rule.hpp"
-#include "my_muparser_interface.hpp"
 
 
 namespace BGLgeom{
