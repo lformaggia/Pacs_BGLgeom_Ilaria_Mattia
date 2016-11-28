@@ -66,9 +66,20 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 		double length() { return (TGT-SRC).norm(); }
 		double length() const { return (TGT-SRC).norm(); }
 	 
-	    //! returns the point corresponding
+	    /*! 
+	    	@brief Returns the point corresponding to that curvilinear abscissa
+	    	@detail It test if the given parameter belongs to [0,1]. If not, it sets the
+	    			parameter to the nearest extreme value, giving a warning on std::cerr
+	    */
 		BGLgeom::point<dim>
 		value (const double & x){
+			if(x > 1 || x < 0){
+				std::cerr << "linear_edge::value(): parameter value out of bound" << std::endl;
+				if(x > 1)	//x=1
+					return TGT;
+				else	//x=0
+					return SRC;
+			}
 			return BGLgeom::point<dim>((TGT-SRC)*x+SRC); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
 		};
 		
@@ -85,12 +96,12 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 		/*! 
 			@brief Curvilinear abscissa. We require a parameter between 0 and 1
 			@detail If the parameter is out of bound, the method sets it to the nearest
-					extreme value and continues the computation
+					extreme value and continues the computation, giving a warning on std::cerr
 		*/
 		double
 		curvilinear_abscissa(const double & x) {
 			if(x > 1 || x < 0){
-				std::cerr << "Curvilinear abscissa: parameter value out of bound" << std::endl;
+				std::cerr << "linear_edge::curvilinear_abscissa(): parameter value out of bound" << std::endl;
 				if(x > 1)	//x=1
 					return (TGT-SRC).norm();
 				else	//x=0
