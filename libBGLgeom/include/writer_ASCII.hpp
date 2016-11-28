@@ -33,14 +33,11 @@ namespace geograph{
 */
 template <typename Graph>
 class writer_ASCII{
-	public:
-		//! Default constructor
-		writer_ASCII() : out_file(){};
-		
-		//! Constructor
+	public:		
+		//! Default Constructor
 		writer_ASCII(std::string _filename) : out_file(){
 			try{
-				out_file.open(filename);
+				out_file.open(_filename);
 			} catch(std::exception & e) {
 				std::cerr << "Error while opening output file. In particular: " << e.what() << std::endl;
 				exit(EXIT_FAILURE);

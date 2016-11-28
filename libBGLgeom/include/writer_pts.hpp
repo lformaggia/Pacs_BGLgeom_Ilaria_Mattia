@@ -34,9 +34,13 @@ namespace BGLgeom{
 	
 	@pre The graph that has to be exported is expected to have at least all the
 		properties defined in data_structure.hpp
-	@pre The mesh
+		
+	@param Graph The type of the graph
+	@param Mesh_Container The container that stores the point of the mesh.
+			We have to decide whether to keep it Eigen with () to access elements,
+			or to use the std containers with [].
 */
-template <typename Graph>
+template <typename Graph, typename Mesh_Container>
 class writer_pts{
 	public:
 		//! Default constructor
@@ -44,7 +48,12 @@ class writer_pts{
 			if(_filename.substr(_filename.length()-3, 3) != "pts")
 				std::cerr << "Warning! The output file does not have 'pts' extension." << std::endl;
 			else
-				out_file.open(_filename.c_str());
+				try{
+				out_file.open(_filename);
+			} catch(std::exception & e) {
+				std::cerr << "Error while opening output file. In particular: " << e.what() << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 		
 		//! Destructor
@@ -53,7 +62,7 @@ class writer_pts{
 		}
 		
 		//! It exports the mesh and the info contained in the graph in an pts file
-		virtual void export_pts(Graph const& G){
+		virtual void export_pts(Graph const& G, Mesh_Container const& M){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			BGLgeom::Vertex_desc<Graph> src, tgt;
 			out_file << "BEGIN_LIST" << std::endl;
@@ -65,8 +74,8 @@ class writer_pts{
 				out_file << G[tgt].BC << std::endl;
 				out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
 				out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
-				for(ciclo sui punti della mesh){
-					out_file << /*coordinates*/ << "point" << std::endl;
+				for(std::size_t i=0; i < M.size(); ++i){
+					out_file << "\t" << 11 << "\t" << M[i] << "point" << std::endl;
 				}
 				out_file << "END_ARC" << std::endl;
 			}	//for
