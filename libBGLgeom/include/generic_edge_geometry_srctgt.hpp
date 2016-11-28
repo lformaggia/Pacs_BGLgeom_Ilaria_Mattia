@@ -21,9 +21,10 @@
 #include<functional>
 #include<cmath>
 #include"point.hpp"
-#include"mesh.hpp"
-#include"numerical_integration.hpp"
-#include"numerical_rule.hpp"
+//#include"mesh.hpp"
+//#include"numerical_integration.hpp"
+//#include"numerical_rule.hpp"
+#include "adaptive_quadrature.hpp"
 
 
 namespace BGLgeom{
@@ -69,6 +70,7 @@ class generic_edge_geometry_srctgt {
 	
 	//! curvilinear abscissa
 	double curvilinear_abscissa(const double & x){
+	/*
   		int nint=1000; // quanto mettiamo il default? Lo leggiamo da GetPot?
   		Geometry::Domain1D domain(0,x);  //estremi di integrazione
   		Geometry::Mesh1D mesh(domain,nint); //definito in mesh.hpp
@@ -86,6 +88,15 @@ class generic_edge_geometry_srctgt {
 
   		std::cout<<"Integral computed with Simpson's method. Result: "<<approxs<<std::endl;
   		return approxs; 
+  		*/
+  	//=========== CON ADAPTIVE_QUADRATURE ==============  	
+  		//lambda functions that returns the integrand function, i.e. norm(first_derivative(t))^2
+  		auto abscissa_integrand = [&](double t) -> double{
+			this -> first_derivatives(t).norm();
+  		};
+  	
+  		return integrate(abscissa_integrand,0,x);
+  	
 	}
 	
 	//! curvature

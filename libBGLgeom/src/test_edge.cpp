@@ -1,4 +1,4 @@
-//#include"generic_edge_geometry_srctgt.hpp"
+#include"generic_edge_geometry_srctgt.hpp"
 #include"linear_edge_geometry_srctgt.hpp"
 #include"point.hpp"
 #include<cmath>
@@ -6,7 +6,7 @@
 #include<algorithm>
 
 int main(){
-	/*
+	
 	//generic edge
   	auto fun = [](double x) -> BGLgeom::point<3>{
 		BGLgeom::point<3> P(pow(x,3),pow(x,2),x);
@@ -25,7 +25,7 @@ int main(){
   	
 	BGLgeom::generic_edge_geometry_srctgt<3> edge(fun, fun1, fun2);		
 	std::cout << edge << std::endl;
-	*/
+	
 	
 	
 	//linear edge
