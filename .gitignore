@@ -23,3 +23,6 @@ fracture_intersection/bin/*
 network_diffusion/doc/*
 network_diffusion/obj/*
 network_diffusion/bin/*
+vtk/*
+bin/*
+Filetxt/*
