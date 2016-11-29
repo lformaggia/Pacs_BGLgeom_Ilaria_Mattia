@@ -174,7 +174,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
 			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
 			out<<"Mesh on the edge:" << std::endl;
-			std::vector<BGLgeom::point<dim>> mesh = edge.create_mesh(0.1);
+			std::vector<BGLgeom::point<dim>> mesh = edge.uniform_mesh(0.1);
 			for(std::size_t i=0; i<mesh.size(); ++i)
 				out << mesh[i] << std::endl;
 			out << std::endl;
