@@ -36,11 +36,8 @@ namespace BGLgeom{
 		properties defined in data_structure.hpp
 		
 	@param Graph The type of the graph
-	@param Mesh_Container The container that stores the point of the mesh.
-			We have to decide whether to keep it Eigen with () to access elements,
-			or to use the std containers with [].
 */
-template <typename Graph, typename Mesh_Container>
+template <typename Graph>
 class writer_pts{
 	public:
 		//! Default constructor
@@ -62,32 +59,42 @@ class writer_pts{
 		}
 		
 		//! It exports the mesh and the info contained in the graph in an pts file
-		virtual void export_pts(Graph const& G, Mesh_Container const& M){
+		void
+		export_pts(Graph const& G, Mesh_Container const& M){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			BGLgeom::Vertex_desc<Graph> src, tgt;
 			out_file << "BEGIN_LIST" << std::endl;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-				out_file << "BEGIN_ARC" << std::endl;
-				src = boost::source(*e_it, G);
-				tgt = boost::target(*e_it, G);
-				out_file << G[src].BC << std::endl;
-				out_file << G[tgt].BC << std::endl;
-				out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
-				out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
-				for(std::size_t i=0; i < M.size(); ++i){
-					out_file << "\t" << 11 << "\t" << M[i] << "point" << std::endl;
-				}
-				out_file << "END_ARC" << std::endl;
+				//The previous code has been put in this function
+				this->export_edge(*e_it, src, tgt);
 			}	//for
 			out_file << "END_LIST";
 			//out_file.close(); ???
 		}	//export_pts
 		
-	protected:
+	private:
 		//! The stream associated to the output file
 		std::ofstream out_file;
+	
+		//! Inner method to output a single edge
+		void
+		export_edge(BGLgeom::Edge_desc<Graph> const& e, BGLgeom::Vertex_desc<Graph> & src, BGLgeom::Vertex_desc<Graph> & tgt){
+			out_file << "BEGIN_ARC" << std::endl;
+			src = boost::source(e, G);
+			tgt = boost::target(e, G);
+			out_file << G[src].BC << std::endl;
+			out_file << G[tgt].BC << std::endl;
+			out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
+			out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
+			G[*e_it].mesh::iterator m_it = G[e].mesh.begin();
+			G[*e_it].mesh::iterator m_end = G[e].mesh.end();
+			for( ; m_it != m_end; ++m_it){
+				out_file << "\t" << 11 << "\t" << *m_it << "point" << std::endl;	//what does 11 means?
+			}
+			out_file << "END_ARC" << std::endl;
+		}	//export_edge
 };	//writer_pts
 
-}	//geograph
+}	//BGLgeom
 
 #endif	//HH_WRITER_PTS_HH

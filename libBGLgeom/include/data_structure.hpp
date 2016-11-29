@@ -72,7 +72,7 @@
 #include "point.hpp"
 #include "boundary_conditions.hpp"
 #include "edge_geometry.hpp"
-
+#include "mesh_structure.hpp"
 
 namespace BGLgeom{
 
@@ -148,16 +148,19 @@ struct Vertex_base_property{
 	
 	@param Geom_t Type of the geometry it is wanted for the edge
 */
-template <typename Geom_t>
+template <typename Geom_t, unsigned int dim>
 struct Edge_base_property_static{
 	//!Definition of some types which may be useful to see outside the struct
 	using geom_t = typename Geom_t;
+	using mesh_t = typename BGlgeom::mesh<dim>;
 
 	//! The class handling the parameterization of the edge
 	Geom_t geometry;
+	//! The container for the mesh
+	mesh_t mesh;	//magari mesglio un puntatore, così pesa di meno la struttura se non uso la mesh e posso inizializzare a null_ptr, anche per controlli
 		
 	//! Default constructor
-	Edge_base_property_static() : geometry() {};
+	Edge_base_property_static() : geometry(), mesh() {};
 	
 	//! Constructor. Maybe is better not to provide it since the constructor of different type of geometry are different
 	//Edge_base_property_static(Geom_t _geometry) : {};
@@ -182,9 +185,15 @@ struct Edge_base_property_static{
 	@detail	This contains a unique pointer to the base abstract class edge_geometry, from
 			which all the concrete types of geometry derive
 */
+template <unsigned int dim>
 struct Edge_base_property_dynamic{
+	//! The type for the container of the mesh
+	using mesh_t = BGLgeom::mesh<dim>;
+
 	//! The pointer to the base class
 	std::unique_ptr<BGLgeom::edge_geometry> geometry;
+	//! The container for the mesh
+	mesh_t mesh;
 	
 	//! Default constructor
 	Edge_base_property_static()  {};
