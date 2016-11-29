@@ -74,7 +74,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 		BGLgeom::point<dim>
 		value (const double & x){
 			if(x > 1 || x < 0){
-				std::cerr << "linear_edge::value(): parameter value out of bound" << std::endl;
+				std::cerr << "linear_edge::value(): parameter value out of bounds" << std::endl;
 				if(x > 1)	//x=1
 					return TGT;
 				else	//x=0
@@ -101,7 +101,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 		double
 		curvilinear_abscissa(const double & x) {
 			if(x > 1 || x < 0){
-				std::cerr << "linear_edge::curvilinear_abscissa(): parameter value out of bound" << std::endl;
+				std::cerr << "linear_edge::curvilinear_abscissa(): parameter value out of bounds" << std::endl;
 				if(x > 1)	//x=1
 					return (TGT-SRC).norm();
 				else	//x=0
@@ -120,7 +120,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			@param h Spacing between the points of the mesh (uniform mesh) in terms of spatial length.
 		*/
 		std::vector<BGLgeom::point<dim>>
-		create_mesh(double const& h = 0.01) {
+		uniform_mesh(double const& h = 0.01) {
 			unsigned int n_points = std::ceil(this->length()/h);
 			double h_abscissa = 1./n_points;
 			double s = 0;
@@ -176,19 +176,13 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			out<<"Mesh on the edge:" << std::endl;
 			std::vector<BGLgeom::point<dim>> mesh = edge.create_mesh(0.1);
 			for(std::size_t i=0; i<mesh.size(); ++i)
-				out << mesh[i] << ", ";
+				out << mesh[i] << std::endl;
 			out << std::endl;
 			return out;
 		}
 	
-}; //class
-
+}; //linear_edge_geometry
 
 } //namespace
-
-
-
-
-
 
 #endif
