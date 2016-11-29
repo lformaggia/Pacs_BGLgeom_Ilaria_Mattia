@@ -14,6 +14,8 @@ old_project_structure/*
 libBGLgeom/doc/*
 libBGLgeom/obj/*
 libBGLgeom/test/*
+libBGLgeom/lib/*
+libBGLgeom/prova_lib/*
 libBGLgeom/bspline_curve/*
 fracture_intersection/doc/*
 fracture_intersection/obj/*
