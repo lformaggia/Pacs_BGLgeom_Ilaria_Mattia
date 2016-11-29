@@ -1,9 +1,9 @@
+# Including general Makefile.inc of the project
+MAKEFILEH_DIR=../
+include $(MAKEFILEH_DIR)/Makefile.inc
 
 # Including Makefile.in of the local folder
 -include Makefile.inc
-
-# Including general Makefile.inc of the project
-include $(MAKEFILEH_DIR)/Makefile.inc
 
 # Definition of Library variables in Makefile.inc
 
@@ -16,6 +16,15 @@ else
 endif
 
 #Definizione di SRCS, OBJS in Makefile.inc
+
+#creazione cartelle se non ci sono
+#ifeq ($(wildcard $(BGLGEOM_DIR)/obj/.*),)
+	#c'è. Non fai niente.
+#	mkdir -p $(BGLGEOM_DIR)/obj
+#else
+	#non c'è
+
+#endif
 
 #=========================================================================
 
@@ -34,19 +43,24 @@ all:
 
 static:	$(LIB_OBJS)
 	@echo "--- Building static library ---"
-	@echo $(LIB_SRCS)
+	#@echo $(LIB_SRCS)
 	ar -r -s $(STATIC_LIB) $(LIB_OBJS)
 	ranlib $(STATIC_LIB)
+	
+$(LIB_OBJS): | $(DIR_TO_BE_CREATED)
+
+$(DIR_TO_BE_CREATED):
+	@mkdir -p $(DIR_TO_BE_CREATED)
 
 dynamic: $(LIB_OBJS)
-	
+	@echo "--- Building dynamic library ---"
+	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS) -o $(DYNAMIC_LIB).1.0
 
-$(LIB_OBJS): $(LIB_SRCS) $(HEADERS)
+$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
+	@echo "--- Building objects ---"
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-
-
-
-
+	
+library: static dynamic
 
 
 
@@ -75,4 +89,5 @@ clean:
 
 distclean: clean
 	rm -rv $(LIBS)
+	#rm -rv $(TEST_EXEC)
 
