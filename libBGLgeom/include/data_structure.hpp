@@ -191,7 +191,7 @@ struct Edge_base_property_dynamic{
 	using mesh_t = BGLgeom::mesh<dim>;
 
 	//! The pointer to the base class
-	std::unique_ptr<BGLgeom::edge_geometry> geometry;
+	std::unique_ptr<BGLgeom::edge_geometry<dim>> geometry;
 	//! The container for the mesh
 	mesh_t mesh;
 	
