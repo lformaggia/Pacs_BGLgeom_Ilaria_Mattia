@@ -106,7 +106,7 @@ Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
 	        return out;
 	    } else {
 	        out.intersect=true;
-	        // I coud have used the mean
+	        // I could have used the mean
 	        if (std::abs(t1    )<= tol){
 	            if(out.endPointIsIntersection[0][0]){
 	                // already found. End here
@@ -314,5 +314,30 @@ std::ostream & operator<<(std::ostream & out, Intersection const& I){
 	        }
 	    }	    
 	}
+	// Output of the type of intersection
+	out << "\t Type: ";
+	if(I.how == BGLgeom::intersection_type::X)
+		out << "X";
+	else if(I.how == BGLgeom::intersection_type::T_new)
+		out << "T_new";
+	else if(I.how == BGLgeom::intersection_type::T_old)
+		out << "T_old";
+	else if(I.how == BGLgeom::intersection_type::Overlap_outside)
+		out << "Overlap_outside";
+	else if(I.how == BGLgeom::intersection_type::Overlap_inside)
+		out << "Overlap_inside";
+	else if(I.how == BGLgeom::intersection_type::Overlap)
+		out << "Overlap";
+	else if(I.how == BGLgeom::intersection_type::Overlap_extreme_inside)
+		out << "Overlap_extreme_inside";
+	else if(I.how == BGLgeom::intersection_type::Overlap_extreme_outside)
+		out << "Overlap_extreme_outside";
+	else if(I.how == BGLgeom::intersection_type::Identical)
+		out << "Identical";
+	else if(I.how == BGLgeom::intersection_type::Common_extreme)
+		out << "Common_extreme";
+	else if(I.how == BGLgeom::intersection_type::Something_went_wrong)
+		out << "Something went wrong";	
+	out << std::endl;
 	return out;
 }	//operator<<
