@@ -78,7 +78,9 @@ class writer_pts{
 	
 		//! Inner method to output a single edge
 		void
-		export_edge(BGLgeom::Edge_desc<Graph> const& e, BGLgeom::Vertex_desc<Graph> & src, BGLgeom::Vertex_desc<Graph> & tgt){
+		export_edge	(BGLgeom::Edge_desc<Graph> const& e,
+					 BGLgeom::Vertex_desc<Graph> & src,
+					 BGLgeom::Vertex_desc<Graph> & tgt){
 			out_file << "BEGIN_ARC" << std::endl;
 			src = boost::source(e, G);
 			tgt = boost::target(e, G);
@@ -86,7 +88,7 @@ class writer_pts{
 			out_file << G[tgt].BC << std::endl;
 			out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
 			out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
-			out_file << "\t11\t" << G[e].mesh << std::endl;	//with overload of operator<< for mesh
+			out_file = write_mesh_pts(out_file, G[e].mesh)	//with overload of operator<< for mesh
 			/*
 			G[*e_it].mesh::iterator m_it = G[e].mesh.begin();
 			G[*e_it].mesh::iterator m_end = G[e].mesh.end();

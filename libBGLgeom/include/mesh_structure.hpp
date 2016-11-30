@@ -31,19 +31,37 @@ template <unsigned int dim>
 using mesh = std::vector<BGLgeom::point<dim>>;
 
 /*! 
-	@brief Overload of the output operator 
+	@brief Function that outputs the mesh in a fashion that suites pts format
 	@detail We don't put in the output the first and the last point of the mesh,
 			which coincide with source and target. The infos about them can be 
 			recoverd through vertex properties
 */
-tempalte <unsigned int dim>
-std::ostream & operator<<(std::ostream & out, mesh<dim> const& M){
+template <unsigned int dim>
+std::ostream &
+write_mesh_pts(std::ostream & out, mesh<dim> const& M){
 	mesh<dim>::iterator m_it = M.begin()+1;
 	mesh<dim>::iterator m_end = M.end()-1;
 	for( ; m_it != m_end; ++m_it)
-		out << *m_it << std::endl;
+		out << "\t11\t" << *m_it << std::endl;
 	return out;
-}	//operator<<
+}
+
+/*
+	@brief Function that outputs the mesh in a fashion that suites ASCII format (all in one line)
+	@detail We don't put in the output the first and the last point of the mesh,
+			which coincide with source and target. The infos about them can be 
+			recoverd through vertex properties
+*/
+template <unsigned int dim>
+std::ostream &
+write_mesh_ASCII(std::ostream & out, mesh<dim> const& M){
+	mesh<dim>::iterator m_it = M.begin()+1;
+	mesh<dim>::iterator m_end = M.end()-1;
+	for( ; m_it != m_end-1; ++m_it)
+		out << *m_it << " ";
+	out << *m_end;
+	return out;
+}
 
 }	//BGLgeom
 #endif	//HH_MESH_STRUCTURE_HH
