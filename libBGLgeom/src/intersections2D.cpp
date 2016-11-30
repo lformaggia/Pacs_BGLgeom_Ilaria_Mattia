@@ -20,10 +20,10 @@
 #include <iomanip>
 
 using namespace BGLgeom;
-
+namespace BGLgeom{
 Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
 									linear_edge_geometry_srctgt<2> const& edge2,
-	                           		double tol=20*std::numeric_limits<double>::epsilon()){
+	                           		double tol){
 	Intersection out;
 	linear_edge_interface S1(edge1);
 	linear_edge_interface S2(edge2);
@@ -316,3 +316,6 @@ std::ostream & operator<<(std::ostream & out, Intersection const& I){
 	}
 	return out;
 }	//operator<<
+
+
+}
