@@ -154,7 +154,7 @@ struct Edge_base_property_static{
 	using geom_t = typename Geom_t;
 
 	//! The class handling the parameterization of the edge
-	Geom_t geometry;
+	geom_t geometry;
 		
 	//! Default constructor
 	Edge_base_property_static() : geometry() {};
