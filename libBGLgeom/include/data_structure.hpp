@@ -155,7 +155,7 @@ struct Edge_base_property_static{
 	using mesh_t = typename BGlgeom::mesh<dim>;
 
 	//! The class handling the parameterization of the edge
-	Geom_t geometry;
+	geom_t geometry;
 	//! The container for the mesh
 	mesh_t mesh;	//magari mesglio un puntatore, così pesa di meno la struttura se non uso la mesh e posso inizializzare a null_ptr, anche per controlli
 		
