@@ -18,6 +18,8 @@
 #define HH_MESH_STRUCTURE_HH
 
 #include <vector>
+#include <iostream>
+#include "point.hpp"
 
 namespace BGLgeom{
 /*!
@@ -27,6 +29,21 @@ namespace BGLgeom{
 */
 template <unsigned int dim>
 using mesh = std::vector<BGLgeom::point<dim>>;
+
+/*! 
+	@brief Overload of the output operator 
+	@detail We don't put in the output the first and the last point of the mesh,
+			which coincide with source and target. The infos about them can be 
+			recoverd through vertex properties
+*/
+tempalte <unsigned int dim>
+std::ostream & operator<<(std::ostream & out, mesh<dim> const& M){
+	mesh<dim>::iterator m_it = M.begin()+1;
+	mesh<dim>::iterator m_end = M.end()-1;
+	for( ; m_it != m_end; ++m_it)
+		out << *m_it << std::endl;
+	return out;
+}	//operator<<
 
 }	//BGLgeom
 #endif	//HH_MESH_STRUCTURE_HH

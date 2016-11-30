@@ -86,11 +86,14 @@ class writer_pts{
 			out_file << G[tgt].BC << std::endl;
 			out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
 			out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
+			out_file << "\t11\t" << G[e].mesh << std::endl;	//with overload of operator<< for mesh
+			/*
 			G[*e_it].mesh::iterator m_it = G[e].mesh.begin();
 			G[*e_it].mesh::iterator m_end = G[e].mesh.end();
 			for( ; m_it != m_end; ++m_it){
 				out_file << "\t" << 11 << "\t" << *m_it << "point" << std::endl;	//what does 11 means?
 			}
+			*/
 			out_file << "END_ARC" << std::endl;
 		}	//export_edge
 };	//writer_pts
