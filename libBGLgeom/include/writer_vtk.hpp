@@ -48,20 +48,20 @@ namespace BGLgeom{
 			We have to decide whether to keep it Eigen with () to access elements,
 			or to use the std containers with [].
 */
-template <typename Graph, typename Mesh_Container>
+template <typename Graph>
 class writer_vtk{
 
 	using CellArray_ptr = vtkSmartPointer<vtkCellArray>;
 	using PolyDataWriter_ptr = vtkSmartPointer<vtkXMLPolyDataWriter>;
 	using PolyData_ptr = vtkSmartPointer<vtkPolyData>;
-	using Points_ptr = vtkSmartPointer<vtkPoints> points;
+	using Points_ptr = vtkSmartPointer<vtkPoints>;
 	
 	public:
 		//! Default constructor
 		writer_vtk(std::string _filename) {
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
-  			  writer -> SetFileName(_filename);
+  			  writer -> SetFileName(_filename.c_str());
   			  
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
@@ -80,7 +80,7 @@ class writer_vtk{
 		//! It exports the graph in .vtp format (compatible with Paraview). If the edge isn't linear we assume there's a mesh defined on it. If there isn't, a simple straight line will be displayed for that edge, indendently of its geometry
 		 
 		virtual void export_vtp(Graph const& G){
-			Edge_iter e_it, e_end;
+			BGLgeom::Edge_iter<Graph> e_it, e_end;
 
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
 				add_line(*e_it, G);					
@@ -92,21 +92,21 @@ class writer_vtk{
 		
 	protected:
 		//! The stream associated to the output file
-		PolyData_ptr writer;
+		PolyDataWriter_ptr writer;
 		//! Container with all the points
 		Points_ptr points;
 		//! The array containing all the lines corresponding to the edges
 		CellArray_ptr lines;
 		
 		
-		void add_line(Edge_desc const& e, Graph const& G){
+		void add_line(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
 			// get source and target
-			Vertex_desc src = boost::source(e,G);
-			Vertex_desc tgt = boost::target(e,G);
+			BGLgeom::Vertex_desc<Graph> src = boost::source(e,G);
+			BGLgeom::Vertex_desc<Graph> tgt = boost::target(e,G);
 			
 			//store point-coordinates in an array
-			double *SRC = G[src].coordinates.data();
-			double *TGT = G[tgt].coordinates.data();
+			const double *SRC = G[src].coordinates.data();
+			const double *TGT = G[tgt].coordinates.data();
 			
 			const int ID_start = points->GetNumberOfPoints(); // in points all the points of all the edges are stored so I need to keep track of the ID of my current points
 			
@@ -119,8 +119,8 @@ class writer_vtk{
 						
 			// if the Mesh is defined create the points of the mesh, incuded source and target
 			else{
-				double *P; //it will contain the point coordinates;
-				for(const BGLgeom::Vertex_base_property::point_t& point: G[e].mesh){
+				double const *P; //it will contain the point coordinates;
+				for(const BGLgeom::Vertex_base_property<3>::point_t& point: G[e].mesh){
 					P = point.data();
 					points -> InsertNextPoint(P);
  				}

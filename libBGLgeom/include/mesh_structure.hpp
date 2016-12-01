@@ -39,8 +39,8 @@ using mesh = std::vector<BGLgeom::point<dim>>;
 template <unsigned int dim>
 std::ostream &
 write_mesh_pts(std::ostream & out, mesh<dim> const& M){
-	mesh<dim>::iterator m_it = M.begin()+1;
-	mesh<dim>::iterator m_end = M.end()-1;
+	typename mesh<dim>::iterator m_it = M.begin()+1;
+	typename mesh<dim>::iterator m_end = M.end()-1;
 	for( ; m_it != m_end; ++m_it)
 		out << "\t11\t" << *m_it << std::endl;
 	return out;
@@ -55,8 +55,8 @@ write_mesh_pts(std::ostream & out, mesh<dim> const& M){
 template <unsigned int dim>
 std::ostream &
 write_mesh_ASCII(std::ostream & out, mesh<dim> const& M){
-	mesh<dim>::iterator m_it = M.begin()+1;
-	mesh<dim>::iterator m_end = M.end()-1;
+	typename mesh<dim>::iterator m_it = M.begin()+1;
+	typename mesh<dim>::iterator m_end = M.end()-1;
 	for( ; m_it != m_end-1; ++m_it)
 		out << *m_it << " ";
 	out << *m_end;

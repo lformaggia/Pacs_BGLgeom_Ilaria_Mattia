@@ -136,7 +136,7 @@ struct Vertex_base_property{
 	Vertex_base_property & operator=(Vertex_base_property &&) = default;
 	
 	//! Overload of output operator
-	std:ostream & operator<<(std::ostream & out, Vertex_base_property const& vbp){
+	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& vbp){
 	
 	}
 };	//Vertex_base_property
@@ -151,8 +151,8 @@ struct Vertex_base_property{
 template <typename Geom_t, unsigned int dim>
 struct Edge_base_property_static{
 	//!Definition of some types which may be useful to see outside the struct
-	using geom_t = typename Geom_t;
-	using mesh_t = typename BGlgeom::mesh<dim>;
+	using geom_t = Geom_t;
+	using mesh_t = typename BGLgeom::mesh<dim>;
 
 	//! The class handling the parameterization of the edge
 	geom_t geometry;
@@ -196,25 +196,25 @@ struct Edge_base_property_dynamic{
 	mesh_t mesh;
 	
 	//! Default constructor
-	Edge_base_property_static()  {};
+	Edge_base_property_dynamic()  {};
 	
 	//! Constructor. Maybe is better not to provide it since the constructor of different type of geometry are different
 	//Edge_base_property_static(Geom_t _geometry) : {};
 	
 	//! Copy constructor
-	Edge_base_property_static(Edge_base_property_static const&) = default;
+	Edge_base_property_dynamic(Edge_base_property_dynamic const&) = default;
 	
 	//! Move_constructor
-	Edge_base_property_static(Edge_base_property_static &&) = default;
+	Edge_base_property_dynamic(Edge_base_property_dynamic &&) = default;
 	
 	//! Assignment operator
-	Edge_base_property_static & operator=(Edge_base_property_static const&) = default;
+	Edge_base_property_dynamic & operator=(Edge_base_property_dynamic const&) = default;
 	
 	//! Move assignment
-	Edge_base_property_static & operator=(Edge_base_property_static &&) = default;
+	Edge_base_property_dynamic & operator=(Edge_base_property_dynamic &&) = default;
 	
 	//! Qui potrebbe avere senso mettere un output operator
-	std::ostream & operator<<(std:ostream & out, Edge_base_property_dynamic const& ebpd){
+	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_dynamic const& ebpd){
 	
 	}
 	

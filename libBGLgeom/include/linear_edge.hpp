@@ -42,6 +42,8 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		BGLgeom::point<dim> TGT;
 
 	public:
+		//! Default constructor 
+		linear_edge() : SRC(), TGT(){};	
 	
 		//! Constructor 
 		linear_edge(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
