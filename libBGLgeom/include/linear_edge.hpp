@@ -7,15 +7,15 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file linear_edge_geometry_srctgt.hpp
+	@file linear_edge.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief linear geometry for the edge
 	@detail 
 */
 
-#ifndef HH_LINEAR_EDGE_GEOMETRY_HH
-#define HH_LINEAR_EDGE_GEOMETRY_HH
+#ifndef HH_LINEAR_EDGE_HH
+#define HH_LINEAR_EDGE_HH
 
 #include <iostream>
 #include <vector>
@@ -34,7 +34,7 @@ namespace BGLgeom{
 	@param dim Dimension of the space
 */
 template <unsigned int dim>
-class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
+class linear_edge : public BGLgeom::edge_geometry<dim> {
 	private:
 		//! Coordinates of the source of the edge
 		BGLgeom::point<dim> SRC;
@@ -44,7 +44,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 	public:
 	
 		//! Constructor 
-		linear_edge_geometry_srctgt(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
+		linear_edge(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
 		
 		//! Sets the value for the source
 		void
@@ -135,7 +135,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 		}
 		
 		//! Overload of operator<<
-		friend std::ostream & operator << (std::ostream & out, linear_edge_geometry_srctgt<dim> & edge) {
+		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
 			out<<"Source: "<<std::endl;
 			out<<edge.value(0)<<std::endl;
 			out<<std::endl;
@@ -181,7 +181,7 @@ class linear_edge_geometry_srctgt : public BGLgeom::edge_geometry<dim> {
 			return out;
 		}
 	
-}; //linear_edge_geometry
+}; //linear_edge
 
 } //namespace
 

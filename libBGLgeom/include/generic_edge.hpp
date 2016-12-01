@@ -7,15 +7,15 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file generic_edge_geometry_srctgt.hpp
+	@file generic_edge.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief The most generic edge. 
 	@detail The user must provide the function describing the edge and those describing forst and second derivative, all parametrized with paramenter between 0 and 1), 
 */
 
-#ifndef HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
-#define HH_GENERIC_EDGE_GEOMETRY_SRCTGT_HH
+#ifndef HH_GENERIC_EDGE_HH
+#define HH_GENERIC_EDGE_HH
 
 #include<array>
 #include<functional>
@@ -30,7 +30,7 @@
 namespace BGLgeom{
 
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
-class generic_edge_geometry_srctgt {
+class generic_edge {
 
 	using vector = Eigen::Matrix<double,dim,1>;
 
@@ -43,7 +43,7 @@ class generic_edge_geometry_srctgt {
 	public:
 	
 	//! full constructor
-	generic_edge_geometry_srctgt
+	generic_edge
 	(std::function<BGLgeom::point<dim>(double)> value_, std::function<vector(double)> first_der_, std::function<vector(double)> second_der_): value_fun(value_), first_derivatives_fun(first_der_), second_derivatives_fun(second_der_)
 	{};
 
@@ -109,7 +109,7 @@ class generic_edge_geometry_srctgt {
 	 
 	
 	//! Overload of operator<<
-	friend std::ostream & operator << (std::ostream & out, generic_edge_geometry_srctgt<dim>& edge) {
+	friend std::ostream & operator << (std::ostream & out, generic_edge<dim>& edge) {
 		out<<"Source: "<<std::endl;
 		out<<edge.value(0)<<std::endl;
 		out<<std::endl;

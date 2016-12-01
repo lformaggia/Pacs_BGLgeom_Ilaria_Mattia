@@ -7,7 +7,7 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file new_reader_class.hpp
+	@file reader_ASCII.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Base abstract class to read input file
@@ -16,8 +16,8 @@
 			to read data form the input file and check errors.
 */
 
-#ifndef HH_NEW_READER_CLASS_HH
-#define HH_NEW_READER_CLASS_HH
+#ifndef HH_READER_ASCII_HH
+#define HH_READER_ASCII_HH
 
 #include <string>
 #include <fstream>
@@ -179,7 +179,7 @@ class new_reader_class {
 		//! Data put in line are converted in istringstream to be got by the user
 		//std::istringstream iss_line;
 		
-};	//new_reader_class
+};	//reader_ASCII
 
 }	//BGLgeom
 

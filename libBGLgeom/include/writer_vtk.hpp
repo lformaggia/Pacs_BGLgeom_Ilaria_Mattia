@@ -30,10 +30,6 @@
 #include <vtkPolyLine.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkXMLPolyDataWriter.h>
 
 #include "data_structure.hpp"
@@ -62,10 +58,11 @@ class writer_vtk{
 	
 	public:
 		//! Default constructor
-		writer_vtk(std::string _filename) : {
+		writer_vtk(std::string _filename) {
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
   			  writer -> SetFileName(_filename);
+  			  
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
 		
@@ -82,9 +79,8 @@ class writer_vtk{
 		
 		//! It exports the graph in .vtp format (compatible with Paraview). If the edge isn't linear we assume there's a mesh defined on it. If there isn't, a simple straight line will be displayed for that edge, indendently of its geometry
 		 
-		virtual void export_vtp(Graph const& G, Mesh_Container const& M){
+		virtual void export_vtp(Graph const& G){
 			Edge_iter e_it, e_end;
-			Vertex_desc src, tgt;
 
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
 				add_line(*e_it, G);					
@@ -114,21 +110,21 @@ class writer_vtk{
 			
 			const int ID_start = points->GetNumberOfPoints(); // in points all the points of all the edges are stored so I need to keep track of the ID of my current points
 			
-			//create SRC point
-			points -> InsertNextPoint(SRC);
-			
-			// if the Mesh is defined create the points of the mesh
-			if(!G[e].mesh.empty()){
-				const int N = G[e].mesh.size();
+			if(G[e].mesh.empty()){
+				//create SRC point
+				points -> InsertNextPoint(SRC);			
+				//create TGT point
+				points -> InsertNextPoint(TGT);
+			}
+						
+			// if the Mesh is defined create the points of the mesh, incuded source and target
+			else{
 				double *P; //it will contain the point coordinates;
-				for(const point_t& point: G[e].mesh){
+				for(const BGLgeom::Vertex_base_property::point_t& point: G[e].mesh){
 					P = point.data();
 					points -> InsertNextPoint(P);
  				}
 			}
-			
-			//create TGT point
-			points -> InsertNextPoint(TGT);
 			
 			const int num_points = points->GetNumberOfPoints() - ID_start; // in this way how many points I have this line
 			
@@ -158,8 +154,10 @@ class writer_vtk{
   			writer->SetInput(polyData);
 			#else
   			writer->SetInputData(polyData);	
+  			#endif
   			
   			writer -> Write();
+
 		}; // generate_output
 		
 };	//writer_vtp
