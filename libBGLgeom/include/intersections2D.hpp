@@ -29,7 +29,7 @@
 #include <tuple>
 #include <iostream>
 
-#include "linear_edge_geometry_srctgt.hpp"
+#include "linear_edge.hpp"
 
 //! Helper functions for the algorithms. Using Unnamed namespace
 namespace {
@@ -98,7 +98,7 @@ namespace BGLgeom{
 class linear_edge_interface{
 	public:
 		//! Default constructor
-		linear_edge_interface	(BGLgeom::linear_edge_geometry_srctgt<2> edge){
+		linear_edge_interface	(BGLgeom::linear_edge<2> edge){
 			extremes[0][0] = edge.get_source()(0,0);
 			extremes[0][1] = edge.get_source()(0,1);
 			extremes[1][0] = edge.get_target()(0,0);
@@ -223,8 +223,8 @@ Another scaled tolerance is used to test ir edges are parallel.
 @par tol A tolerance,it should greater than epsilon for doubles
 @return Intersection. A data structure containing the info about the intersection
 */
-Intersection compute_intersection	(linear_edge_geometry_srctgt<2> const& edge1,
-									linear_edge_geometry_srctgt<2> const& edge2,
+Intersection compute_intersection	(linear_edge<2> const& edge1,
+									linear_edge<2> const& edge2,
                            			double tol=20*std::numeric_limits<double>::epsilon());
                            		
 /*
