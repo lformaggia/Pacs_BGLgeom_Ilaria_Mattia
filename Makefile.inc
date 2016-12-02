@@ -3,9 +3,17 @@
 
 # Directory where the library resides
 PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia#che è la mia, l'utente la cambia
+# libBGLgeom is stored here:
+export BGLGEOM_DIR = $(PROJECT_DIR)/libBGlgeom
+# example on network diffusion is stored here
+export NETW_DIR = $(PROJECT_DIR)/network_diffusion
+# example on fracture intersection is sotred here
+export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 
 # Directories for needed library
 EIGEN_INC_DIR=$(mkEigenInc)
+VTK_INC_DIR=
+VTK_LIB_DIR=
 #MUPARSER_INC_DIR=$(mkMuParserInc)
 #MUPARSER_LIB_DIR=$(mkMuParserLib)
 #NURBS ?
@@ -30,12 +38,6 @@ OPT = -g
 
 STDFLAG = -std=c++11
 
-# libBGLgeom is stored here:
-export BGLGEOM_DIR = $(PROJECT_DIR)/libBGlgeom
-# example on network diffusion is stored here
-export NETW_DIR = $(PROJECT_DIR)/network_diffusion
-# example on fracture intersection is sotred here
-export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 
 # collect all includes
 # QUeste sono solo le directory

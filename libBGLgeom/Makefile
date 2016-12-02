@@ -28,39 +28,61 @@ endif
 
 #=========================================================================
 
-.PHONY: all clean distclean doc static dynamic depend install exec library
+.PHONY: help all clean distclean doc static dynamic install test library
 
-.DEFAULT_GOAL: all
+.DEFAULT_GOAL: help
 
-all:
-	@echo "make static: --- makes static library and executable"
-	@echo "make dynamic: -- makes dynamic library and executable"
-	@echo "make depend: --- just makes dependency file"
-	@echo "make clean: ---- cleans all but not not library"
-	@echo "make distclean:  cleans all"
-	@echo "make install: -- installs"
-	@echo "make doc: ------ makes documentation"
+help:
+	@echo "make help: ----- Prints this help"
+	@echo "make all: ------ Makes libraries, tests and documentation"
+	@echo "make static: --- Makes static library and executable"
+	@echo "make dynamic: -- Makes dynamic library and executable"
+	@echo "make library: -- Makes both static and dynamic libraries"
+	@echo "make test: ----- Makes executables for the tests"
+	@echo "make install: -- Installs the libaries"
+	@echo "make doc: ------ Makes documentation"
+	@echo "make clean: ---- Cleans all but not not library"
+	@echo "make distclean:  Cleans all"
+	@echo $(LIB_OBJS_STATIC)
+	
+all: library test install doc clean
 
-static:	$(LIB_OBJS)
+library: static dynamic
+
+static: $(LIB_OBJS_STATIC)
 	@echo "--- Building static library ---"
-	#@echo $(LIB_SRCS)
-	ar -r -s $(STATIC_LIB) $(LIB_OBJS)
+	ar -r -s $(STATIC_LIB) $(LIB_OBJS_STATIC)
 	ranlib $(STATIC_LIB)
 	
-$(LIB_OBJS): | $(DIR_TO_BE_CREATED)
+dynamic: CXXFLAGS += -fPIC
+dynamic: $(LIB_OBJS_DYNAMIC)
+	@echo "--- Building dynamic library ---"
+	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
+	
+$(LIB_OBJS_STATIC) $(LIB_OBJS_DYNAMIC): | $(DIR_TO_BE_CREATED)
 
 $(DIR_TO_BE_CREATED):
 	@mkdir -p $(DIR_TO_BE_CREATED)
 
-dynamic: $(LIB_OBJS)
-	@echo "--- Building dynamic library ---"
-	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS) -o $(DYNAMIC_LIB).1.0
-
-$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
-	@echo "--- Building objects ---"
+$(BUILD_DIR_STATIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
+	@echo "--- Building static objects ---"
+	@mkdir -p $(BUILD_DIR_STATIC)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-	
-library: static dynamic
+
+$(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
+	@echo "--- Building dynamic objects ---"
+	@mkdir -p $(BUILD_DIR_DYNAMIC)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+
+
+clean:
+	rm -rv $(BUILD_DIR)
+
+distclean: clean
+	rm -rv $(LIBS)
+	#rm -rv $(TEST_EXEC)
+
 
 
 
