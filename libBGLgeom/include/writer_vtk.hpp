@@ -37,7 +37,7 @@
 namespace BGLgeom{
 
 /*!
-	@brief Classe to export a .vtp file
+	@brief Class to export a .vtp file
 	@detail This writer outputs a .vtp file containing the graphical representation of the graph 
 	
 	@pre The graph that has to be exported is expected to have at least all the
@@ -48,13 +48,33 @@ namespace BGLgeom{
 			We have to decide whether to keep it Eigen with () to access elements,
 			or to use the std containers with [].
 */
-template <typename Graph>
-class writer_vtk{
 
-	using CellArray_ptr = vtkSmartPointer<vtkCellArray>;
-	using PolyDataWriter_ptr = vtkSmartPointer<vtkXMLPolyDataWriter>;
-	using PolyData_ptr = vtkSmartPointer<vtkPolyData>;
-	using Points_ptr = vtkSmartPointer<vtkPoints>;
+using CellArray_ptr = vtkSmartPointer<vtkCellArray>;
+using PolyDataWriter_ptr = vtkSmartPointer<vtkXMLPolyDataWriter>;
+using PolyData_ptr = vtkSmartPointer<vtkPolyData>;
+using Points_ptr = vtkSmartPointer<vtkPoints>;
+
+template<int dim>
+inline void insert_point(double const* P, Points_ptr & points){};
+
+// template specializations for dim=2 and dim=3
+template<>
+inline void insert_point<2>(double const* P, Points_ptr & points){
+	// create an array with 3 components: copy the components of v in the first 2 comp and add 0 as z component
+	double PP[3];
+	PP[0] = P[0];
+	PP[1] = P[1];
+	PP[2] = 0.0;
+	points -> InsertNextPoint(PP);
+};
+
+template<>
+inline void insert_point<3>(double const* P, Points_ptr & points){
+	points -> InsertNextPoint(P);
+};
+
+template <typename Graph, int dim>
+class writer_vtk{
 	
 	public:
 		//! Default constructor
@@ -112,17 +132,17 @@ class writer_vtk{
 			
 			if(G[e].mesh.empty()){
 				//create SRC point
-				points -> InsertNextPoint(SRC);			
+				insert_point<dim>(SRC,points);			
 				//create TGT point
-				points -> InsertNextPoint(TGT);
+				insert_point<dim>(TGT,points);			
 			}
 						
 			// if the Mesh is defined create the points of the mesh, incuded source and target
 			else{
 				double const *P; //it will contain the point coordinates;
-				for(const BGLgeom::Vertex_base_property<3>::point_t& point: G[e].mesh){
+				for(const BGLgeom::point<dim>& point: G[e].mesh){
 					P = point.data();
-					points -> InsertNextPoint(P);
+					insert_point<dim>(P,points);			
  				}
 			}
 			
@@ -162,6 +182,8 @@ class writer_vtk{
 		
 };	//writer_vtp
 
-}	//geograph
+
+
+}	//namespace
 
 #endif	//HH_WRITER_PTS_HH

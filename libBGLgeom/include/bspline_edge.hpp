@@ -57,7 +57,104 @@ template<int dim = 3>
 using vect_pts = std::vector<point<dim> >;
 
 
+// SOME AUXILIARY FUNCTIONS: IS IT CORRECT TO PUT THEM HERE? 
+// The following two functions, the only two ones not templated, are implemented in bspline_edge.ccp
+int Pfindspan (int n, int p, double u, const vect &U);
+void Pbasisfun (int i, double u, int p, const vect &U, vect &N);
 
+template<int dim>
+void
+Pbspderiv (int d, const vect_pts<dim> &C, int nc,
+          const vect &k, int nk, vect_pts<dim> &dC, vect &dk)
+// IN:
+//    d  - degree of the B-Spline
+//    C  - vector of control points  (mc x nc matrix stored as column major)
+//    nc - number of control points
+//    k  - knot sequence   (nk x 1 vector)
+// OUT:
+//    dc - vector of derivative control points  
+//    dk - knot sequence   ((nk - 1) x 1 vector)
+{
+  int ierr = 0;
+  int i, j;
+  double tmp;
+  
+  for (i = 0; i < nc-1; i++)
+    {
+      tmp = d / (k[i+d+1] - k[i+1]);
+      for (j = 0; j < dim; j++)
+        dC[i](j) = tmp * (C[i+1](j) - C[i](j));
+    }
+
+  for (i = 1; i < nk-1; i++)
+    dk[i-1] = k[i]; 
+}
+
+
+template<int dim>
+void
+Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
+         const vect &k, double u, point<dim> &P)
+// Pbspeval:  Evaluate B-Spline at parametric points.
+//
+//    IN:
+//       d - Degree of the B-Spline.
+//       C - vector of control points.
+//       k - Knot sequence, i_pt vector of size nk.
+//       u - Parametric evaluation point.
+//    OUT:
+//       P - Evaluated point
+{
+  int s, tmp1, ii, i;
+  vect N (d+1, 0.0);
+  
+  P = point<dim>::Zero(); //! Initialize the point to zero
+
+  s = Pfindspan (nc-1, d, u, k);
+  Pbasisfun (s, u, d, k, N);
+  tmp1 = s - d;
+  for (i = 0; i < dim; ++i)
+    for (ii = 0; ii <= d; ++ii)
+      P(i) += N[ii] * C[tmp1+ii](i);
+}
+
+template<int dim>
+void
+Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
+         const vect &k, const vect &u, vect_pts<dim> & P_vect)
+// Pbspeval:  Evaluate B-Spline at parametric points.
+//
+//    IN:
+//       d - Degree of the B-Spline.
+//       C - vector of Control Points.
+//       k - Knot sequence, i_pt vector of size nk.
+//       u - Parametric evaluation points, i_pt vector of size nu.
+//    OUT:
+//       P_vect - Evaluated points, matrix of size (dim,nu)
+{
+  int s, tmp1, ii, i_vect, i_pt;
+  vect N (d+1, 0.0);
+  auto nu = u.size ();
+  P_vect.resize (nu); //reserve nu places in the output vector
+  
+  // INITIALIZE ALL THE POINTS TO 0 (NECESSARY?)
+  for(BGLgeom::point<dim> & PP: P_vect){
+  	PP = BGLgeom::point<dim>::Zero();
+  }
+  
+  for (i_vect = 0; i_vect < nu; ++i_vect)
+    {
+      s = Pfindspan (nc-1, d, u[i_vect], k);
+      Pbasisfun (s, u[i_vect], d, k, N);
+      tmp1 = s - d;
+      for (i_pt = 0; i_pt < dim; ++i_pt)
+        for (ii = 0; ii <= d; ++ii)
+          P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
+    }  
+}
+
+
+//HERE THE CLASS BEGINS
 template <int dim = 3, int deg = 3>
 class
 bspline_edge
@@ -228,106 +325,6 @@ private:
     return retval;
   };
 }; // class
-
-
-
-// SOME AUXILIARY FUNCTIONS: IS IT CORRECT TO PUT THEM HERE? 
-// The following two functions, the only two ones not templated, are implemented in bspline_edge.ccp
-int Pfindspan (int n, int p, double u, const vect &U);
-void Pbasisfun (int i, double u, int p, const vect &U, vect &N);
-
-template<int dim>
-void
-Pbspderiv (int d, const vect_pts<dim> &C, int nc,
-          const vect &k, int nk, vect_pts<dim> &dC, vect &dk)
-// IN:
-//    d  - degree of the B-Spline
-//    C  - vector of control points  (mc x nc matrix stored as column major)
-//    nc - number of control points
-//    k  - knot sequence   (nk x 1 vector)
-// OUT:
-//    dc - vector of derivative control points  
-//    dk - knot sequence   ((nk - 1) x 1 vector)
-{
-  int ierr = 0;
-  int i, j;
-  double tmp;
-  
-  for (i = 0; i < nc-1; i++)
-    {
-      tmp = d / (k[i+d+1] - k[i+1]);
-      for (j = 0; j < dim; j++)
-        dC[i](j) = tmp * (C[i+1](j) - C[i](j));
-    }
-
-  for (i = 1; i < nk-1; i++)
-    dk[i-1] = k[i]; 
-}
-
-
-template<int dim>
-void
-Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
-         const vect &k, double u, point<dim> &P)
-// Pbspeval:  Evaluate B-Spline at parametric points.
-//
-//    IN:
-//       d - Degree of the B-Spline.
-//       C - vector of control points.
-//       k - Knot sequence, i_pt vector of size nk.
-//       u - Parametric evaluation point.
-//    OUT:
-//       P - Evaluated point
-{
-  int s, tmp1, ii, i;
-  vect N (d+1, 0.0);
-  
-  P = point<dim>::Zero(); //! Initialize the point to zero
-
-  s = Pfindspan (nc-1, d, u, k);
-  Pbasisfun (s, u, d, k, N);
-  tmp1 = s - d;
-  for (i = 0; i < dim; ++i)
-    for (ii = 0; ii <= d; ++ii)
-      P(i) += N[ii] * C[tmp1+ii](i);
-}
-
-template<int dim>
-void
-Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
-         const vect &k, const vect &u, vect_pts<dim> & P_vect)
-// Pbspeval:  Evaluate B-Spline at parametric points.
-//
-//    IN:
-//       d - Degree of the B-Spline.
-//       C - vector of Control Points.
-//       k - Knot sequence, i_pt vector of size nk.
-//       u - Parametric evaluation points, i_pt vector of size nu.
-//    OUT:
-//       P_vect - Evaluated points, matrix of size (dim,nu)
-{
-  int s, tmp1, ii, i_vect, i_pt;
-  vect N (d+1, 0.0);
-  auto nu = u.size ();
-  P_vect.resize (nu); //reserve nu places in the output vector
-  
-  // INITIALIZE ALL THE POINTS TO 0 (NECESSARY?)
-  for(BGLgeom::point<dim> & PP: P_vect){
-  	PP = BGLgeom::point<dim>::Zero();
-  }
-  
-  for (i_vect = 0; i_vect < nu; ++i_vect)
-    {
-      s = Pfindspan (nc-1, d, u[i_vect], k);
-      Pbasisfun (s, u[i_vect], d, k, N);
-      tmp1 = s - d;
-      for (i_pt = 0; i_pt < dim; ++i_pt)
-        for (ii = 0; ii <= d; ++ii)
-          P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
-    }  
-}
-
-
 
 
 } //namespace
