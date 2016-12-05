@@ -135,10 +135,12 @@ struct Vertex_base_property{
 	//! Move assignment
 	Vertex_base_property & operator=(Vertex_base_property &&) = default;
 	
+	/*
 	//! Overload of output operator
 	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& vbp){
 	
 	}
+	*/
 };	//Vertex_base_property
 
 

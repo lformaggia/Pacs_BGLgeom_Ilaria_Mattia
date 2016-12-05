@@ -60,13 +60,13 @@ class writer_pts{
 		
 		//! It exports the mesh and the info contained in the graph in an pts file
 		void
-		export_pts(Graph const& G, Mesh_Container const& M){
+		export_pts(Graph const& G){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			BGLgeom::Vertex_desc<Graph> src, tgt;
 			out_file << "BEGIN_LIST" << std::endl;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
 				//The previous code has been put in this function
-				this->export_edge(*e_it, src, tgt);
+				this->export_edge(G, *e_it, src, tgt);
 			}	//for
 			out_file << "END_LIST";
 			//out_file.close(); ???
@@ -78,7 +78,8 @@ class writer_pts{
 	
 		//! Inner method to output a single edge
 		void
-		export_edge	(BGLgeom::Edge_desc<Graph> const& e,
+		export_edge	(Graph const& G,
+					 BGLgeom::Edge_desc<Graph> const& e,
 					 BGLgeom::Vertex_desc<Graph> & src,
 					 BGLgeom::Vertex_desc<Graph> & tgt){
 			out_file << "BEGIN_ARC" << std::endl;
@@ -88,7 +89,7 @@ class writer_pts{
 			out_file << G[tgt].BC << std::endl;
 			out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
 			out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
-			out_file = write_mesh_pts(out_file, G[e].mesh)	//with overload of operator<< for mesh
+			out_file = write_mesh_pts(out_file, G[e].mesh);	//with overload of operator<< for mesh
 			/*
 			G[*e_it].mesh::iterator m_it = G[e].mesh.begin();
 			G[*e_it].mesh::iterator m_end = G[e].mesh.end();
