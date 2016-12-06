@@ -32,37 +32,54 @@ namespace BGLgeom{
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class generic_edge {
 
-	using vector = Eigen::Matrix<double,dim,1>;
+	using vect_Eigen = Eigen::Matrix<double,dim,1>;
+	using point = BGLgeom::point<dim>;
+	using vect_pts = std::vector<point>;
 
 	private:
 	
-	std::function<BGLgeom::point<dim>(double)> value_fun;      //! stores the function f:[0,1] ->[src,tgt] representing the edge
-	std::function<vector(double)> first_derivatives_fun;   
-	std::function<vector(double)> second_derivatives_fun;	
+	std::function<point(double)> value_fun;      //! stores the function f:[0,1] ->[src,tgt] representing the edge
+	std::function<vect_Eigen(double)> first_derivatives_fun;   
+	std::function<vect_Eigen(double)> second_derivatives_fun;	
 
 	public:
 	
 	//! full constructor
 	generic_edge
-	(std::function<BGLgeom::point<dim>(double)> value_, std::function<vector(double)> first_der_, std::function<vector(double)> second_der_): value_fun(value_), first_derivatives_fun(first_der_), second_derivatives_fun(second_der_)
+	(std::function<point(double)> value_, std::function<vect_Eigen(double)> first_der_, std::function<vect_Eigen(double)> second_der_): value_fun(value_), first_derivatives_fun(first_der_), second_derivatives_fun(second_der_)
 	{};
 
-    //! returns the point corresponding to s=0:1 
-	BGLgeom::point<dim> value (const double & x)
+    //! returns the point corresponding to s=0:1
+     
+	point operator() (double t) const
 	{
 		//check if param belongs to 0->1
-		return value_fun(x);
-	};		
+		return value_fun(t);
+	};
+	
+  	vect_pts
+  	operator() (const std::vector<double> &t) const
+  	{
+    	vect_pts P_vect (t.size ());
+    
+    	for (point<dim> && PP: P_vect)
+    		PP = point<dim>::Zero(); // initialize all the points to zero
+    
+   		for (int i = 0; i<t.size(); ++i);
+   			P_vect[i] = value_fun(t[i]);
+   			
+    	return P_vect;
+  	};		
 	
 	//! first derivative
-	vector 
+	vect_Eigen 
 	first_derivatives(const double & x)
 	{
 		return first_derivatives_fun(x);	
 	};
 	
 	//! second derivative
-	vector 
+	vect_Eigen 
 	second_derivatives(const double & x)
 	{
 		return second_derivatives_fun(x);	
@@ -111,13 +128,13 @@ class generic_edge {
 	//! Overload of operator<<
 	friend std::ostream & operator << (std::ostream & out, generic_edge<dim>& edge) {
 		out<<"Source: "<<std::endl;
-		out<<edge.value(0)<<std::endl;
+		out<<edge(0)<<std::endl;
 		out<<std::endl;
 		out<<"Value in s=0.5: "<<std::endl;
-		out<<edge.value(0.5)<<std::endl;
+		out<<edge(0.5)<<std::endl;
 		out<<std::endl;
 		out<<"Target: "<<std::endl;
-		out<<edge.value(1)<<std::endl;
+		out<<edge(1)<<std::endl;
 		out<<std::endl;
 		out<<"First derivatives in s=0: ";
 		for(int i=0; i<dim; ++i)

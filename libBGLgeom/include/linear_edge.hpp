@@ -35,34 +35,39 @@ namespace BGLgeom{
 */
 template <unsigned int dim>
 class linear_edge : public BGLgeom::edge_geometry<dim> {
+
+	using vect_Eigen = Eigen::Matrix<double,dim,1>;
+	using point = BGLgeom::point<dim>;
+	using vect_pts = std::vector<point>;
+
 	private:
 		//! Coordinates of the source of the edge
-		BGLgeom::point<dim> SRC;
+		point SRC;
 		//! Coordinates of the starget of the edge
-		BGLgeom::point<dim> TGT;
+		point TGT;
 
 	public:
 		//! Default constructor 
 		linear_edge() : SRC(), TGT(){};	
 	
 		//! Constructor 
-		linear_edge(BGLgeom::point<dim> SRC_, BGLgeom::point<dim> TGT_) : SRC(SRC_), TGT(TGT_){};
+		linear_edge(point SRC_, point TGT_) : SRC(SRC_), TGT(TGT_){};
 		
 		//! Sets the value for the source
 		void
-		set_source(BGLgeom::point<dim> SRC_) { SRC = SRC_; }
+		set_source(point SRC_) { SRC = SRC_; }
 		
 		//! Sets the value for the target
 		void
-		set_target(BGLgeom::point<dim> TGT_) {	TGT = TGT_;	}
+		set_target(point TGT_) {	TGT = TGT_;	}
 		
 		//! Getting source's coordinates
-		BGLgeom::point<dim>	get_source() { return SRC; }
-		BGLgeom::point<dim>	get_source() const { return SRC; }
+		point	get_source() { return SRC; }
+		point	get_source() const { return SRC; }
 		
 		//! Getting target's coordinates
-		BGLgeom::point<dim> get_target() { return TGT; }
-		BGLgeom::point<dim> get_target() const { return TGT; }
+		point get_target() { return TGT; }
+		point get_target() const { return TGT; }
 		
 		//! Computing the length of the edge
 		double length() { return (TGT-SRC).norm(); }
@@ -73,26 +78,40 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 	    	@detail It test if the given parameter belongs to [0,1]. If not, it sets the
 	    			parameter to the nearest extreme value, giving a warning on std::cerr
 	    */
-		BGLgeom::point<dim>
-		value (const double & x){
-			if(x > 1 || x < 0){
+		point operator() (double t) const{
+			if(t > 1 || t < 0){
 				std::cerr << "linear_edge::value(): parameter value out of bounds" << std::endl;
-				if(x > 1)	//x=1
+				if(t > 1)	//t=1
 					return TGT;
-				else	//x=0
+				else	//t=0
 					return SRC;
 			}
-			return BGLgeom::point<dim>((TGT-SRC)*x+SRC); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
+			return point((TGT-SRC)*t+SRC); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
 		};
 		
+  		
+  		vect_pts
+  		operator() (const std::vector<double> &t) const
+  		{
+    		vect_pts P_vect (t.size ());
+    
+    		for (point<dim> && PP: P_vect)
+    			PP = point<dim>::Zero(); // initialize all the points to zero
+    
+   			for (int i = 0; i<t.size(); ++i);
+   				P_vect[i] = (TGT-SRC)*t[i]+SRC;
+   			
+   		 	return P_vect;
+  		};
+		
 		//! first derivative
-		Eigen::Matrix<double,dim,1> 
+		vect_Eigen 
 		first_derivatives(const double & x = 0)	{ return TGT-SRC; }		
 		
 		//! second derivative
-		Eigen::Matrix<double,dim,1> 					//! the second derivative is null along all the components
+		vect_Eigen 					//! the second derivative is null along all the components
 		second_derivatives(const double & x = 0) {
-			return Eigen::Matrix<double,dim,1>::Zero();	
+			return vect_Eigen::Zero();	
 		}		
 
 		/*! 
@@ -121,16 +140,16 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			@detail SRC and TGT are included in the mesh points
 			@param h Spacing between the points of the mesh (uniform mesh) in terms of spatial length.
 		*/
-		std::vector<BGLgeom::point<dim>>
+		std::vector<point>
 		uniform_mesh(double const& h = 0.01) {
 			unsigned int n_points = std::ceil(this->length()/h);
 			double h_abscissa = 1./n_points;
 			double s = 0;
-			std::vector<BGLgeom::point<dim>> retval;
+			std::vector<point> retval;
 			retval.push_back(SRC);
 			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
 				s += h_abscissa;
-				retval.emplace_back(BGLgeom::point<dim>(this->value(s)));
+				retval.emplace_back(point(this->value(s)));
 			}
 			retval.push_back(TGT);
 			return retval;			
@@ -176,7 +195,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
 			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
 			out<<"Mesh on the edge:" << std::endl;
-			std::vector<BGLgeom::point<dim>> mesh = edge.uniform_mesh(0.1);
+			std::vector<point> mesh = edge.uniform_mesh(0.1);
 			for(std::size_t i=0; i<mesh.size(); ++i)
 				out << mesh[i] << std::endl;
 			out << std::endl;
