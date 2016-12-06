@@ -1,10 +1,10 @@
 # Directories local variables
-TARGET_DIR  =./prova_lib
-BUILD_DIR   =./obj
-SOURCE_DIR  =./src
-INCLUDE_DIR =./include
-DOC_DIR     =./doc
-TEST_DIR    =./test
+TARGET_DIR  = prova_lib
+BUILD_DIR   = obj
+SOURCE_DIR  = src
+INCLUDE_DIR = include
+DOC_DIR     = doc
+TEST_DIR    = test
 DIR_TO_BE_CREATED = $(TARGET_DIR) $(TEST_DIR) $(BUILD_DIR) $(DOC_DIR)
 
 # Directories where to put object files
@@ -16,8 +16,8 @@ BUILD_DIR_TEST    = $(BUILD_DIR)/test
 LIBNAME = BGLgeom
 DYNAMIC_LIBFILE = lib$(LIBNAME).so
 STATIC_LIBFILE  = lib$(LIBNAME).a
-LIBRARIES += -L. -l$(LIBNAME)
-LDLIBS += $(LIBRARIES)
+#LIBRARIES += -L$(TARGET_DIR) -l$(LIBNAME)
+#LDLIBS += $(LIBRARIES)
 
 
 # Including headers of BGLgeom librabry to compile 
@@ -42,7 +42,7 @@ HEADERS = $(wildcard $(INCLUDE_DIR)/*.hpp)
 # Libraries
 LIBS = $(wildcard $(TARGET_DIR)/*)		#used in make distclean
 DYNAMIC_LIB = $(TARGET_DIR)/$(DYNAMIC_LIBFILE)
-STATIC_LIB = $(TARGET_DIR)/$(STATIC_LIBFILE)
+STATIC_LIB  = $(TARGET_DIR)/$(STATIC_LIBFILE)
 
 
 
