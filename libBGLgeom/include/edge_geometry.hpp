@@ -28,7 +28,7 @@ class
 edge_geometry{
 	public:
 	virtual BGLgeom::point<dim>
-	value (const double & x) = 0;
+	operator() (double t) const = 0;
 	
 	virtual Eigen::Matrix<double,dim,1>
 	first_derivatives (const double & x) = 0;

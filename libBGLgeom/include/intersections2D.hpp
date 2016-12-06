@@ -9,7 +9,7 @@
 /*!
 	@file intersections2D.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Nov, 2016
 	@brief Classes and functions to compute intersections between two linear edges
 	
 	@detail We need to define some additional functionality for std::array just because

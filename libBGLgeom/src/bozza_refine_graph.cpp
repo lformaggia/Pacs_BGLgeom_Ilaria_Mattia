@@ -36,11 +36,12 @@ create_graph(Graph G){
 		if(edge_alone)
 			add_edge(SRC,TGT, G);
 		else{
-			intvect.sort(begin,end,sort_fun(SRC,TGT)); //order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
+			 //order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
 			if(intvect.size()==1){
 				refine_grah(G, SRC, TGT, intvect[0], newinserted_edges, toremove_edges);
 			} 
 			else{
+				intvect.sort(begin,end,sort_fun(SRC,TGT));
 				refine_grah(G, SRC, intvect[1].intpoint[0], intvect[0], newinserted_edges, toremove_edges); //collego src alla prima intersection
 				for(int i=1; i<intvect.size()-1; ++i)
 					refine_grah(G, intvect[i-1].intpoint[intvect[i-1].size()-1], intvect[i+1].intpoint[0], intvect[i], newinserted_edges, toremove_edges);	//ovviamente migliorare sintassi ora illeggibile

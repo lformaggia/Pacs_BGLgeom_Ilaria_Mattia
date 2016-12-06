@@ -95,10 +95,10 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
   		{
     		vect_pts P_vect (t.size ());
     
-    		for (point<dim> && PP: P_vect)
-    			PP = point<dim>::Zero(); // initialize all the points to zero
+    		for (point && PP: P_vect)
+    			PP = point::Zero(); // initialize all the points to zero
     
-   			for (int i = 0; i<t.size(); ++i);
+   			for (int i = 0; i<t.size(); ++i)
    				P_vect[i] = (TGT-SRC)*t[i]+SRC;
    			
    		 	return P_vect;

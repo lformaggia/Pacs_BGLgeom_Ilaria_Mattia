@@ -246,6 +246,9 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 		}
 	} else {		//2 intersezioni, ovvero collinear = true
 		//Overlap_outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)
+		
+		std::cout<<"Entering in 2"<<std::endl;
+		
 		if(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){
 			out.how = intersection_type::Overlap_outside;
 			return out;
@@ -267,6 +270,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 		}
 		//Overlap_extreme_...	; se si sovrappone un estremo, mi segnala tre intersezioni
 		if(numEndPointIntersections == 3){
+			std::cout<<"case 3"<<std::endl;
 			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dello stesso edge
 			if( (out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]) ||
 				(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1])	){
