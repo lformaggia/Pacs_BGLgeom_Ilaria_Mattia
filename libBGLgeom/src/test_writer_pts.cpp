@@ -11,8 +11,8 @@ using namespace boost;
 using namespace BGLgeom;
 
 int main(){
-	adjacency_list<vecS,vecS,undirectedS,Vertex_base_property,no_property> G;
-	std::vector<Vertex_base_property::point_t> mesh;
+	adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,no_property> G;
+	std::vector<Vertex_base_property<3>::point_t> mesh;
 	
 	//initializing mesh
 	

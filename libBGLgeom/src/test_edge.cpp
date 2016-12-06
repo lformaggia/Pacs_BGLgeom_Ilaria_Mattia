@@ -1,5 +1,5 @@
-#include"generic_edge_geometry_srctgt.hpp"
-#include"linear_edge_geometry_srctgt.hpp"
+#include"generic_edge.hpp"
+#include"linear_edge.hpp"
 #include"point.hpp"
 #include<cmath>
 #include<functional>
@@ -23,7 +23,7 @@ int main(){
 		return P;
   	};	
   	
-	BGLgeom::generic_edge_geometry_srctgt<3> edge(fun, fun1, fun2);		
+	BGLgeom::generic_edge<3> edge(fun, fun1, fun2);		
 	std::cout << edge << std::endl;
 	
 	
@@ -31,12 +31,12 @@ int main(){
 	//linear edge
 	BGLgeom::point<3> SRC(0,0,0);
 	BGLgeom::point<3> TGT(2,2,2);	
-	BGLgeom::linear_edge_geometry_srctgt<3> edge_lin(SRC,TGT);
+	BGLgeom::linear_edge<3> edge_lin(SRC,TGT);
 	std::cout << edge_lin << std::endl;
 	
 	//tring to break an existing edge into two new ones:
 	std::cout << "Creating another edge with same extremes" << std::endl;
-	BGLgeom::linear_edge_geometry_srctgt<3> edge_lin2(SRC,TGT);
+	BGLgeom::linear_edge<3> edge_lin2(SRC,TGT);
 	std::cout << "Resizing edges" << std::endl;
 	edge_lin.set_target(BGLgeom::point<3>(1,1,1));
 	edge_lin2.set_source(BGLgeom::point<3>(1,1,1));
@@ -60,7 +60,7 @@ int main(){
 	constexpr double pi = 3.141526;
 	constexpr double half_pi = 3.141526/2;
 	
-	BGLgeom::generic_edge_geometry_srctgt<2> semi_circ(circ, d_circ, dd_circ);
+	BGLgeom::generic_edge<2> semi_circ(circ, d_circ, dd_circ);
 	std::cout << "teta = 0: " << semi_circ.value(0) << std::endl;
 	std::cout << "teta = pi/2: " << semi_circ.value(half_pi) << std::endl;
 	std::cout << "teta = pi: " << semi_circ.value(pi) << std::endl;
