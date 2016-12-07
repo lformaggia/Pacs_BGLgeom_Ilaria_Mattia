@@ -35,18 +35,18 @@ namespace BGLgeom{
 */
 template <unsigned int dim>
 class linear_edge : public BGLgeom::edge_geometry<dim> {
-
-	using vect_Eigen = Eigen::Matrix<double,dim,1>;
-	using point = BGLgeom::point<dim>;
-	using vect_pts = std::vector<point>;
-
+		
 	private:
 		//! Coordinates of the source of the edge
-		point SRC;
+		BGLgeom::point<dim> SRC;
 		//! Coordinates of the starget of the edge
-		point TGT;
+		BGLgeom::point<dim> TGT;
 
 	public:
+		using vect_Eigen = Eigen::Matrix<double,dim,1>;
+		using point = BGLgeom::point<dim>;
+		using vect_pts = std::vector<point>;
+		
 		//! Default constructor 
 		linear_edge() : SRC(), TGT(){};	
 	
@@ -78,7 +78,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 	    	@detail It test if the given parameter belongs to [0,1]. If not, it sets the
 	    			parameter to the nearest extreme value, giving a warning on std::cerr
 	    */
-		point operator() (double t) const{
+		point operator() (double const& t) const {
 			if(t > 1 || t < 0){
 				std::cerr << "linear_edge::value(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//t=1
@@ -155,8 +155,12 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			return retval;			
 		}
 		
+		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
+			out << "I'm edge from " << edge.SRC << " to " << edge.TGT << "." << std::endl;
+			return out;
+			/*
 			out<<"Source: "<<std::endl;
 			out<<edge.value(0)<<std::endl;
 			out<<std::endl;
@@ -200,7 +204,10 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 				out << mesh[i] << std::endl;
 			out << std::endl;
 			return out;
+			*/
 		}
+
+
 	
 }; //linear_edge
 

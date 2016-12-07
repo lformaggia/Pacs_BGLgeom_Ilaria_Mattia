@@ -27,17 +27,17 @@ template<unsigned int dim>
 class
 edge_geometry{
 	public:
-	virtual BGLgeom::point<dim>
-	operator() (double t) const = 0;
-	
-	virtual Eigen::Matrix<double,dim,1>
-	first_derivatives (const double & x) = 0;
-	
-	virtual Eigen::Matrix<double,dim,1>
-	second_derivatives (const double & x) = 0;
-	
-	virtual double
-	curvilinear_abscissa (const double & parameter) = 0;
+		virtual BGLgeom::point<dim>
+		operator() (double const&) const = 0;
+
+		virtual Eigen::Matrix<double,dim,1>
+		first_derivatives (double const&) = 0;
+
+		virtual Eigen::Matrix<double,dim,1>
+		second_derivatives (double const&) = 0;
+
+		virtual double
+		curvilinear_abscissa (double const&) = 0;
 	
 }; //class
 
