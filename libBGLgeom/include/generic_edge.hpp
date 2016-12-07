@@ -63,10 +63,10 @@ class generic_edge {
   	{
     	vect_pts P_vect (t.size ());
     
-    	for (point<dim> && PP: P_vect)
-    		PP = point<dim>::Zero(); // initialize all the points to zero
+    	for (point && PP: P_vect)
+    		PP = point::Zero(); // initialize all the points to zero
     
-   		for (int i = 0; i<t.size(); ++i);
+   		for (int i = 0; i<t.size(); ++i)
    			P_vect[i] = value_fun(t[i]);
    			
     	return P_vect;
@@ -110,7 +110,7 @@ class generic_edge {
   	//=========== CON ADAPTIVE_QUADRATURE ==============  	
   		//lambda functions that returns the integrand function, i.e. norm(first_derivative(t))^2
   		auto abscissa_integrand = [&](double t) -> double{
-			this -> first_derivatives(t).norm();
+			return this -> first_derivatives(t).norm();
   		};
   	
   		return integrate(abscissa_integrand,0,x);
@@ -128,15 +128,19 @@ class generic_edge {
 	
 	//! Overload of operator<<
 	friend std::ostream & operator << (std::ostream & out, generic_edge<dim>& edge) {
+		out << "I'm a generic edge" << std::endl;
+		return out;
+		/*
 		out<<"Source: "<<std::endl;
-		out<<edge(0)<<std::endl;
+		out<<edge.value(0)<<std::endl;
 		out<<std::endl;
 		out<<"Value in s=0.5: "<<std::endl;
-		out<<edge(0.5)<<std::endl;
+		out<<edge.value(0.5)<<std::endl;
 		out<<std::endl;
 		out<<"Target: "<<std::endl;
-		out<<edge(1)<<std::endl;
+		out<<edge.value(1)<<std::endl;
 		out<<std::endl;
+		out << "Length: " << edge.length() << std::endl;
 		out<<"First derivatives in s=0: ";
 		for(int i=0; i<dim; ++i)
 			out<<(edge.first_derivatives(0))[i]<<" ";
@@ -163,7 +167,14 @@ class generic_edge {
 		out<<std::endl;			
 		out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
 		out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
-		out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;		
+		out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
+		out<<"Mesh on the edge:" << std::endl;
+		std::vector<point> mesh = edge.uniform_mesh(0.1);
+		for(std::size_t i=0; i<mesh.size(); ++i)
+			out << mesh[i] << std::endl;
+		out << std::endl;
+		return out;
+		*/		
 	}	
 
 }; //class

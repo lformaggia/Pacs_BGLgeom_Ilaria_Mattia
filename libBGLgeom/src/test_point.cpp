@@ -7,21 +7,18 @@ using namespace BGLgeom;
 int main(){
 	
 	std::ifstream infile;
-	infile.open("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/data/test_point.txt");
+	infile.open("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data_test/test_point.txt");
 	point<3> P1;
 	point<3> P2;
 	
-	infile >> P1 >> P2;	//tutto in fila non va. Perché?
-	//std::cout << "Hello" << std::endl;
+	infile >> P1 >> P2;
 	std::cout << P1 << ", " << std::endl;
-	//infile >> P2;
 	std::cout << P2 << ", " << std::endl;
 	
-	/*
-	read_point<3>(infile,P1);
-	read_point<3>(infile,P2);
-	std::cout << P1 << ", " << P2 << std::endl;
-	*/
+	std::cout << "Comparison: P1 < P2? " << operator<(P1,P2) << std::endl;
+	std::cout << "Comparison: P1 > P2? " << (P1 > P2) << std::endl;
+	std::cout << "Comparison: P1 == P2? " << (P1 == P2) << std::endl;
+	std::cout << "Comparison: P1 != P2? " << (P1 != P2) << std::endl;
 	
 	return 0;
 }
