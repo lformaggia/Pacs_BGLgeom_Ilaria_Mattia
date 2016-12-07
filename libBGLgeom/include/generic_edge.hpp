@@ -20,6 +20,7 @@
 #include<array>
 #include<functional>
 #include<cmath>
+#include<iostream>
 #include"point.hpp"
 //#include"mesh.hpp"
 //#include"numerical_integration.hpp"
