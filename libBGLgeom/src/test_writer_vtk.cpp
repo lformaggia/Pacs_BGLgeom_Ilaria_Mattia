@@ -11,6 +11,8 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
+#include <string>
+
 #include "data_structure.hpp"
 #include "linear_edge.hpp"
 #include "writer_vtk.hpp"
@@ -38,7 +40,8 @@ int main(int, char *[]){
 	e = add_edge(a,c,G).first;
 	G[e].geometry.set_source(G[a].coordinates);
 	G[e].geometry.set_target(G[c].coordinates);		
-
-	writer_vtk<Graph> W("out_vtk.vtp");
+	
+	std::string filename("out_vtk.vtp");
+	writer_vtk<Graph,3> W(filename.c_str());
 	W.export_vtp(G);
 }

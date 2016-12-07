@@ -73,7 +73,7 @@ inline void insert_point<3>(double const* P, Points_ptr & points){
 	points -> InsertNextPoint(P);
 };
 
-template <typename Graph, int dim>
+template <typename Graph, unsigned int dim>
 class writer_vtk{
 	
 	public:
@@ -101,13 +101,9 @@ class writer_vtk{
 		 
 		virtual void export_vtp(Graph const& G){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
-
-			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-				add_line(*e_it, G);					
-			}	//for
-			
+			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
+				add_line(*e_it, G);							
 			generate_output();
-
 		}	
 		
 	protected:

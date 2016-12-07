@@ -7,7 +7,7 @@ using namespace BGLgeom;
 int main(){
 	
 	std::ifstream infile;
-	infile.open("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/data/test_point.txt");
+	infile.open("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data_test/test_point.txt");
 	point<3> P1;
 	point<3> P2;
 	
