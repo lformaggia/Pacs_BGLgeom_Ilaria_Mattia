@@ -59,7 +59,7 @@ tests: $(TEST_EXEC)
 
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking objects to executables ---"
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< -o $@	
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< $(LIB_OBJS_STATIC) -o $@
 
 $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 	@echo "--- Building test objects ---"
