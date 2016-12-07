@@ -17,7 +17,7 @@ help:
 	@echo "make static: --- Makes static library and executable"
 	@echo "make dynamic: -- Makes dynamic library and executable"
 	@echo "make library: -- Makes both static and dynamic libraries"
-	@echo "make test: ----- Makes executables for the tests"
+	@echo "make tests: ----- Makes executables for the tests"
 	@echo "make install: -- Installs the libaries"
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all but not not library"
@@ -54,11 +54,12 @@ $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	@echo "--- Building dynamic objects ---"
 	@mkdir -p $(BUILD_DIR_DYNAMIC)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	
+tests: $(TEST_EXEC)
 
-#$(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
-test: $(BUILD_DIR_TEST)/%.o
+$(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking objects to executables ---"
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< -o $(TEST_DIR)/%	
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< -o $@	
 
 $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 	@echo "--- Building test objects ---"
@@ -69,7 +70,9 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 #test/test_edge: $(BUILD_DIR_TEST)/test_edge.o
 #	$(CXX) $< -o $@
 
+install:
 
+doc:
 
 
 
