@@ -15,13 +15,18 @@ namespace BGLgeom{
 		BGLgeom::intersection_type how;
 		Edge_d int_edge;
 		std::vector<point2> int_pts;
-		
-		
+		int intersected_extreme; // it's useful only in those cases where the intersection happens in one of the two extremes. =0 if 1st extreme, =1 if second extreme
+				
 		Int_layer(const BGLgeom::Intersection & I, const Edge_d & e): intersect(I.intersect), how(I.how), int_edge(e){
 			for(int i=0; i<I.numberOfIntersections; ++i){
 				point2 P(I.intersectionPoint[i][0], I.intersectionPoint[i][1]);
 				int_pts.push_back(P);
 			}
+			
+			if(I.endPointIsIntersection[1][0] == 1) 
+				intersected_extreme = 0;
+			else
+				intersected_extreme = 1;
 		
 		};
 		
