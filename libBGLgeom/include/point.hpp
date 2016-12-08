@@ -17,6 +17,7 @@
 #define HH_POINT_HH
 
 #include <iostream>
+#include <iomanip>
 #include <Eigen/Dense>
 
 namespace BGLgeom{
@@ -55,9 +56,9 @@ operator<<(std::ostream & out, Eigen::DenseBase<Derived> & m){
 template <unsigned int dim>
 void
 write_point_pts(std::ostream & out, point<dim> const& P){
-	out << "\t11\t";
+	out << std::setw(8) << 11 << std::setw(16);
 	for(std::size_t i=0; i<dim-1; ++i)
-		out << P(0,i) << "\t";
+		out << std::fixed << std::setprecision(8) << P(0,i) << std::setw(16);
 	out << P(0,dim-1);
 
 }

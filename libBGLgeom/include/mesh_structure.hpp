@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include "point.hpp"
 
 namespace BGLgeom{
@@ -41,7 +42,7 @@ void
 write_mesh_pts(std::ostream & out, mesh<dim> const& M){
 	for(std::size_t i=1; i<M.size()-1; ++i){
 		BGLgeom::write_point_pts<dim>(out,M[i]);
-		out << "\tpoint" <<  std::endl;
+		out << std::setw(10) << "point" <<  std::endl;
 	}
 }
 
