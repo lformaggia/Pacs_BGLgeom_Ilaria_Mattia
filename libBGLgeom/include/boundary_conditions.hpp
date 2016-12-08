@@ -21,6 +21,20 @@
 #include <array>
 #include <string>
 
+//! Overload of operator= for assignments when there is only 1 BC.
+/*
+namespace{
+
+template <typename T>
+double std::array<T,1>::operator=(double const& val){
+	return val;
+}
+
+
+}	//namespace
+
+*/
+
 namespace BGLgeom{
 /*!
 	@brief An enum class defining the type of the boundary condition we want to add in the node

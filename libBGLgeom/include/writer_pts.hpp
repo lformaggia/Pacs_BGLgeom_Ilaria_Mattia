@@ -37,7 +37,7 @@ namespace BGLgeom{
 		
 	@param Graph The type of the graph
 */
-template <typename Graph>
+template <typename Graph, unsigned int dim>
 class writer_pts{
 	public:
 		//! Default constructor
@@ -87,9 +87,13 @@ class writer_pts{
 			tgt = boost::target(e, G);
 			out_file << G[src].BC << std::endl;
 			out_file << G[tgt].BC << std::endl;
-			out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
-			out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
-			out_file = write_mesh_pts(out_file, G[e].mesh);	//with overload of operator<< for mesh
+			BGLgeom::write_point_pts<dim>(out_file, G[src].coordinates);
+			out_file << "\tstart" << std::endl;
+			BGLgeom::write_point_pts<dim>(out_file, G[tgt].coordinates);
+			out_file << "\tend" << std::endl;
+			//out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
+			//out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
+			write_mesh_pts<dim>(out_file, G[e].mesh);	//with overload of operator<< for mesh
 			/*
 			G[*e_it].mesh::iterator m_it = G[e].mesh.begin();
 			G[*e_it].mesh::iterator m_end = G[e].mesh.end();
