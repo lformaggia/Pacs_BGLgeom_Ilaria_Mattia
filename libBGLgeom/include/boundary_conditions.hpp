@@ -18,6 +18,7 @@
 #define HH_BOUNDARY_CONDITION_HH
 
 #include <iostream>
+#include <iomanip>
 #include <array>
 #include <string>
 
@@ -130,22 +131,22 @@ struct boundary_condition{
 		else if(BC.type == BC_type::DIR){
 			out << "BC DIR ";
 			for(std::size_t i = 0; i < num_bc; ++i)
-			out << BC.value[i] << " ";
+				out << std::fixed << std::setprecision(8) << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::NEU){
 			out << "BC NEU ";
 			for(std::size_t i = 0; i < num_bc; ++i)
-			out << BC.value[i] << " ";
+				out << std::fixed << std::setprecision(8) << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::MIX){
 			out << "BC MIX ";
 			for(std::size_t i = 0; i < num_bc; ++i)
-			out << BC.value[i] << " ";
+				out << std::fixed << std::setprecision(8) << BC.value[i] << " ";
 			return out;
 		} else if(BC.type == BC_type::OTHER){
 			out << "BC OTHER ";
 			for(std::size_t i = 0; i < num_bc; ++i)
-			out << BC.value[i] << " ";
+				out << std::fixed << std::setprecision(8) << BC.value[i] << " ";
 			return out;
 		}
 	}	//operator<<	

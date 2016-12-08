@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <boost/graph/adjacency_list.hpp>
 
@@ -88,9 +89,9 @@ class writer_pts{
 			out_file << G[src].BC << std::endl;
 			out_file << G[tgt].BC << std::endl;
 			BGLgeom::write_point_pts<dim>(out_file, G[src].coordinates);
-			out_file << "\tstart" << std::endl;
+			out_file << std::setw(10) << "start" << std::endl;
 			BGLgeom::write_point_pts<dim>(out_file, G[tgt].coordinates);
-			out_file << "\tend" << std::endl;
+			out_file << std::setw(8) << "end" << std::endl;
 			//out_file << "\t" << G[src].coordinates << "\t" << "start" << std::endl;
 			//out_file << "\t" << G[tgt].coordinates << "\t" << "end" << std::endl;
 			write_mesh_pts<dim>(out_file, G[e].mesh);	//with overload of operator<< for mesh
