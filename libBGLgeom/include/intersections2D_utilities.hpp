@@ -67,7 +67,7 @@ intersection_type_new
 compute_intersection_type(BGLgeom::Intersection const& I);
 
 template <typename Graph>
-struct Intersection_more{
+struct Int_layer{
 	// The alias for the graph. Dimension = 2
 	/*
 	using Graph = boost::adjacency_list	<boost::vecS, boost::vecS, boost::directedS,
@@ -78,34 +78,41 @@ struct Intersection_more{
 	//! The type of the intersection
 	intersection_type_new how;
 	//! The edge descriptor fo the old edge that intersects the new one
-	BGLgeom::Edge_desc<Graph> e;
+	BGLgeom::Edge_desc<Graph> int_edge;
 	//! The container for the intersection points
-	std::vector<BGLgeom::point<2>> int_points;
-	//! Number of intersection with edge e
-	unsigned int num_intersections;
+	std::vector<BGLgeom::point<2>> int_pts;
+	//! Bool value to monitor if the components of int_pts will be swapped
+	bool swapped_comp;
+
+	unsigned int intersected_extreme; // it's useful only in those cases where the intersection happens in one of the two extremes. =0 if 1st extreme, =1 if second extreme
 	
 	
 	//! Constructor
-	Intersection_more	(BGLgeom::Intersection const& _I,
-						 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : e(_e),
-																							  int_points(),
-																							  num_intersections(_I.numberOfIntersections) {
-		int_points.resize(_I.numberOfIntersections);
-		for(std::size_t i = 0; i < num_intersections; ++i)
-			int_points[i] = _I.intersectionPoint[i];
+	Int_layer	(BGLgeom::Intersection const& _I,
+						 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : int_edge(_e),
+																							  int_pts(),
+																							  swapped_comp(false){
+		int_pts.resize(_I.numberOfIntersections);
+		for(std::size_t i = 0; i < _I.numberOfIntersections; ++i)
+			int_pts[i] = _I.intersectionPoint[i];
 		how = compute_intersection_type(_I);
+		
+		if(_I.endPointIsIntersection[1][0] == 1) 
+			intersected_extreme = 0;
+		else
+			intersected_extreme = 1;
 	}
 	
-};	//Intersection_more
+};	//Int_layer
 
 template <typename Graph>
 std::ostream &
-operator<< (std::ostream & out, Intersection_more<Graph> const& I){
-	out << "Number of intersections: " << I.num_intersections << std::endl;
-	out << "Intersecting edge: " << I.e << std::endl;
+operator<< (std::ostream & out, Int_layer<Graph> const& I){
+//	out << "Number of intersections: " << I.num_intersections << std::endl;
+//	out << "Intersecting edge: " << I.int_edge << std::endl;
 	out << "Intersection points: " << std::endl;
-	for(std::size_t i=0; i<I.num_intersections; ++i)
-		out << "\t" << I.int_points[i] << std::endl;
+	for(const BGLgeom::point<2> & P: I.int_pts)
+		out << "\t" << P << std::endl;
 	out << "Type: ";
 	if(I.how == BGLgeom::intersection_type_new::X)
 		out << "X";
