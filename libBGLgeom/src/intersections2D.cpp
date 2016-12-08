@@ -344,7 +344,7 @@ std::ostream & operator<<(std::ostream & out, Intersection const& I){
 	    }	    
 	}
 	// Output of the type of intersection
-	out << "\t Type: ";
+	out << "\tType: ";
 	if(I.how == BGLgeom::intersection_type::X)
 		out << "X";
 	else if(I.how == BGLgeom::intersection_type::T_new)
