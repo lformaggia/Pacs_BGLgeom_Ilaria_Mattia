@@ -40,7 +40,7 @@ int main(){
 	G[e1].mesh = G[e1].geometry.uniform_mesh(0.1);
 	G[e2].mesh = G[e2].geometry.uniform_mesh(0.1);
 	
-	std::string filename = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data_test/out.pts";
+	std::string filename = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out.pts";
 	writer_pts<Graph,3> W(filename.c_str());
 	W.export_pts(G);
 	
