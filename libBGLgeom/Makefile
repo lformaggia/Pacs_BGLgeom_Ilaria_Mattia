@@ -17,12 +17,11 @@ help:
 	@echo "make static: --- Makes static library and executable"
 	@echo "make dynamic: -- Makes dynamic library and executable"
 	@echo "make library: -- Makes both static and dynamic libraries"
-	@echo "make tests: ----- Makes executables for the tests"
+	@echo "make alltest: -- Makes executables for the tests"
 	@echo "make install: -- Installs the libaries"
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all but not not library"
 	@echo "make distclean:  Cleans all"
-	@echo $(TEST_EXEC)
 	
 all: library test install doc clean
 
@@ -38,9 +37,9 @@ dynamic: $(LIB_OBJS_DYNAMIC)
 	@echo "--- Building dynamic library ---"
 	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
 	
-$(LIB_OBJS_STATIC): | $(DIR_TO_BE_CREATED)
-$(LIB_OBJS_DYNAMIC): | $(DIR_TO_BE_CREATED)
-$(TEST_EXEC): | $(DIR_TO_BE_CREATED)
+$(LIB_OBJS_STATIC) $(LIB_OBJS_DYNAMIC) $(TEST_EXEC): | $(DIR_TO_BE_CREATED)
+#$(LIB_OBJS_DYNAMIC): | $(DIR_TO_BE_CREATED)
+#$(TEST_EXEC): | $(DIR_TO_BE_CREATED)
 
 $(DIR_TO_BE_CREATED):
 	@mkdir -p $(DIR_TO_BE_CREATED)
@@ -55,7 +54,7 @@ $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	@mkdir -p $(BUILD_DIR_DYNAMIC)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 	
-tests: $(TEST_EXEC)
+alltest: $(TEST_EXEC)
 
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking objects to executables ---"
