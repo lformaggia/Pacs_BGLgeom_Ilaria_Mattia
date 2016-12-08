@@ -27,6 +27,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	Intersection out;
 	linear_edge_interface S1(edge1);
 	linear_edge_interface S2(edge2);
+	std::array<std::array<double,2>,2> intersectionPoints;
 	auto v1= S1[1]-S1[0];
 	auto v2= S2[1]-S2[0];
 	auto len1 = norm(v1);
@@ -49,7 +50,8 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                return out;
 	            }
 	            out.intersect=true;
-	            out.intersectionPoint[out.numberOfIntersections++]=P1;
+	            intersectionPoints[out.numberOfIntersections++]=P1;
+	            //out.intersectionPoint[out.numberOfIntersections++]=P1;
 	            out.endPointIsIntersection[0][i]=true;
 	            out.endPointIsIntersection[1][j]=true;
 	            out.otherEdgePoint[0][i]=j;
@@ -63,6 +65,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    out.parallel=true;
 	    out.collinear=true;
 	    out.how = intersection_type::Identical;
+	    out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	    return out;
 	}
 	// Now solve the linear system that returns the parametric coordinates of the intersection
@@ -110,6 +113,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	        if (std::abs(t1    )<= tol){
 	            if(out.endPointIsIntersection[0][0]){
 	                // already found. End here
+	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[0][0]=true;
@@ -118,6 +122,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	        if (std::abs(t1-1.0)<= tol){
 	            if(out.endPointIsIntersection[0][1]){
 	                // already found. End here
+	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[0][1]=true;
@@ -126,6 +131,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	        if (std::abs(t2    )<= tol){
 	            if(out.endPointIsIntersection[1][0]){
 	                // already found. End here
+	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[1][0]=true;
@@ -134,12 +140,15 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	        if (std::abs(t2-1.0)<= tol){
 	            if(out.endPointIsIntersection[1][1]){
 	                // already found. End here
+	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[1][1]=true;
 	            }
 	        }
-	        out.intersectionPoint[out.numberOfIntersections++]=A1+ t1*(B1-A1);
+	        intersectionPoints[out.numberOfIntersections++]=A1+ t1*(B1-A1);
+	        //out.intersectionPoint[out.numberOfIntersections++]=A1+ t1*(B1-A1);
+	        out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
 	        return out;
 	    }
 	} else {
@@ -169,9 +178,13 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            t=dot((A2-A1),(B1-A1))/(len1*len1);
 	            if(t>=-0.5*tol && t<=1+0.5*tol){
 	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=A2;
+	                intersectionPoints[out.numberOfIntersections++]=A2;
+	                //out.intersectionPoint[out.numberOfIntersections++]=A2;
 	                out.endPointIsIntersection[1][0]=true;
-	                if(out.numberOfIntersections==2)return out;
+	                if(out.numberOfIntersections==2){
+	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	return out;
+	                }
 	            }
 	        }
 	        // IS B2 on S1? Maybe I have already considered it earlier
@@ -179,9 +192,13 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            t=dot((B2-A1),(B1-A1))/(len1*len1);
 	            if(t>=-0.5*tol && t<=1+0.5*tol){
 	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=B2;
+	                intersectionPoints[out.numberOfIntersections++]=B2;
+	                //out.intersectionPoint[out.numberOfIntersections++]=B2;
 	                out.endPointIsIntersection[1][1]=true;
-	                if(out.numberOfIntersections==2)return out;
+	                if(out.numberOfIntersections==2){
+	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	return out;
+	                }
 	            }
 	        }
 	        // IS A1 on S2? Maybe I have already considered it earlier
@@ -189,9 +206,13 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            t=dot((A1-A2),(B2-A2))/(len2*len2);
 	            if(t>=-0.5*tol && t<=1+0.5*tol){
 	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=A1;
+	                intersectionPoints[out.numberOfIntersections++]=A1;
+	                //out.intersectionPoint[out.numberOfIntersections++]=A1;
 	                out.endPointIsIntersection[0][0]=true;
-	                if(out.numberOfIntersections==2)return out;
+	                if(out.numberOfIntersections==2){
+	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	return out;
+	                }
 	            }
 	        }
 	        // IS B1 on S2? Maybe I have already considered it earlier
@@ -199,9 +220,13 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            t=dot((B1-A2),(B2-A2))/(len2*len2);
 	            if(t>=-0.5*tol && t<=1+0.5*tol){
 	                out.intersect=true;
-	                out.intersectionPoint[out.numberOfIntersections++]=B1;
+	                intersectionPoints[out.numberOfIntersections++]=B1;
+	                //out.intersectionPoint[out.numberOfIntersections++]=B1;
 	                out.endPointIsIntersection[0][1]=true;
-	                if(out.numberOfIntersections==2)return out;
+	                if(out.numberOfIntersections==2){
+	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	return out;
+	                }
 	            }
 	        }
 	    }
@@ -301,19 +326,19 @@ std::ostream & operator<<(std::ostream & out, Intersection const& I){
 	if (!I.intersect) return out;
 	out<<"\tNumber of intersections:"<<I.numberOfIntersections<<std::endl;
 	for (auto j=0u;j<I.numberOfIntersections;++j){
-	    out<<"\t x["<<j<<"]="<<I.intersectionPoint[j][0];
-	    out<<"\t y["<<j<<"]="<<I.intersectionPoint[j][1];
+	    out<<"\t x["<<j<<"]="<<I.intersectionPoint[j](0,0);
+	    out<<"\t y["<<j<<"]="<<I.intersectionPoint[j](0,1);
 	    out<<std::endl;
 	}
-	out<<"\t Segments are identical:"<<std::boolalpha<<I.identical<<std::endl;
-	out<<"\t Segments are parallel :"<<std::boolalpha<<I.parallel<<std::endl;
-	out<<"\t Segments are collinear:"<<std::boolalpha<<I.collinear<<std::endl;
+	out<<"\tSegments are identical:"<<std::boolalpha<<I.identical<<std::endl;
+	out<<"\tSegments are parallel :"<<std::boolalpha<<I.parallel<<std::endl;
+	out<<"\tSegments are collinear:"<<std::boolalpha<<I.collinear<<std::endl;
 	for (unsigned int j=0u;j<2;++j){
 	    for (unsigned int k=0u;k<2;++k){
 	        if(I.endPointIsIntersection[j][k]){
-	            out<<"\t EndPoint "<<k<<" of segment "<<j<<" is intersection"<<std::endl;
+	            out<<"\tEndPoint "<<k<<" of segment "<<j<<" is intersection"<<std::endl;
 	            if(I.otherEdgePoint[j][k]!=-1)
-	            out<<"\t\t and it is joined to EdgePoint "<<I.otherEdgePoint[j][k]
+	            out<<"\t\tand it is joined to EdgePoint "<<I.otherEdgePoint[j][k]
 	                <<" of segment "<<(j+1)%2<<std::endl;
 	        }
 	    }	    
@@ -346,5 +371,13 @@ std::ostream & operator<<(std::ostream & out, Intersection const& I){
 	return out;
 }	//operator<<
 
+std::array<BGLgeom::point<2>,2>
+translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsigned int const& numberOfIntersection){
+	std::array<BGLgeom::point<2>,2> P;
+	for(std::size_t i=0; i<numberOfIntersection; ++i)
+		for(std::size_t j=0; j<2; ++j)
+			P[i](0,j) = array[i][j];
+	return P;
+}	//translate_array_to_eigen
 
 }
