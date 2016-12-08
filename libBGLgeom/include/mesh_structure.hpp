@@ -37,13 +37,12 @@ using mesh = std::vector<BGLgeom::point<dim>>;
 			recoverd through vertex properties
 */
 template <unsigned int dim>
-std::ostream &
+void
 write_mesh_pts(std::ostream & out, mesh<dim> const& M){
-	typename mesh<dim>::iterator m_it = M.begin()+1;
-	typename mesh<dim>::iterator m_end = M.end()-1;
-	for( ; m_it != m_end; ++m_it)
-		out << "\t11\t" << *m_it << std::endl;
-	return out;
+	for(std::size_t i=1; i<M.size()-1; ++i){
+		BGLgeom::write_point_pts<dim>(out,M[i]);
+		out << "\tpoint" <<  std::endl;
+	}
 }
 
 /*

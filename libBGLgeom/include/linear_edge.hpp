@@ -149,7 +149,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			retval.push_back(SRC);
 			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
 				s += h_abscissa;
-				retval.emplace_back(point(this->value(s)));
+				retval.emplace_back(point(this->operator()(s)));
 			}
 			retval.push_back(TGT);
 			return retval;			

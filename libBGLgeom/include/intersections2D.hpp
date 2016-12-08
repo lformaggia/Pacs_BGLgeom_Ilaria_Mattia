@@ -30,6 +30,7 @@
 #include <iostream>
 
 #include "linear_edge.hpp"
+#include "point.hpp"
 
 //! Helper functions for the algorithms. Using Unnamed namespace
 namespace {
@@ -178,7 +179,7 @@ struct Intersection {
 	//! Number of intersections (max 2, rapresenting the case in which the segments overlap)
 	unsigned int numberOfIntersections = 0u;
 	//! Intersection points coordinates
-	std::array<std::array<double,2>,2> intersectionPoint = std::array<std::array<double,2>,2>{std::array<double,2>(), std::array<double,2>()};
+	std::array<BGLgeom::point<2>,2> intersectionPoint = std::array<BGLgeom::point<2>,2>{BGLgeom::point<2>(), BGLgeom::point<2>()};
 	/*! Intersection may be end point:	    
 	    endPointIsIntersection[i][j]=true
 	    then end j of edge i is at the intersection
@@ -232,16 +233,13 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 */
 std::ostream & operator<< (std::ostream & out, Intersection const& I);
 
-
-
-
-/*!
-	@brief A struct containing all the information needed to refine the graph
+/*
+	@brief Helper function to translate array into eigen
+	@detail Needed to suite the working structure of comupte_intersection
+			with the structure used for points in this library, that is Eigen
 */
-struct Useful_intersection{
-	intersection_type situation;
-};	//Useful_intersection
-
+std::array<BGLgeom::point<2>,2>
+translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsigned int const& numberOfIntersection);
 
 };	//BGLgeom
 
