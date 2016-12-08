@@ -174,7 +174,7 @@ struct Intersection {
 	//! Segments interects! True if there is intersection
 	bool intersect = false;
 	//! How the two segments intersect
-	intersection_type how;
+	BGLgeom::intersection_type how;
 	//! Number of intersections (max 2, rapresenting the case in which the segments overlap)
 	unsigned int numberOfIntersections = 0u;
 	//! Intersection points coordinates
