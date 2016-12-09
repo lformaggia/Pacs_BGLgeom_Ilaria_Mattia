@@ -19,9 +19,11 @@ libBGLgeom/bspline_curve/*
 fracture_intersection/doc/*
 fracture_intersection/obj/*
 fracture_intersection/bin/*
+fracture_intersection/test/*
 network_diffusion/doc/*
 network_diffusion/obj/*
 network_diffusion/bin/*
+network_diffucion/test/*
 vtk/*
 bin/*
 Filetxt/*
