@@ -1,5 +1,9 @@
 # Num fract
 11
+# num imposed fracture
+0
+# fracture num pvalue
+#
 #x0 y0 x1 y1 K_t K_n df source exactSolution(no here)
 0.0500 0.4160 0.2200  0.0624 1.0e3 1.0e3 1.e-2 0
 0.0500 0.3333 0.2500  0.0667 1.0e3 1.0e3 1.e-2 0
@@ -12,6 +16,3 @@
 0.7500 0.9574 0.9500  0.8155 1.0e3 1.0e3 1.e-2 0
 0.7500 0.9667 0.9500  0.8333 1.0e3 1.0e3 1.e-2 0
 0.1500 0.8363 0.4000  0.9727 1.0e3 1.0e3 1.e-2 0
-# num imposed fracture
-0
-# fracture num pvalue
