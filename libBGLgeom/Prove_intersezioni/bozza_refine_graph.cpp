@@ -27,6 +27,8 @@ int main(){
     point2 p10(2.0,3.0);
     point2 p11(2.0,-1.0);
     point2 p12(2.0,4.0);
+    point2 p13(3.3,3.3);
+    point2 p14(3.6,3.6);
     
 	line line1(p4,p6);
 	line line2(p2,p3);	
@@ -34,8 +36,9 @@ int main(){
 	line line4(p7,p8);
 	line line5(p9,p10);
 	line line6(p11,p12);
+	line line7(p13,p14);
 
- 	std::vector<line> line_vect{line1,line2,line3,line4,line5,line6};
+ 	std::vector<line> line_vect{line1,line2,line3,line4,line5,line6,line7};
 
  	
  	create_graph(G,line_vect);

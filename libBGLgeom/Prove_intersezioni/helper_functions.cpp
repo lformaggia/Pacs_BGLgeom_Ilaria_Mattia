@@ -68,11 +68,26 @@ namespace BGLgeom{
 				Vertex_d current_src = src;
 			
 				if(intvect.size()==1){
-					refine_graph(G, current_src, intvect[0], next_src);
-					current_src = next_src;
-					if(!same_coordinates(current_src, tgt, G))
+					// if the the type is Overlap_inside both src and tgt are required, so we treat this case separately
+					if(intvect[0].how == BGLgeom::intersection_type_new::Overlap_inside){
+						BGLgeom::Int_layer<Graph> I = intvect[0];
+						
+						Vertex_d v1 = boost::source(I.int_edge, G);
+						Vertex_d v2 = boost::target(I.int_edge, G);
+						boost::remove_edge(I.int_edge,G);
+						std::cout<<"Edge removed"<<std::endl;
+						add_new_edge(v1,src,G);
+						add_new_edge(src,tgt,G);
+						Edge_d e = (boost::edge(src,tgt,G)).first;
+ 						update_edge_properties(e, G);					
+						add_new_edge(tgt,v2,G);								
+					}
+					else{
+						refine_graph(G, current_src, intvect[0], next_src);
+						current_src = next_src;					
+						if(!same_coordinates(current_src, tgt, G))
 						add_new_edge(current_src, tgt, G);
-					
+					}			
 				} 
 				else{
 				 	//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
@@ -224,15 +239,47 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
  			break;
 		}
 		
-		case int_type::Overlap_inside:{
-			//controllare da fuori se siamo in questo caso perchè qui ho bisogno anche del target
-			Vertex_d v1 = boost::source(I.int_edge, G);
-			Vertex_d v2 = boost::target(I.int_edge, G);
+		case int_type::Overlap:{
+			Vertex_d v1;
+			Vertex_d v2;
+
+			if(!swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);				
+			}
 			
-			add_new_edge(v1,src,G);
-			add_new_edge(src,G);		
- 			update_edge_properties(I.int_edge, G);			
-						
+			if(I.intersected_extreme==0){//it means that src is outside and tgt inside
+				add_new_edge(src,v1,G);
+				//recover the vertex_descriptor having the coordinates of the inside point of intersection (which is always the second in vector int_pts)
+				Vertex_d v = get_vertex_descriptor(I.int_pts[1], G);
+				add_new_edge(v1,v,G);
+				update_edge_properties((boost::edge(v1,v)).first, G);
+				add_new_edge(v,v2,G);
+				update_edge_properties((boost::edge(v,v2)).first, G);															
+			}		
+			else{ //it means that src is inside and tgt outside
+				add_new_edge(v1,src,G);
+				add_new_edge(src,v2,G);
+				update_edge_properties((boost::edge(src,v2)).first, G);
+				next_src = v2;
+			}	
+			
+			boost::remove_edge(I.int_edge, G);		
+			break;			
+		}
+		
+		case int_type::Overlap_extreme{
+			
+			break;
+		}
+		
+		case int_type::Identical{
+ 			update_edge_properties(I.int_edge, G);
+ 			break;		
 		}
 	
 	}
