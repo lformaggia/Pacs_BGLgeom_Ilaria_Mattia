@@ -68,12 +68,21 @@ namespace BGLgeom{
 				Vertex_d current_src = src;
 			
 				if(intvect.size()==1){
-					// if the the type is Overlap_inside both src and tgt are required, so we treat this case separately
+					// if the the type is Overlap_inside or Overlap_extreme both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
 					if(intvect[0].how == BGLgeom::intersection_type_new::Overlap_inside){
 						BGLgeom::Int_layer<Graph> I = intvect[0];
-						
-						Vertex_d v1 = boost::source(I.int_edge, G);
-						Vertex_d v2 = boost::target(I.int_edge, G);
+						Vertex_d v1;
+						Vertex_d v2;
+											
+						if(!I.swapped_comp){
+							v1 = boost::source(I.int_edge, G);
+							v2 = boost::target(I.int_edge, G);						
+						}
+						else{
+							v1 = boost::target(I.int_edge, G);
+							v2 = boost::source(I.int_edge, G);						
+						}
+
 						boost::remove_edge(I.int_edge,G);
 						std::cout<<"Edge removed"<<std::endl;
 						add_new_edge(v1,src,G);
@@ -82,6 +91,36 @@ namespace BGLgeom{
  						update_edge_properties(e, G);					
 						add_new_edge(tgt,v2,G);								
 					}
+					
+					else if (intvect[0].how == BGLgeom::intersection_type_new::Overlap_extreme){
+						BGLgeom::Int_layer<Graph> I = intvect[0];
+						Vertex_d v1;
+						Vertex_d v2;
+											
+						if(!I.swapped_comp){
+							v1 = boost::source(I.int_edge, G);
+							v2 = boost::target(I.int_edge, G);						
+						}
+						else{
+							v1 = boost::target(I.int_edge, G);
+							v2 = boost::source(I.int_edge, G);						
+						}
+						
+						if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
+							add_new_edge(src,tgt,G);
+							add_new_edge(tgt,v2,G);
+						}						
+						else{ //the common extreme is the target
+							add_new_edge(v1,src,G);
+							add_new_edge(src,tgt,G);
+						}
+						
+						Edge_d e = (boost::edge(src,tgt,G)).first;
+						update_edge_properties(e,G);
+						boost::remove_edge(I.int_edge,G);
+						std::cout<<"Edge removed"<<std::endl;
+					}
+					
 					else{
 						refine_graph(G, current_src, intvect[0], next_src);
 						current_src = next_src;					
@@ -243,7 +282,7 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 			Vertex_d v1;
 			Vertex_d v2;
 
-			if(!swapped_comp){
+			if(!I.swapped_comp){
 				v1 = boost::source(I.int_edge, G);
 				v2 = boost::target(I.int_edge, G);
 			}
@@ -254,32 +293,54 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 			
 			if(I.intersected_extreme==0){//it means that src is outside and tgt inside
 				add_new_edge(src,v1,G);
-				//recover the vertex_descriptor having the coordinates of the inside point of intersection (which is always the second in vector int_pts)
+				//recover the vertex_descriptor having the coordinates of the inside point of intersection (which is always the second in vector int_pts and it's always the target)
 				Vertex_d v = get_vertex_descriptor(I.int_pts[1], G);
 				add_new_edge(v1,v,G);
-				update_edge_properties((boost::edge(v1,v)).first, G);
+				
+				Edge_d e1 = (boost::edge(v1,v,G)).first;
+				update_edge_properties(e1,G);
+				
 				add_new_edge(v,v2,G);
-				update_edge_properties((boost::edge(v,v2)).first, G);															
+				
+				Edge_d e2 = (boost::edge(v,v2,G)).first;
+				update_edge_properties(e2,G);
+				
+				next_src = v; // v is the same vertex descriptor as tgt, so that no new line will be added in the last step (this is necessarily the last intersection of the vector, otherwise it couldn't involve the target)															
 			}		
 			else{ //it means that src is inside and tgt outside
 				add_new_edge(v1,src,G);
 				add_new_edge(src,v2,G);
-				update_edge_properties((boost::edge(src,v2)).first, G);
+
+				Edge_d e = (boost::edge(src,v2,G)).first;
+				update_edge_properties(e,G);
+				
 				next_src = v2;
 			}	
 			
-			boost::remove_edge(I.int_edge, G);		
+			boost::remove_edge(I.int_edge, G);
+			std::cout<<"Edge removed"<<std::endl;		
 			break;			
 		}
 		
-		case int_type::Overlap_extreme{
-			
-			break;
-		}
-		
-		case int_type::Identical{
+		case int_type::Identical:{
  			update_edge_properties(I.int_edge, G);
  			break;		
+		}
+		
+		case int_type::Common_extreme:{
+			// get the vertex descriptor of the extreme involved in the intersection
+			Vertex_d v;
+			if(I.intersected_extreme == 0) //first extreme, i.e the source
+				v = boost::source(I.int_edge, G);
+			else
+				v = boost::target(I.int_edge, G);
+			
+			if(!(src == v)){ // if src has same coordinates as v there's nothing to do, so we consider only the opposite case
+				add_new_edge(src, v, G);
+			}
+			
+			next_src = v;			
+			break;
 		}
 	
 	}
