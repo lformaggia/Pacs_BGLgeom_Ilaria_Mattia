@@ -40,7 +40,7 @@ int main(){
 	Vertex_base_property<2> src_prop, tgt_prop;
 	Edge_data e_prop;
 	Edge_desc<Graph> e;
-	Vertex_desc<Graph> src(1), tgt(2);	//Initialized
+	Vertex_desc<Graph> src, tgt;
 	
 	// Reading the file
 	R.ignore_dummy_lines(7);
@@ -49,6 +49,8 @@ int main(){
 		src_prop = R.get_source_data();
 		tgt_prop = R.get_target_data();
 		e_prop = R.get_edge_data();
+		src = add_vertex(G);
+		tgt = add_vertex(G);
 		e = add_edge(src, tgt, G).first;
 		src = source(e, G);
 		tgt = target(e, G);
@@ -57,9 +59,6 @@ int main(){
 		G[e] = e_prop;
 		G[e].geometry.set_source(G[src].coordinates);
 		G[e].geometry.set_target(G[tgt].coordinates);
-		//This two lines to make possible execute add_edge with always different vertices
-		src += 2;
-		tgt += 2;	
 	}	//while
 	
 	unsigned int count = 0;
