@@ -6,3 +6,48 @@
 #                  
 #         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 #======================================================================
+
+# Inlcuding general Makefile.in
+MAKEFILEH_DIR = ../
+include $(MAKEFILEH_DIR)/Makefile.inc
+
+# Including Makefile.inc of the local folder
+-include Makefile.inc
+
+#======================================================================
+
+.PHONY: all clean distclean help doc exec
+
+.DEFAUL_GOAL: help
+
+help:
+	@echo "make help: ----- Prints this help"
+	@echo "make all: ------ Makes executables and documentation"
+	@echo "make exec: ----- Makes executables"
+	@echo "make doc: ------ Makes documentation"
+	@echo "make clean: ---- Cleans all object files"
+	@echo "make distclean:  Cleans all" 
+	@echo $(EXEC)
+
+all: exec doc clean
+
+exec: $(EXEC)
+
+$(TARGET_DIR)/%: $(BUILD_DIR)/%.o
+	@mkdir -p $(TARGET_DIR)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) $< -o $@
+
+$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+doc:
+	@mkdir -p $(DOC_DIR)
+
+clean:
+	-rm -rv $(BUILD_DIR)
+
+distclean: clean
+	-rm -rv $(TARGET_DIR)
+	-rm -rv $(DOC_DIR)
+
