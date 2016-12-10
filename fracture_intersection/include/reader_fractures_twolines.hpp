@@ -15,39 +15,48 @@
 	@detail 
 */
 
-#ifndef HH_READER_FRACTURES_HH
-#define HH_READER_FRACTURES_HH
+#ifndef HH_READER_FRACTURES_TWOLINES_HH
+#define HH_READER_FRACTURES_TWOLINES_HH
 
 #include "reader_ASCII.hpp"
 #include "fracture_graph_properties.hpp"
 
 namespace Fracture{
 
-//! The reader based on reader_ASCII to read the data about the fractures
-template <typename Edge_data>
-class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_data, Edge_data> {
+/*! 
+	@brief The reader based on reader_ASCII to read the data about the fractures
+	@detail In this reader we will read to lines of input file at a time, because
+			the input file has a different structure: it has the coordinates of the 
+			source in the first line, and the coordinates of the target in the 
+			second one.
+*/
+template <typename E>
+class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_data, E> {
 	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
 	public:
 		//! Constructor
-		reader_fractures(std::string _filename) :	BGLgeom::reader_ASCII	<Fracture::Vertex_data,
-																			 Edge_data>(_filename),
-													SRC(),
-													TGT(),
-													K_t(),
-													K_n(),
-													df(),
-													source_term() {};
+		reader_fractures_twolines(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_data, E>(_filename),
+															SRC(),
+															TGT(),
+															discard1(),
+															discard2() {};
 		//! Nothing to do with this method
 		void get_other_data(){};
 		
-		//! Reading data from line
+		/*! 
+			@brief Reading data from line
+			@detail The format of the file is: \n
+					- 1=source; coordinates; -10=third coordinate \n
+					- 2=target; coordinates; -10=third coordinate \n
+					This two lines form an edge
+		*/
 		void get_data_from_line(){
-			this->in_file >> SRC >> TGT >> K_t >> K_n >> df >> source_term;
+			this->in_file >> discard1 >> SRC >> discard2 >> discard1 >> TGT >> discard2;
 		}
 		
 		//! Returning data on the edge
-		Edge_data get_edge_data(){
-			return Edge_data(K_t, K_n, df, source_term);
+		E get_edge_data(){
+			return E();
 		}
 		
 		//! Returning data on the source
@@ -68,10 +77,10 @@ class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_data, Ed
 	private:
 		//! Coordinates of source and target
 		Fracture::Vertex_data::point_t SRC, TGT;
-		//! Parameters
-		double K_t, K_n, df, source_term;
-};	//reader_fractures
+		//! Dummy variable
+		double discard1, discard2;
+};	//reader_fractures_twolines
 												 
 }	//Fracture
 						 
-#endif	//HH_READER_FRACTURES_HH
+#endif	//HH_READER_FRACTURES_TWOLINES_HH
