@@ -41,6 +41,7 @@ int main(){
 	Edge_data e_prop;
 	Edge_desc<Graph> e;
 	Vertex_desc<Graph> src, tgt;
+	unsigned int frac_number = 1;
 	
 	// Reading the file
 	R.ignore_dummy_lines(7);
@@ -59,16 +60,16 @@ int main(){
 		G[e] = e_prop;
 		G[e].geometry.set_source(G[src].coordinates);
 		G[e].geometry.set_target(G[tgt].coordinates);
+		G[e].frac_num = frac_number;
+		frac_number++;
 	}	//while
 	
-	unsigned int count = 0;
 	Edge_iter<Graph> e_it, e_end;
 	//Printing out data
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
-		count++;
 		src = source(*e_it, G);
 		tgt = target(*e_it, G);
-		std::cout << "Edge " << count << ": " << std::endl;
+		std::cout << "Edge " << G[*e_it].frac_num << ": " << std::endl;
 		std::cout << G[src].coordinates << ", " << G[tgt].coordinates << std::endl;
 		std::cout << "Parameters: K_t " << G[*e_it].K_t << "; K_n " << G[*e_it].K_n << std::endl;
 	}

@@ -33,25 +33,37 @@ namespace Fracture{
 */
 //! The edge data structure
 struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>{
-	//! Parameter K_t
+	//! Parameter K_t (Permeabilità tangenziale)
 	double K_t;
-	//! Parameter K_n
+	//! Parameter K_n (Permeabilità normale)
 	double K_n;
-	//! Degrees of freedom (??)
+	//! Apertura
 	double df;
+	//! Fracture number
+	unsigned int frac_num;
 	
 	//! Default constructor
 	Edge_data() :	BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
 					K_t(),
 					K_n(),
-					df() {};
+					df(),
+					frac_num() {};
 					
-	//! Constructor
+	//! Constructor (without fracture_number)
 	Edge_data(double const& _K_t, double const& _K_n, double const& _df) :
 				BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
 				K_t(_K_t),
 				K_n(_K_n),
-				df(_df) {};
+				df(_df),
+				frac_num() {};
+	
+	//! Full constructor
+	Edge_data(double const& _K_t, double const& _K_n, double const& _df, unsigned int const& _frac_num) :
+				BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
+				K_t(_K_t),
+				K_n(_K_n),
+				df(_df),
+				frac_num(_frac_num) {};
 };	//Edge_data
 
 
@@ -92,7 +104,9 @@ class reader_fractures : public BGLgeom::reader_ASCII	<BGLgeom::Vertex_base_prop
 		}
 		
 		//! Nothing to do
-		BGLgeom::no_topological_data get_topological_data(){};
+		BGLgeom::no_topological_data get_topological_data(){
+			return BGLgeom::no_topological_data();
+		};
 		
 	private:
 		//! Coordinates of source and target
