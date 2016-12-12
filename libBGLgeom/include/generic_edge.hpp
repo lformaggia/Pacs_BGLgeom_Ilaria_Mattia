@@ -21,6 +21,7 @@
 #include<functional>
 #include<cmath>
 #include<iostream>
+#include <cmath>
 #include"point.hpp"
 //#include"mesh.hpp"
 //#include"numerical_integration.hpp"
@@ -33,7 +34,7 @@ namespace BGLgeom{
 template<unsigned int dim> // dim is the dimension of the space we are working in (2 or 3 in normal cases)
 class generic_edge {
 
-	using vect_Eigen = Eigen::Matrix<double,dim,1>;
+	using vect_Eigen = Eigen::Matrix<double,1,dim>;
 	using point = BGLgeom::point<dim>;
 	using vect_pts = std::vector<point>;
 
@@ -46,12 +47,14 @@ class generic_edge {
 	public:
 	
 	//! full constructor
-	generic_edge
-	(std::function<point(double)> value_, std::function<vect_Eigen(double)> first_der_, std::function<vect_Eigen(double)> second_der_): value_fun(value_), first_derivatives_fun(first_der_), second_derivatives_fun(second_der_)
-	{};
+	generic_edge(std::function<point(double)>  const& value_,
+				 std::function<vect_Eigen(double)> const& first_der_,
+				 std::function<vect_Eigen(double)> second_der_) :
+				 			 value_fun(value_),
+				 			 first_derivatives_fun(first_der_),
+				 			 second_derivatives_fun(second_der_) {};
 
-    //! returns the point corresponding to s=0:1
-     
+    //! returns the point corresponding to s=0:1     
 	point operator() (double t) const
 	{
 		//check if param belongs to 0->1
@@ -119,9 +122,18 @@ class generic_edge {
 	
 	//! curvature
 	double curvature(const double & s){
-		if( (this->first_derivatives(s)).norm() == 0) return 0; // altrimenti al denominatore ho 0 
-		double numerator( (this->first_derivative(s).cross(this->second_derivatives(s))).norm() );
-		double denominator( this->first_derivatives(s) * this->first_derivatives(s) * this->first_derivatives(s) );
+		if( (this->first_derivatives(s)).norm() == 0) return 0; // altrimenti al denominatore ho 0
+		// cross() non funziona se dim == 2, vuole almeno dimensione 3
+		double numerator;
+		if(dim >= 3)
+			numerator = 1.4;//(this->first_derivatives(s));//.cross(this->second_derivatives(s))).norm();
+		else{	//dim == 2
+			numerator = std::abs(this->first_derivatives(s)(0,0) * this->second_derivatives(s)(0,1) - 
+						 		 this->first_derivatives(s)(0,1) * this->second_derivatives(s)(0,0));
+		}
+		double denominator( ((this->first_derivatives(s)).norm()) *
+							((this->first_derivatives(s)).norm()) *
+							((this->first_derivatives(s)).norm()) );
 		return numerator/denominator;
 	}
 	 
