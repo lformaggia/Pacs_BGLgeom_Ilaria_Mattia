@@ -2,13 +2,16 @@
 #Vedi makefile.inc in Example della pacs_repository
 
 # Directory where the library resides
-PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia#che è la mia, l'utente la cambia
+#che è la mia, l'utente la cambia
+PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
 # libBGLgeom is stored here:
-export BGLGEOM_DIR = $(PROJECT_DIR)/libBGlgeom
+export BGLGEOM_DIR = $(PROJECT_DIR)/libBGLgeom
 # example on network diffusion is stored here
 export NETW_DIR = $(PROJECT_DIR)/network_diffusion
 # example on fracture intersection is sotred here
 export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
+
+INSTALL_PATH ?= /usr/local
 
 
 #Creating variable for path to vtk includes

@@ -65,6 +65,8 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 
 
 install:
+	mkdir -p $(INSTALL_PATH)/include/BGLgeom
+	cp $(HEADERS) $(INSTALL_PATH)/include/BGLgeom
 
 doc:
 

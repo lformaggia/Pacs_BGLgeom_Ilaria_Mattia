@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -54,16 +54,15 @@ struct no_topological_data {};
 										empty struct
 */
 template 	<typename Vertex_data_structure,
-			//typename Target_data_structure,
 			typename Edge_data_structure,
 			typename Topological_data_structure = no_topological_data>
-class new_reader_class {
+class reader_ASCII {
 	public:
 		//! Default constructor
-		new_reader_class() : filename(), in_file(), find_eof() {};
+		reader_ASCII() : filename(), in_file(), find_eof() {};
 		
 		//! Constructor
-		new_reader_class(std::string _filename) : filename(_filename), in_file(), find_eof() {
+		reader_ASCII(std::string _filename) : filename(_filename), in_file(), find_eof() {
 			try{
 				in_file.open(filename);
 			} catch(std::exception & e) {
@@ -74,10 +73,10 @@ class new_reader_class {
 		
 		//magari questi fue comunque non servono...
 		//! Copy constructor
-		new_reader_class(new_reader_class const&) = default;
+		reader_ASCII(reader_ASCII const&) = default;
 		
 		//! Assignment operator
-		new_reader_class & operator=(new_reader_class const&) = default;
+		reader_ASCII & operator=(reader_ASCII const&) = default;
 		
 		//! Set the input file to read
 		virtual void set_input(std::string _filename){
@@ -117,32 +116,11 @@ class new_reader_class {
 			}
 		}
 		
-		/*!
-			@brief Reads the data from one single line. It has to be specified by the user
-			@detail It reads data from the istringstream iss_line that is created and
-					initialize in the method get_data_from_line() every time that method is called.
-		*/
-		//virtual void read_line(std::istringstream & iss_line) = 0;
-		
 		/*! 
 			@brief Reads one line and put the data read from the istringstream in the variables defined
 					in the attributes of the derived class defined by the user
 		*/		
 		virtual void get_data_from_line() = 0;
-		/*{
-			std::istringstream iss_line(line);		
-			
-			std::getline(in_file, line);
-				
-			if(iss_line.fail()){
-				std::cerr << "Error while transferring the line read into istringstream." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-			
-			//char a_caso;
-			this->read_line(iss_line);	//non mi piace tanto... 
-			//in_file.get(a_caso);
-		}*/
 		
 		/*!
 			@brief Another method to get data
@@ -183,4 +161,4 @@ class new_reader_class {
 
 }	//BGLgeom
 
-#endif //HH_NEW_READER_CLASS_HH
+#endif //HH_reader_ASCII_HH

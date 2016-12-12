@@ -119,8 +119,11 @@ struct Vertex_base_property{
 	
 	//! Default constructor
 	Vertex_base_property() : coordinates(), BC() {};
+	
+	//! Constructor with only the coordinates
+	Vertex_base_property(point_t _coordinates) : coordinates(_coordinates), BC() {};
 								
-	//! Constructor
+	//! Full constructor
 	Vertex_base_property(point_t _coordinates, bc_t _BC) : coordinates(_coordinates), BC(_BC) {};
 
 	//! Copy constructor
