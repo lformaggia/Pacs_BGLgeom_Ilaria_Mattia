@@ -49,9 +49,7 @@ struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 	@brief Topological properties of the graph
 	@detail The input file gives us explicit infos about the structure of the
 			graph. We can use this infos to index the vertex descriptors like
-			the given data. Moreover, since the label of the vertices in the
-			input file are integers, we can assume to use a vecS,vecS graph
-			in order not to templatize the vertex descriptors in this struct.
+			the given data.
 */
 struct Topological_prop{
 	//! Vertex_descriptor for the source
