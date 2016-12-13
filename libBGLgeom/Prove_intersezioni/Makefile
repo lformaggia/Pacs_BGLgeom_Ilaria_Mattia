@@ -5,9 +5,9 @@ CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/
 .PHONY: all clean distclean
 
 
-prova_sort_duplicates : prova_sort_duplicates.cpp prova_sort_duplicates.o 
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  prova_sort_duplicates.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) prova_sort_duplicates.o -o prova_sort_duplicates
+#prova_sort_duplicates : prova_sort_duplicates.cpp prova_sort_duplicates.o 
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  prova_sort_duplicates.cpp
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) prova_sort_duplicates.o -o prova_sort_duplicates
 	
 bozza_refine_graph: bozza_refine_graph.cpp helper_functions.cpp intersections2D.cpp intersections2D_utilities.cpp helper_functions.o intersections2D.o intersections2D_utilities.o bozza_refine_graph.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  bozza_refine_graph.cpp
