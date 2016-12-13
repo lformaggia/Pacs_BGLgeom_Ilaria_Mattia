@@ -27,6 +27,10 @@ int main(){
     point2 p10(2.0,3.0);
     point2 p11(2.0,-1.0);
     point2 p12(2.0,4.0);
+    point2 p13(3.3,3.3);
+    point2 p14(3.6,3.6);
+    point2 p15(0.5,0.5);
+    point2 p16(-1.0,2.0);
     
 	line line1(p4,p6);
 	line line2(p2,p3);	
@@ -34,12 +38,30 @@ int main(){
 	line line4(p7,p8);
 	line line5(p9,p10);
 	line line6(p11,p12);
+	line line7(p13,p14);
+	line line8(p1,p15);
+	line line9(p1,p15);
+	line line10(p3,p16);
 
- 	std::vector<line> line_vect{line1,line2,line3,line4,line5,line6};
+ 	std::vector<line> line_vect{line1,line2,line3,line4,line5,line6,line7,line8,line9,line10};
 
- 	
  	create_graph(G,line_vect);
 	//initialize writer pts/vtk passing output filename
+	
+	int count_vertices = 0;
+	int count_edges = 0;
+	
+	Edge_it e_it, e_end;
+	Vertex_it v_it, v_end;
+	
+	for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it) //for loop on al the edges already in the graph
+		++count_edges;
+		
+	for (std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it) //for loop on al the edges already in the graph
+		++count_vertices;
+	
+	std::cout << "________________ FINAL COUNT ________________"<<std::endl;
+	std::cout<<count_vertices<<" vertices and " <<count_edges<<" edges"<<std::endl;
 	
 	return 0;
 }

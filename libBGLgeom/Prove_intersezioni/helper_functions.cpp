@@ -52,6 +52,7 @@ namespace BGLgeom{
 					BGLgeom::Int_layer<Graph> intobj(intobj_tmp, *e_it); // this is the structure I'm going to use
 					edge_alone = false;
 					intvect.push_back(intobj);
+					std::cout<<"Intersection with ("<<G[boost::source(*e_it,G)].coordinates<<";"<<G[boost::target(*e_it,G)].coordinates<<")"<<std::endl;
 					std::cout<<intobj<<std::endl;
 				}
 				
@@ -66,22 +67,77 @@ namespace BGLgeom{
 			else{ // there is at least one intersection		
 				Vertex_d next_src;
 				Vertex_d current_src = src;
+				
+				//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
+				if(src < tgt)
+					std::sort(intvect.begin(), intvect.end(), asc_order);
+				else
+					std::sort(intvect.begin(), intvect.end(), desc_order);
 			
 				if(intvect.size()==1){
-					refine_graph(G, current_src, intvect[0], next_src);
-					current_src = next_src;
-					if(!same_coordinates(current_src, tgt, G))
-						add_new_edge(current_src, tgt, G);
+					// if the the type is Overlap_inside or Overlap_extreme both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
+					if(intvect[0].how == BGLgeom::intersection_type_new::Overlap_inside){
+						BGLgeom::Int_layer<Graph> I = intvect[0];
+						Vertex_d v1;
+						Vertex_d v2;
+											
+						if(!I.swapped_comp){
+							v1 = boost::source(I.int_edge, G);
+							v2 = boost::target(I.int_edge, G);						
+						}
+						else{
+							v1 = boost::target(I.int_edge, G);
+							v2 = boost::source(I.int_edge, G);						
+						}
+
+						boost::remove_edge(I.int_edge,G);
+						std::cout<<"Edge removed"<<std::endl;
+						add_new_edge(v1,src,G);
+						add_new_edge(src,tgt,G);
+						Edge_d e = (boost::edge(src,tgt,G)).first;
+ 						update_edge_properties(e, G);					
+						add_new_edge(tgt,v2,G);								
+					}
 					
+					else if (intvect[0].how == BGLgeom::intersection_type_new::Overlap_extreme){
+						BGLgeom::Int_layer<Graph> I = intvect[0];
+						Vertex_d v1;
+						Vertex_d v2;
+											
+						if(!I.swapped_comp){
+							v1 = boost::source(I.int_edge, G);
+							v2 = boost::target(I.int_edge, G);						
+						}
+						else{
+							v1 = boost::target(I.int_edge, G);
+							v2 = boost::source(I.int_edge, G);						
+						}
+						
+						if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
+							add_new_edge(src,tgt,G);
+							add_new_edge(tgt,v2,G);
+						}						
+						else{ //the common extreme is the target
+							add_new_edge(v1,src,G);
+							add_new_edge(src,tgt,G);
+						}
+						
+						Edge_d e = (boost::edge(src,tgt,G)).first;
+						update_edge_properties(e,G);
+						boost::remove_edge(I.int_edge,G);
+						std::cout<<"Edge removed"<<std::endl;
+					}
+					
+					else{
+						refine_graph(G, current_src, intvect[0], next_src);
+						current_src = next_src;					
+						if(!same_coordinates(current_src, tgt, G))
+						add_new_edge(current_src, tgt, G);
+					}			
 				} 
 				else{
-				 	//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
-				 	if(src < tgt)
-						std::sort(intvect.begin(), intvect.end(), asc_order);
-					else
-						std::sort(intvect.begin(), intvect.end(), desc_order);
 					
-					std::cout<<"ordered vector"<<std::endl;	
+					std::cout<<"ORDERED VECTOR"<<std::endl;	
 					for(const BGLgeom::Int_layer<Graph> & I: intvect)
 					std::cout<<I<<std::endl;
 					
@@ -89,7 +145,7 @@ namespace BGLgeom{
 					auto last = std::unique(intvect.begin(), intvect.end(), is_duplicate);
 					intvect.erase(last, intvect.end());
 					
-					std::cout<<"Vector without duplicates"<<std::endl;	
+					std::cout<<"VECTOR WITHOUT DUPLICATES"<<std::endl;	
 					for(const BGLgeom::Int_layer<Graph> & I: intvect)
 					std::cout<<I<<std::endl;
 					
@@ -208,31 +264,92 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 		}
 		
 		case int_type::Overlap_outside:{
-			Vertex_d v1 = boost::source(I.int_edge, G);
-			Vertex_d v2 = boost::target(I.int_edge, G);
+			Vertex_d v1;
+			Vertex_d v2; 
 			
 			if(!I.swapped_comp){ // if the components haven't been inverted, the nearest to src is the source, otherwise the target
-				add_new_edge(src, v1, G);
-				next_src = v2;				
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);
 			}
 			else{
-				add_new_edge(src, v2, G);
-				next_src = v1;			
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);				
 			}
-				
+
+			
+			if(v1 != src){ // otherwise the edge has already been added
+				add_new_edge(src, v1, G);
+			}
+			
+			next_src = v2;
  			update_edge_properties(I.int_edge, G);
+				
  			break;
 		}
 		
-		case int_type::Overlap_inside:{
-			//controllare da fuori se siamo in questo caso perchè qui ho bisogno anche del target
-			Vertex_d v1 = boost::source(I.int_edge, G);
-			Vertex_d v2 = boost::target(I.int_edge, G);
+		case int_type::Overlap:{
+			Vertex_d v1;
+			Vertex_d v2;
+
+			if(!I.swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);				
+			}
 			
-			add_new_edge(v1,src,G);
-			add_new_edge(src,G);		
- 			update_edge_properties(I.int_edge, G);			
-						
+			if(I.intersected_extreme==0 ){//it means that src is outside and tgt inside
+				add_new_edge(src,v1,G);
+				//recover the vertex_descriptor having the coordinates of the inside point of intersection (which is always the second in vector int_pts and it's always the target)
+				Vertex_d v = get_vertex_descriptor(I.int_pts[1], G);
+				add_new_edge(v1,v,G);
+				
+				Edge_d e1 = (boost::edge(v1,v,G)).first;
+				update_edge_properties(e1,G);
+				
+				add_new_edge(v,v2,G);
+				
+				Edge_d e2 = (boost::edge(v,v2,G)).first;
+				update_edge_properties(e2,G);
+				
+				next_src = v; // v is the same vertex descriptor as tgt, so that no new line will be added in the last step (this is necessarily the last intersection of the vector, otherwise it couldn't involve the target)															
+			}		
+			else{ //it means that src is inside and tgt outside
+				add_new_edge(v1,src,G);
+				add_new_edge(src,v2,G);
+
+				Edge_d e = (boost::edge(src,v2,G)).first;
+				update_edge_properties(e,G);
+				
+				next_src = v2;
+			}	
+			
+			boost::remove_edge(I.int_edge, G);
+			std::cout<<"Edge removed"<<std::endl;		
+			break;			
+		}
+		
+		case int_type::Identical:{
+ 			update_edge_properties(I.int_edge, G);
+ 			break;		
+		}
+		
+		case int_type::Common_extreme:{
+			// get the vertex descriptor of the extreme involved in the intersection
+			Vertex_d v;
+			if(I.intersected_extreme == 0) //first extreme, i.e the source
+				v = boost::source(I.int_edge, G);
+			else
+				v = boost::target(I.int_edge, G);
+			
+			if(!(src == v)){ // if src has same coordinates as v there's nothing to do, so we consider only the opposite case
+				add_new_edge(src, v, G);
+			}
+			
+			next_src = v;			
+			break;
 		}
 	
 	}
@@ -245,7 +362,7 @@ bool same_coordinates(const Vertex_d & v1, const Vertex_d & v2, const Graph & G)
 
 void add_new_edge(const Vertex_d & src, const Vertex_d & tgt, Graph & G){
 	Edge_d e = boost::add_edge(src, tgt, G).first;
-	std::cout<<"New edge created"<<std::endl;
+	std::cout<<"New edge created ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
 	
 	point2 SRC = G[src].coordinates;
 	point2 TGT = G[tgt].coordinates;
@@ -267,7 +384,7 @@ void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G){
 	Vertex_d tgt = boost::target(e, G);
 
 	boost::remove_edge(e, G);
-	std::cout<<"Edge removed"<<std::endl;	
+	std::cout<<"Edge removed ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;	
 	add_new_edge(src, v, G);
 	add_new_edge(v, tgt, G);	
 }
