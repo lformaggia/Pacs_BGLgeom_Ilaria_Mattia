@@ -23,14 +23,15 @@
 
 namespace Fracture{
 
+using BGLgeom::operator>>;	// To let the compiler find the overload of operator>> for BGLgeom::point
+
 //! The reader based on reader_ASCII to read the data about the fractures
-template <typename Edge_data>
-class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_data, Edge_data> {
+class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fracture::Edge_prop> {
 	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
 	public:
 		//! Constructor
-		reader_fractures(std::string _filename) :	BGLgeom::reader_ASCII	<Fracture::Vertex_data,
-																			 Edge_data>(_filename),
+		reader_fractures(std::string _filename) :	BGLgeom::reader_ASCII	<Fracture::Vertex_prop,
+																			 Fracture::Edge_prop>(_filename),
 													SRC(),
 													TGT(),
 													K_t(),
@@ -46,18 +47,18 @@ class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_data, Ed
 		}
 		
 		//! Returning data on the edge
-		Edge_data get_edge_data(){
-			return Edge_data(K_t, K_n, df, source_term);
+		Fracture::Edge_prop get_edge_data(){
+			return Fracture::Edge_prop(K_t, K_n, df, source_term);
 		}
 		
 		//! Returning data on the source
-		Fracture::Vertex_data get_source_data(){
-			return Fracture::Vertex_data(SRC);
+		Fracture::Vertex_prop get_source_data(){
+			return Fracture::Vertex_prop(SRC);
 		}
 		
 		//! Returning data on the target
-		Fracture::Vertex_data get_target_data(){
-			return Fracture::Vertex_data(TGT);
+		Fracture::Vertex_prop get_target_data(){
+			return Fracture::Vertex_prop(TGT);
 		}
 		
 		//! Nothing to do
@@ -67,7 +68,7 @@ class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_data, Ed
 		
 	private:
 		//! Coordinates of source and target
-		Fracture::Vertex_data::point_t SRC, TGT;
+		Fracture::Vertex_prop::point_t SRC, TGT;
 		//! Parameters
 		double K_t, K_n, df, source_term;
 };	//reader_fractures

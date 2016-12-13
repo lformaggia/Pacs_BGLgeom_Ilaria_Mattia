@@ -30,7 +30,7 @@ namespace Fracture{
 	parameters: K_t, K_n, df, source_term
 */
 //! The edge data structure
-struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>{
+struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>{
 	//! Parameter K_t (Permeabilità tangenziale)
 	double K_t;
 	//! Parameter K_n (Permeabilità normale)
@@ -43,7 +43,7 @@ struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 	unsigned int frac_num;
 	
 	//! Default constructor
-	Edge_data() :	BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
+	Edge_prop() :	BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
 					K_t(0),
 					K_n(0),
 					df(0),
@@ -51,7 +51,7 @@ struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 					frac_num(0) {};
 					
 	//! Constructor (without fracture_number)
-	Edge_data	(double const& _K_t,
+	Edge_prop	(double const& _K_t,
 			 	 double const& _K_n,
 			 	 double const& _df,
 			 	 double const& _source_term) :
@@ -63,7 +63,7 @@ struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 							frac_num() {};
 	
 	//! Full constructor
-	Edge_data	(double const& _K_t,
+	Edge_prop	(double const& _K_t,
 				 double const& _K_n,
 				 double const& _df,				 
 				 double const& _source_term,
@@ -74,10 +74,10 @@ struct Edge_data : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 							df(_df),
 							source_term(_source_term),
 							frac_num(_frac_num) {};
-};	//Edge_data
+};	//Edge_prop
 
 //! The vertex data structure
-using Vertex_data = BGLgeom::Vertex_base_property<2>;
+using Vertex_prop = BGLgeom::Vertex_base_property<2>;
 
 }	//Fracture
 

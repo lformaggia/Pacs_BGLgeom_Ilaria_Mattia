@@ -30,19 +30,19 @@ using namespace Fracture;
 
 int main(){
 
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_data, Edge_data>;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_prop, Edge_prop>;
 	
 	std::string filename1("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/fracture_intersection/data/fractureElevenVF.dat");
 	std::string filename2("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/fracture_intersection/data/fracture.txt");
 	
 	Graph G1;
 	Graph G2;
-	reader_fractures<Edge_data> R1(filename1);
-	reader_fractures_twolines<Edge_data> R2(filename2);
+	reader_fractures R1(filename1);
+	reader_fractures_twolines R2(filename2);
 	
 	// Utilities to read the data
-	Vertex_data src_prop, tgt_prop;
-	Edge_data e_prop;
+	Vertex_prop src_prop, tgt_prop;
+	Edge_prop e_prop;
 	Edge_desc<Graph> e;
 	Vertex_desc<Graph> src, tgt;
 	unsigned int frac_number = 1;

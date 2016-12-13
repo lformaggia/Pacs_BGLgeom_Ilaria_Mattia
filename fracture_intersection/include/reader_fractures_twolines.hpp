@@ -30,12 +30,11 @@ namespace Fracture{
 			source in the first line, and the coordinates of the target in the 
 			second one.
 */
-template <typename E>
-class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_data, E> {
+class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop> {
 	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
 	public:
 		//! Constructor
-		reader_fractures_twolines(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_data, E>(_filename),
+		reader_fractures_twolines(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop>(_filename),
 															SRC(),
 															TGT(),
 															discard1(),
@@ -55,18 +54,18 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 		}
 		
 		//! Returning data on the edge
-		E get_edge_data(){
-			return E();
+		Fracture::Edge_prop get_edge_data(){
+			return Fracture::Edge_prop();
 		}
 		
 		//! Returning data on the source
-		Fracture::Vertex_data get_source_data(){
-			return Fracture::Vertex_data(SRC);
+		Fracture::Vertex_prop get_source_data(){
+			return Fracture::Vertex_prop(SRC);
 		}
 		
 		//! Returning data on the target
-		Fracture::Vertex_data get_target_data(){
-			return Fracture::Vertex_data(TGT);
+		Fracture::Vertex_prop get_target_data(){
+			return Fracture::Vertex_prop(TGT);
 		}
 		
 		//! Nothing to do
@@ -76,7 +75,7 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 		
 	private:
 		//! Coordinates of source and target
-		Fracture::Vertex_data::point_t SRC, TGT;
+		Fracture::Vertex_prop::point_t SRC, TGT;
 		//! Dummy variable
 		double discard1, discard2;
 };	//reader_fractures_twolines
