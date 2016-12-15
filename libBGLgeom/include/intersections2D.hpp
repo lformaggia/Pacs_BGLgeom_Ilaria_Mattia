@@ -241,6 +241,8 @@ std::ostream & operator<< (std::ostream & out, Intersection const& I);
 std::array<BGLgeom::point<2>,2>
 translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsigned int const& numberOfIntersection);
 
-};	//BGLgeom
+void compute_intersection_type(Intersection & out);
+
+} //BGLgeom
 
 #endif	//HH_INTERSECTIONS_2D_HH

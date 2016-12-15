@@ -48,7 +48,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                out.good=false;
 	                out.how = intersection_type::Something_went_wrong;
 	                return out;
-	            }
+	            } //if
 	            out.intersect=true;
 	            intersectionPoints[out.numberOfIntersections++]=P1;
 	            //out.intersectionPoint[out.numberOfIntersections++]=P1;
@@ -56,9 +56,10 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            out.endPointIsIntersection[1][j]=true;
 	            out.otherEdgePoint[0][i]=j;
 	            out.otherEdgePoint[1][j]=i;
-	        }
-	    }
-	}
+	        }//if
+	    }//for
+	}//for
+	
 	// Handle the case where the two edges are identical!
 	if (out.numberOfIntersections==2u){
 	    out.identical=true;
@@ -66,6 +67,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    out.collinear=true;
 	    out.how = intersection_type::Identical;
 	    out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	    std::cout<<"identical"<<std::endl;
 	    return out;
 	}
 	// Now solve the linear system that returns the parametric coordinates of the intersection
@@ -106,6 +108,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    if (!inside){
 	        // No intersecion, end here
 	        out.how = intersection_type::No_intersection;
+	        std::cout<<"no int"<<std::endl;
 	        return out;
 	    } else {
 	        out.intersect=true;
@@ -114,44 +117,50 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	            if(out.endPointIsIntersection[0][0]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+					compute_intersection_type(out);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[0][0]=true;
 	            }
-	        }
+	        } //if
 	        if (std::abs(t1-1.0)<= tol){
 	            if(out.endPointIsIntersection[0][1]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+					compute_intersection_type(out);	                
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[0][1]=true;
 	            }
-	        }
+	        } //if
 	        if (std::abs(t2    )<= tol){
 	            if(out.endPointIsIntersection[1][0]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+					compute_intersection_type(out);	                
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[1][0]=true;
 	            }
-	        }
+	        } //if
 	        if (std::abs(t2-1.0)<= tol){
 	            if(out.endPointIsIntersection[1][1]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                compute_intersection_type(out);
 	                return out;
 	            } else {
 	                out.endPointIsIntersection[1][1]=true;
 	            }
-	        }
+	        } //if
 	        intersectionPoints[out.numberOfIntersections++]=A1+ t1*(B1-A1);
 	        //out.intersectionPoint[out.numberOfIntersections++]=A1+ t1*(B1-A1);
 	        out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+			compute_intersection_type(out);	        
 	        return out;
-	    }
-	} else {
+	    } //else
+	}//if result.first==true
+	else {
 	    out.parallel=true;
 	    // Compute distance between the two lines
 	    /*
@@ -183,10 +192,11 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                out.endPointIsIntersection[1][0]=true;
 	                if(out.numberOfIntersections==2){
 	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	compute_intersection_type(out);					
 	                	return out;
 	                }
-	            }
-	        }
+	            }//if
+	        }//if
 	        // IS B2 on S1? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[1][1]){
 	            t=dot((B2-A1),(B1-A1))/(len1*len1);
@@ -197,10 +207,11 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                out.endPointIsIntersection[1][1]=true;
 	                if(out.numberOfIntersections==2){
 	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	compute_intersection_type(out);
 	                	return out;
 	                }
 	            }
-	        }
+	        }//if
 	        // IS A1 on S2? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[0][0]){
 	            t=dot((A1-A2),(B2-A2))/(len2*len2);
@@ -211,10 +222,11 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                out.endPointIsIntersection[0][0]=true;
 	                if(out.numberOfIntersections==2){
 	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	compute_intersection_type(out);
 	                	return out;
 	                }
 	            }
-	        }
+	        }//if
 	        // IS B1 on S2? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[0][1]){
 	            t=dot((B1-A2),(B2-A2))/(len2*len2);
@@ -225,16 +237,35 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	                out.endPointIsIntersection[0][1]=true;
 	                if(out.numberOfIntersections==2){
 	                	out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+	                	compute_intersection_type(out);
 	                	return out;
 	                }
 	            }
 	        }
-	    }
+	    } //else
+	} //else
+
+	//if I get here there are 2 cases: no intersection or collinear_common_extreme
+	if(out.intersects == false){
+		out.how = intersection_type::No_intersection;
+		return out;
 	}
-	// ========= COMPUTING THE INTERSECTION SITUATION ============
-	// Identical and No_intersection cases already handled
-	//Poi devo togliere tutti i return prima
+	else{
+		out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
+		compute_intersection_type(out);
+		return out;
+	}
 	
+std::cout<<"Non sono entrato mai Formaggia"<<std::endl;
+
+} //compute_intersection
+
+	
+// ========= COMPUTING THE INTERSECTION SITUATION ============
+// Identical and No_intersection cases already handled
+//Poi devo togliere tutti i return prima
+	
+void compute_intersection_type(Intersection & out){  // lasciare solo return
 	//calcolo il numero di intersezioni endPoint
 	unsigned int numEndPointIntersections = 0;
 	for(std::size_t i=0; i<2; ++i){
@@ -244,42 +275,41 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 		}
 	}
 	//Comincio a distinguere i casi. numIntersection == 0 already treated in the previous code
-	if(out.numberOfIntersections == 1){
-		//with only one intersection, of course edge are not collinear
+	if(out.numberOfIntersections == 1){ 
 		// X intersection
 		if(numEndPointIntersections == 0){
 			out.how	= intersection_type::X;
-			return out;
+			return;
 		}
 		//T_new, T_old
 		if(numEndPointIntersections == 1){
 			//edge 1 interseca con uno dei suoi due estremi (0 o 1)
 			if(out.endPointIsIntersection[1][0] || out.endPointIsIntersection[1][1]){
 				out.how = intersection_type::T_new;
-				return out;
+				return;
 			}
 			//edge 0 interseca con uno dei suoi due estremi (0 o 1)
 			if(out.endPointIsIntersection[0][0] || out.endPointIsIntersection[0][1]){
 				out.how = intersection_type::T_old;
-				return out;
+				return;
 			}
 		}
 		//Common_extreme; There are two end points (one for each edge) that meets
 		if(numEndPointIntersections == 2){
 			out.how = intersection_type::Common_extreme;
-			return out;
+			return;
 		}
+		
 	} else {		//2 intersezioni, ovvero collinear = true
 		//Overlap_outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)
-		
-		if(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){
+		if(numEndPointIntersections == 2 && out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){
 			out.how = intersection_type::Overlap_outside;
-			return out;
+			return;
 		}
 		//Overlap_inside; edge 1 (new) intersects in both its extremes (0 and 1) edge 0 (old)
-		if(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1]){
+		if(numEndPointIntersections == 2 && out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1]){
 			out.how = intersection_type::Overlap_inside;
-			return out;
+			return;
 		}
 		//Overlap; Con solo due intersezioni segnalate sono sicuro di essere in questo caso
 		if(	numEndPointIntersections == 2 && (
@@ -289,32 +319,27 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 			(out.endPointIsIntersection[0][1] && out.endPointIsIntersection[1][1])	 )
 			){
 				out.how = intersection_type::Overlap;
-				return out;
+				return;
 		}
 		//Overlap_extreme_...	; se si sovrappone un estremo, mi segnala tre intersezioni
 		if(numEndPointIntersections == 3){
-			std::cout<<"case 3"<<std::endl;
-			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dello stesso edge
-			if( (out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]) ||
-				(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1])	){
+			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dell'edge1
+			if(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1]){ 
 					out.how = intersection_type::Overlap_extreme_inside;
-					return out;	
+					return;	
 			}
-			/*Overlap_extreme_outside; AHHHHHH, non si può distinguere da overlap_extreme_inside!
-			Provare per credere: mettere nel test di SegmentIntersect gli edge:
-			edge1 : 0,3 ; 0,0  ------ edge2: 0,1 ; 0,0
-			edge1 : 0,3 ; 0,0 ------- edge2: 0,4 ; 0,0
-			Mi dà lo stesso identico output, a parte le coordinate delle intersezioni!
-			O fare un match appunto sulla coordinate delle intersezioni, o cercare fuori
-			di gestire i due casi circa alla stessa maniera
-			*/
 			
-		}
-		
+			//Overlap_extreme_outside; devono essere intersezioni tutti e due gli extremes dell'edge0
+			if(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){ 
+					out.how = intersection_type::Overlap_extreme_outside;
+					return;	
+			}
+			
+		}	
 	}
-	
-	return out;
-}	//compute_intersection
+	std::cout<<"Non sono entrato mai Noi"<<std::endl;	
+	return;
+}	//compute_intersection_type
 
 
 

@@ -1,3 +1,6 @@
+/// ATTENZIONE DISTINGUERE OVERLAP_EXT_INSIDE (CHE È QUELLO ATTUALMENTE PRESENTE) DA overlap_extreme_inside OUTSIDE (CHE VA PROPRIO AGGIUNTO)
+
+
 #include<iostream>
 
 #include"helper_functions.hpp"
@@ -75,8 +78,8 @@ namespace BGLgeom{
 					std::sort(intvect.begin(), intvect.end(), desc_order);
 			
 				if(intvect.size()==1){
-					// if the the type is Overlap_inside or Overlap_extreme both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
-					if(intvect[0].how == BGLgeom::intersection_type_new::Overlap_inside){
+					// if the the type is Overlap_inside or overlap_extreme_inside both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
+					if(intvect[0].how == BGLgeom::intersection_type::Overlap_inside){
 						BGLgeom::Int_layer<Graph> I = intvect[0];
 						Vertex_d v1;
 						Vertex_d v2;
@@ -99,7 +102,7 @@ namespace BGLgeom{
 						add_new_edge(tgt,v2,G);								
 					}
 					
-					else if (intvect[0].how == BGLgeom::intersection_type_new::Overlap_extreme){
+					else if (intvect[0].how == BGLgeom::intersection_type::Overlap_extreme_inside){
 						BGLgeom::Int_layer<Graph> I = intvect[0];
 						Vertex_d v1;
 						Vertex_d v2;
@@ -203,12 +206,12 @@ bool desc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2){
 
 bool is_duplicate(const BGLgeom::Int_layer<Graph> & I1, const BGLgeom::Int_layer<Graph> & I2){
 	//check if the first of the 2 elements is of type Common_extreme or T_old. If so check if the second one shares with it one intersection point
-	if(I1.how == intersection_type_new::Common_extreme || I1.how == intersection_type_new::T_old){
+	if(I1.how == intersection_type::Common_extreme || I1.how == intersection_type::T_old){
 		for(const point2 & P2: I2.int_pts)
 			if(I1.int_pts[0] == P2) return true;
 	}
 	// Do the same as before, inverting I1 and I2
-	if(I2.how == intersection_type_new::Common_extreme || I2.how == intersection_type_new::T_old){
+	if(I2.how == intersection_type::Common_extreme || I2.how == intersection_type::T_old){
 		for(const point2 & P1: I1.int_pts)
 			if(I2.int_pts[0] == P1) return true;
 	}
@@ -218,7 +221,7 @@ bool is_duplicate(const BGLgeom::Int_layer<Graph> & I1, const BGLgeom::Int_layer
 
 
 void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I, Vertex_d & next_src){
-	using int_type = BGLgeom::intersection_type_new;
+	using int_type = BGLgeom::intersection_type;
 	int_type T = I.how;
 	
 	switch(T){
