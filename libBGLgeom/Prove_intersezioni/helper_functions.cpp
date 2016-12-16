@@ -1,6 +1,3 @@
-/// ATTENZIONE DISTINGUERE OVERLAP_EXT_INSIDE (CHE È QUELLO ATTUALMENTE PRESENTE) DA overlap_extreme_inside OUTSIDE (CHE VA PROPRIO AGGIUNTO)
-
-
 #include<iostream>
 
 #include"helper_functions.hpp"
@@ -38,6 +35,11 @@ namespace BGLgeom{
 		for(const line & L : Lvect){
 		
 			std::cout<<"-------------------STARTING A NEW LINE-------------------"<<std::endl;
+			int count_v = 0;
+			Vertex_it vv,vvend;
+			for(std::tie(vv,vvend) = boost::vertices(G); vv!=vvend; ++vv) ++count_v;
+			std::cout<<"There are "<<count_v<<" vertices"<<std::endl;
+			
 			//line = getline;
 			Vertex_d src = get_vertex_descriptor(L.get_source(), G); //inserts a new vertex and returns the vertex desc or simply returns an already existing vertex desc in the case the coordinates match
 			Vertex_d tgt = get_vertex_descriptor(L.get_target(), G);
@@ -55,8 +57,8 @@ namespace BGLgeom{
 					BGLgeom::Int_layer<Graph> intobj(intobj_tmp, *e_it); // this is the structure I'm going to use
 					edge_alone = false;
 					intvect.push_back(intobj);
-					std::cout<<"Intersection with ("<<G[boost::source(*e_it,G)].coordinates<<";"<<G[boost::target(*e_it,G)].coordinates<<")"<<std::endl;
-					std::cout<<intobj<<std::endl;
+//					std::cout<<"Intersection with ("<<G[boost::source(*e_it,G)].coordinates<<";"<<G[boost::target(*e_it,G)].coordinates<<")"<<std::endl;
+//					std::cout<<intobj<<std::endl;
 				}
 				
 			}//for
@@ -72,10 +74,26 @@ namespace BGLgeom{
 				Vertex_d current_src = src;
 				
 				//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
-				if(src < tgt)
+				if(G[src].coordinates < G[tgt].coordinates){
 					std::sort(intvect.begin(), intvect.end(), asc_order);
-				else
+				}
+				else{
 					std::sort(intvect.begin(), intvect.end(), desc_order);
+				}
+
+				std::cout<<"ORDERED VECTOR"<<std::endl;	
+				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+				std::cout<<I<<std::endl;
+
+				
+				//remove multiple "common_extreme" and "T_old" with same intersection vertex_descriptor: they don't affect the graph so we don't consider them
+				auto last = std::unique(intvect.begin(), intvect.end(), is_duplicate);
+				intvect.erase(last, intvect.end());
+				
+				std::cout<<"VECTOR WITHOUT DUPLICATES"<<std::endl;	
+				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+				std::cout<<I<<std::endl;
+				
 			
 				if(intvect.size()==1){
 					// if the the type is Overlap_inside or overlap_extreme_inside both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
@@ -116,6 +134,7 @@ namespace BGLgeom{
 							v2 = boost::source(I.int_edge, G);						
 						}
 						
+						
 						if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
 							add_new_edge(src,tgt,G);
 							add_new_edge(tgt,v2,G);
@@ -132,35 +151,22 @@ namespace BGLgeom{
 					}
 					
 					else{
-						refine_graph(G, current_src, intvect[0], next_src);
+						refine_graph(G, current_src, tgt, intvect[0], next_src);
 						current_src = next_src;					
 						if(!same_coordinates(current_src, tgt, G))
 						add_new_edge(current_src, tgt, G);
 					}			
 				} 
-				else{
-					
-					std::cout<<"ORDERED VECTOR"<<std::endl;	
-					for(const BGLgeom::Int_layer<Graph> & I: intvect)
-					std::cout<<I<<std::endl;
-					
-					//remove multiple "common_extreme" and "T_old" with same intersection vertex_descriptor: they don't affect the graph so we don't consider them
-					auto last = std::unique(intvect.begin(), intvect.end(), is_duplicate);
-					intvect.erase(last, intvect.end());
-					
-					std::cout<<"VECTOR WITHOUT DUPLICATES"<<std::endl;	
-					for(const BGLgeom::Int_layer<Graph> & I: intvect)
-					std::cout<<I<<std::endl;
-					
-										
-					// now we are ready to refine the graph: 
+				// There are more than one intersections
+				else{										
 					// first, we resolve the connection between source and first intersection
-					refine_graph(G, src, intvect[0], next_src); //collego src alla prima intersection
+					refine_graph(G, src, tgt, intvect[0], next_src); //collego src alla prima intersection
 					
 					for(int i=1; i<intvect.size(); ++i){ //here we resolve all the intermediate intersections
 						current_src = next_src;
-						refine_graph(G, current_src, intvect[i], next_src);	// graph, current source, current intersection object					
+						refine_graph(G, current_src, tgt, intvect[i], next_src);	// graph, current source, current intersection object					
 					};
+					
 					// Finally we connect the last intersection point with the target
 					current_src = next_src;
 					if(!same_coordinates(current_src, tgt, G));
@@ -220,7 +226,7 @@ bool is_duplicate(const BGLgeom::Int_layer<Graph> & I1, const BGLgeom::Int_layer
 
 
 
-void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I, Vertex_d & next_src){
+void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, BGLgeom::Int_layer<Graph> & I, Vertex_d & next_src){
 	using int_type = BGLgeom::intersection_type;
 	int_type T = I.how;
 	
@@ -241,21 +247,24 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 		} 
 		
 		case int_type::T_new:{
-			// create vertex_descriptor for the intersection point
-			Vertex_d v = add_new_vertex(I.int_pts.front(), G);
-			 
-			if(!same_coordinates(src, v, G))
-				add_new_edge(src, v, G);
-				
-			cut_old_edge(I.int_edge, v, G);
-			next_src = v;
+			// if the intersection point corresponds to the target (i.e. I.intersected_extreme_new = 1) I add a new edge
+			if(I.intersected_extreme_new == 1){
+				add_new_edge(src, tgt, G);
+				cut_old_edge(I.int_edge, tgt, G);
+				next_src = tgt;
+			}	
+			else{
+				cut_old_edge(I.int_edge, src, G);
+				next_src = src;			
+			}
+			
 			break;
 		}
 		
 		case int_type::T_old:{
 			// get the vertex descriptor of the extreme involved in the intersection
 			Vertex_d v;
-			if(I.intersected_extreme == 0) //first extreme, i.e the source
+			if(I.intersected_extreme_old== 0) //first extreme, i.e the source
 				v = boost::source(I.int_edge, G);
 			else
 				v = boost::target(I.int_edge, G);
@@ -303,7 +312,7 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 				v2 = boost::source(I.int_edge, G);				
 			}
 			
-			if(I.intersected_extreme==0 ){//it means that src is outside and tgt inside
+			if(I.intersected_extreme_old==0 ){//it means that src is outside and tgt inside
 				add_new_edge(src,v1,G);
 				//recover the vertex_descriptor having the coordinates of the inside point of intersection (which is always the second in vector int_pts and it's always the target)
 				Vertex_d v = get_vertex_descriptor(I.int_pts[1], G);
@@ -336,22 +345,60 @@ void refine_graph(Graph &G, const Vertex_d & src, BGLgeom::Int_layer<Graph> & I,
 		
 		case int_type::Identical:{
  			update_edge_properties(I.int_edge, G);
+ 			
+ 			Vertex_d v1;
+			Vertex_d v2;
+
+			if(!I.swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);				
+			}
+			
+			next_src = v2;
+ 			
  			break;		
 		}
 		
 		case int_type::Common_extreme:{
 			// get the vertex descriptor of the extreme involved in the intersection
 			Vertex_d v;
-			if(I.intersected_extreme == 0) //first extreme, i.e the source
+			if(I.intersected_extreme_old== 0) //first extreme, i.e the source
 				v = boost::source(I.int_edge, G);
 			else
 				v = boost::target(I.int_edge, G);
+				
 			
 			if(!(src == v)){ // if src has same coordinates as v there's nothing to do, so we consider only the opposite case
 				add_new_edge(src, v, G);
 			}
 			
 			next_src = v;			
+			break;
+		}
+		
+		case int_type::Overlap_extreme_outside:{
+			Vertex_d v1;
+			Vertex_d v2;
+
+			if(!I.swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);				
+			}		
+			
+			if(!(src == v1)){ // it means that the common extreme is the target. I have to connect src to v1	
+				add_new_edge(src,v1,G);
+			}
+			
+			update_edge_properties(I.int_edge, G);
+			next_src = v2;
 			break;
 		}
 	

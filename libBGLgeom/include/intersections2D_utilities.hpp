@@ -86,7 +86,8 @@ struct Int_layer{
 	//! Bool value to monitor if the components of int_pts will be swapped
 	bool swapped_comp;
 
-	unsigned int intersected_extreme; // it's useful only in those cases where the intersection happens in one of the two extremes. =0 if 1st extreme, =1 if second extreme
+	unsigned int intersected_extreme_old; // it's useful only in those cases where the intersection happens in one of the two extremes of the old edge. =0 if 1st extreme, =1 if second extreme
+	unsigned int intersected_extreme_new; // it's useful only in those cases where the intersection happens in one of the two extremes of the new edge. =0 if 1st extreme, =1 if second extreme
 	
 	
 	//! Constructor
@@ -100,10 +101,15 @@ struct Int_layer{
 			int_pts[i] = _I.intersectionPoint[i];
 //		how = compute_intersection_type(_I);
 		
-		if(_I.endPointIsIntersection[1][0] == 1) 
-			intersected_extreme = 0;
+		if(_I.endPointIsIntersection[0][0] == 1) 
+			intersected_extreme_old = 0;
 		else
-			intersected_extreme = 1;
+			intersected_extreme_old = 1;
+			
+		if(_I.endPointIsIntersection[1][0] == 1) 
+			intersected_extreme_new = 0;
+		else
+			intersected_extreme_new = 1;
 	}
 	
 };	//Int_layer
