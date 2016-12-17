@@ -39,7 +39,7 @@ namespace BGLgeom{
 				@param domain A 1D domain
 				@param num_elements Number of elements
 		    */
-			Uniform(Geometry::Domain1D const & domain, unsigned int const & num_elements) :
+			Uniform(BGLgeom::Domain1D const & domain, unsigned int const & num_elements) :
 			    OneDMeshGenerator(domain),M_num_elements(num_elements) {};
 			/*! 
 				@brief Calling operator

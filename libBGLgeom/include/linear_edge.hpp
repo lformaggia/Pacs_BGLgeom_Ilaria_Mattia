@@ -24,12 +24,13 @@
 #include <Eigen/Dense>
 #include "point.hpp"
 #include "edge_geometry.hpp"
+#include "mesh_utilities.hpp"
 
 namespace BGLgeom{
 
 /*!
 	@brief The class handling the linear geometry for an edge
-	@detail It is parametrized using the curvilinear abscissa
+	@detail It is parametrized with parameter between 0 and 1
 	
 	@param dim Dimension of the space
 */
@@ -41,29 +42,31 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		BGLgeom::point<dim> SRC;
 		//! Coordinates of the starget of the edge
 		BGLgeom::point<dim> TGT;
+		//! A vector to handle a parametric mesh, if requested
+		std::vector<double> parametric_mesh;
 
 	public:
-		using vect_Eigen = Eigen::Matrix<double,dim,1>;
+		//using vect_Eigen = Eigen::Matrix<double,1,dim>;
 		using point = BGLgeom::point<dim>;
 		using vect_pts = std::vector<point>;
 		
 		//! Default constructor 
-		linear_edge() : SRC(), TGT(){};	
+		linear_edge() : SRC(), TGT(), parametric_mesh() {};	
 	
 		//! Constructor 
-		linear_edge(point SRC_, point TGT_) : SRC(SRC_), TGT(TGT_){};
+		linear_edge(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_), parametric_mesh() {};
 		
 		//! Sets the value for the source
 		void
-		set_source(point SRC_) { SRC = SRC_; }
+		set_source(point const& SRC_) { SRC = SRC_; }
 		
 		//! Sets the value for the target
 		void
-		set_target(point TGT_) {	TGT = TGT_;	}
+		set_target(point const& TGT_) {	TGT = TGT_;	}
 		
 		//! Getting source's coordinates
-		point	get_source() { return SRC; }
-		point	get_source() const { return SRC; }
+		point get_source() { return SRC; }
+		point get_source() const { return SRC; }
 		
 		//! Getting target's coordinates
 		point get_target() { return TGT; }
@@ -80,58 +83,62 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 	    */
 		point operator() (double const& t) const {
 			if(t > 1 || t < 0){
-				std::cerr << "linear_edge::value(): parameter value out of bounds" << std::endl;
+				std::cerr << "linear_edge::operator(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//t=1
 					return TGT;
 				else	//t=0
 					return SRC;
 			}
-			return point((TGT-SRC)*t+SRC); // copy-constructor: we copy in P the values of the line in correspondence of the indicated parameter
+			return point((TGT-SRC)*t+SRC);
 		};
 		
-  		
+  		/*!
+  			@brief It evaluates a vector of values for the parameter
+  		*/
   		vect_pts
-  		operator() (const std::vector<double> &t) const
-  		{
-    		vect_pts P_vect (t.size ());
-    
-    		for (point && PP: P_vect)
-    			PP = point::Zero(); // initialize all the points to zero
-    
-   			for (int i = 0; i<t.size(); ++i)
-   				P_vect[i] = (TGT-SRC)*t[i]+SRC;
-   			
+  		operator() (std::vector<double> const& t) const {
+    		vect_pts P_vect(t.size());
+   			for (std::size_t i = 0; i < t.size(); ++i)
+   				P_vect[i] = this->operator()(t[i]); //(TGT-SRC)*t[i] + SRC;   			
    		 	return P_vect;
-  		};
+  		}
 		
-		//! first derivative
-		vect_Eigen 
-		first_derivatives(const double & x = 0)	{ return TGT-SRC; }		
+		//! Evaluates the first derivative of the line
+		point 
+		first_der(double const& t = 0)	{ return TGT-SRC; }
 		
-		//! second derivative
-		vect_Eigen 					//! the second derivative is null along all the components
-		second_derivatives(const double & x = 0) {
-			return vect_Eigen::Zero();	
-		}		
+		//! Evaluates the first derivatives in a vector of values of the parameter
+		vect_pts
+		first_der(std::vector<double> const& t){
+			vect_pts Fder(t.size());
+			for (std::size_t i = 0; i < t.size(); ++i)
+   				Fder[i] = this->first_der(); //(TGT-SRC)*t[i] + SRC;   			
+   		 	return Fder;
+		}
+		
+		//! Evaluates the second derivative of the line (of course returns zero!)
+		point
+		second_der(const double & t = 0) { return point::Zero(); }		
 
 		/*! 
-			@brief Curvilinear abscissa. We require a parameter between 0 and 1
+			@brief Curvilinear abscissa.
 			@detail If the parameter is out of bound, the method sets it to the nearest
 					extreme value and continues the computation, giving a warning on std::cerr
+			@param t Value of the parameter (between 0 and 1) where to evaluate the curvilinear abscissa
 		*/
 		double
-		curvilinear_abscissa(const double & x) {
-			if(x > 1 || x < 0){
-				std::cerr << "linear_edge::curvilinear_abscissa(): parameter value out of bounds" << std::endl;
-				if(x > 1)	//x=1
+		curv_abs(const double & t) {
+			if(t < 0 || t > 1){
+				std::cerr << "linear_edge::curv_abs(): parameter value out of bounds" << std::endl;
+				if(t > 1)	//x=length
 					return (TGT-SRC).norm();
 				else	//x=0
 					return 0;;
 			}
-			return (TGT-SRC).norm() * x;
-		};
+			return (TGT-SRC).norm() * t;
+		}
 		
-		//! curvature
+		//! Evaluates the curvature of the line (of course zero again!)
 		double
 		curvature(const double & x) { return 0; }
 		
@@ -140,12 +147,12 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			@detail SRC and TGT are included in the mesh points
 			@param h Spacing between the points of the mesh (uniform mesh) in terms of spatial length.
 		*/
-		std::vector<point>
+		vect_pts
 		uniform_mesh(double const& h = 0.01) {
 			unsigned int n_points = std::ceil(this->length()/h);
 			double h_abscissa = 1./n_points;
 			double s = 0;
-			std::vector<point> retval;
+			vect_pts retval;
 			retval.push_back(SRC);
 			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
 				s += h_abscissa;
@@ -155,60 +162,39 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			return retval;			
 		}
 		
+		//=================================================================================
+		//Trying to build up mesh generation
+		
+		/*
+			@brief It generates a uniform paramtric mesh
+			@detail
+			@param n Number of intervals
+		*/
+		void
+		uniform_param_mesh(unsigned int const& n){
+			//default constructor builds between 0 and 1, as we want
+			BGLgeom::Mesh1D param_m(BGLgeom::Domain1D(), n);
+			parametric_mesh = param_m.getMesh();
+		}
+		
+		//! Getting the real points from the parametric mesh
+		vect_pts
+		evaluate_param_mesh(){
+			return this->operator()(parametric_mesh);
+		}
+		
+		std::vector<double>
+		get_parametric_mesh() {
+			return parametric_mesh;
+		}
+		
 		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
-			out << "I'm edge from " << edge.SRC << " to " << edge.TGT << "." << std::endl;
+			out << "Hi! I'm edge from " << edge.SRC << " to " << edge.TGT << ".";
 			return out;
-			/*
-			out<<"Source: "<<std::endl;
-			out<<edge.value(0)<<std::endl;
-			out<<std::endl;
-			out<<"Value in s=0.5: "<<std::endl;
-			out<<edge.value(0.5)<<std::endl;
-			out<<std::endl;
-			out<<"Target: "<<std::endl;
-			out<<edge.value(1)<<std::endl;
-			out<<std::endl;
-			out << "Length: " << edge.length() << std::endl;
-			out<<"First derivatives in s=0: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_derivatives(0))[i]<<" ";
-			out<<std::endl;
-			out<<"First derivatives in s=0.5: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_derivatives(0.5))[i]<<" ";
-			out<<std::endl;
-			out<<"First derivatives in s=1: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_derivatives(1))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=0: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_derivatives(0))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=0.5: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_derivatives(0.5))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=1: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_derivatives(1))[i]<<" ";
-			out<<std::endl;			
-			out<<"Curvilinear abscissa in s=0: "<<edge.curvilinear_abscissa(0)<<std::endl;
-			out<<"Curvilinear abscissa in s=0.5: "<<edge.curvilinear_abscissa(0.5)<<std::endl;
-			out<<"Curvilinear abscissa in s=1: "<<edge.curvilinear_abscissa(1)<<std::endl;
-			out<<"Mesh on the edge:" << std::endl;
-			std::vector<point> mesh = edge.uniform_mesh(0.1);
-			for(std::size_t i=0; i<mesh.size(); ++i)
-				out << mesh[i] << std::endl;
-			out << std::endl;
-			return out;
-			*/
 		}
-
-
-	
+			
 }; //linear_edge
 
 } //namespace

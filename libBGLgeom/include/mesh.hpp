@@ -6,7 +6,7 @@
 #include "domain.hpp"
 #include "meshGenerators.hpp"
 
-namespace Geometry{
+namespace BGLgeom{
 
 class Mesh1D{
 
@@ -72,6 +72,8 @@ class Mesh1D{
 		unsigned int numNodes() const { return myNodes.size(); }
 		//! The i-th node.
 		double operator [](int i) const { return myNodes[i]; }
+		//! The whole mesh
+		std::vector<double> getMesh() { return myNodes; }
 		//! To use the mesh in range based for loop I need begin()
 		std::vector<double>::iterator begin() { return myNodes.begin(); }
 		std::vector<double>::const_iterator begin()const { return myNodes.cbegin(); }
