@@ -55,16 +55,18 @@ namespace BGLgeom{
 	@param Something_went_wrong Error in computing the intersection
 	@param No_intersection There are no intersection between the edges
 */
-enum class intersection_type_new	{X, T_new, T_old, Overlap_outside, Overlap_inside, Overlap,
+
+/*enum class intersection_type_new	{X, T_new, T_old, Overlap_outside, Overlap_inside, Overlap,
 								Overlap_extreme, Identical, Common_extreme, Something_went_wrong,
-								No_intersection};
+								No_intersection}; */
 
 /*!
 	@brief Function to compute the type of intersection
-	@detail It returns one of the situation contained in the enum intersection_type_new
+	@detail It returns one of the situation contained in the enum BGLgeom::intersection_type
 */
-intersection_type_new
-compute_intersection_type(BGLgeom::Intersection const& I);
+
+/*BGLgeom::intersection_type
+compute_intersection_type(BGLgeom::Intersection const& I); */
 
 template <typename Graph>
 struct Int_layer{
@@ -76,7 +78,7 @@ struct Int_layer{
 										 >;
 	*/
 	//! The type of the intersection
-	intersection_type_new how;
+	BGLgeom::intersection_type how;
 	//! The edge descriptor fo the old edge that intersects the new one
 	BGLgeom::Edge_desc<Graph> int_edge;
 	//! The container for the intersection points
@@ -84,23 +86,30 @@ struct Int_layer{
 	//! Bool value to monitor if the components of int_pts will be swapped
 	bool swapped_comp;
 
-	unsigned int intersected_extreme; // it's useful only in those cases where the intersection happens in one of the two extremes. =0 if 1st extreme, =1 if second extreme
+	unsigned int intersected_extreme_old; // it's useful only in those cases where the intersection happens in one of the two extremes of the old edge. =0 if 1st extreme, =1 if second extreme
+	unsigned int intersected_extreme_new; // it's useful only in those cases where the intersection happens in one of the two extremes of the new edge. =0 if 1st extreme, =1 if second extreme
 	
 	
 	//! Constructor
 	Int_layer	(BGLgeom::Intersection const& _I,
 						 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : int_edge(_e),
 																							  int_pts(),
-																							  swapped_comp(false){
+																							  swapped_comp(false),
+																							  how(_I.how){
 		int_pts.resize(_I.numberOfIntersections);
 		for(std::size_t i = 0; i < _I.numberOfIntersections; ++i)
 			int_pts[i] = _I.intersectionPoint[i];
-		how = compute_intersection_type(_I);
+//		how = compute_intersection_type(_I);
 		
-		if(_I.endPointIsIntersection[1][0] == 1) 
-			intersected_extreme = 0;
+		if(_I.endPointIsIntersection[0][0] == 1) 
+			intersected_extreme_old = 0;
 		else
-			intersected_extreme = 1;
+			intersected_extreme_old = 1;
+			
+		if(_I.endPointIsIntersection[1][0] == 1) 
+			intersected_extreme_new = 0;
+		else
+			intersected_extreme_new = 1;
 	}
 	
 };	//Int_layer
@@ -114,25 +123,27 @@ operator<< (std::ostream & out, Int_layer<Graph> const& I){
 	for(const BGLgeom::point<2> & P: I.int_pts)
 		out << "\t" << P << std::endl;
 	out << "Type: ";
-	if(I.how == BGLgeom::intersection_type_new::X)
+	if(I.how == BGLgeom::intersection_type::X)
 		out << "X";
-	else if(I.how == BGLgeom::intersection_type_new::T_new)
+	else if(I.how == BGLgeom::intersection_type::T_new)
 		out << "T_new";
-	else if(I.how == BGLgeom::intersection_type_new::T_old)
+	else if(I.how == BGLgeom::intersection_type::T_old)
 		out << "T_old";
-	else if(I.how == BGLgeom::intersection_type_new::Overlap_outside)
+	else if(I.how == BGLgeom::intersection_type::Overlap_outside)
 		out << "Overlap_outside";
-	else if(I.how == BGLgeom::intersection_type_new::Overlap_inside)
+	else if(I.how == BGLgeom::intersection_type::Overlap_inside)
 		out << "Overlap_inside";
-	else if(I.how == BGLgeom::intersection_type_new::Overlap)
+	else if(I.how == BGLgeom::intersection_type::Overlap)
 		out << "Overlap";
-	else if(I.how == BGLgeom::intersection_type_new::Overlap_extreme)
-		out << "Overlap_extreme";
-	else if(I.how == BGLgeom::intersection_type_new::Identical)
+	else if(I.how == BGLgeom::intersection_type::Overlap_extreme_inside)
+		out << "Overlap_extreme_inside";
+	else if(I.how == BGLgeom::intersection_type::Overlap_extreme_outside)
+		out << "Overlap_extreme_outside";
+	else if(I.how == BGLgeom::intersection_type::Identical)
 		out << "Identical";
-	else if(I.how == BGLgeom::intersection_type_new::Common_extreme)
+	else if(I.how == BGLgeom::intersection_type::Common_extreme)
 		out << "Common_extreme";
-	else if(I.how == BGLgeom::intersection_type_new::Something_went_wrong)
+	else if(I.how == BGLgeom::intersection_type::Something_went_wrong)
 		out << "Something went wrong";	
 	out << std::endl;
 	return out;
