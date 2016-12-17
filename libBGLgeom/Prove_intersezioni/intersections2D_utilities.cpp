@@ -1,5 +1,6 @@
 #include "intersections2D_utilities.hpp"
 #include "intersections2D.hpp"
+#include <iostream>
 
 using namespace BGLgeom;
 
@@ -28,8 +29,9 @@ compute_intersection_type(BGLgeom::Intersection const& I){
 				numEndPointIntersections++;
 		}
 	}
+	std::cout << I.numberOfIntersections << std::endl;
 	//numIntersection == 0 already treated
-	if(!I.collinear){	//collinear == false, i.e. only 1 intersection
+	if(I.numberOfIntersections == 1){	//collinear == false, i.e. only 1 intersection, but the case of collinear with common extreme
 		//with only one intersection, of course edge are not collinear
 		// X intersection
 		if(numEndPointIntersections == 0){
@@ -50,13 +52,13 @@ compute_intersection_type(BGLgeom::Intersection const& I){
 		if(numEndPointIntersections == 2){
 			return intersection_type_new::Common_extreme;
 		}
-	} else {		//collinear == true, i.e. 2 intersections
+	} else {		// 2 intersections, i.e. collinear == true
 		//Overlap_Outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)		
-		if(numEndPointIntersections ==2 && I.endPointIsIntersection[0][0] && I.endPointIsIntersection[0][1]){
+		if(numEndPointIntersections == 2 && I.endPointIsIntersection[0][0] && I.endPointIsIntersection[0][1]){
 			return intersection_type_new::Overlap_outside;
 		}
 		//Overlap_inside; edge 1 (new) intersects in both its extremes (0 and 1) edge 0 (old)
-		if(numEndPointIntersections ==2 && I.endPointIsIntersection[1][0] && I.endPointIsIntersection[1][1]){
+		if(numEndPointIntersections == 2 && I.endPointIsIntersection[1][0] && I.endPointIsIntersection[1][1]){
 			return intersection_type_new::Overlap_inside;
 		}
 		//Overlap; with only two end point intersections I'm sure to be in this case
