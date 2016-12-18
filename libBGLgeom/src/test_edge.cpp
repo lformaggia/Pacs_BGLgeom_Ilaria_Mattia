@@ -8,7 +8,7 @@
 
 int main(){
 	
-  	constexpr double pi = 3.1415269;
+  	constexpr double pi = std::atan(1.0)*4.0;
   	constexpr double pih = pi/2;
 	
 	//generic edge
@@ -74,7 +74,7 @@ int main(){
  	std::cout << "----------- LINEAR_EDGE -----------------" << std::endl << std::endl;
 	
 	BGLgeom::point<2> SRC(0,0);
-	BGLgeom::point<2> TGT(2,2);
+	BGLgeom::point<2> TGT(10,10);
 	BGLgeom::linear_edge<2> e1(SRC, TGT);
 	std::cout << "Hello! " << e1 << std::endl << std::endl;
 	
@@ -84,24 +84,26 @@ int main(){
 	std::cout << "\tt=1:   " << e1(1) << std::endl;
 	
 	std::cout << "Computing a uniform mesh" << std::endl;
-	e1.uniform_param_mesh(4);
-	std::vector<BGLgeom::point<2>> mesh, mesh2, first_der;
-	mesh = e1.evaluate_param_mesh();
-	for(std::size_t i = 0; i < mesh.size(); ++i)
-		std::cout << mesh[i] << std::endl;
+	e1.uniform_mesh(4);
+	std::vector<BGLgeom::point<2>> mesh2, mesh3, first_der;
 	std::cout << std::endl;
-	mesh2 = e1(e1.get_parametric_mesh());
-	std::cout << "Evaluating in other way: " << std::endl;
-	for(std::size_t i = 0; i < mesh.size(); ++i)
+	mesh2 = e1(e1.get_mesh());
+	for(std::size_t i = 0; i < mesh2.size(); ++i)
 		std::cout << mesh2[i] << std::endl;
 	std::cout << std::endl;
 	
 	std::cout << "Evaluating first derivative in the parametric mesh" << std::endl;
-	first_der = e1.first_der(e1.get_parametric_mesh());
-	for(std::size_t i = 0; i < mesh.size(); ++i)
+	first_der = e1.first_der(e1.get_mesh());
+	for(std::size_t i = 0; i < first_der.size(); ++i)
 		std::cout << first_der[i] << std::endl;
 	std::cout << std::endl;
 	
+	std::cout << "Now variable size mesh: " << std::endl;
+	e1.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	mesh3 = e1(e1.get_mesh());
+	for(std::size_t i = 0; i < mesh3.size(); ++i)
+		std::cout << mesh3[i] << std::endl;
+	std::cout << std::endl;
 	
 	return 0;
 }

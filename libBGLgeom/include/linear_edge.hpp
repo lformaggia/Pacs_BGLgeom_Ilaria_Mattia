@@ -22,9 +22,10 @@
 #include <functional>
 #include <cmath>
 #include <Eigen/Dense>
+#include <memory>
 #include "point.hpp"
 #include "edge_geometry.hpp"
-#include "mesh_utilities.hpp"
+#include "parametric_mesh_generator.hpp"
 
 namespace BGLgeom{
 
@@ -35,15 +36,15 @@ namespace BGLgeom{
 	@param dim Dimension of the space
 */
 template <unsigned int dim>
-class linear_edge : public BGLgeom::edge_geometry<dim> {
+class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_generator {
 		
 	private:
 		//! Coordinates of the source of the edge
 		BGLgeom::point<dim> SRC;
 		//! Coordinates of the starget of the edge
 		BGLgeom::point<dim> TGT;
-		//! A vector to handle a parametric mesh, if requested
-		std::vector<double> parametric_mesh;
+		//! A pointer to the class that will handle the parametric mesh
+		//std::unique_ptr<parametric_mesh_generator> param_mesh;
 
 	public:
 		//using vect_Eigen = Eigen::Matrix<double,1,dim>;
@@ -51,10 +52,10 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		using vect_pts = std::vector<point>;
 		
 		//! Default constructor 
-		linear_edge() : SRC(), TGT(), parametric_mesh() {};	
+		linear_edge() : SRC(), TGT() {};	
 	
 		//! Constructor 
-		linear_edge(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_), parametric_mesh() {};
+		linear_edge(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_) {};
 		
 		//! Sets the value for the source
 		void
@@ -142,52 +143,13 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		double
 		curvature(const double & x) { return 0; }
 		
-		/*! 
-			@brief Creating a mesh on the edge
-			@detail SRC and TGT are included in the mesh points
-			@param h Spacing between the points of the mesh (uniform mesh) in terms of spatial length.
-		*/
-		vect_pts
-		uniform_mesh(double const& h = 0.01) {
-			unsigned int n_points = std::ceil(this->length()/h);
-			double h_abscissa = 1./n_points;
-			double s = 0;
-			vect_pts retval;
-			retval.push_back(SRC);
-			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
-				s += h_abscissa;
-				retval.emplace_back(point(this->operator()(s)));
-			}
-			retval.push_back(TGT);
-			return retval;			
-		}
-		
-		//=================================================================================
-		//Trying to build up mesh generation
-		
-		/*
-			@brief It generates a uniform paramtric mesh
-			@detail
-			@param n Number of intervals
-		*/
-		void
-		uniform_param_mesh(unsigned int const& n){
-			//default constructor builds between 0 and 1, as we want
-			BGLgeom::Mesh1D param_m(BGLgeom::Domain1D(), n);
-			parametric_mesh = param_m.getMesh();
-		}
-		
+			/*	
 		//! Getting the real points from the parametric mesh
 		vect_pts
 		evaluate_param_mesh(){
-			return this->operator()(parametric_mesh);
+			return this->operator()(this->p_mesh);
 		}
-		
-		std::vector<double>
-		get_parametric_mesh() {
-			return parametric_mesh;
-		}
-		
+		*/
 		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
