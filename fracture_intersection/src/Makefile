@@ -12,7 +12,7 @@ VTK_LIBS = $(LIBS6:lib%=%)
 
 
 CXXFLAGS += -std=c++11
-CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I$(mkVtkInc) 
+CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/include -I$(mkVtkInc) 
 
 .PHONY: all clean distclean
 
@@ -21,11 +21,11 @@ CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I$(mkVtkInc)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  prova_sort_duplicates.cpp
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) prova_sort_duplicates.o -o prova_sort_duplicates
 	
-bozza_refine_graph: helper_functions.o intersections2D.o bozza_refine_graph.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o bozza_refine_graph.o -o bozza_refine_graph
+main_ila: helper_functions.o intersections2D.o main_ila.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o main_ila.o -o main_ila
 	
-bozza_refine_graph.o:
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  bozza_refine_graph.cpp -o $@
+main_ila.o:
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_ila.cpp -o $@
 helper_functions.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  helper_functions.cpp	-o $@
 intersections2D.o:
@@ -34,6 +34,6 @@ intersections2D.o:
 	
 	
 clean :
-	$(RM) *.o prova_sort_duplicates bozza_refine_graph test_intersection
+	$(RM) *.o main_ila
 
 
