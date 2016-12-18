@@ -246,7 +246,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	} //else
 
 	//if I get here there are 2 cases: no intersection or collinear_common_extreme
-	if(out.intersects == false){
+	if(out.intersect == false){
 		out.how = intersection_type::No_intersection;
 		return out;
 	}

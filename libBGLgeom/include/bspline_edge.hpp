@@ -44,6 +44,7 @@
 #include <functional>
 
 #include "data_structure.hpp"
+#include "edge_geometry.hpp"
 
 
 namespace BGLgeom{
@@ -59,12 +60,12 @@ using vect_pts = std::vector<point<dim> >;
 
 // SOME AUXILIARY FUNCTIONS: IS IT CORRECT TO PUT THEM HERE? 
 // The following two functions, the only two ones not templated, are implemented in bspline_edge.ccp
-int Pfindspan (int n, int p, double u, const vect &U);
-void Pbasisfun (int i, double u, int p, const vect &U, vect &N);
+int findspan (int n, int p, double u, const vect &U);
+void basisfun (int i, double u, int p, const vect &U, vect &N);
 
 template<int dim>
 void
-Pbspderiv (int d, const vect_pts<dim> &C, int nc,
+bspderiv (int d, const vect_pts<dim> &C, int nc,
           const vect &k, int nk, vect_pts<dim> &dC, vect &dk)
 // IN:
 //    d  - degree of the B-Spline
@@ -93,9 +94,9 @@ Pbspderiv (int d, const vect_pts<dim> &C, int nc,
 
 template<int dim>
 void
-Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
+bspeval (const int d, const vect_pts<dim> &C, const int nc,
          const vect &k, double u, point<dim> &P)
-// Pbspeval:  Evaluate B-Spline at parametric points.
+// bspeval:  Evaluate B-Spline at parametric points.
 //
 //    IN:
 //       d - Degree of the B-Spline.
@@ -110,8 +111,8 @@ Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
   
   P = point<dim>::Zero(); //! Initialize the point to zero
 
-  s = Pfindspan (nc-1, d, u, k);
-  Pbasisfun (s, u, d, k, N);
+  s = findspan (nc-1, d, u, k);
+  basisfun (s, u, d, k, N);
   tmp1 = s - d;
   for (i = 0; i < dim; ++i)
     for (ii = 0; ii <= d; ++ii)
@@ -120,9 +121,9 @@ Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
 
 template<int dim>
 void
-Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
+bspeval (const int d, const vect_pts<dim> &C, const int nc,
          const vect &k, const vect &u, vect_pts<dim> & P_vect)
-// Pbspeval:  Evaluate B-Spline at parametric points.
+// bspeval:  Evaluate B-Spline at parametric points.
 //
 //    IN:
 //       d - Degree of the B-Spline.
@@ -144,8 +145,8 @@ Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
   
   for (i_vect = 0; i_vect < nu; ++i_vect)
     {
-      s = Pfindspan (nc-1, d, u[i_vect], k);
-      Pbasisfun (s, u[i_vect], d, k, N);
+      s = findspan (nc-1, d, u[i_vect], k);
+      basisfun (s, u[i_vect], d, k, N);
       tmp1 = s - d;
       for (i_pt = 0; i_pt < dim; ++i_pt)
         for (ii = 0; ii <= d; ++ii)
@@ -157,7 +158,7 @@ Pbspeval (const int d, const vect_pts<dim> &C, const int nc,
 //HERE THE CLASS BEGINS
 template <int dim = 3, int deg = 3>
 class
-bspline_edge
+bspline_edge : public BGLgeom::edge_geometry<dim>
 {
 
 public:
@@ -173,7 +174,7 @@ public:
     	PP = point<dim>::Zero(); // initialize all the points to zero
     
     dk.resize (k.size () - 2, 0.0);
-    Pbspderiv<dim> (deg, C, nc, k, k.size (), dC, dk);
+    bspderiv<dim> (deg, C, nc, k, k.size (), dC, dk);
 
     // construction of spline for the vector of second derivative
     d2k.resize (dk.size () - 2, 0.0);    
@@ -181,7 +182,7 @@ public:
     for (point<dim> & PP: d2C)
     	PP = point<dim>::Zero(); // initialize all the points to zero
     	
-    Pbspderiv<dim> (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);      
+    bspderiv<dim> (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);      
     
   };
 
@@ -196,7 +197,7 @@ public:
     	PP = point<dim>::Zero(); // initialize all the points to zero
     	
     dk.resize (k.size () - 2, 0.0);
-    Pbspderiv<dim> (deg, C, dim, nc, k, k.size (), dC, dk);
+    bspderiv<dim> (deg, C, dim, nc, k, k.size (), dC, dk);
 
     // construction of spline for the vector of second derivative
     d2k.resize (dk.size () - 2, 0.0);    
@@ -204,7 +205,7 @@ public:
     for (point<dim> && PP: d2C)
     	PP = point<dim>::Zero(); // initialize all the points to zero
     	
-    Pbspderiv<dim> (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);      
+    bspderiv<dim> (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);      
     
   };
 
@@ -212,7 +213,7 @@ public:
   operator() (double t) const
   {
     point<dim> P = point<dim>::Zero();
-    Pbspeval<dim> (deg, C, nc, k, t, P);
+    bspeval<dim> (deg, C, nc, k, t, P);
     return P;
   };
 
@@ -224,7 +225,7 @@ public:
     for (point<dim> && PP: P_vect)
     	PP = point<dim>::Zero(); // initialize all the points to zero
     
-    Pbspeval<dim> (deg, C, nc, k, t, P_vect);
+    bspeval<dim> (deg, C, nc, k, t, P_vect);
     return P_vect;
   };
 
@@ -232,7 +233,7 @@ public:
   first_derivative (double t) const
   {
     point<dim> P = point<dim>::Zero();
-    Pbspeval<dim> (deg-1, dC, nc-1, dk, t, P);
+    bspeval<dim> (deg-1, dC, nc-1, dk, t, P);
     return P;
   };
 
@@ -243,7 +244,7 @@ public:
     for (point<dim> && PP: P_vect)
     	PP = point<dim>::Zero(); // initialize all the points to zero
     	
-    Pbspeval<dim> (deg-1, dC, nc-1, dk, t, P_vect);
+    bspeval<dim> (deg-1, dC, nc-1, dk, t, P_vect);
     return P_vect;
   };
 
@@ -251,7 +252,7 @@ public:
   second_derivative (double t) const
   {
     point<dim> P = point<dim>::Zero();
-    Pbspeval<dim> (deg-2, d2C, nc-2, d2k, t, P);
+    bspeval<dim> (deg-2, d2C, nc-2, d2k, t, P);
     return P;
   };
 
@@ -263,7 +264,7 @@ public:
     for (point<dim> && PP: P_vect)
     	PP = point<dim>::Zero(); // initialize all the points to zero
     
-    Pbspeval<dim> (deg-2, d2C, nc-2, d2k, t, P_vect);
+    bspeval<dim> (deg-2, d2C, nc-2, d2k, t, P_vect);
     return P_vect;
   };
 
@@ -271,7 +272,7 @@ public:
   abscissa (double t) const
   {
     double retval =
-      integrate ([&] (double u) {return velocity (u);}, 0, t);
+      BGLgeom::integrate ([&] (double u) {return velocity (u);}, 0, t);
     return retval;
   };
 
@@ -281,7 +282,7 @@ public:
     vect_dbl retval (t.size (), .0);
     for (int ii = 1; ii < t.size (); ++ii)
       retval[ii] = retval[ii-1] +
-        integrate ([&] (double u) {return velocity (u);}, t[ii-1], t[ii]);
+        BGLgeom::integrate ([&] (double u) {return velocity (u);}, t[ii-1], t[ii]);
     return retval;
   };
   
@@ -297,7 +298,7 @@ private:
   velocity (double x)
   {
     point<dim> tmp = point<dim>::Zero();
-    Pbspeval<dim> (deg-1, dC, (nc-1), dk, x, tmp);
+    bspeval<dim> (deg-1, dC, (nc-1), dk, x, tmp);
     return tmp.norm();
   };
 

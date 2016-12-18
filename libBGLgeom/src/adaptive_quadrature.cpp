@@ -7,6 +7,10 @@
 #define tol 1.0e-12
 #define maxdepth 40
 
+using namespace BGLgeom;
+
+namespace BGLgeom{
+
 int depth = 0;
 int depth_reached = 0;
 
@@ -53,4 +57,5 @@ integrate (std::function<double (double)> f, double a, double b)
   return res;
 };
 
+}	//BGLgeom
 
