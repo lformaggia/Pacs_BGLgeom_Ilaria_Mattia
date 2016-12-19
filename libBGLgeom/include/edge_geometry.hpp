@@ -57,7 +57,7 @@ edge_geometry{
 					underlying container is the same
 		*/
 		virtual BGLgeom::point<dim>
-		first_der (double const&) = 0;
+		first_der (double const&) const = 0;
 		
 		//! The same as before, but with evaluation on a vector of parameters
 		virtual std::vector<BGLgeom::point<dim>>
@@ -72,7 +72,7 @@ edge_geometry{
 					underlying container is the same
 		*/
 		virtual BGLgeom::point<dim>
-		second_der (double const&) = 0;
+		second_der (double const&) const = 0;
 		
 		//! The same as before, but with evaluation on a vector of parameters
 		virtual std::vector<BGLgeom::point<dim>>
@@ -84,7 +84,7 @@ edge_geometry{
 					value of the parameter
 		*/
 		virtual double
-		curv_abs (double const&) = 0;
+		curv_abs (double const&) const = 0;
 		
 		//! The same as before, but with evaluation on a vector of parameters
 		virtual std::vector<double>
@@ -95,7 +95,7 @@ edge_geometry{
 			@detail It evaluates the curvature at a given value of the parameter
 		*/
 		virtual double
-		curvature (double const&) = 0;
+		curvature (double const&) const = 0;
 		
 		//! The same as before, but with evaluation on a vector of parameters
 		virtual std::vector<double>

@@ -106,11 +106,11 @@ class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_g
 		
 		//! Evaluates the first derivative of the line
 		point 
-		first_der(double const& t = 0)	{ return TGT-SRC; }
+		first_der(double const& t = 0) const { return TGT-SRC; }
 		
 		//! Evaluates the first derivatives in a vector of values of the parameter
 		vect_pts
-		first_der(vect_double const& t){
+		first_der(vect_double const& t) const {
 			vect_pts Fder(t.size());
 			for (std::size_t i = 0; i < t.size(); ++i)
    				Fder[i] = this->first_der(); //(TGT-SRC)*t[i] + SRC;   			
@@ -119,11 +119,11 @@ class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_g
 		
 		//! Evaluates the second derivative of the line (of course returns zero!)
 		point
-		second_der(const double & t = 0) { return point::Zero(); }
+		second_der(const double & t = 0) const { return point::Zero(); }
 		
 		//! Evaluates the second derivative of the line in a vector of parameters
 		vect_pts
-		second_der(vect_double const& t){
+		second_der(vect_double const& t) const {
 			return vect_pts(t.size(), point::Zero());
 		}
 
@@ -134,7 +134,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_g
 			@param t Value of the parameter (between 0 and 1) where to evaluate the curvilinear abscissa
 		*/
 		double
-		curv_abs(const double & t) {
+		curv_abs(const double & t) const {
 			if(t < 0 || t > 1){
 				std::cerr << "linear_edge::curv_abs(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//x=length
@@ -147,20 +147,20 @@ class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_g
 		
 		//! Evaluates the cuvilinear abscissa in a vector of parameters
 		vect_double
-		curv_abs(vect_double const& t){
+		curv_abs(vect_double const& t) const {
 			vect_double C(t.size());
-			for(std:size_t i = 0; i < t.size(); ++i)
+			for(std::size_t i = 0; i < t.size(); ++i)
 				C[i] = this->curv_abs(t[i]);
 			return C;
 		}
 		
 		//! Evaluates the curvature of the line (of course zero again!)
 		double
-		curvature(const double & x) { return 0; }
+		curvature(const double & x) const { return 0; }
 		
 		//! Evaluates the curvature of the line in a vector of parameters
 		vect_double
-		curvature(vect_double const& t){
+		curvature(vect_double const& t) const {
 			return vect_double(t.size(),0.0);
 		}
 		

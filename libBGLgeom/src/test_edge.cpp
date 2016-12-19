@@ -41,7 +41,7 @@ int main(){
 	std::cout << "\tt=0.5: " << edge(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge(1) << std::endl;
 	std::cout << "\tt=pi:  " << edge(pi) << std::endl;
-	std::cout << "\tt=4.44279" << edge(4.44279) << std::endl;
+	std::cout << "\tt=4.44288" << edge(4.44288) << std::endl;
 	
 	edge.riparam_original();
 	std::cout << "Now coming back to original parameterization" << std::endl;
