@@ -2,6 +2,7 @@
 #include<vector>
 
 #include"local_data_structure.hpp"
+#include"writer_vtk.hpp"
 
 #include"helper_functions.hpp"
 
@@ -62,6 +63,11 @@ int main(){
 	
 	std::cout << "________________ FINAL COUNT ________________"<<std::endl;
 	std::cout<<count_vertices<<" vertices and " <<count_edges<<" edges"<<std::endl;
+	
+	std::string filename("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_color.vtp");
+	
+	writer_vtk<Graph,2> W(filename.c_str());
+	W.export_vtp(G);
 	
 	return 0;
 }
