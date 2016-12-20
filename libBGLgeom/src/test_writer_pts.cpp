@@ -22,14 +22,14 @@ int main(){
 	G[a].coordinates = point<3>(0,1,2);
 	G[b].coordinates = point<3>(2,3,5);
 	G[c].coordinates = point<3>(3,1,6);
-	G[a].BC.type[0] = BC_type::DIR;
-	G[a].BC.value[0] = 3.5;
-	G[a].BC.type[1] = BC_type::DIR;
-	G[a].BC.value[1] = 3.7;
-	G[c].BC.type[0] = BC_type::NEU;
-	G[c].BC.value[0] = 4.5;
-	G[c].BC.type[1] = BC_type::INT;
-	G[c].BC.value[1] = 3.5;
+	G[a].BC[0].type = BC_type::DIR;
+	G[a].BC[0].value = 3.5;
+	G[a].BC[1].type = BC_type::DIR;
+	G[a].BC[1].value = 3.7;
+	G[c].BC[0].type = BC_type::NEU;
+	G[c].BC[0].value = 4.5;
+	G[c].BC[1].type = BC_type::INT;
+	G[c].BC[1].value = 3.5;
 	
 	Edge_desc<Graph> e1,e2;
 	e1 = add_edge(a,b,G).first;

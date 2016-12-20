@@ -138,12 +138,14 @@ class writer_pts{
 			out_file << "BEGIN_ARC" << std::endl;
 			src = boost::source(e, G);
 			tgt = boost::target(e, G);
+			/*
 			BGLgeom::write_BC_pts<num_bc>(out_file, G[src].BC, i);
 			out_file << std::endl;
 			BGLgeom::write_BC_pts<num_bc>(out_file, G[tgt].BC, i);
 			out_file << std::endl;
-			//out_file << G[src].BC << std::endl;
-			//out_file << G[tgt].BC << std::endl;
+			*/
+			out_file << G[src].BC[i] << std::endl;
+			out_file << G[tgt].BC[i] << std::endl;
 			BGLgeom::write_point_pts<dim>(out_file, G[src].coordinates);
 			out_file << std::setw(10) << "start" << std::endl;
 			BGLgeom::write_point_pts<dim>(out_file, G[tgt].coordinates);
