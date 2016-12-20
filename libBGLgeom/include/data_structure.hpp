@@ -67,6 +67,7 @@
 
 #include <iostream>
 #include <memory>
+#include <array>
 #include <boost/graph/graph_traits.hpp>
 
 #include "point.hpp"
@@ -111,11 +112,11 @@ template <unsigned int N, unsigned int num_bc = 1>
 struct Vertex_base_property{
 	//!Definition of some types which may be useful to see outside the struct
 	using point_t = typename BGLgeom::point<N>;
-	using bc_t = typename BGLgeom::boundary_condition<num_bc>;	
+	using bc_t = BGLgeom::boundary_condition;	
 	
 	//! Coordinates of the vertex
 	point_t coordinates;
-	bc_t BC;
+	std::array<bc_t, num_bc> BC;
 	
 	//! Default constructor
 	Vertex_base_property() : coordinates(), BC() {};
@@ -124,7 +125,7 @@ struct Vertex_base_property{
 	Vertex_base_property(point_t _coordinates) : coordinates(_coordinates), BC() {};
 								
 	//! Full constructor
-	Vertex_base_property(point_t _coordinates, bc_t _BC) : coordinates(_coordinates), BC(_BC) {};
+	Vertex_base_property(point_t _coordinates, std::array<bc_t,num_bc> _BC) : coordinates(_coordinates), BC(_BC) {};
 
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
@@ -137,6 +138,9 @@ struct Vertex_base_property{
 	
 	//! Move assignment
 	Vertex_base_property & operator=(Vertex_base_property &&) = default;
+	
+	//! Destructor
+	virtual ~Vertex_base_property() = default;
 	
 	/*
 	//! Overload of output operator
@@ -220,7 +224,7 @@ struct Edge_base_property_dynamic{
 	
 	//! Qui potrebbe avere senso mettere un output operator
 	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_dynamic const& ebpd){
-	
+		return out;
 	}
 	
 };	//Edge_base_property_dynamic
