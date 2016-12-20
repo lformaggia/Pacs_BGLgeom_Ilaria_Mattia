@@ -83,6 +83,8 @@ int main(){
 	std::cout << "\tt=0.5: " << e1(0.5) << std::endl;
 	std::cout << "\tt=1:   " << e1(1) << std::endl;
 	
+	/*
+	
 	std::cout << "Computing a uniform mesh" << std::endl;
 	e1.uniform_mesh(4);
 	std::vector<BGLgeom::point<2>> mesh2, mesh3, first_der;
@@ -104,6 +106,8 @@ int main(){
 	for(std::size_t i = 0; i < mesh3.size(); ++i)
 		std::cout << mesh3[i] << std::endl;
 	std::cout << std::endl;
+	
+	*/
 	
 	return 0;
 }

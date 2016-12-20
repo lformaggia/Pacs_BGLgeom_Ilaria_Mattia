@@ -56,15 +56,15 @@ class parametric_mesh_generator{
 		operator=(parametric_mesh_generator &&) = default;
 		
 		//! Destructor
-		virtual ~parametric_mesh_generator() = default;
+		virtual ~parametric_mesh_generator() {};
 		
 		//! Get the mesh
-		virtual
+		
 		std::vector<double>
 		get_mesh() { return p_mesh; }
 		
 		//! Clear the mesh
-		virtual
+		
 		void
 		clear_mesh() { p_mesh.clear(); }
 		
@@ -77,7 +77,7 @@ class parametric_mesh_generator{
 			
 			@param n Number of intervals
 		*/
-		virtual
+		
 		void
 		uniform_mesh(unsigned int const& n); /*{
 			p_mesh.clear();		//we clear the previous mesh, if present.
@@ -97,7 +97,7 @@ class parametric_mesh_generator{
 			@param n Max number of intervals (maybe they will be less)
 			@param spacing_function A function defining the spacing between the nodes 
 		*/
-		virtual
+		
 		void
 		variable_mesh(unsigned int const& n, std::function<double(double const& t)> spacing_function); /*{
 			

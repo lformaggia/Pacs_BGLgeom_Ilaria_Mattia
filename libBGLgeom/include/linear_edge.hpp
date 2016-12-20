@@ -25,7 +25,7 @@
 #include <memory>
 #include "point.hpp"
 #include "edge_geometry.hpp"
-#include "parametric_mesh_generator.hpp"
+//#include "parametric_mesh_generator.hpp"
 
 namespace BGLgeom{
 
@@ -36,7 +36,7 @@ namespace BGLgeom{
 	@param dim Dimension of the space
 */
 template <unsigned int dim>
-class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_generator {
+class linear_edge : public BGLgeom::edge_geometry<dim> {
 		
 	private:
 		//! Coordinates of the source of the edge
@@ -177,24 +177,21 @@ class linear_edge : public BGLgeom::edge_geometry<dim>, public parametric_mesh_g
  			@detail SRC and TGT are included in the mesh points
  			@param n Number of intervals
  		*/
- 		/*
-		std::vector<point>
 		vect_pts
- 		uniform_mesh_boh(unsigned int const& n) {
- 			double h_abscissa = static_cast<double>(1/n);
- 			double s = 0;
- 			vect_double = param_mesh;
- 			param_mesh.resize(n+1);
+		uniform_mesh(double const& h = 0.01) {
+			unsigned int n_points = std::ceil(this->length()/h);
+			double h_abscissa = 1./n_points;
+			double s = 0;
 			vect_pts retval;
- 			param_mesh.push_back(0);
- 			for(std::size_t i=0; i < n-1; ++i){	//n_points-1 per non includere già qui TGT
- 				s += h_abscissa;
- 				retval.emplace_back(point(this->operator()(s)));
- 			}
- 			param_mesh.push_back(1);
- 			return retval;			
- 		}
- 		*/
+			retval.push_back(SRC);
+			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
+				s += h_abscissa;
+				retval.emplace_back(point(this->operator()(s)));
+			}
+			retval.push_back(TGT);
+			return retval;			
+		}
+ 		
 		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {

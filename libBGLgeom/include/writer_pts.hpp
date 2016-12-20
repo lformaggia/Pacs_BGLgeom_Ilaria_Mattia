@@ -60,7 +60,7 @@ class writer_pts{
 		
 		//! Destructor
 		virtual ~writer_pts(){
-			out_file.close();	//necessary?
+			out_file.close();	//necessary? Really not
 		}
 		
 		//! Changing the filename to open a different ofstream

@@ -41,10 +41,8 @@ int main(){
 	G[e2].geometry.set_target(G[c].coordinates);
 	
 	//Creating a uniform mesh
-	G[e1].geometry.uniform_mesh(20);
-	G[e1].mesh = G[e1].geometry( G[e1].geometry.get_mesh() );
-	G[e2].geometry.uniform_mesh(30);
-	G[e2].mesh = G[e2].geometry( G[e2].geometry.get_mesh() );
+	G[e1].mesh = G[e1].geometry.uniform_mesh();	
+	G[e2].mesh = G[e2].geometry.uniform_mesh();
 	
 	std::string filename = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test.pts";
 	writer_pts<Graph,3,2> W(filename);
