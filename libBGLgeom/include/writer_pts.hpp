@@ -55,12 +55,7 @@ class writer_pts{
 			if(_filename.substr(_filename.length()-3, 3) != "pts")
 				std::cerr << "Warning! The output file does not have 'pts' extension." << std::endl;
 			/*else
-				try{
-				out_file.open(_filename.c_str());
-			} catch(std::exception & e) {
-				std::cerr << "Error while opening output file. In particular: " << e.what() << std::endl;
-				exit(EXIT_FAILURE);
-			}*/
+				*/
 		}
 		
 		//! Destructor
@@ -81,18 +76,25 @@ class writer_pts{
 			BGLgeom::Vertex_desc<Graph> src, tgt;
 			for(std::size_t i = 0; i < num_bc; ++i){
 				std::string temp_filename(filename);
+				// Changing filename if needed
 				if(num_bc > 1){
 					// Renaming filename
 					std::ostringstream temp;
 					temp << "_BC" << i+1;
 					temp_filename.insert(filename.length()-4, temp.str());
 				}
-				out_file.open(temp_filename.c_str());
+				// Opening file
+				try{
+					out_file.open(temp_filename.c_str());
+				} catch(std::exception & e) {
+					std::cerr << "Writer_pts: error while opening output file. In particular: " << e.what() << std::endl;
+					exit(EXIT_FAILURE);
+				}
+				// Writing on file
 				out_file << "BEGIN_LIST" << std::endl;
 				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-					//The previous code has been put in this function
 					this->export_edge(G, *e_it, src, tgt, i);
-				}	//for
+				}
 				out_file << "END_LIST";
 				out_file.close();
 			}	//for			
