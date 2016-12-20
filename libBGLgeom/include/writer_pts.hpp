@@ -95,23 +95,7 @@ class writer_pts{
 				}	//for
 				out_file << "END_LIST";
 				out_file.close();
-			}	//for
-			
-			
-			/*
-			if(num_bc == 1){			
-				out_file << "BEGIN_LIST" << std::endl;
-				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-					//The previous code has been put in this function
-					this->export_edge(G, *e_it, src, tgt);
-				}	//for
-				out_file << "END_LIST";
-				out_file.close();
-			} else {
-				for(std::size_t i = 0; )
-			}
-			*/
-			
+			}	//for			
 		}	//export_pts
 		
 	private:
@@ -138,12 +122,6 @@ class writer_pts{
 			out_file << "BEGIN_ARC" << std::endl;
 			src = boost::source(e, G);
 			tgt = boost::target(e, G);
-			/*
-			BGLgeom::write_BC_pts<num_bc>(out_file, G[src].BC, i);
-			out_file << std::endl;
-			BGLgeom::write_BC_pts<num_bc>(out_file, G[tgt].BC, i);
-			out_file << std::endl;
-			*/
 			out_file << G[src].BC[i] << std::endl;
 			out_file << G[tgt].BC[i] << std::endl;
 			BGLgeom::write_point_pts<dim>(out_file, G[src].coordinates);
