@@ -96,7 +96,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    auto P1 = A1+ t[0]*(B1-A1);
 	    auto P2 = A2+ t[1]*(B2-A2);
 	    if(norm(P1-P2)>tol_dist)
-	        std::cerr<<" Something strange, intersection points not coincident. Distance= "<<norm(P1-P2);
+	        std::cerr<<"Something strange, intersection points not coincident. Distance= "<<norm(P1-P2)<<" and tol = "<<tol_dist<<std::endl;
 	#endif        
 	    // The two lines intersect.
 	    // Check whether we are inside the segments

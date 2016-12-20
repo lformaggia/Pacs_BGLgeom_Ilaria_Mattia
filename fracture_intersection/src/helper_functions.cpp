@@ -1,3 +1,11 @@
+// CORREGGERE FRAC_NUM (MA ASPETTA CHE AGGIORNIAMO STRUTTURE GENERALI)
+// CAMBIARE == IN POINT PER TOLLERANZA
+// USARE GENERICHE FUNZIONI BGLgeom ADD NEW EDGE ADD NEW VERTEX
+// SPOSTARE TUTTI I CASI IN REFINE GRAPH
+// LOCAL DATA STRUCTURE DA SPOSTARE A INIZIO MAIN
+// IL MAIN DIVENTA LA FUNZIONE CREATE GRAPH
+
+
 #include<iostream>
 
 #include"helper_functions.hpp"
@@ -71,11 +79,16 @@ namespace BGLgeom{
 //					std::cout<<"Intersection with ("<<G[boost::source(*e_it,G)].coordinates<<";"<<G[boost::target(*e_it,G)].coordinates<<")"<<std::endl;
 //					std::cout<<intobj<<std::endl;
 				}	
+				
+				else{
+					std::cout<<"NO intersection with ("<<G[boost::source(*e_it,G)].coordinates<<";"<<G[boost::target(*e_it,G)].coordinates<<")"<<std::endl;
+				}
 			} //for
 			
 			std::cout<<count<<" edges"<<std::endl;
 			
 			if(edge_alone){
+				std::cout<<"edge alone"<<std::endl;
 				add_new_edge(src,tgt,e_prop,line_count,G);
 			}
 			else{ // there is at least one intersection		
