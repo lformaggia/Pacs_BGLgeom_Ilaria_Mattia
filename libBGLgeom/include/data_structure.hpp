@@ -68,6 +68,7 @@
 #include <iostream>
 #include <memory>
 #include <array>
+#include <string>
 #include <boost/graph/graph_traits.hpp>
 
 #include "point.hpp"
@@ -116,16 +117,54 @@ struct Vertex_base_property{
 	
 	//! Coordinates of the vertex
 	point_t coordinates;
+	/*!
+		@brief Boundary conditions on the vertex
+		@detail
+	*/
 	std::array<bc_t, num_bc> BC;
+	//! A label for the vertex (if needed)
+	std::string label;
+	//! An index for the vertex (if the user wants to keep track of the vertices)
+	unsigned int index;
 	
 	//! Default constructor
-	Vertex_base_property() : coordinates(), BC() {};
+	Vertex_base_property() : coordinates(), BC(), label(), index(0) {};
 	
 	//! Constructor with only the coordinates
-	Vertex_base_property(point_t _coordinates) : coordinates(_coordinates), BC() {};
+	Vertex_base_property(point_t const& _coordinates) : coordinates(_coordinates),
+														BC(),
+														index(0),
+														label() {};
+	
+	//! Constructor with coordinates and index
+	Vertex_base_property(point_t const& _coordinates,
+						 unsigned int const& _index) : 	coordinates(_coordinates),
+														BC(),
+						 								index(_index),
+						 								label() {};
+						 								
+	//! Constructor with coordinates and label
+	Vertex_base_property(point_t const& _coordinates
+						 std::string const& _label) :	coordinates(_coordinates),
+														BC(),						 						
+								 						index(0),
+								 						label(_label) {};
+						 						
+	//! Constructor with coordinates and BC
+	Vertex_base_property(point_t const& _coordinates
+						 bc_t const& _BC) :	coordinates(_coordinates),
+											BC(_BC),						 						
+					 						index(0),
+					 						label() {};
 								
 	//! Full constructor
-	Vertex_base_property(point_t _coordinates, std::array<bc_t,num_bc> _BC) : coordinates(_coordinates), BC(_BC) {};
+	Vertex_base_property(point_t const& _coordinates,
+						 std::array<bc_t,num_bc> const& _BC,
+						 std::string const& _label,
+						 unsigned int const& _index) : 	coordinates(_coordinates),
+						 								BC(_BC),
+						 								label(_label),
+						 								index(_index) {};
 
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
@@ -166,13 +205,33 @@ struct Edge_base_property_static{
 	//! The class handling the parameterization of the edge
 	geom_t geometry;
 	//! The container for the mesh
-	mesh_t mesh;	//magari mesglio un puntatore, così pesa di meno la struttura se non uso la mesh e posso inizializzare a null_ptr, anche per controlli
+	mesh_t mesh;
+	//! A label for the vertex (if needed)
+	std::string label;
+	//! An index for the vertex (if the user wants to keep track of the vertices)
+	unsigned int index;
 		
 	//! Default constructor
-	Edge_base_property_static() : geometry(), mesh() {};
+	Edge_base_property_static() : geometry(), mesh(), label(), index() {};
 	
-	//! Constructor. Maybe is better not to provide it since the constructor of different type of geometry are different
-	//Edge_base_property_static(Geom_t _geometry) : {};
+	//! Constructor with label
+	Edge_base_property_static(std::string const& _label) :	geometry(),
+							 								mesh(),
+							 								label(_label),
+							 								index(0);
+								 								
+	//! Constructor with index
+	Edge_base_property_static(unsigned int const& _index) :	geometry(),
+							 								mesh(),
+							 								label(),
+							 								index(_index);
+	
+	//! Constructor with label and index
+	Edge_base_property_static	(std::string const& _label,
+								 unsigned int const& _index) :	geometry(),
+								 								mesh(),
+								 								label(_label),
+								 								index(_index) {};
 	
 	//! Copy constructor
 	Edge_base_property_static(Edge_base_property_static const&) = default;
