@@ -1,7 +1,7 @@
 // CORREGGERE FRAC_NUM (MA ASPETTA CHE AGGIORNIAMO STRUTTURE GENERALI)
 // CAMBIARE == IN POINT PER TOLLERANZA
 // USARE GENERICHE FUNZIONI BGLgeom ADD NEW EDGE ADD NEW VERTEX
-// SPOSTARE TUTTI I CASI IN REFINE GRAPH
+// SPOSTARE TUTTI I CASI IN REFINE GRAPH  --> FATTO
 // LOCAL DATA STRUCTURE DA SPOSTARE A INIZIO MAIN
 // IL MAIN DIVENTA LA FUNZIONE CREATE GRAPH
 
@@ -116,86 +116,19 @@ namespace BGLgeom{
 				for(const BGLgeom::Int_layer<Graph> & I: intvect)
 				std::cout<<I<<std::endl;
 				
-			
-				if(intvect.size()==1){
-					// if the the type is Overlap_inside or overlap_extreme_inside both src and tgt are required, so we treat these case separately (also because thy appear only in the case intvect.size()=1)
-					if(intvect[0].how == BGLgeom::intersection_type::Overlap_inside){
-						BGLgeom::Int_layer<Graph> I = intvect[0];
-						Vertex_d v1;
-						Vertex_d v2;
-											
-						if(!I.swapped_comp){
-							v1 = boost::source(I.int_edge, G);
-							v2 = boost::target(I.int_edge, G);						
-						}
-						else{
-							v1 = boost::target(I.int_edge, G);
-							v2 = boost::source(I.int_edge, G);						
-						}
-
-						add_new_edge(v1,src,G[I.int_edge],line_count,G);
-						add_new_edge(src,tgt,G[I.int_edge],line_count,G);
-						Edge_d e = (boost::edge(src,tgt,G)).first; // get the edge descriptor of the edge just inserted
- 						update_edge_properties(e, e_prop, G);					
-						add_new_edge(tgt,v2,G[I.int_edge],line_count,G);		
-						
-						boost::remove_edge(I.int_edge,G);
-						std::cout<<"Edge removed"<<std::endl;						
-					}
-					
-					else if (intvect[0].how == BGLgeom::intersection_type::Overlap_extreme_inside){
-						BGLgeom::Int_layer<Graph> I = intvect[0];
-						Vertex_d v1;
-						Vertex_d v2;
-											
-						if(!I.swapped_comp){
-							v1 = boost::source(I.int_edge, G);
-							v2 = boost::target(I.int_edge, G);						
-						}
-						else{
-							v1 = boost::target(I.int_edge, G);
-							v2 = boost::source(I.int_edge, G);						
-						}
-						
-						
-						if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
-							add_new_edge(src,tgt, G[I.int_edge],line_count,G);
-							add_new_edge(tgt,v2,G[I.int_edge],line_count,G);
-						}						
-						else{ //the common extreme is the target
-							add_new_edge(v1,src,G[I.int_edge],line_count,G);
-							add_new_edge(src,tgt,G[I.int_edge],line_count,G);
-						}
-						
-						Edge_d e = (boost::edge(src,tgt,G)).first; // get the edge descriptor of the edge just inserted
-						update_edge_properties(e,e_prop,G);
-						boost::remove_edge(I.int_edge,G);
-						std::cout<<"Edge removed"<<std::endl;
-					}
-					
-					else{
-						refine_graph(G, current_src, tgt, e_prop, line_count, intvect[0], next_src);
-						current_src = next_src;					
-						if(!same_coordinates(current_src, tgt, G))
-							add_new_edge(current_src, tgt, e_prop, line_count,G);
-					}			
-				} 
-				// There are more than one intersections
-				else{										
-					// first, we resolve the connection between source and first intersection
-					refine_graph(G, src, tgt, e_prop, line_count, intvect[0], next_src); //collego src alla prima intersection
-					
-					for(int i=1; i<intvect.size(); ++i){ //here we resolve all the intermediate intersections
-						current_src = next_src;
-						refine_graph(G, current_src, tgt, e_prop, line_count, intvect[i], next_src);	// graph, current source, current intersection object					
-					};
-					
-					// Finally we connect the last intersection point with the target
+										
+				// first, we resolve the connection between source and first intersection
+				refine_graph(G, src, tgt, e_prop, line_count, intvect[0], next_src); //collego src alla prima intersection
+				
+				for(int i=1; i<intvect.size(); ++i){ //here we resolve all the intermediate intersections (if there is only one intrsection this loop is not executed)
 					current_src = next_src;
-					if(!same_coordinates(current_src, tgt, G));
-						add_new_edge(current_src, tgt, e_prop, line_count, G);									
-				}
-			
+					refine_graph(G, current_src, tgt, e_prop, line_count, intvect[i], next_src);	// graph, current source, current intersection object					
+				};
+				
+				// Finally we connect the last intersection point with the target
+				current_src = next_src;
+				if(!same_coordinates(current_src, tgt, G));
+					add_new_edge(current_src, tgt, e_prop, line_count, G);										
 			}// else 
 		} //while(!eof)
 	}; //create_graph
@@ -253,6 +186,64 @@ void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, const Fr
 	int_type T = I.how;
 	
 	switch(T){
+	
+		case int_type::Overlap_inside:
+		{
+			Vertex_d v1;
+			Vertex_d v2;
+								
+			if(!I.swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);						
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);						
+			}
+
+			add_new_edge(v1,src,G[I.int_edge],frac_num,G);
+			add_new_edge(src,tgt,G[I.int_edge],frac_num,G);
+			Edge_d e = (boost::edge(src,tgt,G)).first; // get the edge descriptor of the edge just inserted
+				update_edge_properties(e, e_prop, G);					
+			add_new_edge(tgt,v2,G[I.int_edge],frac_num,G);		
+			
+			boost::remove_edge(I.int_edge,G);
+			std::cout<<"Edge removed"<<std::endl;						
+		}
+		
+		
+		case int_type::Overlap_extreme_inside:
+		{
+			Vertex_d v1;
+			Vertex_d v2;
+								
+			if(!I.swapped_comp){
+				v1 = boost::source(I.int_edge, G);
+				v2 = boost::target(I.int_edge, G);						
+			}
+			else{
+				v1 = boost::target(I.int_edge, G);
+				v2 = boost::source(I.int_edge, G);						
+			}
+			
+			
+			if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
+				add_new_edge(src,tgt, G[I.int_edge],frac_num,G);
+				add_new_edge(tgt,v2,G[I.int_edge],frac_num,G);
+			}						
+			else{ //the common extreme is the target
+				add_new_edge(v1,src,G[I.int_edge],frac_num,G);
+				add_new_edge(src,tgt,G[I.int_edge],frac_num,G);
+			}
+			
+			Edge_d e = (boost::edge(src,tgt,G)).first; // get the edge descriptor of the edge just inserted
+			update_edge_properties(e,e_prop,G);
+			boost::remove_edge(I.int_edge,G);
+			std::cout<<"Edge removed"<<std::endl;
+		}
+
+
+	
 		case int_type::X:
 		{
 			// create vertex_descriptor for the intersection point
