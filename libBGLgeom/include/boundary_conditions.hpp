@@ -58,7 +58,7 @@ struct boundary_condition{
 	double value;
 	
 	//! Default constructor
-	boundary_condition() : type(BC_type::NONE), value(0.0) {}
+	boundary_condition() : type(BC_type::NONE), value(0.0) {};
 	
 	//! Constructor
 	boundary_condition(BC_type _type, double _value) : type(_type), value(_value) {};
