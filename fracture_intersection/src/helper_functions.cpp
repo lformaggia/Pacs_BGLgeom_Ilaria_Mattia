@@ -22,8 +22,7 @@ namespace BGLgeom{
 		}
 
 		//if this part is executed it means that there's no vertex desciptor matching the new coordinates
-		Vertex_d v = boost::add_vertex(G);
-		G[v] = v_prop;	
+		Vertex_d v = boost::add_vertex(v_prop,G);
 		return v;
 	}	
 	
@@ -247,8 +246,9 @@ void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, const Fr
 		case int_type::X:
 		{
 			// create vertex_descriptor for the intersection point
-			Vertex_d v = add_new_vertex(I.int_pts.front(), G);
-			
+			Fracture::Vertex_prop v_prop(I.int_pts.front());
+//			Vertex_d v = add_new_vertex(I.int_pts.front(), G);
+			Vertex_d v = add_new_vertex(v_prop, G);			
 			// add edge between src and v
 			add_new_edge(src, v, e_prop, frac_num, G);
 			
@@ -421,18 +421,17 @@ bool same_coordinates(const Vertex_d & v1, const Vertex_d & v2, const Graph & G)
 }
 
 void add_new_edge(const Vertex_d & src, const Vertex_d & tgt, const Fracture::Edge_prop & e_prop, const unsigned int frac_num, Graph & G){
-	Edge_d e = boost::add_edge(src, tgt, G).first;
+	Edge_d e = boost::add_edge(src, tgt, e_prop, G).first;
 	std::cout<<"New edge created ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
 	
 	point2 SRC = G[src].coordinates;
 	point2 TGT = G[tgt].coordinates;
 	
-	G[e] = e_prop;
 	G[e].geometry.set_source(SRC);
 	G[e].geometry.set_target(TGT);
-	G[e].frac_num = frac_num;
+	G[e].index = frac_num;
 	
-	std::cout<<"Fracture number: "<<G[e].frac_num<<std::endl;
+	std::cout<<"Fracture number: "<<G[e].index<<std::endl;
 }; // add_new_edge
 
 
@@ -440,6 +439,12 @@ Vertex_d add_new_vertex(const point2 & P, Graph & G){
 	Vertex_d v = boost::add_vertex(G);
 	std::cout<<"New vertex created"<<std::endl;
 	G[v].coordinates = P;
+	return v;
+}
+
+Vertex_d add_new_vertex(const Fracture::Vertex_prop & V, Graph & G){
+	Vertex_d v = boost::add_vertex(V,G);
+	std::cout<<"New vertex created"<<std::endl;
 	return v;
 }
 

@@ -21,7 +21,7 @@
 #include <tuple>
 #include <boost/graph/graph_traits.hpp>
 
-#include "point.hpp"
+#include "data_structure.hpp"
 
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
@@ -64,22 +64,57 @@ void give_edge_properties	(Edge_data_structure const& D,
 			every call of the function. It also perfom an extra control (not needed in much
 			cases, see documentation of boost::add_edge)
 */
-template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure>
-void create_edge(Graph & G,
-				typename boost::graph_traits<Graph>::vertex_descriptor const& src,
-				typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
-				Vertex_data_structure const& src_data,
-				Vertex_data_structure const& tgt_data,
-				Edge_data_structure const& e_data){
+template <typename Graph>
+BGLgeom::Edge_desc<Graph> 
+new_edge(	typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			Graph & G){
 	
 	bool inserted;
+	
 	typename boost::graph_traits<Graph>::edge_descriptor e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
-	G[src] = src_data;
-	G[tgt] = tgt_data;
-	G[e] = e_data;
+}	//new_edge (without properties)
+
+
+template <typename Graph, typename Edge_data_structure>
+BGLgeom::Edge_desc<Graph> 
+new_edge(	typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			Edge_data_structure const& e_data,
+			Graph & G){
+	
+	bool inserted;
+	
+	typename boost::graph_traits<Graph>::edge_descriptor e;
+	std::tie(e, inserted) = boost::add_edge(src, tgt, e_data, G);
+	check_if_edge_inserted<Graph>(e, inserted);
 }	//create_edge
+
+
+template <typename Graph>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Graph & G){	
+	return boost::add_vertex(v_data,G);
+}	//new_vertex
+
+template <typename Graph, typename Vertex_data_structure>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Vertex_data_structure const& v_data,
+				Graph & G, bool check_unique = false){
+	
+	if(check_unique){
+		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
+		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
+			if(v_data.coordinates == G[*v_it].coordinates)
+				return *v_it;
+		}
+	}
+	else{
+		return boost::add_vertex(v_data,G);
+	}
+}	//new_vertex
 
 /*!
 	@brief This function refines a graph creating a new vertex where the edges intersect

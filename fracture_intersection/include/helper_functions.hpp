@@ -20,6 +20,7 @@ namespace BGLgeom{
 	bool same_coordinates(const Vertex_d & v1, const Vertex_d & v2, const Graph & G);
 	void add_new_edge(const Vertex_d & src, const Vertex_d & tgt, const Fracture::Edge_prop & e_prop, const unsigned int frac_num, Graph & G);
 	Vertex_d add_new_vertex(const point2 & P, Graph & G);
+	Vertex_d add_new_vertex(const Fracture::Vertex_prop & V, Graph & G);
 	void cut_old_edge(Edge_d &e, const Vertex_d & v, const unsigned int frac_num, Graph & G);
 	void update_edge_properties(Edge_d &e, const Fracture::Edge_prop & new_edge_prop, Graph &G);
 }

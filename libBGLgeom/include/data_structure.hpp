@@ -70,6 +70,7 @@
 #include <array>
 #include <string>
 #include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
@@ -83,6 +84,12 @@ namespace BGLgeom{
 	@detail We provide alias for vertex and edge descriptors, vertex
 			and edge iterators.
 */
+
+template<unsigned int dim, 
+		 typename Vertex_prop = BGLgeom::Vertex_base_property<dim>, 
+		 typename Edge_prop = BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<dim>,dim>>
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex_prop , Edge_prop>;
+
 //! Vertex descriptor type alias
 template <typename Graph>
 using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
@@ -144,14 +151,14 @@ struct Vertex_base_property{
 						 								label() {};
 						 								
 	//! Constructor with coordinates and label
-	Vertex_base_property(point_t const& _coordinates
+	Vertex_base_property(point_t const& _coordinates,
 						 std::string const& _label) :	coordinates(_coordinates),
 														BC(),						 						
 								 						index(0),
 								 						label(_label) {};
 						 						
 	//! Constructor with coordinates and BC
-	Vertex_base_property(point_t const& _coordinates
+	Vertex_base_property(point_t const& _coordinates,
 						 bc_t const& _BC) :	coordinates(_coordinates),
 											BC(_BC),						 						
 					 						index(0),
@@ -206,9 +213,9 @@ struct Edge_base_property_static{
 	geom_t geometry;
 	//! The container for the mesh
 	mesh_t mesh;
-	//! A label for the vertex (if needed)
+	//! A label for the edge (if needed)
 	std::string label;
-	//! An index for the vertex (if the user wants to keep track of the vertices)
+	//! An index for the vertex (if the user wants to keep track of the edge)
 	unsigned int index;
 		
 	//! Default constructor
@@ -218,13 +225,15 @@ struct Edge_base_property_static{
 	Edge_base_property_static(std::string const& _label) :	geometry(),
 							 								mesh(),
 							 								label(_label),
-							 								index(0);
+							 								index(0)
+							 								{};
 								 								
 	//! Constructor with index
 	Edge_base_property_static(unsigned int const& _index) :	geometry(),
 							 								mesh(),
 							 								label(),
-							 								index(_index);
+							 								index(_index)
+							 								{};
 	
 	//! Constructor with label and index
 	Edge_base_property_static	(std::string const& _label,
