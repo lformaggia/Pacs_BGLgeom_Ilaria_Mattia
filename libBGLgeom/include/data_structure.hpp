@@ -72,10 +72,12 @@
 #include <tuple>
 #include <vector>
 #include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
 #include "edge_geometry.hpp"
+#include "linear_edge.hpp" //(for the default Graph type)
 #include "mesh_structure.hpp"
 
 namespace BGLgeom{
@@ -85,6 +87,7 @@ namespace BGLgeom{
 	@detail We provide alias for vertex and edge descriptors, vertex
 			and edge iterators.
 */
+
 //! Vertex descriptor type alias
 template <typename Graph>
 using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
@@ -215,8 +218,9 @@ struct Edge_base_property_static{
 	std::pair<mesh_t, parametric_mesh_t> mesh;
 	//! A label for the vertex (if needed)
 	std::string label;
-	//! An index for the vertex (if the user wants to keep track of the vertices)
+	//! An index for the vertex (if the user wants to keep track of the edge)
 	unsigned int index;
+	
 		
 	//! Default constructor
 	Edge_base_property_static() : geometry(), mesh(), label(), index() {};
@@ -238,7 +242,8 @@ struct Edge_base_property_static{
 								 unsigned int const& _index) :	geometry(),
 								 								mesh(),
 								 								label(_label),
-								 								index(_index) {};
+								 								index(_index)							 								
+								 								{};
 	
 	//! Copy constructor
 	Edge_base_property_static(Edge_base_property_static const&) = default;
@@ -294,6 +299,13 @@ struct Edge_base_property_dynamic{
 	}
 	
 };	//Edge_base_property_dynamic
+
+/*
+template<unsigned int dim, 
+		 typename Vertex_prop = Vertex_base_property<dim>, 
+		 typename Edge_prop = Edge_base_property_static<BGLgeom::linear_edge<dim>,dim>>
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex_prop , Edge_prop>;
+*/
 
 }	//BGLgeom
 

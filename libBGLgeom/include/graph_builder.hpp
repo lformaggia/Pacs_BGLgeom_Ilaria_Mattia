@@ -19,9 +19,14 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <cmath>
+#include <limits>
 #include <boost/graph/graph_traits.hpp>
 
-#include "point.hpp"
+#include "data_structure.hpp"
+#include "generic_edge.hpp"
+#include "linear_edge.hpp"
+#include "fracture_graph_properties.hpp"
 
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
@@ -64,22 +69,99 @@ void give_edge_properties	(Edge_data_structure const& D,
 			every call of the function. It also perfom an extra control (not needed in much
 			cases, see documentation of boost::add_edge)
 */
-template <typename Graph, typename Vertex_data_structure, typename Edge_data_structure>
-void create_edge(Graph & G,
-				typename boost::graph_traits<Graph>::vertex_descriptor const& src,
-				typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
-				Vertex_data_structure const& src_data,
-				Vertex_data_structure const& tgt_data,
-				Edge_data_structure const& e_data){
+template <typename Graph>
+BGLgeom::Edge_desc<Graph> 
+new_edge(	typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			Graph & G){
 	
 	bool inserted;
+	
 	typename boost::graph_traits<Graph>::edge_descriptor e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
-	G[src] = src_data;
-	G[tgt] = tgt_data;
-	G[e] = e_data;
+return e;
+}	//new_edge (without properties)
+
+
+template <typename Graph, typename Edge_data_structure>
+BGLgeom::Edge_desc<Graph> 
+new_edge(	typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			Edge_data_structure const & e_data,
+			Graph & G){
+	
+	bool inserted;
+	typename boost::graph_traits<Graph>::edge_descriptor e;
+	
+	std::tie(e, inserted) = boost::add_edge(src, tgt, e_data, G);
+	check_if_edge_inserted<Graph>(e, inserted);
+
+return e;
 }	//create_edge
+
+template <typename Graph, unsigned int dim>
+BGLgeom::Edge_desc<Graph> 
+new_lin_edge(typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			 typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			 BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<dim>,dim> & e_dat,
+			 Graph & G){
+	BGLgeom::Edge_desc<Graph> e = new_edge<Graph, Fracture::Edge_prop>(src,tgt,e_dat,G);	
+	G[e].geometry.set_source(G[src].coordinates);
+	G[e].geometry.set_target(G[tgt].coordinates);
+	
+	std::cout<<"New edge created ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
+	std::cout<<"Fracture number: "<<G[e].index<<std::endl;
+	
+	return e;			 
+}
+
+template <typename Graph, unsigned int dim>
+BGLgeom::Edge_desc<Graph> 
+new_lin_edge(typename boost::graph_traits<Graph>::vertex_descriptor const& src,
+			 typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
+			 BGLgeom::Edge_base_property_static<BGLgeom::generic_edge<dim>,dim> const& e_data,
+			 Graph & G){
+			 
+	BGLgeom::Edge_desc<Graph> e(new_edge(src,tgt,e_data,G));	
+	// check coherence with the extremes of the parametric curve describing the edge
+	if(!(G[src].coordinates == (G[e].geometry)(0)))
+		std::cerr<<"Warning: The point inserted as source does not correspond to the paramentric function evaluated in t = 0"<<std::endl;
+	if(!(G[tgt].coordinates == (G[e].geometry)(1)))
+		std::cerr<<"Warning: The point inserted as target does not correspond to the paramentric function evaluated in t = 1"<<std::endl;
+			 
+	return e;
+}
+
+template <typename Graph>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Graph & G){	
+	return boost::add_vertex(G);
+}	//new_vertex
+
+template <typename Graph, typename Vertex_data_structure>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Vertex_data_structure const& v_data,
+		   Graph & G, 
+		   const bool check_unique = false,
+		   const double tol = 20*std::numeric_limits<double>::epsilon()){
+	
+	if(check_unique){
+		const double dist = 0.0;
+	
+		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
+		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
+			if((v_data.coordinates - G[*v_it].coordinates).norm() < tol){
+				std::cout<<"Vertex already existing"<<std::endl;	
+				return *v_it;
+			}
+		}
+	}
+	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
+	std::cout<<"New vertex created"<<std::endl;
+	return boost::add_vertex(v_data,G);
+	
+}	//new_vertex
 
 /*!
 	@brief This function refines a graph creating a new vertex where the edges intersect

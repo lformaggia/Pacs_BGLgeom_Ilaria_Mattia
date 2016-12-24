@@ -26,6 +26,13 @@ main_ila: helper_functions.o intersections2D.o main_ila.o
 	
 main_ila.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_ila.cpp -o $@
+	
+main_new: helper_functions.o intersections2D.o main_new.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o main_new.o -o main_new
+	
+main_new.o:
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_new.cpp -o $@	
+	
 helper_functions.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  helper_functions.cpp	-o $@
 intersections2D.o:
@@ -34,6 +41,9 @@ intersections2D.o:
 	
 	
 clean :
-	$(RM) *.o main_ila
+	$(RM) *.o main_ila main_new
+	
+distclean: 
+	$(RM) *.o
 
 

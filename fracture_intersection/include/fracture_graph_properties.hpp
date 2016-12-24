@@ -39,41 +39,27 @@ struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edg
 	double df;
 	//! Source term
 	double source_term;
-	//! Fracture number
-	unsigned int frac_num;
+
 	
 	//! Default constructor
 	Edge_prop() :	BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
 					K_t(0),
 					K_n(0),
 					df(0),
-					source_term(0),
-					frac_num(0) {};
-					
-	//! Constructor (without fracture_number)
-	Edge_prop	(double const& _K_t,
-			 	 double const& _K_n,
-			 	 double const& _df,
-			 	 double const& _source_term) :
-							BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
-							K_t(_K_t),
-							K_n(_K_n),
-							df(_df),
-							source_term(_source_term),
-							frac_num() {};
-	
+					source_term(0)
+					{};
+
 	//! Full constructor
 	Edge_prop	(double const& _K_t,
 				 double const& _K_n,
 				 double const& _df,				 
-				 double const& _source_term,
-				 unsigned int const& _frac_num) :
+				 double const& _source_term) :
 							BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<2>,2>(),
 							K_t(_K_t),
 							K_n(_K_n),
 							df(_df),
-							source_term(_source_term),
-							frac_num(_frac_num) {};
+							source_term(_source_term)
+							{};
 };	//Edge_prop
 
 //! The vertex data structure
