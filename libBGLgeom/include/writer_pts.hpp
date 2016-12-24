@@ -26,8 +26,40 @@
 #include <boost/graph/adjacency_list.hpp>
 
 #include "data_structure.hpp"
+#include "point.hpp"
+#include "mesh_structure.hpp"
 
 namespace BGLgeom{
+
+//! @defgroup "Helper function for pts output" @{
+
+//! Function to write a point in a pts file format
+template <unsigned int dim>
+void
+write_point_pts(std::ostream & out, BGLgeom::point<dim> const& P){
+	out << std::setw(16);
+	for(std::size_t i=0; i<dim-1; ++i)
+		out << std::fixed << std::setprecision(8) << P(0,i) << std::setw(16);
+	out << P(0,dim-1);
+}
+
+/*! 
+	@brief Function that outputs the mesh in a fashion that suites pts format
+	@detail We don't put in the output the first and the last point of the mesh,
+			which coincide with source and target. The infos about them can be 
+			recoverd through vertex properties
+*/
+template <unsigned int dim>
+void
+write_mesh_pts(std::ostream & out, BGLgeom::mesh<dim> const& M){
+	for(std::size_t i=1; i<M.size()-1; ++i){
+		out << std::setw(8);
+		BGLgeom::write_point_pts<dim>(out,M[i]);
+		out << std::setw(10) << "point" <<  std::endl;
+	}
+}
+//!@}
+
 
 /*!
 	@brief	Classe to export infos about the graph on a .pts file
@@ -69,9 +101,18 @@ class writer_pts{
 			out_file.open(_filename.c_str());
 		}
 		
-		//! It exports the mesh and the info contained in the graph in an pts file
+		/*! 
+			@brief It exports the mesh and the info contained in the graph in an pts file
+			@detail If the parameter add_geometric_info is passed as true, this will print
+					in a separate file, named "filename"_addinfo.pts, the evaluation of the
+					first derivative and of the curvature in corrispondence of the point
+					of the mesh
+			@pre	A parametric mesh is required to be presented in the "second" record
+					of the member "mesh" in the base edge properties. If empty, the writer
+					will stop reporting an error
+		*/
 		void
-		export_pts(Graph const& G){
+		export_pts(Graph const& G, bool add_geometric_info = false){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			BGLgeom::Vertex_desc<Graph> src, tgt;
 			for(std::size_t i = 0; i < num_bc; ++i){
@@ -97,7 +138,29 @@ class writer_pts{
 				}
 				out_file << "END_LIST";
 				out_file.close();
-			}	//for			
+			}	//for
+			// Adding geometrical information
+			if(add_geometric_info){
+				// Changing filename
+				std::string temp_filename(filename);
+				std::ostringstream temp;
+				temp << "_addinfo";
+				temp_filename.insert(filename.length()-4, temp.str());
+				// Opening file
+				try{
+					out_file.open(temp_filename.c_str());
+				} catch(std::exception & e) {
+					std::cerr << "Writer_pts: error while opening output file. In particular: " << e.what() << std::endl;
+					exit(EXIT_FAILURE);
+				}
+				// Writing on file
+				out_file << "BEGIN_LIST" << std::endl;
+				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
+					this->export_info(G, *e_it);
+				}
+				out_file << "END_LIST";
+				out_file.close();				
+			}	//if				
 		}	//export_pts
 		
 	private:
@@ -126,13 +189,44 @@ class writer_pts{
 			tgt = boost::target(e, G);
 			out_file << G[src].BC[i] << std::endl;
 			out_file << G[tgt].BC[i] << std::endl;
-			BGLgeom::write_point_pts<dim>(out_file, G[src].coordinates);
+			out_file<< std::setw(8) << std::setprecision(2) << G[e].index;
+			write_point_pts<dim>(out_file, G[src].coordinates);
 			out_file << std::setw(10) << "start" << std::endl;
-			BGLgeom::write_point_pts<dim>(out_file, G[tgt].coordinates);
+			out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+			write_point_pts<dim>(out_file, G[tgt].coordinates);
 			out_file << std::setw(8) << "end" << std::endl;
-			write_mesh_pts<dim>(out_file, G[e].mesh);	//with overload of operator<< for mesh
+			// Writing the mesh (without source and target)
+			for(std::size_t i = 1; i < G[e].mesh.first.size()-1; ++i){
+				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+				write_point_pts<dim>(out_file, G[e].mesh.first[i]);
+				out_file << std::setw(10) << "point" << std::endl;
+			}
 			out_file << "END_ARC" << std::endl;
 		}	//export_edge
+		
+		/*!
+			@brief	Exporting to a separate pts file additional geometric infos
+			@detail	It exports for each edge this kind of info: \n
+					- the three component of the first derivative; \n
+					- the three component of the second derivative; \n
+					- the evaluation of the curvature. \n
+					All this info are computed in correspondence of the points of the
+					mesh present on the edge
+			
+		*/
+		void
+		export_info(Graph const& G,
+					BGLgeom::Edge_desc<Graph> const& e){
+			out_file << "BEGIN_ARC" << std::endl;
+			for(std::size_t i = 0; i < G[e].mesh.second.size(); ++i){
+				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+				write_point_pts<dim>(out_file, G[e].geometry.first_der( G[e].mesh.second[i] ));
+				write_point_pts<dim>(out_file, G[e].geometry.second_der( G[e].mesh.second[i] ));
+				out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature( G[e].mesh.second[i] );
+				out_file << std::endl;
+			}
+			out_file << "END_ARC" << std::endl;		
+		}	//export_info
 };	//writer_pts
 
 }	//BGLgeom

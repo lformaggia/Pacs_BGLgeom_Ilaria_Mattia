@@ -52,16 +52,7 @@ operator<<(std::ostream & out, Eigen::DenseBase<Derived> & m){
 	return out;
 }
 
-//! Function to write in the proper way in a pts file format
-template <unsigned int dim>
-void
-write_point_pts(std::ostream & out, point<dim> const& P){
-	out << std::setw(8) << 11 << std::setw(16);
-	for(std::size_t i=0; i<dim-1; ++i)
-		out << std::fixed << std::setprecision(8) << P(0,i) << std::setw(16);
-	out << P(0,dim-1);
 
-}
 
 // Write_ASCII
 
