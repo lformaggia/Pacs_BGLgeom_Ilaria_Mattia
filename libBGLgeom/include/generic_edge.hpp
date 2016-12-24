@@ -67,7 +67,9 @@ class generic_edge {
 					 			 //riparam(),
 					 			 scale_factor(1),
 					 			 known_term(0),
-					 			 param_with_curv_abs(false) {};
+					 			 param_with_curv_abs(false)
+					 			 {};
+					 			 		
 					 			 
 		//! Length of the curve
 		double length() const {

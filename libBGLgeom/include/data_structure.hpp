@@ -75,6 +75,7 @@
 #include "point.hpp"
 #include "boundary_conditions.hpp"
 #include "edge_geometry.hpp"
+#include "linear_edge.hpp" //(for the default Graph type)
 #include "mesh_structure.hpp"
 
 namespace BGLgeom{
@@ -84,11 +85,6 @@ namespace BGLgeom{
 	@detail We provide alias for vertex and edge descriptors, vertex
 			and edge iterators.
 */
-
-template<unsigned int dim, 
-		 typename Vertex_prop = BGLgeom::Vertex_base_property<dim>, 
-		 typename Edge_prop = BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<dim>,dim>>
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex_prop , Edge_prop>;
 
 //! Vertex descriptor type alias
 template <typename Graph>
@@ -217,6 +213,7 @@ struct Edge_base_property_static{
 	std::string label;
 	//! An index for the vertex (if the user wants to keep track of the edge)
 	unsigned int index;
+	
 		
 	//! Default constructor
 	Edge_base_property_static() : geometry(), mesh(), label(), index() {};
@@ -232,7 +229,7 @@ struct Edge_base_property_static{
 	Edge_base_property_static(unsigned int const& _index) :	geometry(),
 							 								mesh(),
 							 								label(),
-							 								index(_index)
+							 								index(_index)							 								
 							 								{};
 	
 	//! Constructor with label and index
@@ -240,7 +237,8 @@ struct Edge_base_property_static{
 								 unsigned int const& _index) :	geometry(),
 								 								mesh(),
 								 								label(_label),
-								 								index(_index) {};
+								 								index(_index)							 								
+								 								{};
 	
 	//! Copy constructor
 	Edge_base_property_static(Edge_base_property_static const&) = default;
@@ -296,6 +294,13 @@ struct Edge_base_property_dynamic{
 	}
 	
 };	//Edge_base_property_dynamic
+
+/*
+template<unsigned int dim, 
+		 typename Vertex_prop = Vertex_base_property<dim>, 
+		 typename Edge_prop = Edge_base_property_static<BGLgeom::linear_edge<dim>,dim>>
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex_prop , Edge_prop>;
+*/
 
 }	//BGLgeom
 
