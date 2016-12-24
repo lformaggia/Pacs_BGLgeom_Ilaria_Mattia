@@ -156,8 +156,6 @@ class generic_edge {
 				std::cerr << "generic_edge::curvature(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
-            if( (this->first_der(s)).norm() == 0)
-                return 0; // altrimenti al denominatore ho 0
 			if( (this->first_der(t)).norm() < tol_dist )
 				return 0; // otherwise at the denominator I will have zero or very close to it
 			double numerator;
