@@ -12,7 +12,7 @@ VTK_LIBS = $(LIBS6:lib%=%)
 
 
 CXXFLAGS += -std=c++11
-CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/include -I$(mkVtkInc) 
+CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/include -I$(mkVtkInc)
 
 .PHONY: all clean distclean
 
