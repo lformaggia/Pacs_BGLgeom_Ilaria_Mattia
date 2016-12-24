@@ -20,11 +20,13 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <tuple>
 #include <cmath>
 #include <Eigen/Dense>
-#include <memory>
 #include "point.hpp"
 #include "edge_geometry.hpp"
+#include "mesh.hpp"
+#include "domain.hpp"
 //#include "parametric_mesh_generator.hpp"
 
 namespace BGLgeom{
@@ -43,8 +45,6 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		BGLgeom::point<dim> SRC;
 		//! Coordinates of the starget of the edge
 		BGLgeom::point<dim> TGT;
-		//! A pointer to the class that will handle the parametric mesh
-		//std::unique_ptr<parametric_mesh_generator> param_mesh;
 
 	public:
 		using point = BGLgeom::point<dim>;
@@ -173,12 +173,23 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		*/
 		
 		/*! 
- 			@brief Creating a mesh on the edge
+ 			@brief Creating a uniform mesh on the edge
  			@detail SRC and TGT are included in the mesh points
  			@param n Number of intervals
+ 			@return A pair containing: \n
+ 					- first: the points of the mesh
+ 					- second: the vector of the parameter's value used to generate
+ 						the mesh
  		*/
-		vect_pts
-		uniform_mesh(double const& h = 0.01) {
+		std::pair<vect_pts,std::vector<double>>
+		uniform_mesh(unsigned int const& n) {
+			std::vector<double> parametric_mesh;
+			vect_pts real_mesh;
+			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n);
+			parametric_mesh = temp_mesh.getMesh();
+			real_mesh = this->operator()(parametric_mesh);
+			return std::make_pair(real_mesh, parametric_mesh);		
+			/*
 			unsigned int n_points = std::ceil(this->length()/h);
 			double h_abscissa = 1./n_points;
 			double s = 0;
@@ -189,9 +200,29 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 				retval.emplace_back(point(this->operator()(s)));
 			}
 			retval.push_back(TGT);
-			return retval;			
+			return retval;
+			*/
 		}
- 		
+		
+		/*! 
+ 			@brief Creating a non-uniform mesh on the edge
+ 			@detail SRC and TGT are included in the mesh points
+ 			@param n Maximum number of intervals
+ 			@param spacing_function Spacing function
+ 			@return A pair containing: \n
+ 					- first: the points of the mesh
+ 					- second: the vector of the parameter's value used to generate
+ 						the mesh
+ 		*/
+		std::pair<vect_pts,std::vector<double>>
+		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
+			vect_pts real_mesh;
+			vect_double parametric_mesh;
+			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n, spacing_function);
+			parametric_mesh = temp_mesh.getMesh();
+			real_mesh = this->operator()(parametric_mesh);
+			return std::make_pair(real_mesh, parametric_mesh);
+		} 		
 		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
