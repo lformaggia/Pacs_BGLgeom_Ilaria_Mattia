@@ -18,14 +18,18 @@
 #define HH_GENERIC_EDGE_HH
 
 #include <functional>
-#include <cmath>
+#include <tuple>
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
 #include "point.hpp"
 #include "adaptive_quadrature.hpp"
 #include <Eigen/Dense>
+#include "mesh.hpp"
+#include "domain.hpp"
 
+//! The tolerance on being zero
+#define tol_dist 1e-8
 
 namespace BGLgeom{
 
@@ -33,8 +37,9 @@ namespace BGLgeom{
 	@brief Generic geometry for an edge
 	@detail It requires as the full specification of the expression of the curve,
 			of its firts derivative and of its second derivative (so they must be
-			known a priori). It provides reparameterization? Between what??????
-			???????????????????????????????????????????????????????????? 
+			known a priori)
+	@remark It requires parameterization between 0 and 1. It checks in each method
+			if the given parameter is in this range, otherwise the program abort
 	
 	@param dim Dimension of the space	
 */
@@ -50,64 +55,29 @@ class generic_edge {
 		std::function<point(double)> value_fun;      //! stores the function f:[0,1] ->[src,tgt] representing the edge
 		std::function<point(double)> first_der_fun;   
 		std::function<point(double)> second_der_fun;
-		//std::function<double(double)> riparam;
-		double scale_factor;
-		double known_term;
-		bool param_with_curv_abs;
-
+		
 	public:
 	
 		//! full constructor
-		generic_edge(std::function<point(double)>  const& value_,
+		generic_edge(std::function<point(double)> const& value_,
 					 std::function<point(double)> const& first_der_,
-					 std::function<point(double)> second_der_) :
+					 std::function<point(double)> const& second_der_) :
 					 			 value_fun(value_),
 					 			 first_der_fun(first_der_),
-					 			 second_der_fun(second_der_),
-					 			 //riparam(),
-					 			 scale_factor(1),
-					 			 known_term(0),
-					 			 param_with_curv_abs(false) {};
+					 			 second_der_fun(second_der_) {};
 					 			 
 		//! Length of the curve
-		double length() const {
-			return 100;		//I need to store inside the class t0 and tf to compute this...
-		}
+		double length() { return this->curv_abs(1); }
+		double length() const { return this->curv_abs(1); }
 		
-		/*!
-			@brief Method to riparametrize the curve w.r.t the curvilinear abscissa
-			@detail 
-		*/
-		void riparam_to_curv_abs(double const& t0, double const& tf){
-			scale_factor = (tf - t0)/this->curv_abs(tf);
-			known_term = t0;
-			param_with_curv_abs = true;
-		}
-		
-		/*!
-			#brief Method to riparametrize the curve form curvilinear abscissa
-					to original parameter interval
-		*/
-		void riparam_original(){
-			if(param_with_curv_abs){
-				scale_factor = 1;
-				known_term = 0;
-				param_with_curv_abs = false;
-			} else {
-				std::cerr << "Error, generic_edge::riparam_original()" << std::endl;
-				std::cerr << "This curve is not parametrized w.r.t curvilinear abscissa" << std::endl;
+		//! Evaluation of the curve in a given value of the parameter
+		point
+		operator()(double const& t) const {
+			if(t < 0 || t > 1){
+				std::cerr << "generic_edge::first_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
-		}
-
-	    //! Evaluation of the curve ina given value of the parameter     
-		point operator() (double const& s) const
-		{	
-			if(param_with_curv_abs)
-				if(s < 0 || s > this->length())
-					std::cerr << "generic_edge::operator(): parameter value out of bounds" << std::endl;
-			//check if param belongs to 0->1
-			return value_fun(scale_factor * s + known_term);
+			return value_fun(t);	
 		}
 		
 		//! Evaluation in a vector of parameters
@@ -121,7 +91,13 @@ class generic_edge {
 		
 		//! Evaluation of the first derivative in a given value of the parameter
 		point
-		first_der(const double & t)	{ return first_der_fun(t); }
+		first_der(const double & t){ 
+			if(t < 0 || t > 1){
+				std::cerr << "generic_edge::first_der(): parameter value out of bounds" << std::endl;
+				exit(EXIT_FAILURE);
+			}
+			return first_der_fun(t);
+		}
 		
 		//! Evaluation in a vector of parameters
 		vect_pts
@@ -134,7 +110,13 @@ class generic_edge {
 		
 		//! Evaluation of the second derivative in a given value of the parameter
 		point 
-		second_der(const double & t) { return second_der_fun(t); }
+		second_der(const double & t){
+			if(t < 0 || t > 1){
+				std::cerr << "generic_edge::second_der(): parameter value out of bounds" << std::endl;
+				exit(EXIT_FAILURE);
+			}
+			return second_der_fun(t);
+		}
 		
 		//! Evaluation ina vector of parameters
 		vect_pts
@@ -146,12 +128,17 @@ class generic_edge {
 		}
 		
 		//! Evaluation of the curvilinear abscissa
-		double curv_abs(const double & t){
+		double curv_abs(const double & t)  {
+			if(t < 0 || t > 1){
+				std::cerr << "generic_edge::curv_abs(): parameter value out of bounds" << std::endl;
+				exit(EXIT_FAILURE);
+			}	
 			//lambda functions that returns the integrand function, i.e. norm(first_derivative(t))
 	  		auto abscissa_integrand = [&](double t) -> double{
 				return this -> first_der(t).norm();
-	  		};	  	
-	  		return BGLgeom::integrate(abscissa_integrand,0,t);
+	  		};
+	  		double retval = BGLgeom::integrate(abscissa_integrand,0,t);
+	  		return retval;	  		
 		}
 		
 		//! Evaluation in a vector of parameters
@@ -164,26 +151,32 @@ class generic_edge {
 		}
 		
 		//! Evaluation of the curvature
-		double curvature(const double & s){
-			if( (this->first_der(s)).norm() == 0)
-				return 0; // altrimenti al denominatore ho 0
+		double curvature(const double & t){
+			if(t < 0 || t > 1){
+				std::cerr << "generic_edge::curvature(): parameter value out of bounds" << std::endl;
+				exit(EXIT_FAILURE);
+			}
+            if( (this->first_der(s)).norm() == 0)
+                return 0; // altrimenti al denominatore ho 0
+			if( (this->first_der(t)).norm() < tol_dist )
+				return 0; // otherwise at the denominator I will have zero or very close to it
 			double numerator;
 			if(dim == 3){
 				// explicit computation of the determinant
-				Eigen::Matrix<double,1,3> tmp( (this->first_der(s)(0,0) * this->second_der(s)(0,1) -
-							 					this->first_der(s)(0,1) * this->second_der(s)(0,0)),
-							 				   (this->first_der(s)(0,2) * this->second_der(s)(0,0) -
-							 					this->first_der(s)(0,0) * this->second_der(s)(0,2)),
-							 				   (this->first_der(s)(0,1) * this->second_der(s)(0,2) -
-							 					this->first_der(s)(0,2) * this->second_der(s)(0,1))   );
+				Eigen::Matrix<double,1,3> tmp( (this->first_der(t)(0,0) * this->second_der(t)(0,1) -
+							 					this->first_der(t)(0,1) * this->second_der(t)(0,0)),
+							 				   (this->first_der(t)(0,2) * this->second_der(t)(0,0) -
+							 					this->first_der(t)(0,0) * this->second_der(t)(0,2)),
+							 				   (this->first_der(t)(0,1) * this->second_der(t)(0,2) -
+							 					this->first_der(t)(0,2) * this->second_der(t)(0,1))   );
 				numerator = tmp.norm();
 			} else {	//dim == 2
-				numerator = std::abs(this->first_der(s)(0,0) * this->second_der(s)(0,1) - 
-							 		 this->first_der(s)(0,1) * this->second_der(s)(0,0));
+				numerator = std::abs(this->first_der(t)(0,0) * this->second_der(t)(0,1) - 
+							 		 this->first_der(t)(0,1) * this->second_der(t)(0,0));
 			}
-			double denominator( ((this->first_der(s)).norm()) *
-								((this->first_der(s)).norm()) *
-								((this->first_der(s)).norm()) );
+			double denominator( ((this->first_der(t)).norm()) *
+								((this->first_der(t)).norm()) *
+								((this->first_der(t)).norm()) );
 			return numerator/denominator;
 		}
 		
@@ -197,55 +190,73 @@ class generic_edge {
 		}
 		 
 		
+		 
+		/*! 
+ 			@brief Creating a uniform mesh on the edge
+ 			@detail SRC and TGT are included in the mesh points
+ 			@param n Number of intervals
+ 			@return A pair containing: \n
+ 					- first: the points of the mesh
+ 					- second: the vector of the parameter's value used to generate
+ 						the mesh
+ 		*/
+ 		
+		std::pair<vect_pts,vect_double>
+		uniform_mesh(unsigned int const& n){
+		/*
+			vect_pts mesh;
+			//mesh.resize(n+1);
+			vect_double parametric_mesh;
+			//parametric_mesh.resize(n+1);
+			mesh.emplace_back(this->operator()(0));
+			parametric_mesh.emplace_back(0);
+			double h_abscissa = static_cast<double>(this->length()/n);
+			double u = 0;
+			double t_eval;
+			for(std::size_t i = 0; i < n-1; ++i){
+				u += h_abscissa;
+				t_eval = u/this->length();
+				//std::cout << "evaluation" << std::endl;
+				parametric_mesh.emplace_back(t_eval);
+				mesh.emplace_back(this->operator()(t_eval));
+			}
+			mesh.emplace_back(this->operator()(1));
+			parametric_mesh.emplace_back(1);
+			return std::make_pair(mesh,parametric_mesh);
+			*/
+			std::vector<double> parametric_mesh;
+			vect_pts real_mesh;
+			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n);
+			parametric_mesh = temp_mesh.getMesh();	
+			real_mesh = this->operator()(parametric_mesh);
+			return std::make_pair(real_mesh, parametric_mesh);
+			
+		}
+		
+		/*! 
+ 			@brief Creating a non-uniform mesh on the edge
+ 			@detail SRC and TGT are included in the mesh points
+ 			@param n Maximum number of intervals
+ 			@param spacing_function Spacing function
+ 			@return A pair containing: \n
+ 					- first: the points of the mesh
+ 					- second: the vector of the parameter's value used to generate
+ 						the mesh
+ 		*/
+		std::pair<vect_pts,std::vector<double>>
+		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
+			vect_pts real_mesh;
+			vect_double parametric_mesh;
+			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n, spacing_function);
+			parametric_mesh = temp_mesh.getMesh();
+			real_mesh = this->operator()(parametric_mesh);
+			return std::make_pair(real_mesh, parametric_mesh);
+		}		
+		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, generic_edge<dim>& edge) {
 			out << "I'm a generic edge";
 			return out;
-			/*
-			out<<"Source: "<<std::endl;
-			out<<edge.value(0)<<std::endl;
-			out<<std::endl;
-			out<<"Value in s=0.5: "<<std::endl;
-			out<<edge.value(0.5)<<std::endl;
-			out<<std::endl;
-			out<<"Target: "<<std::endl;
-			out<<edge.value(1)<<std::endl;
-			out<<std::endl;
-			out << "Length: " << edge.length() << std::endl;
-			out<<"First derivatives in s=0: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_der(0))[i]<<" ";
-			out<<std::endl;
-			out<<"First derivatives in s=0.5: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_der(0.5))[i]<<" ";
-			out<<std::endl;
-			out<<"First derivatives in s=1: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.first_der(1))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=0: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_der(0))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=0.5: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_der(0.5))[i]<<" ";
-			out<<std::endl;		
-			out<<"Second derivatives in s=1: ";
-			for(int i=0; i<dim; ++i)
-				out<<(edge.second_der(1))[i]<<" ";
-			out<<std::endl;			
-			out<<"Curvilinear abscissa in s=0: "<<edge.curv_abs(0)<<std::endl;
-			out<<"Curvilinear abscissa in s=0.5: "<<edge.curv_abs(0.5)<<std::endl;
-			out<<"Curvilinear abscissa in s=1: "<<edge.curv_abs(1)<<std::endl;
-			out<<"Mesh on the edge:" << std::endl;
-			std::vector<point> mesh = edge.uniform_mesh(0.1);
-			for(std::size_t i=0; i<mesh.size(); ++i)
-				out << mesh[i] << std::endl;
-			out << std::endl;
-			return out;
-			*/		
 		}	
 
 }; //class
