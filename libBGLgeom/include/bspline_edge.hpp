@@ -42,118 +42,53 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-
-//#include "data_structure.hpp"
 #include "edge_geometry.hpp"
 #include "adaptive_quadrature.hpp"
 
+#define tol_dist 1e-8
 
 namespace BGLgeom{
 
 using vect = std::vector<double>;
 
-// SOME AUXILIARY FUNCTIONS: IS IT CORRECT TO PUT THEM HERE? 
-// The following two functions, the only two ones not templated, are implemented in bspline_edge.ccp
-int findspan (int n, int p, double u, const vect &U);
-void basisfun (int i, double u, int p, const vect &U, vect &N);
-
-/*
-
-template<int dim>
-void
-bspderiv (int d, const vect_pts<dim> &C, int nc,
-          const vect &k, int nk, vect_pts<dim> &dC, vect &dk)
-// IN:
-//    d  - degree of the B-Spline
-//    C  - vector of control points  (mc x nc matrix stored as column major)
-//    nc - number of control points
-//    k  - knot sequence   (nk x 1 vector)
-// OUT:
-//    dc - vector of derivative control points  
-//    dk - knot sequence   ((nk - 1) x 1 vector)
-{
-	int ierr = 0;
-	int i, j;
-	double tmp;
-
-	for (i = 0; i < nc-1; i++){
-	    tmp = d / (k[i+d+1] - k[i+1]);
-	    for (j = 0; j < dim; j++)
-	    dC[i](j) = tmp * (C[i+1](j) - C[i](j));
-	}
-
-	for (i = 1; i < nk-1; i++)
-	dk[i-1] = k[i];
-}
-
-
-template<int dim>
-void
-bspeval (const int d, const vect_pts<dim> &C, const int nc,
-         const vect &k, double u, point<dim> &P)
-// bspeval:  Evaluate B-Spline at parametric points.
-//
-//    IN:
-//       d - Degree of the B-Spline.
-//       C - vector of control points.
-//       k - Knot sequence, i_pt vector of size nk.
-//       u - Parametric evaluation point.
-//    OUT:
-//       P - Evaluated point
-{
-	int s, tmp1, ii, i;
-	vect N (d+1, 0.0);
-
-	P = point<dim>::Zero(); //! Initialize the point to zero
-
-	s = findspan (nc-1, d, u, k);
-	basisfun (s, u, d, k, N);
-	tmp1 = s - d;
-	for (i = 0; i < dim; ++i)
-	for (ii = 0; ii <= d; ++ii)
-	    P(i) += N[ii] * C[tmp1+ii](i);
-}
-
-template<int dim>
-void
-bspeval (const int d, const vect_pts<dim> &C, const int nc,
-         const vect &k, const vect &u, vect_pts<dim> & P_vect)
-// bspeval:  Evaluate B-Spline at parametric points.
-//
-//    IN:
-//       d - Degree of the B-Spline.
-//       C - vector of Control Points.
-//       k - Knot sequence, i_pt vector of size nk.
-//       u - Parametric evaluation points, i_pt vector of size nu.
-//    OUT:
-//       P_vect - Evaluated points, matrix of size (dim,nu)
-{
-	int s, tmp1, ii, i_vect, i_pt;
-	vect N (d+1, 0.0);
-	auto nu = u.size ();
-	P_vect.resize(nu); //reserve nu places in the output vector
-
-	// INITIALIZE ALL THE POINTS TO 0 (NECESSARY?)
-	for(BGLgeom::point<dim> & PP: P_vect){
-		PP = BGLgeom::point<dim>::Zero();
-	}
-
-	for (i_vect = 0; i_vect < nu; ++i_vect){
-	    s = findspan (nc-1, d, u[i_vect], k);
-	    basisfun (s, u[i_vect], d, k, N);
-	    tmp1 = s - d;
-	    for (i_pt = 0; i_pt < dim; ++i_pt)
-	    for (ii = 0; ii <= d; ++ii)
-	        P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
-	}  
-}
-
+/*!
+	@brief	Find the knot span of the parametric point u.
+	@note	This is NOT	Algorithm A2.1 from 'The NURBS BOOK' pg68
+			as that algorithm only works for nonperiodic
+			knot vectors, nonetheless the results should
+			be EXACTLY the same if U is nonperiodic
+			
+	@param n Number of control points - 1
+	@param p Spline degree
+	@param t Parametric point
+	@param U Knot sequence
+	@return	Knot span
+	
+	@todo	This implementation has linear, rather than log complexity
 */
+int findspan (int n, int p, double u, const vect &U);
+
+/*!
+	@brief	Compute the functions of the basis
+	@note	Algorithm A2.2 from 'The NURBS BOOK' pg70.
+	
+	@param i Knot span (form findspan())
+	@param t Parametric point
+	@param p Spline degree
+	@param U Knot sequence
+	@return	Vector of the functions of the basis (p+1 dimensional)	
+*/
+void basisfun (int i, double t, int p, const vect &U, vect &N);
 
 
 /*!
 	@brief Class to handle edges described by a bspline
 	@detail
+	@note	We do not perform checks on the value of the input parameter when evaluating
+			the curve since this check is already performed by the code in findspan, 
+			which returns an error message and exits.
+	@param dim Dimension of the space
+	@param deg Degree of the spline
 */
 template <int dim = 3, int deg = 3>
 class
@@ -166,7 +101,7 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 		//! Constructor with control points
 		bspline_edge (const vect_pts &C_)
-			: C(C_), nc(C_.size ()), k(make_knots(nc)) {
+			: nc(C_.size ()), k(make_knots(nc)), C(C_) {
 
 			// construction of spline for the vector of first derivative
 			dC.resize (nc-1);
@@ -187,7 +122,7 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 		//! Constructor with control points and knot vector
 		bspline_edge (const vect_pts &C_, const vect &k_)
-			: C(C_), k(k_), nc(C_.size ()) {
+			: nc(C_.size ()), k(k_), C(C_) {
 
 			// construction of spline for the vector of first derivative
 			dC.resize (nc-1);
@@ -205,56 +140,64 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 				
 			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
 		};
-
+		
+		//! Evaluation of the curve at a given value of the parameter
 		point 
 		operator() (double const& t) const {
 			point P = point::Zero();
 			bspeval (deg, C, nc, k, t, P);
 			return P;
 		};
-
+		
+		//! Evaluation in a vector of parameters
 		vect_pts
 		operator() (vect const& t) const {
-			vect_pts PP(t.size());
+			vect_pts PP(dim*t.size());
 			bspeval (deg, C, nc, k, t, PP);
 			return PP;
 		};
-
+		
+		//! Evaluation of the first derivative at a given value of the parameter
 		point 
 		first_der (double const& t) const {
 			point P = point::Zero();
 			bspeval (deg-1, dC, nc-1, dk, t, P);
 			return P;
 		};
-
+		
+		//! Evaluation in a vector of parameters
 		vect_pts
 		first_der (vect const& t) const {
 			vect_pts PP(t.size());
 			bspeval (deg-1, dC, nc-1, dk, t, PP);
 			return PP;
 		};
-
+		
+		//! Evaluation of the second derivative at a given value of the parameter
 		point 
 		second_der (double const& t) const {
 			point P = point::Zero();
 			bspeval (deg-2, d2C, nc-2, d2k, t, P);
 			return P;
 		};
-
+		
+		//! Evaluation in a vector of parameters
 		vect_pts
 		second_der (vect const& t) const	{
 			vect_pts PP(t.size());
 			bspeval (deg-2, d2C, nc-2, d2k, t, PP);
 			return PP;
 		};
-
+		
+		//! Evaluation of the curvilinear abscissa at a given value of the parameter
 		double
 		curv_abs (double const& t) const {
 			double retval =
 			    BGLgeom::integrate ([&] (double u) {return velocity (u);}, 0, t);
 			return retval;
 		};
-
+		
+		//! Evaluation in a vector of parameters
 		vect
 		curv_abs (vect const& t) const {
 			vect retval (t.size (), .0);
@@ -264,26 +207,53 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			return retval;
 		};
 		
+		//! Evaluation of the curvature at a given value of the parameter
 		double
 		curvature(double const& t) const {
-			return 1.2;
+			if( (this->first_der(t)).norm() < tol_dist )
+				return 0; // otherwise at the denominator I will have zero or very close to it
+			double numerator;
+			if(dim == 3){
+				// explicit computation of the determinant
+				Eigen::Matrix<double,1,3> tmp( (this->first_der(t)(0,0) * this->second_der(t)(0,1) -
+							 					this->first_der(t)(0,1) * this->second_der(t)(0,0)),
+							 				   (this->first_der(t)(0,2) * this->second_der(t)(0,0) -
+							 					this->first_der(t)(0,0) * this->second_der(t)(0,2)),
+							 				   (this->first_der(t)(0,1) * this->second_der(t)(0,2) -
+							 					this->first_der(t)(0,2) * this->second_der(t)(0,1))   );
+				numerator = tmp.norm();
+			} else {	//dim == 2
+				numerator = std::abs(this->first_der(t)(0,0) * this->second_der(t)(0,1) - 
+							 		 this->first_der(t)(0,1) * this->second_der(t)(0,0));
+			}
+			double denominator( ((this->first_der(t)).norm()) *
+								((this->first_der(t)).norm()) *
+								((this->first_der(t)).norm()) );
+			return numerator/denominator;
 		}
 		
+		//! Evaluation in a vector of parameters
 		vect
 		curvature(vect const& t) const {
-			return vect(t.size(),2.3);
-		}
-		
-		
+			vect C(t.size());
+			for(std::size_t i = 0; i < t.size(); ++i)
+				C[i] = this->curvature(t[i]);
+			return C;
+		}		
 
 	private:
-
+		//! Number of control points
 		const int nc;
+		//! Knot vector
 		const vect k;
+		//! Vector of the control points
 		const vect_pts C;
+		//! Knot vectors of the first and second derivatives
 		vect dk, d2k;
+		//! Vectors of the control points of the first and second derivatives
 		vect_pts dC, d2C;
-
+		
+		//! Norm of the first derivative (to compute curvilinear abscissa)
 		double
 		velocity (double x)	{
 			point tmp = point::Zero();
@@ -291,7 +261,7 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			return tmp.norm();
 		};
 		
-		// creates n knots in the interval [0,1]
+		//! Creates n knots in the interval [0,1]
 		vect 
 		make_knots (int n) {
 			vect retval;
@@ -314,87 +284,84 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			return retval;
 		};
 		
-		
+		/*!
+			@brief Compute the first derivative of the curve as a bspline
+			
+			@param d Degree of the bspline
+			@param C Vector of the control points (mc x nc matrix stored as column major)
+			@param nc Number of control points
+			@param k Knot sequence (nk x 1 vector)
+			@param dc vector of the derivative control points (output)
+			@param dk Knot sequence of the derivative ((nk-1) x 1 vector) (output)
+		*/
 		void
 		bspderiv (int d, const vect_pts &C, int nc,
-		          const vect &k, int nk, vect_pts &dC, vect &dk) const
-		// IN:
-		//    d  - degree of the B-Spline
-		//    C  - vector of control points  (mc x nc matrix stored as column major)
-		//    nc - number of control points
-		//    k  - knot sequence   (nk x 1 vector)
-		// OUT:
-		//    dc - vector of derivative control points  
-		//    dk - knot sequence   ((nk - 1) x 1 vector)
-		{
-			//int ierr = 0;
+		          const vect &k, int nk, vect_pts &dC, vect &dk) const {
 			int i, j;
 			double tmp;
-
 			for (i = 0; i < nc-1; i++){
 			    tmp = d / (k[i+d+1] - k[i+1]);
 			    for (j = 0; j < dim; j++)
 			    dC[i](j) = tmp * (C[i+1](j) - C[i](j));
 			}
-
 			for (i = 1; i < nk-1; i++)
 			dk[i-1] = k[i];
-		}
+		}	//bspderiv
 
-
+		/*!
+			@brief Evaluates the bspline at the given parametric point
+			
+			@param d Degree of the bspline
+			@param C Vector of the control points
+			@param nc Number of control points
+			@param k Knot sequence (nk x 1 vector)
+			@param t Parametric evaluation point
+			@param P Evaluated point (output)
+		*/
 		void
 		bspeval (const int d, const vect_pts &C, const int nc,
-		         const vect &k, double u, point &P) const
-		// bspeval:  Evaluate B-Spline at parametric points.
-		//
-		//    IN:
-		//       d - Degree of the B-Spline.
-		//       C - vector of control points.
-		//       k - Knot sequence, i_pt vector of size nk.
-		//       u - Parametric evaluation point.
-		//    OUT:
-		//       P - Evaluated point
-		{
+		         const vect &k, double t, point &P) const {
 			int s, tmp1, ii, i;
 			vect N (d+1, 0.0);
-
-			P = point::Zero(); //! Initialize the point to zero
-
-			s = findspan (nc-1, d, u, k);
-			basisfun (s, u, d, k, N);
+			P = point::Zero(); // Initialize the point to zero
+			s = findspan (nc-1, d, t, k);
+			basisfun (s, t, d, k, N);
 			tmp1 = s - d;
+			
 			for (i = 0; i < dim; ++i)
-			for (ii = 0; ii <= d; ++ii)
-			    P(i) += N[ii] * C[tmp1+ii](i);
-		}
+				for (ii = 0; ii <= d; ++ii)
+			    	P(i) += N[ii] * C[tmp1+ii](i);
+		}	//bspeval
 
-
+		/*!
+			@brief Evaluates the bspline at the given parametric points
+			
+			@param d Degree of the bspline
+			@param C Vector of the control points
+			@param nc Number of control points
+			@param k Knot sequence (nk x 1 vector)
+			@param t Vector of parametric evaluation point
+			@param P Vector of evaluated point (output)
+		*/
 		void
 		bspeval (const int d, const vect_pts &C, const int nc,
-		         const vect &k, const vect &u, vect_pts & P_vect) const
-		// bspeval:  Evaluate B-Spline at parametric points.
-		//
-		//    IN:
-		//       d - Degree of the B-Spline.
-		//       C - vector of Control Points.
-		//       k - Knot sequence, i_pt vector of size nk.
-		//       u - Parametric evaluation points, i_pt vector of size nu.
-		//    OUT:
-		//       P_vect - Evaluated points, matrix of size (dim,nu)
-		{
-			int s, tmp1, ii, i_vect, i_pt;
+		         const vect &k, const vect &t, vect_pts & P_vect) const {
+			int s, tmp1, ii, i_pt;
 			vect N (d+1, 0.0);
-			auto nu = u.size ();
-			P_vect.resize(nu); //reserve nu places in the output vector
-			for (i_vect = 0; i_vect < nu; ++i_vect){
-			    s = findspan (nc-1, d, u[i_vect], k);
-			    basisfun (s, u[i_vect], d, k, N);
+			auto nt = t.size ();
+			P_vect.resize(nt); //reserve nu places in the output vector
+			for (std::size_t i_vect = 0; i_vect < nt; ++i_vect){
+			    s = findspan (nc-1, d, t[i_vect], k);
+			    basisfun (s, t[i_vect], d, k, N);
 			    tmp1 = s - d;
-			    for (i_pt = 0; i_pt < dim; ++i_pt);
-			    for (ii = 0; ii <= d; ++ii)
-			        P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
-			}  
-		}
+			    			    			
+			    for (i_pt = 0; i_pt < dim; ++i_pt){
+			    	for (ii = 0; ii <= d; ++ii)
+			        	P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
+			    }
+			}	//for
+		}	//bspeval
+
 }; // class
 
 } //BGLgeom

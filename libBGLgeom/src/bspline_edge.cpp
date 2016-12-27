@@ -35,6 +35,7 @@
 
 #include <functional>
 #include <iostream>
+#include <cstdlib>
 #include "bspline_edge.hpp"
 
 using namespace BGLgeom;
@@ -46,57 +47,24 @@ int
 sub2ind (int i, int j, int m, int n)
 { return (i + j * m); }
 
+
 int
-findspan (int n, int p, double u, const vect &U)
-// Find the knot span of the parametric point u.
-//
-// INPUT:
-//
-//   n - number of control points - 1
-//   p - spline degree
-//   u - parametric point
-//   U - knot sequence
-//
-// RETURN:
-//
-//   s - knot span
-//
-// Note: This is NOT
-// Algorithm A2.1 from 'The NURBS BOOK' pg68
-// as that algorithm only works for nonperiodic
-// knot vectors, nonetheless the results should
-// be EXACTLY the same if U is nonperiodic
-{
-	// FIXME : this implementation has linear, rather than log complexity
+findspan (int n, int p, double t, const vect &U) {
 	int ret = 0;
-
-	if (u > U[U.size () - 1] || u < U[0])
-		std::cerr << "Value " << u
-	            << " of u is outside the knot span by "
-	            << U[U.size () - 1] - u << "\n";
-	else
-		while ((ret++ < n) && (U[ret] <= u)) { };
-
+	if (t > U[U.size () - 1] || t < U[0]){
+		std::cerr << "Value " << t
+	            << " of t is outside the knot span by "
+	            << U[U.size () - 1] - t << "\n";
+	    exit(EXIT_FAILURE);
+	} else {
+		while ((ret++ < n) && (U[ret] <= t)) { };
+	}
 	return (ret-1);
-}
+}	//findspan
+
 
 void
-basisfun (int i, double u, int p, const vect &U, vect &N)
-// Basis Function.
-//
-// INPUT:
-//
-//   i - knot span  ( from FindSpan() )
-//   u - parametric point
-//   p - spline degree
-//   U - knot sequence
-//
-// OUTPUT:
-//
-//   N - Basis functions vector[p+1]
-//
-// Algorithm A2.2 from 'The NURBS BOOK' pg70.
-{
+basisfun (int i, double t, int p, const vect &U, vect &N){
 	int j,r;
 	double saved, temp;
 
@@ -106,8 +74,8 @@ basisfun (int i, double u, int p, const vect &U, vect &N)
 
 	N[0] = 1.0;
 	for (j = 1; j <= p; j++) {
-	    left[j]  = u - U[i+1-j];
-	    right[j] = U[i+j] - u;
+	    left[j]  = t - U[i+1-j];
+	    right[j] = U[i+j] - t;
 	    saved = 0.0;
 	    for (r = 0; r < j; r++) {
 	        temp = N[r] / (right[r+1] + left[j-r]);

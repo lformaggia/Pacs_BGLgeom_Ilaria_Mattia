@@ -6,16 +6,86 @@ using namespace BGLgeom;
 
 int main(){
 
-	std::vector<BGLgeom::point<2>> control_pts;
+	std::vector<point<2>> control_pts;
 	control_pts.push_back(point<2>(0,0));
 	control_pts.push_back(point<2>(0,1));
 	control_pts.push_back(point<2>(1,1));
 	control_pts.push_back(point<2>(1,0));
 	
-	BGLgeom::bspline_edge<2,2> B(control_pts);
+	bspline_edge<2,2> B(control_pts);
 	
 	std::cout << "Evaluation: " << std::endl;
+	std::cout << "\tt=0   : " << B(0) << std::endl;
 	std::cout << "\tt=0.5 : " << B(0.5) << std::endl;
+	std::cout << "\tt=1   : " << B(1) << std::endl;
+	
+	std::cout << "First derivative: " << std::endl;
+	std::cout << "\tt=0   : " << B.first_der(0) << std::endl;
+	std::cout << "\tt=0.5 : " << B.first_der(0.5) << std::endl;
+	std::cout << "\tt=1   : " << B.first_der(1) << std::endl;
+	
+	std::cout << "Second derivative: " << std::endl;
+	std::cout << "\tt=0   : " << B.second_der(0) << std::endl;
+	std::cout << "\tt=0.5 : " << B.second_der(0.5) << std::endl;
+	std::cout << "\tt=1   : " << B.second_der(1) << std::endl;
+//	std::cout << "\tt=10  : " << B.second_der(10) << std::endl;
+	
+	std::cout << "Curvilinear abscissa: " << std::endl;
+	std::cout << "\tt=0   : " << B.curv_abs(0) << std::endl;
+	std::cout << "\tt=0.5 : " << B.curv_abs(0.5) << std::endl;
+	std::cout << "\tt=1   : " << B.curv_abs(1) << std::endl;
+	
+	std::cout << "Curvature: " << std::endl;
+	std::cout << "\tt=0   : " << B.curvature(0) << std::endl;
+	std::cout << "\tt=0.5 : " << B.curvature(0.5) << std::endl;
+	std::cout << "\tt=1   : " << B.curvature(1) << std::endl;
+	
+	// Now evaluation with vectors
+	std::cout << std::endl << "Now evaluation with vector" << std::endl << std::endl;
+	std::vector<double> t{0,0.5,1};
+	
+	std::cout << "Evaluation:" << std::endl;
+	std::vector<point<2>> Eval = B(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << Eval[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "First_ erivative:" << std::endl;
+	std::vector<point<2>> F = B.first_der(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << F[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Second derivative:" << std::endl;
+	std::vector<point<2>> S = B.second_der(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << S[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Curvilinear abscissa:" << std::endl;
+	std::vector<double> A = B.curv_abs(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << A[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Curvature:" << std::endl;
+	std::vector<double> C = B.curvature(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << C[i] << std::endl;
+	std::cout << std::endl;
+	
+	// The example on De Falco demo
+	std::cout << std::endl;
+	std::cout << "Now a more difficult example" << std::endl << std::endl;
+	
+	std::vector<point<3>> CPs = {point<3>(0,      0,   0),    // 1st c.p.
+							     point<3>(2./3.,  1,   0),	// 2nd c.p.
+							     point<3>(2,      2, 8.0),	// 3rd c.p.
+							     point<3>(10./3., 4,   0),	// 4th c.p.
+							     point<3>(11./3., 4,   0),	// 5th c.p.
+							     point<3>(4,      8,   0)};	// 6th c.p.
+	// Bspline edge defaulted at dim=3, deg=3
+	bspline_edge<> B2(CPs);
 	
 	
 	return 0;
