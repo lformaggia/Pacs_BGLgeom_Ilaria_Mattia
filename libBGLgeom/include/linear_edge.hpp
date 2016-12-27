@@ -57,6 +57,21 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		//! Constructor 
 		linear_edge(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_) {};
 		
+		//! Copy constructor
+		linear_edge(linear_edge const&) = default;
+		
+		//! Move construcotr
+		linear_edge(linear_edge &&) = default;
+		
+		//! Destructor
+		virtual ~linear_edge(){};
+		
+		//! Assignment operator
+		linear_edge & operator=(linear_edge const&) = default;
+		
+		//! Move assignment
+		linear_edge & operator=(linear_edge &&) = default;
+		
 		//! Sets the value for the source
 		void
 		set_source(point const& SRC_) { SRC = SRC_; }
@@ -181,7 +196,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
  					- second: the vector of the parameter's value used to generate
  						the mesh
  		*/
-		std::pair<vect_pts,std::vector<double>>
+		std::pair<vect_pts,vect_double>
 		uniform_mesh(unsigned int const& n) {
 			std::vector<double> parametric_mesh;
 			vect_pts real_mesh;
@@ -214,7 +229,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
  					- second: the vector of the parameter's value used to generate
  						the mesh
  		*/
-		std::pair<vect_pts,std::vector<double>>
+		std::pair<vect_pts,vect_double>
 		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
 			vect_pts real_mesh;
 			vect_double parametric_mesh;

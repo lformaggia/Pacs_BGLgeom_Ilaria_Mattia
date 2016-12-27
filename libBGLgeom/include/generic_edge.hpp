@@ -58,7 +58,10 @@ class generic_edge {
 		
 	public:
 	
-		//! full constructor
+		//! Default constructor
+		generic_edge() : value_fun(), first_der_fun(), second_der_fun() {};
+	
+		//! Full constructor
 		generic_edge(std::function<point(double)> const& value_,
 					 std::function<point(double)> const& first_der_,
 					 std::function<point(double)> const& second_der_) :
@@ -66,6 +69,50 @@ class generic_edge {
 					 			 first_der_fun(first_der_),
 					 			 second_der_fun(second_der_) {};
 					 			 
+		//! Copy constructor
+		generic_edge(generic_edge const&) = default;
+		
+		//! Move constructor
+		generic_edge(generic_edge &&) = default;
+		
+		//! Destructor
+		virtual ~generic_edge() = default;
+		
+		//! Assignment operator
+		generic_edge & operator=(generic_edge const&) = default;
+		
+		//! Move assignment
+		generic_edge & operator=(generic_edge &&) = default;
+		
+		/*!
+			@defgroup Setting methods
+			@{		
+		*/
+		void
+		set_function(std::function<point(double)> const& _value_fun){
+			value_fun = _value_fun;
+		}
+			
+		void
+		set_first_der(std::function<point(double)> const& _first_der_fun){
+			first_der_fun = _first_der_fun;
+		}
+			
+		void
+		set_second_der(std::function<point(double)> const& _second_der_fun){
+			second_der_fun = _second_der_fun;
+		}
+		
+		void
+		set_all(std::function<point(double)> const& _value_fun,
+					 std::function<point(double)> const& _first_der_fun,
+					 std::function<point(double)> const& _second_der_fun){
+			value_fun = _value_fun;
+			first_der_fun = _first_der_fun;
+			second_der_fun = _second_der_fun;				 
+		}
+		/*! @} */
+		
 		//! Length of the curve
 		double length() { return this->curv_abs(1); }
 		double length() const { return this->curv_abs(1); }
