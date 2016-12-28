@@ -11,6 +11,7 @@ using namespace boost;
 
 int main(){
 
+
 	std::vector<point<2>> control_pts;
 	control_pts.push_back(point<2>(0,0));
 	control_pts.push_back(point<2>(0,1));
