@@ -87,51 +87,6 @@ int main(){
 		std::cout << param_mesh[i] << std::endl;
 	std::cout << std::endl;
 	
-	
-	std::cout << std::endl << std::endl;
- 	std::cout << "----------- LINEAR_EDGE -----------------" << std::endl << std::endl;
-	
-	BGLgeom::point<2> SRC(0,0);
-	BGLgeom::point<2> TGT(10,10);
-	BGLgeom::linear_edge<2> e1(SRC, TGT);
-	std::cout << "Hello! " << e1 << std::endl << std::endl;
-	
-	std::cout << "Some values: " << std::endl;
-	std::cout << "\tt=0:   " << e1(0) << std::endl;
-	std::cout << "\tt=0.5: " << e1(0.5) << std::endl;
-	std::cout << "\tt=1:   " << e1(1) << std::endl;
-	
-	
-	std::cout << "Computing a uniform mesh: " << std::endl;
-//	std::vector<BGLgeom::point<2>> mesh1, mesh2, first_der;
-//	std::vector<double> param_mesh;
-	std::cout << std::endl;
-	std::tie(mesh3,param_mesh) = e1.uniform_mesh(10);
-	for(std::size_t i = 0; i < mesh3.size(); ++i)
-		std::cout << mesh3[i] << std::endl;
-	std::cout << std::endl;	
-	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
-	std::cout << std::endl;
-	
-	std::cout << "Evaluating first derivative in the parametric mesh" << std::endl;
-	first_der = e1.first_der(param_mesh);
-	for(std::size_t i = 0; i < first_der.size(); ++i)
-		std::cout << first_der[i] << std::endl;
-	std::cout << std::endl;
-	
-	std::cout << "Now variable size mesh: " << std::endl;
-	std::tie(mesh4, param_mesh) = e1.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
-	for(std::size_t i = 0; i < mesh4.size(); ++i)
-		std::cout << mesh4[i] << std::endl;
-	std::cout << std::endl;
-	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
-	std::cout << std::endl;
-	
-	
 	//===================== ANOTHER GENERIC EDGE =================================
 	std::cout << std::endl << std::endl;
 	std::cout << "Another generic edge" << std::endl;
