@@ -263,7 +263,6 @@ std::cout<<"Non sono entrato mai Formaggia"<<std::endl;
 	
 // ========= COMPUTING THE INTERSECTION SITUATION ============
 // Identical and No_intersection cases already handled
-//Poi devo togliere tutti i return prima
 	
 void compute_intersection_type(Intersection & out){  // lasciare solo return
 	//calcolo il numero di intersezioni endPoint

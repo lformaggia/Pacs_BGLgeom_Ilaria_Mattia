@@ -21,6 +21,12 @@ CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I$(mkVtkInc)
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  prova_sort_duplicates.cpp
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) prova_sort_duplicates.o -o prova_sort_duplicates
 	
+prova_strutture: prova_strutture.o
+	$(CXX) $(CXXFLAGS) prova_strutture.o -o prova_strutture
+	
+prova_strutture.o: prova_strutture.cpp
+	$(CXX) $(CXXFLAGS) -c prova_strutture.cpp -o $@
+	
 bozza_refine_graph: helper_functions.o intersections2D.o bozza_refine_graph.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o bozza_refine_graph.o -o bozza_refine_graph
 	

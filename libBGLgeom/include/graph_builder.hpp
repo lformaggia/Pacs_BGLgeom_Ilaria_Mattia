@@ -63,6 +63,38 @@ void give_edge_properties	(Edge_prop const& E_prop,
 	G[e] = E_prop;
 }	//give_edge_properties
 
+
+template <typename Graph>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Graph & G){	
+	return boost::add_vertex(G);
+}	//new_vertex
+
+
+template <typename Graph, typename Vertex_data_structure>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(Vertex_data_structure const& v_data,
+		   Graph & G, 
+		   const bool check_unique = false,
+		   const double tol = 20*std::numeric_limits<double>::epsilon()){
+	
+	if(check_unique){
+		const double dist = 0.0;
+	
+		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
+		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
+			if((v_data.coordinates - G[*v_it].coordinates).norm() < tol){
+				std::cout<<"Vertex already existing"<<std::endl;	
+				return *v_it;
+			}
+		}
+	}
+	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
+	std::cout<<"New vertex created"<<std::endl;
+	return boost::add_vertex(v_data,G);	
+}	//new_vertex
+
+
 /*!
 	@brief Creates an edge giving the right properties to source and target vertex and to the edge itself
 	@detail Topological information, such as source and target vertices, has to be passed as
@@ -101,73 +133,6 @@ new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
 	return e;
 }
 
-/*
-template <typename Graph, unsigned int dim>
-BGLgeom::Edge_desc<Graph> 
-new_lin_edge(typename boost::graph_traits<Graph>::vertex_descriptor const& src,
-			 typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
-			 BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<dim>,dim> & e_dat,
-			 Graph & G){
-	BGLgeom::Edge_desc<Graph> e = new_edge<Graph, Fracture::Edge_prop>(src,tgt,e_dat,G);	
-	G[e].geometry.set_source(G[src].coordinates);
-	G[e].geometry.set_target(G[tgt].coordinates);
-	
-	std::cout<<"New edge created ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
-	std::cout<<"Fracture number: "<<G[e].index<<std::endl;
-	
-	return e;			 
-}
-*/
-
-template <typename Graph, unsigned int dim>
-BGLgeom::Edge_desc<Graph> 
-new_lin_edge(typename boost::graph_traits<Graph>::vertex_descriptor const& src,
-			 typename boost::graph_traits<Graph>::vertex_descriptor const& tgt,
-			 BGLgeom::Edge_base_property_static<BGLgeom::generic_edge<dim>,dim> const& e_data,
-			 Graph & G){
-			 
-	BGLgeom::Edge_desc<Graph> e(new_edge(src,tgt,e_data,G));	
-	// check coherence with the extremes of the parametric curve describing the edge
-	if(!(G[src].coordinates == (G[e].geometry)(0)))
-		std::cerr<<"Warning: The point inserted as source does not correspond to the paramentric function evaluated in t = 0"<<std::endl;
-	if(!(G[tgt].coordinates == (G[e].geometry)(1)))
-		std::cerr<<"Warning: The point inserted as target does not correspond to the paramentric function evaluated in t = 1"<<std::endl;
-			 
-	return e;
-}
-
-
-template <typename Graph>
-BGLgeom::Vertex_desc<Graph>
-new_vertex(Graph & G){	
-	return boost::add_vertex(G);
-}	//new_vertex
-
-
-template <typename Graph, typename Vertex_data_structure>
-BGLgeom::Vertex_desc<Graph>
-new_vertex(Vertex_data_structure const& v_data,
-		   Graph & G, 
-		   const bool check_unique = false,
-		   const double tol = 20*std::numeric_limits<double>::epsilon()){
-	
-	if(check_unique){
-		const double dist = 0.0;
-	
-		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
-		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
-			if((v_data.coordinates - G[*v_it].coordinates).norm() < tol){
-				std::cout<<"Vertex already existing"<<std::endl;	
-				return *v_it;
-			}
-		}
-	}
-	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	std::cout<<"New vertex created"<<std::endl;
-	return boost::add_vertex(v_data,G);	
-}	//new_vertex
-
-
 /*!
 	@brief	Adding a new linear edge to the graph
 	@remark	Use this only when you set "linear_edge<dim>" as template parameter of the
@@ -190,21 +155,18 @@ template <typename Graph, typename Edge_prop>
 BGLgeom::Edge_desc<Graph>
 new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 				 BGLgeom::Vertex_desc<Graph> const& tgt,
-				 Graph & G,
-				 Edge_prop & E = Edge_prop()){
+				 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
-	
-	// Copying properties
-	G[e] = E;
 	
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
 	G[e].geometry.set_target(G[tgt].coordinates);
 	return e;
 }	//new_linear_edge
+
 
 /*!
 	@brief	Adding a new linear edge to the graph
@@ -225,6 +187,8 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	@param TGT The coordinates of the target
 	@return The edge descriptor of the new edge
 */
+
+/*
 template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
 new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
@@ -243,7 +207,7 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	return e;
 }	//new_linear_edge
 
-
+*/
 
 
 /*!
@@ -308,8 +272,7 @@ BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
 					 Graph & G,
-					 std::vector<BGLgeom::point<dim>> const& C,
-					 Edge_prop Prop = vuoto){
+					 std::vector<BGLgeom::point<dim>> const& C){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
@@ -317,7 +280,6 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
-	G[e] = Prop;
 	return e;				 
 }	//new_bspline_edge
 

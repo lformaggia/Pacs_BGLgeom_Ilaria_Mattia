@@ -241,7 +241,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		
 		//! Overload of operator<<
 		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
-			out << "Hi! I'm edge from " << edge.SRC << " to " << edge.TGT << ".";
+			out << "source: " << edge.SRC << ", target: " << edge.TGT;
 			return out;
 		}
 			

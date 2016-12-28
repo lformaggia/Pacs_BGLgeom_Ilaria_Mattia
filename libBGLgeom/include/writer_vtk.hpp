@@ -77,7 +77,32 @@ template <typename Graph, unsigned int dim>
 class writer_vtk{
 	
 	public:
-		//! Default constructor
+	
+		//! Default constructor 
+		writer_vtk() {
+			  // Write the file
+  			  writer = PolyDataWriter_ptr::New();
+  			  writer_vertices = PolyDataWriter_ptr::New();
+  			  
+  			  std::string filename("output_vtk.vtp");
+  			  writer -> SetFileName(filename.c_str());
+  			  
+  			  
+  			  lines = CellArray_ptr::New();
+			  points = Points_ptr::New();
+		
+			  if(_filename.substr(filename.length()-3, 3) != "vtp")
+				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
+				
+			  std::string vertex_string("_vertices");
+			  std::string filename_vertices(filename);
+			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+9);
+			
+			  writer_vertices -> SetFileName(filename_vertices.c_str());
+		}
+		
+		
+		//! Constructor with filename
 		writer_vtk(std::string _filename) {
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
@@ -86,8 +111,14 @@ class writer_vtk{
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
 		
-			if(_filename.substr(_filename.length()-3, 3) != "vtp")
-				std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
+			  if(_filename.substr(_filename.length()-3, 3) != "vtp")
+				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
+				
+			  std::string vertex_string("_vertices");
+			  std::string filename_vertices(_filename);
+			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+9);
+			
+			  writer_vertices -> SetFileName(filename_vertices.c_str());
 		}
 		
 		/*
@@ -109,8 +140,10 @@ class writer_vtk{
 	protected:
 		//! The stream associated to the output file
 		PolyDataWriter_ptr writer;
+		PolyDataWriter_ptr writer_vertices;
 		//! Container with all the points
 		Points_ptr points;
+		Points_ptr vertices;
 		//! The array containing all the lines corresponding to the edges
 		CellArray_ptr lines;
 		
@@ -126,11 +159,15 @@ class writer_vtk{
 			
 			const int ID_start = points->GetNumberOfPoints(); // in points all the points of all the edges are stored so I need to keep track of the ID of my current points
 			
+			// insert src and tgt in "vertices"
+			insert_point<dim>(SRC,vertices);
+			insert_point(TGT,vertices);				
+			
 			if(G[e].mesh.first.empty()){
 				//create SRC point
-				insert_point<dim>(SRC,points);			
+				insert_point<dim>(SRC,points);
 				//create TGT point
-				insert_point<dim>(TGT,points);			
+				insert_point<dim>(TGT,points);		
 			}
 						
 			// if the Mesh is defined create the points of the mesh, incuded source and target
@@ -159,20 +196,27 @@ class writer_vtk{
 		void generate_output(){
 			//! Now all the lines have been stored in lines: we create a PolyData object containing points and lines containers, and it will be the writer input argument
 			PolyData_ptr polyData = PolyData_ptr::New();
+			PolyData_ptr polyData_vertices = PolyData_ptr::New();
  
 			// Add the points to the dataset
   			polyData->SetPoints(points);
  
   			// Add the lines to the dataset
   			polyData->SetLines(lines);
+  			
+  			// Add the vertices to polyData_vertices
+  			polyData_vertices -> SetPoints(vertices);
   
 			#if VTK_MAJOR_VERSION <= 5
   			writer->SetInput(polyData);
+  			writer_vertices -> SetInput(polyData_vertices)
 			#else
   			writer->SetInputData(polyData);	
+    		writer_vertices -> SetInputData(polyData_vertices)
   			#endif
   			
   			writer -> Write();
+  			writer_vertices -> Write();
 
 		}; // generate_output
 		

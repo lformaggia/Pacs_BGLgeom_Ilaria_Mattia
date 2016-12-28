@@ -96,7 +96,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    auto P1 = A1+ t[0]*(B1-A1);
 	    auto P2 = A2+ t[1]*(B2-A2);
 	    if(norm(P1-P2)>tol_dist)
-	        std::cerr<<"Something strange, intersection points not coincident. Distance= "<<norm(P1-P2)<<" and tol = "<<tol_dist<<std::endl;
+	        std::cerr<<" Something strange, intersection points not coincident. Distance= "<<norm(P1-P2);
 	#endif        
 	    // The two lines intersect.
 	    // Check whether we are inside the segments
@@ -108,6 +108,7 @@ Intersection compute_intersection	(linear_edge<2> const& edge1,
 	    if (!inside){
 	        // No intersecion, end here
 	        out.how = intersection_type::No_intersection;
+	        std::cout<<"no int"<<std::endl;
 	        return out;
 	    } else {
 	        out.intersect=true;
@@ -262,7 +263,6 @@ std::cout<<"Non sono entrato mai Formaggia"<<std::endl;
 	
 // ========= COMPUTING THE INTERSECTION SITUATION ============
 // Identical and No_intersection cases already handled
-//Poi devo togliere tutti i return prima
 	
 void compute_intersection_type(Intersection & out){  // lasciare solo return
 	//calcolo il numero di intersezioni endPoint
