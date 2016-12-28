@@ -126,7 +126,7 @@ class writer_vtk{
 			
 			const int ID_start = points->GetNumberOfPoints(); // in points all the points of all the edges are stored so I need to keep track of the ID of my current points
 			
-			if(G[e].mesh.empty()){
+			if(G[e].mesh.first.empty()){
 				//create SRC point
 				insert_point<dim>(SRC,points);			
 				//create TGT point
@@ -136,13 +136,13 @@ class writer_vtk{
 			// if the Mesh is defined create the points of the mesh, incuded source and target
 			else{
 				double const *P; //it will contain the point coordinates;
-				for(const BGLgeom::point<dim>& point: G[e].mesh){
+				for(const BGLgeom::point<dim>& point: G[e].mesh.first){
 					P = point.data();
 					insert_point<dim>(P,points);			
  				}
 			}
 			
-			const int num_points = points->GetNumberOfPoints() - ID_start; // in this way how many points I have this line
+			const unsigned int num_points = points->GetNumberOfPoints() - ID_start; // in this way how many points I have this line
 			
 			// create a new PolyLine
 			vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
