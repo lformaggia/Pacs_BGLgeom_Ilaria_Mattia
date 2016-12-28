@@ -1,8 +1,13 @@
 #include "bspline_edge.hpp"
+#include "graph_builder.hpp"
+#include "data_structure.hpp"
 #include <vector>
 #include <iostream>
+#include <boost/graph/adjacency_list.hpp>
+
 
 using namespace BGLgeom;
+using namespace boost;
 
 int main(){
 
@@ -78,15 +83,30 @@ int main(){
 	std::cout << std::endl;
 	std::cout << "Now a more difficult example" << std::endl << std::endl;
 	
-	std::vector<point<3>> CPs = {point<3>(0,      0,   0),    // 1st c.p.
+	std::vector<point<3>> CPs = {point<3>(0,      0,   0),	// 1st c.p.
 							     point<3>(2./3.,  1,   0),	// 2nd c.p.
 							     point<3>(2,      2, 8.0),	// 3rd c.p.
 							     point<3>(10./3., 4,   0),	// 4th c.p.
 							     point<3>(11./3., 4,   0),	// 5th c.p.
 							     point<3>(4,      8,   0)};	// 6th c.p.
 	// Bspline edge defaulted at dim=3, deg=3
-	bspline_edge<> B2(CPs);
+	bspline_edge<> B2;
+	B2.set_bspline(CPs);
+	std::cout << "\tt=0   : " << B2(0) << std::endl;
 	
+	// Now we try to build a graph with one bspline edge
+	std::cout << std::endl <<  "Creating a graph" << std::endl;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_edge<>,3> >;
+	Graph G;
+	
+	Vertex_desc<Graph> src, tgt;
+	src = add_vertex(G);
+	tgt = add_vertex(G);
+	Edge_desc<Graph> e;
+	e = new_bspline_edge<Graph,3>(src, tgt, G, CPs);
+	
+	std::cout << "\tt=0   : " << G[e].geometry(0) << std::endl;
+	std::cout << "\tt=0.34: " << G[e].geometry.second_der(0.34) << std::endl;
 	
 	return 0;
 }
