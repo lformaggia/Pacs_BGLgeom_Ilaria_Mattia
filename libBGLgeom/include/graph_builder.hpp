@@ -36,7 +36,7 @@ namespace BGLgeom{
 			for the function boost::add_edge. See its reference on BGL web page
 */
 template <typename Graph>
-void check_if_edge_inserted(typename BGLgeom::Edge_desc<Graph> const& e, bool const& inserted){
+void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inserted){
 	if(!inserted){
 		std::cerr << "Error while inserting edge!" << std::endl;
 		std::cerr << "Failed insertion for edge " << e << "." << std::endl;
@@ -49,16 +49,16 @@ void check_if_edge_inserted(typename BGLgeom::Edge_desc<Graph> const& e, bool co
 //! Giving to source node v all properties through assigning the Source_data_structure
 template <typename Graph, typename Vertex_prop>
 void give_vertex_properties	(Vertex_prop const& V_prop,
-							typename BGLgeom::Vertex_desc<Graph> const& v,
-							Graph & G){
+							 BGLgeom::Vertex_desc<Graph> const& v,
+							 Graph & G){
 	G[v] = V_prop;
 }	//give_vertex_properties
 
 //! Giving to edge e all properties through assigning the Edge_data_structure
 template <typename Graph, typename Edge_prop>
 void give_edge_properties	(Edge_prop const& E_prop,
-							typename BGLgeom::Edge_desc<Graph> const& e,
-							Graph & G){
+							 BGLgeom::Edge_desc<Graph> const& e,
+							 Graph & G){
 	G[e] = E_prop;
 }	//give_edge_properties
 
@@ -72,8 +72,8 @@ void give_edge_properties	(Edge_prop const& E_prop,
 */
 template <typename Graph>
 BGLgeom::Edge_desc<Graph> 
-new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
-			typename BGLgeom::Vertex_desc<Graph> const& tgt,
+new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
+			BGLgeom::Vertex_desc<Graph> const& tgt,
 			Graph & G){
 	
 	bool inserted;	
@@ -167,16 +167,118 @@ new_vertex(Vertex_data_structure const& v_data,
 }	//new_vertex
 
 
+/*!
+	@brief	Adding a new linear edge to the graph
+	@remark	Use this only when you set "linear_edge<dim>" as template parameter of the
+			Edge_base_property
+	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
+			It takes care of setting up the geometry. Only the geometry is set up,
+			the other properties are left defaulted
+	@note 	It performs a check on the insertion of the edge
+	@pre	This version of the function assumes that the coordinates of the vertices
+			are already defined in the vertex properties of the verticesù
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
+	@param src Vertex descriptor for the source
+	@param tgt Vertex descriptor fot the target
+	@param G The graph
+	@return The edge descriptor of the new edge
+*/
+template <typename Graph>
+BGLgeom::Edge_desc<Graph>
+new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
+				 BGLgeom::Vertex_desc<Graph> const& tgt,
+				 Graph & G){
+	bool inserted;
+	BGLgeom::Edge_desc<Graph> e;
+	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
+	check_if_edge_inserted<Graph>(e, inserted);
+	
+	// Setting up the geometry
+	G[e].geometry.set_source(G[src].coordinates);
+	G[e].geometry.set_target(G[tgt].coordinates);
+	return e;
+}	//new_linear_edge
+
+/*!
+	@brief	Adding a new linear edge to the graph
+	@remark	Use this only when you set "linear_edge<dim>" as template parameter of the
+			Edge_base_property
+	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
+			It takes care of setting up the geometry, but requires as input the coordinates
+			realted to the two vertex descriptors. Only the geometry is set up,	the other 
+			properties are left defaulted
+	@note 	It performs a check on the insertion of the edge
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
+	@param src Vertex descriptor for the source
+	@param tgt Vertex descriptor fot the target
+	@param G The graph
+	@param SRC The coordinates of the source
+	@param TGT The coordinates of the target
+	@return The edge descriptor of the new edge
+*/
+template <typename Graph, unsigned int dim>
+BGLgeom::Edge_desc<Graph>
+new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
+				 BGLgeom::Vertex_desc<Graph> const& tgt,
+				 Graph & G,
+				 BGLgeom::point<dim> const& SRC,
+				 BGLgeom::point<dim> const& TGT){
+	bool inserted;
+	BGLgeom::Edge_desc<Graph> e;
+	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
+	check_if_edge_inserted<Graph>(e, inserted);
+	
+	// Setting up the geometry
+	G[e].geometry.set_source(SRC);
+	G[e].geometry.set_target(TGT);
+	return e;
+}	//new_linear_edge
+
+
+
+
+/*!
+	@brief	Adding a new generic edge to the graph
+	@remark	Use this only when you set "generic_edge<dim>" as template parameter of the
+			Edge_base_property
+	@detail	It adds a new edge assuming that the underlying geometry is the generic one.
+			It takes care of setting up the geometry. Only the geometry is set up,
+			the other properties are left defaulted
+	@note 	It performs a check on the insertion of the edge
+	@pre	This version of the function assumes that the coordinates of the vertices
+			are already defined in the vertex properties of the vertices
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
+	@param src Vertex descriptor for the source
+	@param tgt Vertex descriptor fot the target
+	@param G The graph
+	@return The edge descriptor of the new edge
+*/
+template <typename Graph>
+BGLgeom::Edge_desc<Graph>
+new_generic_edge(){};
 
 /*!
 	@brief	Adding a new bspline edge to the graph
-	@detail	It add a new edge assuming that the underlying geometry is a bspline one.
-			The parameters to set up this geometry are required. Only the geometry is 
-			set up, the other properties are left defaulted
+	@remark	Use this only when you set "bspline_edge<dim,deg>" as template parameter of the
+			Edge_base_property
+	@detail	It adds a new edge assuming that the underlying geometry is the bspline one.
+			It takes care of setting up the geometry, so some additional parameters are
+			required. Only the geometry is set up, the other properties are left defaulted
+	@note 	It performs a check on the insertion of the edge
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
 	@param G The graph
 	@param C The vector of control points
+	@return The edge descriptor of the new edge
 */
 template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
@@ -185,15 +287,49 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 Graph & G,
 					 std::vector<BGLgeom::point<dim>> const& C){
 	bool inserted;
-	BGLgeom::Edge_desc<Graph> e;
-	
+	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
 	return e;				 
-}
+}	//new_bspline_edge
+
+/*!
+	@brief	Adding a new bspline edge to the graph
+	@remark	Use this only when you set "bspline_edge<dim,deg>" as template parameter of the
+			Edge_base_property
+	@detail	It adds a new edge assuming that the underlying geometry is the bspline one.
+			It takes care of setting up the geometry, so some additional parameters are
+			required. Only the geometry is set up, the other properties are left defaulted
+	@note 	It performs a check on the insertion of the edge
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
+	@param src Vertex descriptor for the source
+	@param tgt Vertex descriptor fot the target
+	@param G The graph
+	@param C The vector of control points
+	@param k The knot vector for the bspline
+	@return The edge descriptor of the new edge
+*/
+template <typename Graph, unsigned int dim>
+BGLgeom::Edge_desc<Graph>
+new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
+					 BGLgeom::Vertex_desc<Graph> const& tgt,
+					 Graph & G,
+					 std::vector<BGLgeom::point<dim>> const& C,
+					 std::vector<double> const& k){
+	bool inserted;
+	BGLgeom::Edge_desc<Graph> e;	
+	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
+	check_if_edge_inserted<Graph>(e, inserted);
+	
+	// Setting up the geometry
+	G[e].geometry.set_bspline(C,k);
+	return e;				 
+}	//new_bspline_edge
 
 }	//BGLgeom
 
