@@ -21,6 +21,7 @@
 #include <tuple>
 #include <cmath>
 #include <limits>
+#include <functional>
 
 #include "data_structure.hpp"
 #include "generic_edge.hpp"
@@ -246,22 +247,40 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	@remark	Use this only when you set "generic_edge<dim>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the generic one.
-			It takes care of setting up the geometry. Only the geometry is set up,
-			the other properties are left defaulted
+			It takes care of setting up the geometry, and so requires some additional
+			parameters to do this. Only the geometry is set up, the other properties 
+			are left defaulted
 	@note 	It performs a check on the insertion of the edge
-	@pre	This version of the function assumes that the coordinates of the vertices
-			are already defined in the vertex properties of the vertices
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
 	@param G The graph
+	@param _fun Parametrized function describing the curve of the edge
+	@param _first_der Parametrized function describing the first derivative of the curve
+	@param _second_der Parametrized function describing the second derivative of the curve
 	@return The edge descriptor of the new edge
 */
-template <typename Graph>
+template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
-new_generic_edge(){};
+new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
+				 BGLgeom::Vertex_desc<Graph> const& tgt,
+				 Graph & G,
+				 std::function<BGLgeom::point<dim>(double)> const& _fun,
+				 std::function<BGLgeom::point<dim>(double)> const& _first_der,
+				 std::function<BGLgeom::point<dim>(double)> const& _second_der){
+	bool inserted;
+	BGLgeom::Edge_desc<Graph> e;
+	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
+	check_if_edge_inserted<Graph>(e, inserted);
+	
+	// Setting up the geometry
+	G[e].geometry.set_function(_fun);
+	G[e].geometry.set_first_der(_first_der);
+	G[e].geometry.set_second_der(_second_der);
+	return e;	
+}	//new_generic_edge
 
 /*!
 	@brief	Adding a new bspline edge to the graph
