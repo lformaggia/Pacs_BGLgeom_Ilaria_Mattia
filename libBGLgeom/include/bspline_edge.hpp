@@ -38,6 +38,7 @@
 #ifndef HH_BSPLINE_EDGE_HH
 #define HH_BSPLINE_EDGE_HH
 
+#include <iostream>
 #include <vector>
 #include <cassert>
 #include <cmath>
@@ -98,6 +99,9 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 	
 		using point = BGLgeom::point<dim>;
 		using vect_pts = std::vector<point>;
+		
+		//! Default constructor
+		bspline_edge() : nc(0), k(), C(), dk(), d2k(), dC(), d2C() {};
 
 		//! Constructor with control points
 		bspline_edge (const vect_pts &C_)
@@ -105,18 +109,12 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 			// construction of spline for the vector of first derivative
 			dC.resize (nc-1);
-			for (point & PP: dC)
-				PP = point::Zero(); // initialize all the points to zero
-
 			dk.resize (k.size () - 2, 0.0);
 			bspderiv (deg, C, nc, k, k.size (), dC, dk);
 
 			// construction of spline for the vector of second derivative
 			d2k.resize (dk.size () - 2, 0.0);    
 			d2C.resize (nc-2);
-			for (point & PP: d2C)
-				PP = point::Zero(); // initialize all the points to zero
-				
 			bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
 		}
 
@@ -125,21 +123,71 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			: nc(C_.size ()), k(k_), C(C_) {
 
 			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);
-			for (point && PP: dC)
-				PP = point::Zero(); // initialize all the points to zero
-				
+			dC.resize (nc-1);				
 			dk.resize (k.size () - 2, 0.0);
 			bspderiv (deg, C, dim, nc, k, k.size (), dC, dk);
 
 			// construction of spline for the vector of second derivative
 			d2k.resize (dk.size () - 2, 0.0);    
 			d2C.resize (nc-2);
-			for (point && PP: d2C)
-				PP = point::Zero(); // initialize all the points to zero
-				
 			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
 		};
+		
+		//! Copy constructor
+		bspline_edge(bspline_edge const&) = default;
+		
+		//! Move constructor
+		bspline_edge(bspline_edge &&) = default;
+		
+		//! Destructor
+		virtual ~bspline_edge() = default;
+		
+		//! Assignment operator
+		bspline_edge & operator=(bspline_edge const&) = default;
+		
+		//! Move assignment
+		bspline_edge & operator=(bspline_edge &&) = default;
+		
+		/*! 
+			@defgroup Building the bspline if default constructed
+			@{
+		*/
+		//! Setting bspline with control points
+		void
+		set_bspline(vect_pts const& _C){
+			C = _C;
+			nc = _C.size();
+			k = make_knots(nc);
+
+			// construction of spline for the vector of first derivative
+			dC.resize (nc-1);
+			dk.resize (k.size () - 2, 0.0);
+			bspderiv (deg, _C, nc, k, k.size(), dC, dk);
+			
+			// construction of spline for the vector of second derivative
+			d2k.resize (dk.size () - 2, 0.0);    
+			d2C.resize (nc-2);
+			bspderiv (deg-1, dC, (nc-1), dk, dk.size(), d2C, d2k);
+		}
+		
+		//! Setting bspline with control points and knot vector
+		void
+		set_bspline(vect_pts const& _C, vect const& _k){
+			C = _C;
+			nc = _C.size();
+			k = _k;
+
+			// construction of spline for the vector of first derivative
+			dC.resize (nc-1);				
+			dk.resize (k.size () - 2, 0.0);
+			bspderiv (deg, _C, dim, nc, k, k.size(), dC, dk);
+
+			// construction of spline for the vector of second derivative
+			d2k.resize (dk.size () - 2, 0.0);    
+			d2C.resize (nc-2);
+			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size(), d2C, d2k);
+		}
+		/*! @} */
 		
 		//! Evaluation of the curve at a given value of the parameter
 		point 
@@ -243,11 +291,11 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 	private:
 		//! Number of control points
-		const int nc;
+		int nc;
 		//! Knot vector
-		const vect k;
+		vect k;
 		//! Vector of the control points
-		const vect_pts C;
+		vect_pts C;
 		//! Knot vectors of the first and second derivatives
 		vect dk, d2k;
 		//! Vectors of the control points of the first and second derivatives
@@ -302,10 +350,10 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			for (i = 0; i < nc-1; i++){
 			    tmp = d / (k[i+d+1] - k[i+1]);
 			    for (j = 0; j < dim; j++)
-			    dC[i](j) = tmp * (C[i+1](j) - C[i](j));
+			    	dC[i](j) = tmp * (C[i+1](j) - C[i](j));
 			}
 			for (i = 1; i < nk-1; i++)
-			dk[i-1] = k[i];
+				dk[i-1] = k[i];
 		}	//bspderiv
 
 		/*!
@@ -323,11 +371,10 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 		         const vect &k, double t, point &P) const {
 			int s, tmp1, ii, i;
 			vect N (d+1, 0.0);
-			P = point::Zero(); // Initialize the point to zero
 			s = findspan (nc-1, d, t, k);
 			basisfun (s, t, d, k, N);
 			tmp1 = s - d;
-			
+			//std::cout << tmp1 << ", " << C.size() << std::endl;
 			for (i = 0; i < dim; ++i)
 				for (ii = 0; ii <= d; ++ii)
 			    	P(i) += N[ii] * C[tmp1+ii](i);
