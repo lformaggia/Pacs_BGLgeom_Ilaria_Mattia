@@ -186,15 +186,19 @@ new_vertex(Vertex_data_structure const& v_data,
 	@param G The graph
 	@return The edge descriptor of the new edge
 */
-template <typename Graph>
+template <typename Graph, typename Edge_prop>
 BGLgeom::Edge_desc<Graph>
 new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 				 BGLgeom::Vertex_desc<Graph> const& tgt,
-				 Graph & G){
+				 Graph & G,
+				 Edge_prop & E = Edge_prop()){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
+	
+	// Copying properties
+	G[e] = E;
 	
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
@@ -304,7 +308,8 @@ BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
 					 Graph & G,
-					 std::vector<BGLgeom::point<dim>> const& C){
+					 std::vector<BGLgeom::point<dim>> const& C,
+					 Edge_prop Prop = vuoto){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
@@ -312,6 +317,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
+	G[e] = Prop;
 	return e;				 
 }	//new_bspline_edge
 
