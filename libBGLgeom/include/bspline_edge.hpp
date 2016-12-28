@@ -73,7 +73,7 @@ int findspan (int n, int p, double u, const vect &U);
 	@brief	Compute the functions of the basis
 	@note	Algorithm A2.2 from 'The NURBS BOOK' pg70.
 	
-	@param i Knot span (form findspan())
+	@param i Knot span (from findspan())
 	@param t Parametric point
 	@param p Spline degree
 	@param U Knot sequence
