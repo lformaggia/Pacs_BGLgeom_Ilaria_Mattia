@@ -14,7 +14,6 @@ using namespace boost;
 int main(){
 	
   	constexpr double pi = std::atan(1.0)*4.0;
-  	constexpr double pih = pi/2;
 	
 	//generic edge
   	auto fun = [](double x) -> point<2>{
@@ -28,47 +27,41 @@ int main(){
   	auto fun2 = [](double x) -> point<2>{
 		return point<2>(0, 0);
   	};
-  	
-//	std::vector<point<2>> mesh1, mesh2, mesh3, first_der;
-//	std::vector<double> param_mesh;
-  	
-  	std::cout << "----------- GENERIC_EDGE -----------------" << std::endl << std::endl;
-  	std::cout << "Representing a straigth line in the plane with a generic_edge" << std::endl;
+  	  	
+  	std::cout << "================== GENERIC_EDGE ================" << std::endl;
+  	std::cout << "Representing a straigth line in the plane with a generic_edge" << std::endl << std::endl;
   	
 	generic_edge<2> edge(fun, fun1, fun2);
 	
-	//std::cout << "generic edge: " << edge << std::endl;
 	std::cout << "Some values: " << std::endl;
 	std::cout << "\tt=0:   " << edge(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge(1) << std::endl;
-//	std::cout << "\tt=pi:  " << edge(pi) << std::endl;
-//	std::cout << "\tt=10:  " << edge(4.44288) << std::endl;
 	
 	std::cout << "Some first derivatives: " << std::endl;
 	std::cout << "\tt=0:   " << edge.first_der(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge.first_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge.first_der(1) << std::endl;
-//	std::cout << "\tt=pi:  " << edge.first_der(pi) << std::endl;
+
+	std::cout << "Some sedond derivatives: " << std::endl;
+	std::cout << "\tt=0:   " << edge.second_der(0) << std::endl;
+	std::cout << "\tt=0.5: " << edge.second_der(0.5) << std::endl;
+	std::cout << "\tt=1:   " << edge.second_der(1) << std::endl;
 	
 	std::cout << "Some curvatures: " << std::endl;
 	std::cout << "\tt=0:   " << edge.curvature(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge.curvature(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge.curvature(1) << std::endl;
-//	std::cout << "\tt=pi:  " << edge.curvature(pi) << std::endl;
 	
 	std::cout << "Curvilinear abscissa: " << std::endl;
 	std::cout << "\tt=0:   " << edge.curv_abs(0) << std::endl;
-	std::cout << "\tt=1:   " << edge.curv_abs(1) << std::endl;
-//	std::cout << "\tt=pih: " << edge.curv_abs(pih) << std::endl;
-//	std::cout << "\tt=pi:  " << edge.curv_abs(pi) << std::endl;
+	std::cout << "\tt=1:   " << edge.curv_abs(1) << std::endl;;
 	
 	std::cout << std::endl;
 	std::cout << "Computing a uniform mesh: " << std::endl;
 	std::cout << std::endl;
 	mesh<2> M1;
 	M1.uniform_mesh(10, edge);
-//	std::tie(mesh1,param_mesh) = edge.uniform_mesh(10);
 	for(std::size_t i = 0; i < M1.real.size(); ++i)
 		std::cout << M1.real[i] << std::endl;
 	std::cout << std::endl;	
@@ -80,7 +73,6 @@ int main(){
 	std::cout << "Now variable size mesh: " << std::endl;
 	mesh<2> M2;
 	M2.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); }, edge);
-//	std::tie(mesh2, param_mesh) = edge.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
 	for(std::size_t i = 0; i < M2.real.size(); ++i)
 		std::cout << M2.real[i] << std::endl;
 	std::cout << std::endl;
@@ -89,9 +81,8 @@ int main(){
 		std::cout << M2.parametric[i] << std::endl;
 	std::cout << std::endl;
 	
-	//===================== ANOTHER GENERIC EDGE =================================
-	std::cout << std::endl << std::endl;
-	std::cout << "Another generic edge" << std::endl;
+	std::cout << "=================== ANOTHER GENERIC EDGE =======================" << std::endl;
+	std::cout << "Representing a half-circumference" << std::endl << std::endl;
 	
 	auto gamma = [](double x) -> point<2>{
 		return point<2>(std::cos(pi*x), 2*std::sin(pi*x)); 
@@ -116,6 +107,11 @@ int main(){
 	std::cout << "\tt=0.5: " << edge2.first_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2.first_der(1) << std::endl;
 	
+	std::cout << "Some second derivatives: " << std::endl;
+	std::cout << "\tt=0:   " << edge2.second_der(0) << std::endl;
+	std::cout << "\tt=0.5: " << edge2.second_der(0.5) << std::endl;
+	std::cout << "\tt=1:   " << edge2.second_der(1) << std::endl;
+	
 	std::cout << "Some curvatures: " << std::endl;
 	std::cout << "\tt=0:   " << edge2.curvature(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge2.curvature(0.5) << std::endl;
@@ -125,12 +121,44 @@ int main(){
 	std::cout << "\tt=0:   " << edge2.curv_abs(0) << std::endl;
 	std::cout << "\tt=1:   " << edge2.curv_abs(1) << std::endl;
 	
+	// Now evaluation with vectors
+	std::cout << std::endl << "--------- Now evaluation with vector ----------" << std::endl << std::endl;
+	std::vector<double> t{0,0.5,1};
+	
+	std::cout << "Evaluation:" << std::endl;
+	std::vector<point<2>> Eval = edge2(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << Eval[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "First derivative:" << std::endl;
+	std::vector<point<2>> F = edge2.first_der(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << F[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Second derivative:" << std::endl;
+	std::vector<point<2>> S = edge2.second_der(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << S[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Curvilinear abscissa:" << std::endl;
+	std::vector<double> A = edge2.curv_abs(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << A[i] << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "Curvature:" << std::endl;
+	std::vector<double> C = edge2.curvature(t);
+	for(std::size_t i=0; i<t.size(); ++i)
+		std::cout << "\t" << t[i] << "\t: " << C[i] << std::endl;
+	std::cout << std::endl;
+	
 	std::cout << std::endl;
 	std::cout << "Computing a uniform mesh: " << std::endl;
-//	param_mesh.clear();
-//	std::tie(mesh3,param_mesh) = edge2.uniform_mesh(2);
 	mesh<2> M3;
-	M3.uniform_mesh(2, edge2);
+	M3.uniform_mesh(10, edge2);
 	for(std::size_t i = 0; i < M3.real.size(); ++i)
 		std::cout << M3.real[i] << std::endl;
 	std::cout << std::endl;	
@@ -140,6 +168,7 @@ int main(){
 	std::cout << std::endl;
   	
   	// BUilding a simple Graph
+  	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout << std::endl << "Creating a graph with a generic edge" << std::endl;
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<generic_edge<3>,3> >;
 	Graph G;
