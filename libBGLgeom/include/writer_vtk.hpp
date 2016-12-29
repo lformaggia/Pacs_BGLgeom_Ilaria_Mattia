@@ -42,19 +42,6 @@
 
 namespace BGLgeom{
 
-/*!
-	@brief Class to export a .vtp file
-	@detail This writer outputs a .vtp file containing the graphical representation of the graph 
-	
-	@pre The graph that has to be exported is expected to have at least all the
-		properties defined in data_structure.hpp
-		
-	@param Graph The type of the graph
-	@param Mesh_Container The container that stores the point of the mesh.
-			We have to decide whether to keep it Eigen with () to access elements,
-			or to use the std containers with [].
-*/
-
 using CellArray_ptr = vtkSmartPointer<vtkCellArray>;
 using PolyDataWriter_ptr = vtkSmartPointer<vtkXMLPolyDataWriter>;
 using PolyData_ptr = vtkSmartPointer<vtkPolyData>;
@@ -79,6 +66,15 @@ inline void insert_point<3>(double const* P, Points_ptr & points){
 	points -> InsertNextPoint(P);
 };
 
+/*!
+	@brief	Class to export a .vtp file
+	@detail This writer outputs a .vtp file containing the graphical representation of the graph 	
+	@pre	The graph that has to be exported is expected to have at least all the
+			properties defined in data_structure.hpp
+		
+	@param Graph The type of the graph
+	@param dim The dimension of the space
+*/
 template <typename Graph, unsigned int dim>
 class writer_vtk{
 	
@@ -119,10 +115,12 @@ class writer_vtk{
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
 			  vertices = Points_ptr::New();
-		
+			  
+			  // Check on the extension of _filename
 			  if(_filename.substr(_filename.length()-3, 3) != "vtp")
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
-				
+			  
+			  // Naming the output file for colored vertices
 			  std::string vertex_string("_vertices");
 			  std::string filename_vertices(_filename);
 			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
@@ -158,7 +156,7 @@ class writer_vtk{
 		//! The stream associated to the output file
 		PolyDataWriter_ptr writer;
 		PolyDataWriter_ptr writer_vertices;
-		//! Container with all the points
+		//! Containers with all the points
 		Points_ptr points;
 		Points_ptr vertices;
 		//! The array containing all the lines corresponding to the edges
@@ -174,45 +172,40 @@ class writer_vtk{
 			const double *SRC = G[src].coordinates.data();
 			const double *TGT = G[tgt].coordinates.data();
 			
-			const int ID_start = points->GetNumberOfPoints(); // in points all the points of all the edges are stored so I need to keep track of the ID of my current points
+			// all the points of all the edges are stored in points, so I need to keep track of the ID of my current point
+			const int ID_start = points->GetNumberOfPoints(); 
 			
 			// insert src and tgt in "vertices"
 			insert_point<dim>(SRC,vertices);
 			insert_point<dim>(TGT,vertices);
 			count_vertices += 2;				
 			
-			if(G[e].mesh.first.empty()){
-				//create SRC point
+			if(G[e].mesh.real.empty()){	// If the mesh is empty, create only source and target
 				insert_point<dim>(SRC,points);
-				//create TGT point
 				insert_point<dim>(TGT,points);		
-			}
-						
-			// if the Mesh is defined create the points of the mesh, incuded source and target
-			else{
+			} else {	// if the Mesh is defined, create the points of the mesh, included source and target
 				double const *P; //it will contain the point coordinates;
-				for(const BGLgeom::point<dim>& point: G[e].mesh.first){
+				for(const BGLgeom::point<dim>& point: G[e].mesh.real){
 					P = point.data();
 					insert_point<dim>(P,points);			
  				}
-			}
+			}	//else
 			
-			const unsigned int num_points = points->GetNumberOfPoints() - ID_start; // in this way how many points I have this line
+			const unsigned int num_points = points->GetNumberOfPoints() - ID_start; // we count how many points we have in this line
 			
 			// create a new PolyLine
 			vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
   			polyLine ->GetPointIds()->SetNumberOfIds(num_points); // set the PolyLine to contain num_points elements
   			
   			for(unsigned int i = 0; i < num_points; i++)
-    		{
     			polyLine->GetPointIds()->SetId(i,i+ID_start);
-    		}
  
    			lines->InsertNextCell(polyLine); // insert the new created line to the container of all lines
 		}; // add_line
 		
 		void generate_output(const unsigned int & n_vertices){
-			//! Now all the lines have been stored in lines: we create a PolyData object containing points and lines containers, and it will be the writer input argument
+			/* Now all the lines have been stored in lines: we create a PolyData object
+			containing points and line containers, and it will be the writer input argument */
 			PolyData_ptr polyData = PolyData_ptr::New();
 			PolyData_ptr polyData_vertices = PolyData_ptr::New();
 			
@@ -250,7 +243,7 @@ class writer_vtk{
 	  		colors->SetNumberOfComponents(n_vertices);
 	  		colors->SetName ("Colors");
 	  		
-	  		for (int i=0; i<n_vertices; ++i)
+	  		for (std::size_t i=0; i<n_vertices; ++i)
 	  			colors->InsertNextTupleValue(red);
 	 
 	  		polyData_color->GetPointData()->SetScalars(colors);	
@@ -273,8 +266,6 @@ class writer_vtk{
 		
 };	//writer_vtp
 
-
-
-}	//namespace
+}	//BGLgeom
 
 #endif	//HH_WRITER_PTS_HH
