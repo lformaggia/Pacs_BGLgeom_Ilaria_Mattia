@@ -31,6 +31,12 @@
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkXMLPolyDataWriter.h>
+#include <vtkVertexGlyphFilter.h>
+#include <vtkPointData.h>
+// For compatibility with new VTK generic data arrays
+#ifdef vtkGenericDataArray_h
+#define InsertNextTupleValue InsertNextTypedTuple
+#endif
 
 #include "data_structure.hpp"
 
@@ -90,13 +96,14 @@ class writer_vtk{
   			  
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
+			  vertices = Points_ptr::New();
 		
-			  if(_filename.substr(filename.length()-3, 3) != "vtp")
+			  if(filename.substr(filename.length()-3, 3) != "vtp")
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
 				
 			  std::string vertex_string("_vertices");
 			  std::string filename_vertices(filename);
-			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+9);
+			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
 			
 			  writer_vertices -> SetFileName(filename_vertices.c_str());
 		}
@@ -104,21 +111,30 @@ class writer_vtk{
 		
 		//! Constructor with filename
 		writer_vtk(std::string _filename) {
+			  std::cout<<"____________________ Writing vtk output...  ____________________"<<std::endl;
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
   			  writer -> SetFileName(_filename.c_str());
-  			  
+
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
+			  vertices = Points_ptr::New();
 		
 			  if(_filename.substr(_filename.length()-3, 3) != "vtp")
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
 				
 			  std::string vertex_string("_vertices");
 			  std::string filename_vertices(_filename);
-			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+9);
+			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
+			  
+			  std::cout<<filename_vertices.c_str()<<std::endl;
 			
-			  writer_vertices -> SetFileName(filename_vertices.c_str());
+  			  writer_vertices = PolyDataWriter_ptr::New();			  
+			  //writer_vertices -> SetFileName(filename_vertices.c_str());
+			  
+			  writer_vertices -> SetFileName("G1_v.vtp");		  
+			  
+//			  std::cout<<"Main name: "<<_filename<<". Vertex name: "<<filename_vertices<<std::endl;
 		}
 		
 		/*
@@ -132,9 +148,10 @@ class writer_vtk{
 		 
 		virtual void export_vtp(Graph const& G){
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
+			unsigned int n_vertices = 0;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
-				add_line(*e_it, G);							
-			generate_output();
+				add_line(*e_it, G, n_vertices);							
+			generate_output(n_vertices);
 		}	
 		
 	protected:
@@ -148,7 +165,7 @@ class writer_vtk{
 		CellArray_ptr lines;
 		
 		
-		void add_line(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
+		void add_line(BGLgeom::Edge_desc<Graph> const& e, Graph const& G, unsigned int & count_vertices){
 			// get source and target
 			BGLgeom::Vertex_desc<Graph> src = boost::source(e,G);
 			BGLgeom::Vertex_desc<Graph> tgt = boost::target(e,G);
@@ -161,7 +178,8 @@ class writer_vtk{
 			
 			// insert src and tgt in "vertices"
 			insert_point<dim>(SRC,vertices);
-			insert_point(TGT,vertices);				
+			insert_point<dim>(TGT,vertices);
+			count_vertices += 2;				
 			
 			if(G[e].mesh.first.empty()){
 				//create SRC point
@@ -193,10 +211,12 @@ class writer_vtk{
    			lines->InsertNextCell(polyLine); // insert the new created line to the container of all lines
 		}; // add_line
 		
-		void generate_output(){
+		void generate_output(const unsigned int & n_vertices){
 			//! Now all the lines have been stored in lines: we create a PolyData object containing points and lines containers, and it will be the writer input argument
 			PolyData_ptr polyData = PolyData_ptr::New();
 			PolyData_ptr polyData_vertices = PolyData_ptr::New();
+			
+			std::cout<<"PolyData objects created"<<std::endl;
  
 			// Add the points to the dataset
   			polyData->SetPoints(points);
@@ -206,17 +226,48 @@ class writer_vtk{
   			
   			// Add the vertices to polyData_vertices
   			polyData_vertices -> SetPoints(vertices);
+  			std::cout<<"Vertices set"<<std::endl;
+  			
+  			// Color vertices
+ 	   		vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
+			#if VTK_MAJOR_VERSION <= 5
+	  		vertexFilter->SetInputConnection(polyData_vertices ->GetProducerPort());
+			#else
+	  		vertexFilter->SetInputData(polyData_vertices);
+			#endif
+	  		vertexFilter->Update();
+	 
+	  		PolyData_ptr polyData_color = vtkSmartPointer<vtkPolyData>::New();
+	  	
+	  		polyData_color->ShallowCopy(vertexFilter->GetOutput());
+	 
+	  		// Setup colors
+	  		unsigned char red[3] = {255, 0, 0};
+	  		//unsigned char green[3] = {0, 255, 0};
+	  		//unsigned char blue[3] = {0, 0, 255};
+	 
+	  		vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+	  		colors->SetNumberOfComponents(n_vertices);
+	  		colors->SetName ("Colors");
+	  		
+	  		for (int i=0; i<n_vertices; ++i)
+	  			colors->InsertNextTupleValue(red);
+	 
+	  		polyData_color->GetPointData()->SetScalars(colors);	
   
+  			// Set the writers and write the output files
 			#if VTK_MAJOR_VERSION <= 5
   			writer->SetInput(polyData);
-  			writer_vertices -> SetInput(polyData_vertices)
+  			writer_vertices -> SetInput(polyData_color);
 			#else
   			writer->SetInputData(polyData);	
-    		writer_vertices -> SetInputData(polyData_vertices)
+    		writer_vertices -> SetInputData(polyData_color)
   			#endif
   			
   			writer -> Write();
   			writer_vertices -> Write();
+  			
+  			std::cout<<"Leaving generate_output()"<<std::endl;
 
 		}; // generate_output
 		
