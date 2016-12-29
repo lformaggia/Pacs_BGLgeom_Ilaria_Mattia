@@ -24,9 +24,9 @@
 #include <functional>
 
 #include "data_structure.hpp"
-#include "generic_edge.hpp"
-#include "linear_edge.hpp"
-#include "bspline_edge.hpp"
+#include "generic_geometry.hpp"
+#include "linear_geometry.hpp"
+#include "bspline_geometry.hpp"
 
 namespace BGLgeom{
 
@@ -133,7 +133,7 @@ new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
 
 /*!
 	@brief	Adding a new linear edge to the graph
-	@remark	Use this only when you set "linear_edge<dim>" as template parameter of the
+	@remark	Use this only when you set "linear_geometry<dim>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
 			It takes care of setting up the geometry. Only the geometry is set up,
@@ -165,52 +165,9 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	return e;
 }	//new_linear_edge
 
-
-/*!
-	@brief	Adding a new linear edge to the graph
-	@remark	Use this only when you set "linear_edge<dim>" as template parameter of the
-			Edge_base_property
-	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
-			It takes care of setting up the geometry, but requires as input the coordinates
-			realted to the two vertex descriptors. Only the geometry is set up,	the other 
-			properties are left defaulted
-	@note 	It performs a check on the insertion of the edge
-	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
-			as edge property of the graph
-			
-	@param src Vertex descriptor for the source
-	@param tgt Vertex descriptor fot the target
-	@param G The graph
-	@param SRC The coordinates of the source
-	@param TGT The coordinates of the target
-	@return The edge descriptor of the new edge
-*/
-
-/*
-template <typename Graph, unsigned int dim>
-BGLgeom::Edge_desc<Graph>
-new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
-				 BGLgeom::Vertex_desc<Graph> const& tgt,
-				 Graph & G,
-				 BGLgeom::point<dim> const& SRC,
-				 BGLgeom::point<dim> const& TGT){
-	bool inserted;
-	BGLgeom::Edge_desc<Graph> e;
-	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
-	
-	// Setting up the geometry
-	G[e].geometry.set_source(SRC);
-	G[e].geometry.set_target(TGT);
-	return e;
-}	//new_linear_edge
-
-*/
-
-
 /*!
 	@brief	Adding a new generic edge to the graph
-	@remark	Use this only when you set "generic_edge<dim>" as template parameter of the
+	@remark	Use this only when you set "generic_geometry<dim>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the generic one.
 			It takes care of setting up the geometry, and so requires some additional
@@ -250,7 +207,7 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 
 /*!
 	@brief	Adding a new bspline edge to the graph
-	@remark	Use this only when you set "bspline_edge<dim,deg>" as template parameter of the
+	@remark	Use this only when you set "bspline_geometry<dim,deg>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the bspline one.
 			It takes care of setting up the geometry, so some additional parameters are
@@ -283,7 +240,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 
 /*!
 	@brief	Adding a new bspline edge to the graph
-	@remark	Use this only when you set "bspline_edge<dim,deg>" as template parameter of the
+	@remark	Use this only when you set "bspline_geometry<dim,deg>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the bspline one.
 			It takes care of setting up the geometry, so some additional parameters are

@@ -19,7 +19,6 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
-//#include "domain.hpp"
 
 namespace BGLgeom{
 

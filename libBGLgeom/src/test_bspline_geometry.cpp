@@ -1,4 +1,4 @@
-#include "bspline_edge.hpp"
+#include "bspline_geometry.hpp"
 #include "graph_builder.hpp"
 #include "data_structure.hpp"
 #include <vector>
@@ -18,7 +18,7 @@ int main(){
 	control_pts.push_back(point<2>(1,1));
 	control_pts.push_back(point<2>(1,0));
 	
-	bspline_edge<2,2> B(control_pts);
+	bspline_geometry<2,2> B(control_pts);
 	
 	std::cout << "Evaluation: " << std::endl;
 	std::cout << "\tt=0   : " << B(0) << std::endl;
@@ -91,13 +91,13 @@ int main(){
 							     point<3>(11./3., 4,   0),	// 5th c.p.
 							     point<3>(4,      8,   0)};	// 6th c.p.
 	// Bspline edge defaulted at dim=3, deg=3
-	bspline_edge<> B2;
+	bspline_geometry<> B2;
 	B2.set_bspline(CPs);
 	std::cout << "\tt=0   : " << B2(0) << std::endl;
 	
 	// Now we try to build a graph with one bspline edge
 	std::cout << std::endl <<  "Creating a graph" << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_edge<>,3> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_geometry<>,3> >;
 	Graph G;
 	
 	Vertex_desc<Graph> src, tgt;

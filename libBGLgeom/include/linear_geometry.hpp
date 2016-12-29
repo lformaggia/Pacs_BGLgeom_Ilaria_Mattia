@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,15 +7,15 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file linear_edge.hpp
+	@file linear_geometry.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
-	@brief linear geometry for the edge
+	@brief Linear geometry for the edge
 	@detail 
 */
 
-#ifndef HH_LINEAR_EDGE_HH
-#define HH_LINEAR_EDGE_HH
+#ifndef HH_LINEAR_GEOMETRY_HH
+#define HH_LINEAR_GEOMETRY_HH
 
 #include <iostream>
 #include <vector>
@@ -37,7 +37,7 @@ namespace BGLgeom{
 	@param dim Dimension of the space
 */
 template <unsigned int dim>
-class linear_edge : public BGLgeom::edge_geometry<dim> {
+class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		
 	private:
 		//! Coordinates of the source of the edge
@@ -51,25 +51,25 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		using vect_double = std::vector<double>;
 		
 		//! Default constructor 
-		linear_edge() : SRC(), TGT() {};	
+		linear_geometry() : SRC(), TGT() {};	
 	
 		//! Constructor 
-		linear_edge(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_) {};
+		linear_geometry(point const& SRC_, point const& TGT_) : SRC(SRC_), TGT(TGT_) {};
 		
 		//! Copy constructor
-		linear_edge(linear_edge const&) = default;
+		linear_geometry(linear_geometry const&) = default;
 		
 		//! Move construcotr
-		linear_edge(linear_edge &&) = default;
+		linear_geometry(linear_geometry &&) = default;
 		
 		//! Destructor
-		virtual ~linear_edge(){};
+		virtual ~linear_geometry(){};
 		
 		//! Assignment operator
-		linear_edge & operator=(linear_edge const&) = default;
+		linear_geometry & operator=(linear_geometry const&) = default;
 		
 		//! Move assignment
-		linear_edge & operator=(linear_edge &&) = default;
+		linear_geometry & operator=(linear_geometry &&) = default;
 		
 		//! Sets the value for the source
 		void
@@ -98,7 +98,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 	    */
 		point operator() (double const& t) const {
 			if(t > 1 || t < 0){
-				std::cerr << "linear_edge::operator(): parameter value out of bounds" << std::endl;
+				std::cerr << "linear_geometry::operator(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//t=1
 					return TGT;
 				else	//t=0
@@ -150,7 +150,7 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 		double
 		curv_abs(const double & t) const {
 			if(t < 0 || t > 1){
-				std::cerr << "linear_edge::curv_abs(): parameter value out of bounds" << std::endl;
+				std::cerr << "linear_geometry::curv_abs(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//x=length
 					return (TGT-SRC).norm();
 				else	//x=0
@@ -182,13 +182,13 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			@brief	Overload of operator<<
 			@detail It only tells the coordinates of its extremes. May be useful for debugging
 		*/
-		friend std::ostream & operator<<(std::ostream & out, linear_edge<dim> const& edge) {
+		friend std::ostream & operator<<(std::ostream & out, linear_geometry<dim> const& edge) {
 			out << "(linear)\tSource: " << edge.SRC << ", Target: " << edge.TGT;
 			return out;
 		}
 			
-}; //linear_edge
+}; //linear_geometry
 
 } //BGLgeom
 
-#endif	//HH_LINEAR_EDGE_HH
+#endif	//HH_LINEAR_GEOMETRY_HH

@@ -23,7 +23,7 @@
 #define HH_INTERSECTIONS2D_UTILITIES_HH
 
 #include "data_structure.hpp"
-#include "linear_edge.hpp"
+#include "linear_geometry.hpp"
 #include "intersections2D.hpp"
 
 #include <boost/graph/adjacency_list.hpp>
@@ -74,7 +74,7 @@ struct Int_layer{
 	/*
 	using Graph = boost::adjacency_list	<boost::vecS, boost::vecS, boost::directedS,
 										 BGLgeom::Vertec_base_property<2>,
-										 BGlgeom::Edge_base_property_static<BGlgeom::linear_edge<2>,2>
+										 BGlgeom::Edge_base_property_static<BGlgeom::linear_geometry<2>,2>
 										 >;
 	*/
 	//! The type of the intersection

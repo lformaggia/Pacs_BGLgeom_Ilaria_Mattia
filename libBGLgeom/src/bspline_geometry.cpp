@@ -7,11 +7,11 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file bspline_edge.cpp
+	@file bspline_geometry.cpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Dec, 2016
 	@brief B-spline edge. 
-	@detail Implementation of some helper functions for bspline_edge
+	@detail Implementation of some helper functions for bspline_geometry
 */
 
 /* 
@@ -36,7 +36,7 @@
 #include <functional>
 #include <iostream>
 #include <cstdlib>
-#include "bspline_edge.hpp"
+#include "bspline_geoemtry.hpp"
 
 using namespace BGLgeom;
 

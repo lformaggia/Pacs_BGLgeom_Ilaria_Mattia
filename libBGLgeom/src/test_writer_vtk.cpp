@@ -14,14 +14,14 @@
 #include <string>
 
 #include "data_structure.hpp"
-#include "linear_edge.hpp"
+#include "linear_geometry.hpp"
 #include "writer_vtk.hpp"
 
 using namespace boost;
 using namespace BGLgeom;
 
 int main(int, char *[]){
-	using Graph = adjacency_list<vecS,vecS,directedS,Vertex_base_property<3>,Edge_base_property_static<linear_edge<3>,3> >;
+	using Graph = adjacency_list<vecS,vecS,directedS,Vertex_base_property<3>,Edge_base_property_static<linear_geometry<3>,3> >;
 	Graph G;
 	Edge_desc<Graph> e;
 	Vertex_desc<Graph> a,b,c;

@@ -19,10 +19,8 @@
 #include <vector>
 #include <functional>
 #include <memory>
-//#include "domain.hpp"
 #include "mesh_generators.hpp"
 #include "point.hpp"
-//#include "edge_geometry.hpp"
 
 namespace BGLgeom{
 

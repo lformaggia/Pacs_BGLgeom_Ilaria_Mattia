@@ -21,8 +21,8 @@
 
 using namespace BGLgeom;
 namespace BGLgeom{
-Intersection compute_intersection	(linear_edge<2> const& edge1,
-									linear_edge<2> const& edge2,
+Intersection compute_intersection	(linear_geometry<2> const& edge1,
+									linear_geometry<2> const& edge2,
 	                           		double tol){
 	Intersection out;
 	linear_edge_interface S1(edge1);

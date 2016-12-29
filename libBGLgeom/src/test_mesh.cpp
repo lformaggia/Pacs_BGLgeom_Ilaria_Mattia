@@ -13,7 +13,7 @@ int main(){
 	
 	std::cout << "Creating a mesh on a simple graph" << std::endl;
 	
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<2>, Edge_base_property_static<linear_edge<2>,2> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<2>, Edge_base_property_static<linear_geometry<2>,2> >;
 	Graph G;
 	
 	point<2> A(0,0);

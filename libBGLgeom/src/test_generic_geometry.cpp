@@ -1,4 +1,4 @@
-#include "generic_edge.hpp"
+#include "generic_geometry.hpp"
 #include "point.hpp"
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
@@ -28,34 +28,36 @@ int main(){
 		return point<2>(0, 0);
   	};
   	  	
-  	std::cout << "================== GENERIC_EDGE ================" << std::endl;
-  	std::cout << "Representing a straigth line in the plane with a generic_edge" << std::endl << std::endl;
+  	std::cout << "================== GENERIC_GEOMETRY ================" << std::endl;
+  	std::cout << "Representing a straigth line in the plane with a generic_geometry" << std::endl << std::endl;
   	
-	generic_edge<2> edge(fun, fun1, fun2);
+	generic_geometry<2> edge(fun, fun1, fun2);
+	std::cout << edge << std::endl << std::endl;
 	
-	std::cout << "Some values: " << std::endl;
+	std::cout << "Evaluation: " << std::endl;
 	std::cout << "\tt=0:   " << edge(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge(1) << std::endl;
 	
-	std::cout << "Some first derivatives: " << std::endl;
+	std::cout << "First derivatives: " << std::endl;
 	std::cout << "\tt=0:   " << edge.first_der(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge.first_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge.first_der(1) << std::endl;
 
-	std::cout << "Some sedond derivatives: " << std::endl;
+	std::cout << "Sedond derivatives: " << std::endl;
 	std::cout << "\tt=0:   " << edge.second_der(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge.second_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge.second_der(1) << std::endl;
 	
-	std::cout << "Some curvatures: " << std::endl;
+	std::cout << "Curvatures: " << std::endl;
 	std::cout << "\tt=0:   " << edge.curvature(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge.curvature(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge.curvature(1) << std::endl;
 	
 	std::cout << "Curvilinear abscissa: " << std::endl;
 	std::cout << "\tt=0:   " << edge.curv_abs(0) << std::endl;
-	std::cout << "\tt=1:   " << edge.curv_abs(1) << std::endl;;
+	std::cout << "\tt=0.5: " << edge.curv_abs(0.5) << std::endl;
+	std::cout << "\tt=1:   " << edge.curv_abs(1) << std::endl;
 	
 	std::cout << std::endl;
 	std::cout << "Computing a uniform mesh: " << std::endl;
@@ -96,29 +98,30 @@ int main(){
 		return point<2>(-pi*pi*std::cos(pi*x), -2*pi*pi*std::sin(pi*x)); 
   	};
   	
-  	BGLgeom::generic_edge<2> edge2(gamma,gamma1,gamma2);
-	std::cout << "Some values: " << std::endl;
+  	BGLgeom::generic_geometry<2> edge2(gamma,gamma1,gamma2);
+	std::cout << "Values: " << std::endl;
 	std::cout << "\tt=0:   " << edge2(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge2(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2(1) << std::endl;
 	
-	std::cout << "Some first derivatives: " << std::endl;
+	std::cout << "First derivatives: " << std::endl;
 	std::cout << "\tt=0:   " << edge2.first_der(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge2.first_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2.first_der(1) << std::endl;
 	
-	std::cout << "Some second derivatives: " << std::endl;
+	std::cout << "Second derivatives: " << std::endl;
 	std::cout << "\tt=0:   " << edge2.second_der(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge2.second_der(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2.second_der(1) << std::endl;
 	
-	std::cout << "Some curvatures: " << std::endl;
+	std::cout << "Curvatures: " << std::endl;
 	std::cout << "\tt=0:   " << edge2.curvature(0) << std::endl;
 	std::cout << "\tt=0.5: " << edge2.curvature(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2.curvature(1) << std::endl;
 	
 	std::cout << "Curvilinear abscissa: " << std::endl;
 	std::cout << "\tt=0:   " << edge2.curv_abs(0) << std::endl;
+	std::cout << "\tt=0.5: " << edge2.curv_abs(0.5) << std::endl;
 	std::cout << "\tt=1:   " << edge2.curv_abs(1) << std::endl;
 	
 	// Now evaluation with vectors
@@ -170,7 +173,7 @@ int main(){
   	// BUilding a simple Graph
   	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout << std::endl << "Creating a graph with a generic edge" << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<generic_edge<3>,3> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<generic_geometry<3>,3> >;
 	Graph G;
 	
 	auto alfa = [](double x) -> point<3>{

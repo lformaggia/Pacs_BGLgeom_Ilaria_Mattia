@@ -7,15 +7,15 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file generic_edge.hpp
+	@file generic_geometry.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Concrete class for a generic edge geometry 
 	@detail
 */
 
-#ifndef HH_GENERIC_EDGE_HH
-#define HH_GENERIC_EDGE_HH
+#ifndef HH_GENERIC_GEOMETRY_HH
+#define HH_GENERIC_GEOMETRY_HH
 
 #include <functional>
 #include <tuple>
@@ -44,7 +44,7 @@ namespace BGLgeom{
 	@param dim Dimension of the space	
 */
 template<unsigned int dim>
-class generic_edge {
+class generic_geometry {
 
 	using point = BGLgeom::point<dim>;
 	using vect_pts = std::vector<point>;
@@ -59,30 +59,30 @@ class generic_edge {
 	public:
 	
 		//! Default constructor
-		generic_edge() : value_fun(), first_der_fun(), second_der_fun() {};
+		generic_geometry() : value_fun(), first_der_fun(), second_der_fun() {};
 	
 		//! Full constructor
-		generic_edge(std::function<point(double)> const& value_,
-					 std::function<point(double)> const& first_der_,
-					 std::function<point(double)> const& second_der_) :
+		generic_geometry(std::function<point(double)> const& value_,
+						 std::function<point(double)> const& first_der_,
+						 std::function<point(double)> const& second_der_) :
 					 			 value_fun(value_),
 					 			 first_der_fun(first_der_),
 					 			 second_der_fun(second_der_) {};
 					 			 
 		//! Copy constructor
-		generic_edge(generic_edge const&) = default;
+		generic_geometry(generic_geometry const&) = default;
 		
 		//! Move constructor
-		generic_edge(generic_edge &&) = default;
+		generic_geometry(generic_geometry &&) = default;
 		
 		//! Destructor
-		virtual ~generic_edge() = default;
+		virtual ~generic_geometry() = default;
 		
 		//! Assignment operator
-		generic_edge & operator=(generic_edge const&) = default;
+		generic_geometry & operator=(generic_geometry const&) = default;
 		
 		//! Move assignment
-		generic_edge & operator=(generic_edge &&) = default;
+		generic_geometry & operator=(generic_geometry &&) = default;
 		
 		/*!
 			@defgroup Setting methods
@@ -105,8 +105,8 @@ class generic_edge {
 		
 		void
 		set_all(std::function<point(double)> const& _value_fun,
-					 std::function<point(double)> const& _first_der_fun,
-					 std::function<point(double)> const& _second_der_fun){
+				std::function<point(double)> const& _first_der_fun,
+				std::function<point(double)> const& _second_der_fun){
 			value_fun = _value_fun;
 			first_der_fun = _first_der_fun;
 			second_der_fun = _second_der_fun;				 
@@ -121,7 +121,7 @@ class generic_edge {
 		point
 		operator()(double const& t) const {
 			if(t < 0 || t > 1){
-				std::cerr << "generic_edge::first_der(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::first_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			return value_fun(t);	
@@ -140,7 +140,7 @@ class generic_edge {
 		point
 		first_der(const double & t){ 
 			if(t < 0 || t > 1){
-				std::cerr << "generic_edge::first_der(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::first_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			return first_der_fun(t);
@@ -159,7 +159,7 @@ class generic_edge {
 		point 
 		second_der(const double & t){
 			if(t < 0 || t > 1){
-				std::cerr << "generic_edge::second_der(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::second_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			return second_der_fun(t);
@@ -177,7 +177,7 @@ class generic_edge {
 		//! Evaluation of the curvilinear abscissa
 		double curv_abs(const double & t)  {
 			if(t < 0 || t > 1){
-				std::cerr << "generic_edge::curv_abs(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::curv_abs(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}	
 			//lambda functions that returns the integrand function, i.e. norm(first_derivative(t))
@@ -200,7 +200,7 @@ class generic_edge {
 		//! Evaluation of the curvature
 		double curvature(const double & t){
 			if(t < 0 || t > 1){
-				std::cerr << "generic_edge::curvature(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::curvature(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			if( (this->first_der(t)).norm() < tol_dist )
@@ -238,13 +238,13 @@ class generic_edge {
 			@brief	Overload of operator<<
 			@detail It only tells the coordinates of its extremes. May be useful for debugging
 		*/
-		friend std::ostream & operator<<(std::ostream & out, generic_edge<dim> const& edge) {
+		friend std::ostream & operator<<(std::ostream & out, generic_geometry<dim> const& edge) {
 			out << "(generic)\tSource: " << edge(0) << ", Target: " << edge(1);
 			return out;
 		}	
 
-}; //class
+}; //generic_geometry
 
 } //BGLgeom
 
-#endif	//HH_GENERIC_EDGE_HH
+#endif	//HH_GENERIC_GEOMETRY_HH

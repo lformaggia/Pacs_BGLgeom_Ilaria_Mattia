@@ -7,7 +7,7 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file bspline_edge.hpp
+	@file bspline_geometry.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Dec, 2016
 	@brief B-spline edge. 
@@ -35,8 +35,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef HH_BSPLINE_EDGE_HH
-#define HH_BSPLINE_EDGE_HH
+#ifndef HH_BSPLINE_GEOMETRY_HH
+#define HH_BSPLINE_GEOMETRY_HH
 
 #include <iostream>
 #include <vector>
@@ -93,7 +93,7 @@ void basisfun (int i, double t, int p, const vect &U, vect &N);
 */
 template <int dim = 3, int deg = 3>
 class
-bspline_edge : public BGLgeom::edge_geometry<dim> {
+bspline_geometry : public BGLgeom::edge_geometry<dim> {
 
 	public:
 	
@@ -101,10 +101,10 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 		using vect_pts = std::vector<point>;
 		
 		//! Default constructor
-		bspline_edge() : nc(0), k(), C(), dk(), d2k(), dC(), d2C() {};
+		bspline_geometry() : nc(0), k(), C(), dk(), d2k(), dC(), d2C() {};
 
 		//! Constructor with control points
-		bspline_edge (const vect_pts &C_)
+		bspline_geometry (const vect_pts &C_)
 			: nc(C_.size ()), k(make_knots(nc)), C(C_) {
 
 			// construction of spline for the vector of first derivative
@@ -119,7 +119,7 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 		}
 
 		//! Constructor with control points and knot vector
-		bspline_edge (const vect_pts &C_, const vect &k_)
+		bspline_geometry (const vect_pts &C_, const vect &k_)
 			: nc(C_.size ()), k(k_), C(C_) {
 
 			// construction of spline for the vector of first derivative
@@ -134,19 +134,19 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 		};
 		
 		//! Copy constructor
-		bspline_edge(bspline_edge const&) = default;
+		bspline_geometry(bspline_geometry const&) = default;
 		
 		//! Move constructor
-		bspline_edge(bspline_edge &&) = default;
+		bspline_geometry(bspline_geometry &&) = default;
 		
 		//! Destructor
-		virtual ~bspline_edge() = default;
+		virtual ~bspline_geometry() = default;
 		
 		//! Assignment operator
-		bspline_edge & operator=(bspline_edge const&) = default;
+		bspline_geometry & operator=(bspline_geometry const&) = default;
 		
 		//! Move assignment
-		bspline_edge & operator=(bspline_edge &&) = default;
+		bspline_geometry & operator=(bspline_geometry &&) = default;
 		
 		/*! 
 			@defgroup Building the bspline if default constructed
@@ -293,7 +293,7 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			@brief	Overload of operator<<
 			@detail It only tells the coordinates of its extremes. May be useful for debugging
 		*/
-		friend std::ostream & operator<<(std::ostream & out, bspline_edge<dim,deg> const& edge) {
+		friend std::ostream & operator<<(std::ostream & out, bspline_geometry<dim,deg> const& edge) {
 			out << "(bspline)\tSource: " << edge(0) << ", Target: " << edge(1);
 			return out;
 		}
@@ -422,4 +422,4 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 } //BGLgeom
 
-#endif	//HH_BSPLINE_EDGE_HH
+#endif	//HH_BSPLINE_GEOMETRY_HH

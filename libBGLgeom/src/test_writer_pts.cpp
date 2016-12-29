@@ -6,7 +6,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include "writer_pts.hpp"
 #include "data_structure.hpp"
-#include "linear_edge.hpp"
+#include "linear_geometry.hpp"
 
 using namespace boost;
 using namespace BGLgeom;
@@ -14,7 +14,7 @@ using namespace BGLgeom;
 int main(){
 
 	// testing a graph with two boundary conditions in the vertex properties
-	using Graph = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3,2>,Edge_base_property_static<linear_edge<3>,3> >;
+	using Graph = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3,2>,Edge_base_property_static<linear_geometry<3>,3> >;
 	Graph G;
 	
 	Vertex_desc<Graph> a,b,c;
@@ -52,7 +52,7 @@ int main(){
 	
 	
 	// Now testing the writer on the additional infos to print
-	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,Edge_base_property_static<linear_edge<3>,3> >;
+	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,Edge_base_property_static<linear_geometry<3>,3> >;
 	Graph2 G2;
 	
 	Vertex_desc<Graph2> d,e,f;
