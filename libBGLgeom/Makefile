@@ -69,6 +69,7 @@ install:
 	cp $(HEADERS) $(INSTALL_PATH)/include/BGLgeom
 
 doc:
+	doxygen Doxyfile
 
 clean:
 	-rm -rv $(BUILD_DIR)
