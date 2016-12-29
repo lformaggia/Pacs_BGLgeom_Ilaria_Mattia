@@ -1,8 +1,11 @@
 #include "bspline_geometry.hpp"
 #include "graph_builder.hpp"
 #include "data_structure.hpp"
+#include "mesh.hpp"
+#include "point.hpp"
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <boost/graph/adjacency_list.hpp>
 
 
@@ -18,7 +21,9 @@ int main(){
 	control_pts.push_back(point<2>(1,1));
 	control_pts.push_back(point<2>(1,0));
 	
+	std::cout << "================== BSPLINE GEOMETRY ======================" << std::endl << std::endl;
 	bspline_geometry<2,2> B(control_pts);
+	std::cout << B << std::endl << std::endl;
 	
 	std::cout << "Evaluation: " << std::endl;
 	std::cout << "\tt=0   : " << B(0) << std::endl;
@@ -47,7 +52,7 @@ int main(){
 	std::cout << "\tt=1   : " << B.curvature(1) << std::endl;
 	
 	// Now evaluation with vectors
-	std::cout << std::endl << "Now evaluation with vector" << std::endl << std::endl;
+	std::cout << std::endl << "----------- Now evaluation with vector ------------" << std::endl << std::endl;
 	std::vector<double> t{0,0.5,1};
 	
 	std::cout << "Evaluation:" << std::endl;
@@ -81,7 +86,7 @@ int main(){
 	std::cout << std::endl;
 	
 	// The example on De Falco demo
-	std::cout << std::endl;
+	std::cout << std::endl << "==================== ANOTHER BSPLINE =====================" << std::endl;
 	std::cout << "Now a more difficult example" << std::endl << std::endl;
 	
 	std::vector<point<3>> CPs = {point<3>(0,      0,   0),	// 1st c.p.
@@ -93,10 +98,24 @@ int main(){
 	// Bspline edge defaulted at dim=3, deg=3
 	bspline_geometry<> B2;
 	B2.set_bspline(CPs);
-	std::cout << "\tt=0   : " << B2(0) << std::endl;
+	mesh<3> M;
+	M.uniform_mesh(20, B2);
+	std::vector<point<3>> value = M.real;
+	std::vector<point<3>> firstD = B2.first_der(M.parametric);
+	std::vector<point<3>> secondD = B2.second_der(M.parametric);
+	
+	std::cout << std::setw(6) << "x" << std::setw(7) << "y" << std::setw(7) << "z"
+			  << std::setw(14) << "dx/dt" << std::setw(7) << "dy/dt" << std::setw(7) << "dz/dt"
+			  << std::setw(13) << "d2x/dt2" << std::setw(8) << "d2y/dt2" << std::setw(8) << "d2z/dt2" << std::endl;
+	for(std::size_t i = 0; i < value.size(); ++i){
+		std::cout << std::setprecision(4) << std::fixed << std::setw(8)
+				  << value[i] << std::setw(12) << firstD[i] << std::setw(12) << secondD[i] << std::endl;
+	}
+	std::cout << std::endl;
 	
 	// Now we try to build a graph with one bspline edge
-	std::cout << std::endl <<  "Creating a graph" << std::endl;
+	std::cout << "==================== ON GRAPH ======================" << std::endl;
+	std::cout <<  "Creating a graph" << std::endl << std::endl;
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_geometry<>,3> >;
 	Graph G;
 	
