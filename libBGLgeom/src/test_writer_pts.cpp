@@ -43,8 +43,8 @@ int main(){
 	G[e2].geometry.set_target(G[c].coordinates);
 	
 	//Creating a uniform mesh
-	G[e1].mesh = G[e1].geometry.uniform_mesh(20);	
-	G[e2].mesh = G[e2].geometry.uniform_mesh(20);
+	G[e1].mesh.uniform_mesh(20, G[e1].geometry);	
+	G[e2].mesh.uniform_mesh(20, G[e2].geometry);
 	
 	std::string filename1 = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/testPTS2bc.pts";
 	writer_pts<Graph,3,2> W(filename1);
@@ -79,8 +79,8 @@ int main(){
 	G2[e4].index = 2;
 	
 	//Creating a uniform mesh
-	G2[e3].mesh = G2[e3].geometry.uniform_mesh(20);	
-	G2[e4].mesh = G2[e4].geometry.uniform_mesh(20);
+	G2[e3].mesh.uniform_mesh(20, G[e3].geometry);	
+	G2[e4].mesh.uniform_mesh(20, G[e4].geometry);
 	
 	std::string filename2 = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/testPTS.pts";
 	writer_pts<Graph2,3> W2(filename2);
