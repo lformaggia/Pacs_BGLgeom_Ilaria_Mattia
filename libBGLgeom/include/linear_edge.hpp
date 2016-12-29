@@ -26,7 +26,7 @@
 #include "point.hpp"
 #include "edge_geometry.hpp"
 #include "mesh.hpp"
-#include "domain.hpp"
+//#include "domain.hpp"
 
 namespace BGLgeom{
 
@@ -178,74 +178,17 @@ class linear_edge : public BGLgeom::edge_geometry<dim> {
 			return vect_double(t.size(),0.0);
 		}
 		
-			/*	
-		//! Getting the real points from the parametric mesh
-		vect_pts
-		evaluate_param_mesh(){
-			return this->operator()(this->p_mesh);
-		}
+		/*!
+			@brief	Overload of operator<<
+			@detail It only tells the coordinates of its extremes. May be useful for debugging
 		*/
-		
-		/*! 
- 			@brief Creating a uniform mesh on the edge
- 			@detail SRC and TGT are included in the mesh points
- 			@param n Number of intervals
- 			@return A pair containing: \n
- 					- first: the points of the mesh
- 					- second: the vector of the parameter's value used to generate
- 						the mesh
- 		*/
-		std::pair<vect_pts,vect_double>
-		uniform_mesh(unsigned int const& n) {
-			std::vector<double> parametric_mesh;
-			vect_pts real_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n);
-			parametric_mesh = temp_mesh.getMesh();
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);		
-			/*
-			unsigned int n_points = std::ceil(this->length()/h);
-			double h_abscissa = 1./n_points;
-			double s = 0;
-			vect_pts retval;
-			retval.push_back(SRC);
-			for(std::size_t i=0; i < n_points-1; ++i){	//n_points-1 per non includere già qui TGT
-				s += h_abscissa;
-				retval.emplace_back(point(this->operator()(s)));
-			}
-			retval.push_back(TGT);
-			return retval;
-			*/
-		}
-		
-		/*! 
- 			@brief Creating a non-uniform mesh on the edge
- 			@detail SRC and TGT are included in the mesh points
- 			@param n Maximum number of intervals
- 			@param spacing_function Spacing function
- 			@return A pair containing: \n
- 					- first: the points of the mesh
- 					- second: the vector of the parameter's value used to generate
- 						the mesh
- 		*/
-		std::pair<vect_pts,vect_double>
-		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
-			vect_pts real_mesh;
-			vect_double parametric_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n, spacing_function);
-			parametric_mesh = temp_mesh.getMesh();
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);
-		} 		
-		
-		//! Overload of operator<<
-		friend std::ostream & operator << (std::ostream & out, linear_edge<dim> & edge) {
-			out << "source: " << edge.SRC << ", target: " << edge.TGT;
+		friend std::ostream & operator<<(std::ostream & out, linear_edge<dim> const& edge) {
+			out << "(linear)\tSource: " << edge.SRC << ", Target: " << edge.TGT;
 			return out;
 		}
 			
 }; //linear_edge
 
-} //namespace
+} //BGLgeom
 
-#endif
+#endif	//HH_LINEAR_EDGE_HH

@@ -25,8 +25,8 @@
 #include "point.hpp"
 #include "adaptive_quadrature.hpp"
 #include <Eigen/Dense>
-#include "mesh.hpp"
-#include "domain.hpp"
+//#include "mesh.hpp"
+//#include "domain.hpp"
 
 //! The tolerance on being zero
 #define tol_dist 1e-8
@@ -233,79 +233,18 @@ class generic_edge {
 				C[i] = this->curvature(t[i]);
 			return C;
 		}
-		 
 		
-		 
-		/*! 
- 			@brief Creating a uniform mesh on the edge
- 			@detail SRC and TGT are included in the mesh points
- 			@param n Number of intervals
- 			@return A pair containing: \n
- 					- first: the points of the mesh
- 					- second: the vector of the parameter's value used to generate
- 						the mesh
- 		*/
- 		
-		std::pair<vect_pts,vect_double>
-		uniform_mesh(unsigned int const& n){
-		/*
-			vect_pts mesh;
-			//mesh.resize(n+1);
-			vect_double parametric_mesh;
-			//parametric_mesh.resize(n+1);
-			mesh.emplace_back(this->operator()(0));
-			parametric_mesh.emplace_back(0);
-			double h_abscissa = static_cast<double>(this->length()/n);
-			double u = 0;
-			double t_eval;
-			for(std::size_t i = 0; i < n-1; ++i){
-				u += h_abscissa;
-				t_eval = u/this->length();
-				//std::cout << "evaluation" << std::endl;
-				parametric_mesh.emplace_back(t_eval);
-				mesh.emplace_back(this->operator()(t_eval));
-			}
-			mesh.emplace_back(this->operator()(1));
-			parametric_mesh.emplace_back(1);
-			return std::make_pair(mesh,parametric_mesh);
-			*/
-			std::vector<double> parametric_mesh;
-			vect_pts real_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n);
-			parametric_mesh = temp_mesh.getMesh();	
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);
-			
-		}
-		
-		/*! 
- 			@brief Creating a non-uniform mesh on the edge
- 			@detail SRC and TGT are included in the mesh points
- 			@param n Maximum number of intervals
- 			@param spacing_function Spacing function
- 			@return A pair containing: \n
- 					- first: the points of the mesh
- 					- second: the vector of the parameter's value used to generate
- 						the mesh
- 		*/
-		std::pair<vect_pts,std::vector<double>>
-		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
-			vect_pts real_mesh;
-			vect_double parametric_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n, spacing_function);
-			parametric_mesh = temp_mesh.getMesh();
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);
-		}		
-		
-		//! Overload of operator<<
-		friend std::ostream & operator << (std::ostream & out, generic_edge<dim>& edge) {
-			out << "I'm a generic edge";
+		/*!
+			@brief	Overload of operator<<
+			@detail It only tells the coordinates of its extremes. May be useful for debugging
+		*/
+		friend std::ostream & operator<<(std::ostream & out, generic_edge<dim> const& edge) {
+			out << "(generic)\tSource: " << edge(0) << ", Target: " << edge(1);
 			return out;
 		}	
 
 }; //class
 
-} //namespace
+} //BGLgeom
 
-#endif
+#endif	//HH_GENERIC_EDGE_HH
