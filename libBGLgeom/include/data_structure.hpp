@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file data_structure.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Definition of some useful alias type and data structures 
+	@file	data_structure.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Definition of some useful alias type and data structures 
 			for properties of edges and vertices
 
 	@detail This file includes the definition of the minimal set of 

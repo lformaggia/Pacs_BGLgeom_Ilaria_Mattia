@@ -7,13 +7,13 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file reader_ASCII.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Base abstract class to read input file
+	@file	reader_ASCII.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Base abstract class to read input file
 
-	@detail This abstract class provides the user some methods and functionality
-			to read data form the input file and check errors.
+	@detail	This abstract class provides the user some methods and functionality
+			to read data form the input file
 */
 
 #ifndef HH_READER_ASCII_HH

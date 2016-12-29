@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file mesh.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief
+	@file	mesh.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	
 */
 
 #ifndef HH_MESH_HH

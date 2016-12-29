@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file linear_geometry.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Linear geometry for the edge
+	@file	linear_geometry.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Concrete class for a linear geometry on an edge
 	@detail 
 */
 

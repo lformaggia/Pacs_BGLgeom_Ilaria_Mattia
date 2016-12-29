@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,12 +7,12 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file writer_ASCII.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Base abstract class to write infos about the graph on tabular files.
+	@file	writer_ASCII.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Base abstract class to write infos about the graph on tabular files.
 
-	@detail This abstract class provides the user some methods and functionality
+	@detail	This abstract class provides the user some methods and functionality
 			to write data on file from the graph
 */
 #ifndef HH_WRITER_ASCII_HH

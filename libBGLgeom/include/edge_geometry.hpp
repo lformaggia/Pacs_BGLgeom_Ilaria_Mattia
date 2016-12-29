@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file edge_geometry.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Virtual base class for the geometry of an edge
+	@file	edge_geometry.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Virtual base class for the geometry of an edge
 	@detail 
 */
 

@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersections2D.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Nov, 2016
-	@brief Classes and functions to compute intersections between two linear edges
+	@file	intersections2D.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Nov, 2016
+	@brief	Classes and functions to compute intersections between two linear edges
 	
 	@detail We need to define some additional functionality for std::array just because
 			the storage type for the points in the library is an Eigen std::array<double,2>, while

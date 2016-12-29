@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersections2D_utilities.cpp
+	@file	intersections2D_utilities.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief More classes and function to handle intersections
+	@date	Sept, 2016
+	@brief	More classes and function to handle intersections
 	
 	@detail In this header can ben found some more specific utilities to handle
 			intersections between edges. In particular, we provide a function

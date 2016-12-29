@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file point.hpp
-	@author Ilaria Speranza and Mattia Tantardini
-	@date Sept, 2016
-	@brief Description of a point and utilities
+	@file	point.hpp
+	@author	Ilaria Speranza and Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Description of a point and utilities
 */
 
 #ifndef HH_POINT_HH

@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file mesh_generator.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief
+	@file	mesh_generator.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Utilities to generate a 1D mesh, that will be the parametric one
 */
 
 #ifndef HH_MESH_GENERATOR_HH

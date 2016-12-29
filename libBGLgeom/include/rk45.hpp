@@ -1,3 +1,19 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	rk45.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Sept, 2016
+	@brief	Definition of method to solve ODE systems
+	@detail Utilities which will be used when needed variable mesh size generation
+*/
+
 #ifndef HH_RK45INTEGRATOR_HH
 #define HH_RK45INTEGRATOR_HH
 

@@ -7,10 +7,10 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file generic_geometry.hpp
+	@file	generic_geometry.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Concrete class for a generic edge geometry 
+	@date	Sept, 2016
+	@brief	Concrete class for a generic edge geometry 
 	@detail
 */
 

@@ -7,14 +7,12 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file bspline_geometry.hpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Dec, 2016
-	@brief B-spline edge. 
-	@detail Given a vector of control points, this class implements a B-spline on the edge 
+	@file	bspline_geometry.hpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Dec, 2016
+	@brief	Definition of a B-spline geometry for an edge
+	@detail 
 */
-
-// AGGIUNGERE TRA GLI AUTORI DE FALCO?
 
 /* 
    Copyright (C) 2010-2016 Carlo de Falco
