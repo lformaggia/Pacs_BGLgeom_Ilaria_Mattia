@@ -31,8 +31,6 @@
 
 namespace BGLgeom{
 
-//! @defgroup "Helper function for pts output" @{
-
 //! Function to write a point in a pts file format
 template <unsigned int dim>
 void
@@ -42,25 +40,6 @@ write_point_pts(std::ostream & out, BGLgeom::point<dim> const& P){
 		out << std::fixed << std::setprecision(8) << P(0,i) << std::setw(16);
 	out << P(0,dim-1);
 }
-
-/*! 
-	@brief Function that outputs the mesh in a fashion that suites pts format
-	@detail We don't put in the output the first and the last point of the mesh,
-			which coincide with source and target. The infos about them can be 
-			recoverd through vertex properties
-*/
-/*
-template <unsigned int dim>
-void
-write_mesh_pts(std::ostream & out, BGLgeom::mesh<dim> const& M){
-	for(std::size_t i=1; i<M.size()-1; ++i){
-		out << std::setw(8);
-		BGLgeom::write_point_pts<dim>(out,M[i]);
-		out << std::setw(10) << "point" <<  std::endl;
-	}
-}
-*/
-//!@}
 
 
 /*!
