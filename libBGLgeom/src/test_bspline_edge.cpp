@@ -56,7 +56,7 @@ int main(){
 		std::cout << "\t" << t[i] << "\t: " << Eval[i] << std::endl;
 	std::cout << std::endl;
 	
-	std::cout << "First_ erivative:" << std::endl;
+	std::cout << "First derivative:" << std::endl;
 	std::vector<point<2>> F = B.first_der(t);
 	for(std::size_t i=0; i<t.size(); ++i)
 		std::cout << "\t" << t[i] << "\t: " << F[i] << std::endl;
