@@ -287,7 +287,16 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 			for(std::size_t i = 0; i < t.size(); ++i)
 				C[i] = this->curvature(t[i]);
 			return C;
-		}		
+		}
+		
+		/*!
+			@brief	Overload of operator<<
+			@detail It only tells the coordinates of its extremes. May be useful for debugging
+		*/
+		friend std::ostream & operator<<(std::ostream & out, bspline_edge<dim,deg> const& edge) {
+			out << "(bspline)\tSource: " << edge(0) << ", Target: " << edge(1);
+			return out;
+		}
 
 	private:
 		//! Number of control points
@@ -413,4 +422,4 @@ bspline_edge : public BGLgeom::edge_geometry<dim> {
 
 } //BGLgeom
 
-#endif
+#endif	//HH_BSPLINE_EDGE_HH
