@@ -2,6 +2,7 @@
 #include "point.hpp"
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
+#include "mesh.hpp"
 #include <functional>
 #include <cmath>
 #include <vector>
@@ -28,8 +29,8 @@ int main(){
 		return point<2>(0, 0);
   	};
   	
-	std::vector<point<2>> mesh1, mesh2, mesh3, first_der;
-	std::vector<double> param_mesh;
+//	std::vector<point<2>> mesh1, mesh2, mesh3, first_der;
+//	std::vector<double> param_mesh;
   	
   	std::cout << "----------- GENERIC_EDGE -----------------" << std::endl << std::endl;
   	std::cout << "Representing a straigth line in the plane with a generic_edge" << std::endl;
@@ -65,23 +66,27 @@ int main(){
 	std::cout << std::endl;
 	std::cout << "Computing a uniform mesh: " << std::endl;
 	std::cout << std::endl;
-	std::tie(mesh1,param_mesh) = edge.uniform_mesh(10);
-	for(std::size_t i = 0; i < mesh1.size(); ++i)
-		std::cout << mesh1[i] << std::endl;
+	mesh<2> M1;
+	M1.uniform_mesh(10, edge);
+//	std::tie(mesh1,param_mesh) = edge.uniform_mesh(10);
+	for(std::size_t i = 0; i < M1.real.size(); ++i)
+		std::cout << M1.real[i] << std::endl;
 	std::cout << std::endl;	
 	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
+	for(std::size_t i = 0; i < M1.parametric.size(); ++i)
+		std::cout << M1.parametric[i] << std::endl;
 	std::cout << std::endl;
 	
 	std::cout << "Now variable size mesh: " << std::endl;
-	std::tie(mesh2, param_mesh) = edge.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
-	for(std::size_t i = 0; i < mesh2.size(); ++i)
-		std::cout << mesh2[i] << std::endl;
+	mesh<2> M2;
+	M2.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); }, edge);
+//	std::tie(mesh2, param_mesh) = edge.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	for(std::size_t i = 0; i < M2.real.size(); ++i)
+		std::cout << M2.real[i] << std::endl;
 	std::cout << std::endl;
 	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
+	for(std::size_t i = 0; i < M2.parametric.size(); ++i)
+		std::cout << M2.parametric[i] << std::endl;
 	std::cout << std::endl;
 	
 	//===================== ANOTHER GENERIC EDGE =================================
@@ -122,18 +127,20 @@ int main(){
 	
 	std::cout << std::endl;
 	std::cout << "Computing a uniform mesh: " << std::endl;
-	param_mesh.clear();
-	std::tie(mesh3,param_mesh) = edge2.uniform_mesh(2);
-	for(std::size_t i = 0; i < mesh3.size(); ++i)
-		std::cout << mesh3[i] << std::endl;
+//	param_mesh.clear();
+//	std::tie(mesh3,param_mesh) = edge2.uniform_mesh(2);
+	mesh<2> M3;
+	M3.uniform_mesh(2, edge2);
+	for(std::size_t i = 0; i < M3.real.size(); ++i)
+		std::cout << M3.real[i] << std::endl;
 	std::cout << std::endl;	
 	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
+	for(std::size_t i = 0; i < M3.parametric.size(); ++i)
+		std::cout << M3.parametric[i] << std::endl;
 	std::cout << std::endl;
   	
   	// BUilding a simple Graph
-	std::cout << std::endl <<  "Creating a graph" << std::endl;
+	std::cout << std::endl << "Creating a graph with a generic edge" << std::endl;
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<generic_edge<3>,3> >;
 	Graph G;
 	

@@ -2,6 +2,7 @@
 #include "point.hpp"
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
+#include "mesh.hpp"
 #include <vector>
 #include <tuple>
 #include <cmath>
@@ -26,33 +27,38 @@ int main(){
 	std::cout << "\tt=1:   " << edge(1) << std::endl;	
 	
 	std::cout << "Computing a uniform mesh: " << std::endl;
-	std::vector<point<2>> mesh1, mesh2, first_der;
-	std::vector<double> param_mesh;
+	mesh<2> M;
+	M.uniform_mesh(10, edge);
+//	std::vector<point<2>> mesh1, mesh2, first_der;
+//	std::vector<double> param_mesh;
 	std::cout << std::endl;
-	std::tie(mesh1,param_mesh) = edge.uniform_mesh(10);
-	for(std::size_t i = 0; i < mesh1.size(); ++i)
-		std::cout << mesh1[i] << std::endl;
+//	std::tie(mesh1,param_mesh) = edge.uniform_mesh(10);
+	for(std::size_t i = 0; i < M.real.size(); ++i)
+		std::cout << M.real[i] << std::endl;
 	std::cout << std::endl;	
 	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
+	for(std::size_t i = 0; i < M.parametric.size(); ++i)
+		std::cout << M.parametric[i] << std::endl;
 	std::cout << std::endl;
 	
 	std::cout << "Evaluating first derivative in the parametric mesh" << std::endl;
-	first_der = edge.first_der(param_mesh);
+	std::vector<point<2>> first_der;
+	first_der = edge.first_der(M.parametric);
 	for(std::size_t i = 0; i < first_der.size(); ++i)
 		std::cout << first_der[i] << std::endl;
 	std::cout << std::endl;
 	
 	std::cout << "Now variable size mesh: " << std::endl;
-	param_mesh.clear();
-	std::tie(mesh2, param_mesh) = edge.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
-	for(std::size_t i = 0; i < mesh2.size(); ++i)
-		std::cout << mesh2[i] << std::endl;
+	mesh<2> var_M;
+	var_M.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.));}, edge);
+//	param_mesh.clear();
+//	std::tie(mesh2, param_mesh) = edge.variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	for(std::size_t i = 0; i < var_M.real.size(); ++i)
+		std::cout << var_M.real[i] << std::endl;
 	std::cout << std::endl;
 	std::cout << "The corresponding parametric mesh is: " << std::endl;
-	for(std::size_t i = 0; i < param_mesh.size(); ++i)
-		std::cout << param_mesh[i] << std::endl;
+	for(std::size_t i = 0; i < var_M.parametric.size(); ++i)
+		std::cout << var_M.parametric[i] << std::endl;
 	std::cout << std::endl;
 	
 	// BUilding a simple Graph
@@ -72,12 +78,13 @@ int main(){
 	d = add_vertex(G);	//boost
 	G[a].coordinates = A;
 	G[b].coordinates = B;
+	G[c].coordinates = C;
 	G[d].coordinates = D;
 	
 	Edge_desc<Graph> e1, e2, e3;
-	e1 = new_linear_edge(a, b, G);					//BGLgeom
-	e2 = new_linear_edge<Graph,3>(b, c, G, B, C);	//BGLgeom
-	e3 = add_edge(c, d, G).first;					//boost
+	e1 = new_linear_edge(a, b, G);	//BGLgeom
+	e2 = new_linear_edge(b, c, G);	//BGLgeom
+	e3 = add_edge(c, d, G).first;	//boost
 	G[e3].geometry.set_source(G[e2].geometry(1));
 	G[e3].geometry.set_target(G[d].coordinates);	
 	
