@@ -17,11 +17,10 @@
 #ifndef HH_EDGE_GEOMETRY_HH
 #define HH_EDGE_GEOMETRY_HH
 
-#include<vector>
+#include <vector>
 #include <functional>
-#include<Eigen/Dense>
-#include"point.hpp"
-#include "mesh.hpp"
+#include <Eigen/Dense>
+#include "point.hpp"
 #include "domain.hpp"
 
 namespace BGLgeom{
@@ -33,13 +32,12 @@ namespace BGLgeom{
 	@detail	It specifies all the geometric operation that should be carried
 			out on the edge, thougth as a curve in the space (2 or 3 dimensional).
 			It provide also evaluation of this characteristics for a single value
-			or for a vector of values of the parameter.
+			or for a vector of values of the parameter
 	@param dim The dimension of the space
 */
-template<unsigned int dim>
-class
-edge_geometry{
-using point = BGLgeom::point<dim>;
+template <unsigned int dim>
+class edge_geometry {
+	using point = BGLgeom::point<dim>;
 	using vect_pts = std::vector<point>;
 	using vect_double = std::vector<double>;
 

@@ -27,7 +27,6 @@
 #include "edge_geometry.hpp"
 #include "mesh.hpp"
 #include "domain.hpp"
-//#include "parametric_mesh_generator.hpp"
 
 namespace BGLgeom{
 
