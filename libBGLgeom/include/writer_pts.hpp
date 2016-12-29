@@ -72,9 +72,7 @@ class writer_pts{
 		}
 		
 		//! Destructor
-		virtual ~writer_pts(){
-			out_file.close();	//necessary? Really not
-		}
+		virtual ~writer_pts() {}
 		
 		//! Changing the filename to open a different ofstream
 		void set_filename(std::string const& _filename){
