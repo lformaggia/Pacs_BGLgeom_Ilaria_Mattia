@@ -19,6 +19,8 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <iostream>
+#include <cstdlib>
 #include "mesh_generators.hpp"
 #include "point.hpp"
 
@@ -69,6 +71,35 @@ struct mesh{
 	
 	//! Destructor
 	virtual ~mesh() = default;
+	
+	//! Clear both the container
+	void
+	clear(){
+		real.clear();
+		parametric.clear();
+	}
+	
+	/*!
+		@brief	Check if a mesh have already been computed and is present in the container
+		@detail	If only one of the two container is empty, it launches a message error and
+				stop the program, since this thing is not the desired behaviour of this
+				class. This may happen since the user has public access to the members, so
+				for some strange reason (or for error) he may clean only one of them, leaving
+				the other non-empty, and thus causing possible unexpected behaviour
+		@return	True if the containers are empty, false if not
+	*/
+	bool
+	empty(){
+		if(real.empty() && parametric.empty())
+			return true;
+		else{
+			if(real.empty() || parametric.empty()){
+				std::cerr << "BGLgeom::mesh::empty(): error, unexpected behaviuor!" << std::endl;
+				exit(EXIT_FAILURE);
+			}
+			return false;
+		}
+	}
 	
 	/*! 
 		@brief	Creates a uniform parametric mesh, and then evaluates it
