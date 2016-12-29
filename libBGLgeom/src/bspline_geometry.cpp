@@ -36,7 +36,7 @@
 #include <functional>
 #include <iostream>
 #include <cstdlib>
-#include "bspline_geoemtry.hpp"
+#include "bspline_geometry.hpp"
 
 using namespace BGLgeom;
 
