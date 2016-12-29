@@ -21,7 +21,6 @@
 #include <functional>
 #include <Eigen/Dense>
 #include "point.hpp"
-#include "domain.hpp"
 
 namespace BGLgeom{
 
@@ -107,30 +106,6 @@ class edge_geometry {
 		//! The same as before, but with evaluation on a vector of parameters
 		virtual std::vector<double>
 		curvature (std::vector<double> const&) const = 0;
-		
-		/*
-		virtual
-		std::pair<vect_pts,std::vector<double>>
-		uniform_mesh(unsigned int const& n) {
-			std::vector<double> parametric_mesh;
-			vect_pts real_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n);
-			parametric_mesh = temp_mesh.getMesh();
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);
-		}
-		
-		virtual
-		std::pair<vect_pts,std::vector<double>>
-		variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
-			vect_pts real_mesh;
-			vect_double parametric_mesh;
-			BGLgeom::Mesh1D temp_mesh(BGLgeom::Domain1D(0,1), n, spacing_function);
-			parametric_mesh = temp_mesh.getMesh();
-			real_mesh = this->operator()(parametric_mesh);
-			return std::make_pair(real_mesh, parametric_mesh);
-		}
-		*/
 }; //edge_geometry
 
 } //namespace
