@@ -77,8 +77,7 @@
 #include "point.hpp"
 #include "boundary_conditions.hpp"
 #include "edge_geometry.hpp"
-#include "linear_edge.hpp" //(for the default Graph type)
-#include "mesh_structure.hpp"
+#include "mesh.hpp"
 
 namespace BGLgeom{
 
@@ -138,22 +137,22 @@ struct Vertex_base_property{
 	//! Constructor with only the coordinates
 	Vertex_base_property(point_t const& _coordinates) : coordinates(_coordinates),
 														BC(),
-														index(0),
-														label() {};
+														label(),
+														index(0) {};
 	
 	//! Constructor with coordinates and index
 	Vertex_base_property(point_t const& _coordinates,
 						 unsigned int const& _index) : 	coordinates(_coordinates),
 														BC(),
-						 								index(_index),
-						 								label() {};
+						 								label(),
+						 								index(_index) {};
 						 								
 	//! Constructor with coordinates and label
 	Vertex_base_property(point_t const& _coordinates,
 						 std::string const& _label) :	coordinates(_coordinates),
-														BC(),						 						
-								 						index(0),
-								 						label(_label) {};
+														BC(),
+														label(_label),					 						
+								 						index(0) {};
 						 						
 	//! Constructor with coordinates and BC
 	Vertex_base_property(point_t const& _coordinates,
@@ -199,14 +198,14 @@ struct Vertex_base_property{
 	@brief Minimal data structure for the edge geometrical properties in "static" version
 	@detail	The type of the geometry of the edge is choose as template parameter
 	
-	@param Geom_t Type of the geometry it is wanted for the edge
+	@param Geom Type of the geometry it is wanted for the edge
+	@param dim The dimension of the space
 */
-template <typename Geom_t, unsigned int dim>
+template <typename Geom, unsigned int dim>
 struct Edge_base_property_static{
-	//!Definition of some types which may be useful to see outside the struct
-	using geom_t = Geom_t;
+	//! Definition of some types which may be useful to see outside the struct
+	using geom_t = Geom;
 	using mesh_t = typename BGLgeom::mesh<dim>;
-	using parametric_mesh_t = typename std::vector<double>;
 
 	//! The class handling the parameterization of the edge
 	geom_t geometry;
@@ -215,7 +214,7 @@ struct Edge_base_property_static{
 		@detail - first: mesh points \n
 				- second: the values of the parameter from which the mesh was generated
 	*/
-	std::pair<mesh_t, parametric_mesh_t> mesh;
+	mesh_t mesh;
 	//! A label for the vertex (if needed)
 	std::string label;
 	//! An index for the vertex (if the user wants to keep track of the edge)
@@ -242,8 +241,7 @@ struct Edge_base_property_static{
 								 unsigned int const& _index) :	geometry(),
 								 								mesh(),
 								 								label(_label),
-								 								index(_index)							 								
-								 								{};
+								 								index(_index) {};
 	
 	//! Copy constructor
 	Edge_base_property_static(Edge_base_property_static const&) = default;
@@ -273,7 +271,7 @@ struct Edge_base_property_dynamic{
 	//! The pointer to the base class
 	std::unique_ptr<BGLgeom::edge_geometry<dim>> geometry;
 	//! The container for the mesh
-	mesh_t mesh;
+	//mesh_t mesh;
 	
 	//! Default constructor
 	Edge_base_property_dynamic()  {};

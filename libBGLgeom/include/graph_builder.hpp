@@ -71,19 +71,17 @@ new_vertex(Graph & G){
 }	//new_vertex
 
 
-template <typename Graph, typename Vertex_data_structure>
+template <typename Graph, typename Vertex_prop>
 BGLgeom::Vertex_desc<Graph>
-new_vertex(Vertex_data_structure const& v_data,
+new_vertex(Vertex_prop const& v_prop,
 		   Graph & G, 
 		   const bool check_unique = false,
 		   const double tol = 20*std::numeric_limits<double>::epsilon()){
 	
-	if(check_unique){
-		const double dist = 0.0;
-	
+	if(check_unique){	
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
-			if((v_data.coordinates - G[*v_it].coordinates).norm() < tol){
+			if((v_prop.coordinates - G[*v_it].coordinates).norm() < tol){
 				std::cout<<"Vertex already existing"<<std::endl;	
 				return *v_it;
 			}
@@ -91,7 +89,7 @@ new_vertex(Vertex_data_structure const& v_data,
 	}
 	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
 	std::cout<<"New vertex created"<<std::endl;
-	return boost::add_vertex(v_data,G);	
+	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
 
 
@@ -151,7 +149,7 @@ new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
 	@param G The graph
 	@return The edge descriptor of the new edge
 */
-template <typename Graph, typename Edge_prop>
+template <typename Graph>
 BGLgeom::Edge_desc<Graph>
 new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 				 BGLgeom::Vertex_desc<Graph> const& tgt,

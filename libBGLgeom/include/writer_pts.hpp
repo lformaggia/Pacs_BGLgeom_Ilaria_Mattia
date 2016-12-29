@@ -27,7 +27,7 @@
 
 #include "data_structure.hpp"
 #include "point.hpp"
-#include "mesh_structure.hpp"
+#include "mesh.hpp"
 
 namespace BGLgeom{
 
@@ -49,6 +49,7 @@ write_point_pts(std::ostream & out, BGLgeom::point<dim> const& P){
 			which coincide with source and target. The infos about them can be 
 			recoverd through vertex properties
 */
+/*
 template <unsigned int dim>
 void
 write_mesh_pts(std::ostream & out, BGLgeom::mesh<dim> const& M){
@@ -58,6 +59,7 @@ write_mesh_pts(std::ostream & out, BGLgeom::mesh<dim> const& M){
 		out << std::setw(10) << "point" <<  std::endl;
 	}
 }
+*/
 //!@}
 
 
@@ -196,9 +198,9 @@ class writer_pts{
 			write_point_pts<dim>(out_file, G[tgt].coordinates);
 			out_file << std::setw(8) << "end" << std::endl;
 			// Writing the mesh (without source and target)
-			for(std::size_t i = 1; i < G[e].mesh.first.size()-1; ++i){
+			for(std::size_t i = 1; i < G[e].mesh.real.size()-1; ++i){
 				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
-				write_point_pts<dim>(out_file, G[e].mesh.first[i]);
+				write_point_pts<dim>(out_file, G[e].mesh.real[i]);
 				out_file << std::setw(10) << "point" << std::endl;
 			}
 			out_file << "END_ARC" << std::endl;
@@ -218,11 +220,11 @@ class writer_pts{
 		export_info(Graph const& G,
 					BGLgeom::Edge_desc<Graph> const& e){
 			out_file << "BEGIN_ARC" << std::endl;
-			for(std::size_t i = 0; i < G[e].mesh.second.size(); ++i){
+			for(std::size_t i = 0; i < G[e].mesh.parametric.size(); ++i){
 				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
-				write_point_pts<dim>(out_file, G[e].geometry.first_der( G[e].mesh.second[i] ));
-				write_point_pts<dim>(out_file, G[e].geometry.second_der( G[e].mesh.second[i] ));
-				out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature( G[e].mesh.second[i] );
+				write_point_pts<dim>(out_file, G[e].geometry.first_der( G[e].mesh.parametric[i] ));
+				write_point_pts<dim>(out_file, G[e].geometry.second_der( G[e].mesh.parametric[i] ));
+				out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature( G[e].mesh.parametric[i] );
 				out_file << std::endl;
 			}
 			out_file << "END_ARC" << std::endl;		
