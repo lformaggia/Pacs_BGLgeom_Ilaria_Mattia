@@ -9,7 +9,7 @@
 namespace BGLgeom{
 
 using point2 = BGLgeom::point<2>;
-using line = BGLgeom::linear_edge<2>;
+using line = BGLgeom::linear_geometry<2>;
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Fracture::Vertex_prop , Fracture::Edge_prop>;
 using Edge_it = BGLgeom::Edge_iter<Graph>;

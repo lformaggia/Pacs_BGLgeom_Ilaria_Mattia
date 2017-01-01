@@ -71,9 +71,9 @@ new_vertex(Graph & G){
 }	//new_vertex
 
 
-template <typename Graph, typename Vertex_prop>
+template <typename Graph, unsigned int dim>
 BGLgeom::Vertex_desc<Graph>
-new_vertex(Vertex_prop const& v_prop,
+new_vertex(BGLgeom::Vertex_base_property<dim> const& v_prop,
 		   Graph & G, 
 		   const bool check_unique = false,
 		   const double tol = 20*std::numeric_limits<double>::epsilon()){
@@ -82,6 +82,30 @@ new_vertex(Vertex_prop const& v_prop,
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
 			if((v_prop.coordinates - G[*v_it].coordinates).norm() < tol){
+				std::cout<<"Vertex already existing"<<std::endl;	
+				return *v_it;
+			}
+		}
+	}
+	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
+	std::cout<<"New vertex created"<<std::endl;
+	return boost::add_vertex(v_prop,G);	
+}	//new_vertex
+
+
+template <typename Graph, unsigned int dim>
+BGLgeom::Vertex_desc<Graph>
+new_vertex(BGLgeom::point<dim> const& P,
+		   Graph & G, 
+		   const bool check_unique = false,
+		   const double tol = 20*std::numeric_limits<double>::epsilon()){
+	
+	BGLgeom::Vertex_base_property<dim> v_prop(P);
+	
+	if(check_unique){	
+		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
+		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
+			if((P - G[*v_it].coordinates).norm() < tol){
 				std::cout<<"Vertex already existing"<<std::endl;	
 				return *v_it;
 			}
@@ -226,8 +250,8 @@ template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
-					 Graph & G,
-					 std::vector<BGLgeom::point<dim>> const& C){
+					 std::vector<BGLgeom::point<dim>> const& C,
+					 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
@@ -260,9 +284,9 @@ template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
-					 Graph & G,
 					 std::vector<BGLgeom::point<dim>> const& C,
-					 std::vector<double> const& k){
+					 std::vector<double> const& k,
+					 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);

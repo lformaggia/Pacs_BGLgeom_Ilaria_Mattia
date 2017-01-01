@@ -97,7 +97,7 @@ class writer_vtk{
 			  if(filename.substr(filename.length()-3, 3) != "vtp")
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
 				
-			  std::string vertex_string("_vertices");
+			  std::string vertex_string("_vertices.vtp");
 			  std::string filename_vertices(filename);
 			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
 			
@@ -121,18 +121,15 @@ class writer_vtk{
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
 			  
 			  // Naming the output file for colored vertices
-			  std::string vertex_string("_vertices");
-			  std::string filename_vertices(_filename);
-			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
+			  std::string vertex_string("_vertices.vtp");
+			  std::string filename_vertices(_filename.begin(),_filename.end()-4);
+			  std::cout<<filename_vertices.c_str()<<std::endl;		  
+			  filename_vertices.append(vertex_string);
 			  
 			  std::cout<<filename_vertices.c_str()<<std::endl;
 			
   			  writer_vertices = PolyDataWriter_ptr::New();			  
-			  //writer_vertices -> SetFileName(filename_vertices.c_str());
-			  
-			  writer_vertices -> SetFileName("G1_v.vtp");		  
-			  
-//			  std::cout<<"Main name: "<<_filename<<". Vertex name: "<<filename_vertices<<std::endl;
+			  writer_vertices -> SetFileName(filename_vertices.c_str());	  
 		}
 		
 		/*

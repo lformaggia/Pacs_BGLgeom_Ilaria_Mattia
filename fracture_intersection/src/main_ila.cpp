@@ -160,7 +160,7 @@ int main(){
 	std::cout << "________________ FINAL COUNT ________________"<<std::endl;
 	std::cout<<count_vertices<<" vertices and " <<count_edges<<" edges"<<std::endl;
 	
-	std::string filename("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/G1.vtp");
+	std::string filename("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/fracture_intersection/data/G1.vtp");
 	
 	writer_vtk<Graph,2> W1(filename.c_str());
 	W1.export_vtp(G);

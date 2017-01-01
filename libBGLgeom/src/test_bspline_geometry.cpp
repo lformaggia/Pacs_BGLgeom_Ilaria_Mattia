@@ -123,7 +123,7 @@ int main(){
 	src = add_vertex(G);
 	tgt = add_vertex(G);
 	Edge_desc<Graph> e;
-	e = new_bspline_edge<Graph,3>(src, tgt, G, CPs);
+	e = new_bspline_edge<Graph,3>(src, tgt, CPs, G);
 	
 	std::cout << "\tt=0   : " << G[e].geometry(0) << std::endl;
 	std::cout << "\tt=0.34: " << G[e].geometry.second_der(0.34) << std::endl;
