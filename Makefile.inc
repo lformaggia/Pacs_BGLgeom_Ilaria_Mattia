@@ -44,7 +44,7 @@ CXX=g++
 # Example: -DNDEBUG disactivates asserts
 # DEFINES=
 
-WARNS = -Wall
+WARNS = -Wall -Wno-deprecated
 
 # Level of optimization
 # Mettere la parte corrispondente dell'esempio del corso se voglio essere più "standard", direi
