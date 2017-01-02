@@ -15,7 +15,7 @@
 
 #include "data_structure.hpp"
 #include "linear_geometry.hpp"
-#include "writer_vtk.hpp"
+#include "writer_vtp.hpp"
 
 using namespace boost;
 using namespace BGLgeom;

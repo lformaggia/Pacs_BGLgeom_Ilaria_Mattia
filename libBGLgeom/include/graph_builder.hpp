@@ -71,9 +71,9 @@ new_vertex(Graph & G){
 }	//new_vertex
 
 
-template <typename Graph, unsigned int dim>
+template <typename Graph, typename Vertex_prop>
 BGLgeom::Vertex_desc<Graph>
-new_vertex(BGLgeom::Vertex_base_property<dim> const& v_prop,
+new_vertex(Vertex_prop const& v_prop,
 		   Graph & G, 
 		   const bool check_unique = false,
 		   const double tol = 20*std::numeric_limits<double>::epsilon()){

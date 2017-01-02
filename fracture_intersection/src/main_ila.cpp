@@ -25,7 +25,7 @@
 #include "reader_fractures_twolines.hpp"
 #include "graph_builder.hpp"
 #include "helper_functions.hpp"
-#include "writer_vtk.hpp"
+#include "writer_vtp.hpp"
 
 using namespace boost;
 using namespace BGLgeom;

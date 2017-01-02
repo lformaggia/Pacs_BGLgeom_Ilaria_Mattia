@@ -1,7 +1,7 @@
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
 #include "writer_pts.hpp"
-#include "writer_vtk.hpp"
+#include "writer_vtp.hpp"
 #include <boost/graph/adjacency_list.hpp>
 #include <iostream>
 
@@ -22,17 +22,14 @@ int main(){
 	point<2> C(15,5);
 	
 	Vertex_desc<Graph> a, b, c;
-/*
+
 	Vertex_base_property<2> AA(A);
 	Vertex_base_property<2> BB(B);
 	Vertex_base_property<2> CC(C);
 	a = new_vertex(AA,G);
 	b = new_vertex(BB,G);
 	c = new_vertex(CC,G);
-*/
-	a = new_vertex<Graph,2>(A,G);
-	b = new_vertex<Graph,2>(B,G);
-	c = new_vertex<Graph,2>(C,G);
+
 		
 	Edge_desc<Graph> e1, e2;
 	e1 = new_linear_edge(a, b, G);
@@ -80,7 +77,7 @@ int main(){
 	e3 = new_bspline_edge<Graph3D,3>(d, e, CPs1, G1);
 	e4 = new_bspline_edge<Graph3D,3>(d, f, CPs2, G1);
 	
-	G1[e3].mesh.uniform_mesh(10, G1[e3].geometry);
+	G1[e3].mesh.uniform_mesh(10, G1[e3].geometry); // G1[e3].make_uniform_mesh(10);
 	G1[e4].mesh.uniform_mesh(1000, G1[e4].geometry );
 	
 	std::string filename1("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test_mesh3D_bspline.vtp");
