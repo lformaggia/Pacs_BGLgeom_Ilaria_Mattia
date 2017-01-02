@@ -28,21 +28,27 @@ all: library test install doc clean
 library: static dynamic
 
 static: $(LIB_OBJS_STATIC)
+	@echo "--- Building of object files completed ---"
+	@echo " "
 	@echo "--- Building static library ---"
+	@mkdir -p $(TARGET_DIR)
 	ar -r -s $(STATIC_LIB) $(LIB_OBJS_STATIC)
 	ranlib $(STATIC_LIB)
 	
 dynamic: CXXFLAGS += -fPIC
 dynamic: $(LIB_OBJS_DYNAMIC)
+	@echo "--- Building of object files completed ---"
+	@echo " "
 	@echo "--- Building dynamic library ---"
+	@mkdir -p $(TARGET_DIR)
 	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
 	
 alltest: $(TEST_EXEC)
 	
-$(LIB_OBJS_STATIC) $(LIB_OBJS_DYNAMIC) $(TEST_EXEC): | $(DIR_TO_BE_CREATED)
+#$(LIB_OBJS_STATIC) $(LIB_OBJS_DYNAMIC) $(TEST_EXEC): | $(DIR_TO_BE_CREATED)
 
-$(DIR_TO_BE_CREATED):
-	@mkdir -p $(DIR_TO_BE_CREATED)
+#$(DIR_TO_BE_CREATED):
+#	@mkdir -p $(DIR_TO_BE_CREATED)
 
 $(BUILD_DIR_STATIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	@echo "--- Building static objects ---"
@@ -56,6 +62,7 @@ $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking objects to executables ---"
+	@mkdir -p $(TEST_DIR)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< $(LIB_OBJS_STATIC) -o $@
 
 $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
@@ -63,13 +70,14 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR_TEST)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -c $< -o $@
 
-
 install:
-	mkdir -p $(INSTALL_PATH)/include/BGLgeom
+	@mkdir -p $(INSTALL_PATH)/include/BGLgeom
 	cp $(HEADERS) $(INSTALL_PATH)/include/BGLgeom
 
 doc:
+	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
+	pdflatex $(DOC_DIR)/latex/refman.pdf
 
 clean:
 	-rm -rv $(BUILD_DIR)
