@@ -23,13 +23,22 @@
 #include <fstream>
 #include <cstdlib>
 #include <initializer_list>
-#include <tuple>
+#include "data_structure.hpp"
+
+/* Not used here, but the user may need to use boost::source or boost::target,
+so in this way he doesn't have to remember to put the header when he derives
+the writer */
 #include <boost/graph/adjacency_list.hpp>
 
-namespace geograph{
+namespace BGLgeom{
 
 /*!
-	@brief Class handling output operations for a tabular type file
+	@brief	Class handling output operations for a tabular type file
+	@detail	The user is asked to derived its own writer class from this abstract
+			one and to define its own "write_data" method as he wants. This allows
+			him to choose the format that suites the best for him, and to choose
+			which properties (only him knows which they are, if the are not the
+			base ones provided by this library!) to write in the output file
 */
 template <typename Graph>
 class writer_ASCII{
@@ -47,82 +56,57 @@ class writer_ASCII{
 		//! Destructor
 		virtual ~writer_ASCII(){};
 		
-		//Ha senso?
-		//! Copy constructor
-		
-		//Ha senso?
-		//! Assignment operator
-		
 		//! Set the output file
 		virtual void set_output(std::string _filename){
-			out_file.close();	//I close the previous file I opened in the constructor
+			out_file.close();
 			try{
-				out_file.open(filename);
+				out_file.open(_filename);
 			} catch(std::exception & e) {
 				std::cerr << "Error while opening input file. In particular: " << e.what() << std::endl;
 				exit(EXIT_FAILURE);
 			}
 		}
 		
+		//! Closing current file
+		virtual void close(){
+			out_file.close();
+		}
+		
 		/*!
 			@brief It writes headers of columns
-			@detail Implemented using initializer_list, so it can accept any number of arguments
+			@detail Implemented using initializer_list, so it can accept any number of arguments.
+					it puts a tab as a separator of the different columns
 		*/
 		virtual void put_headers(std::initializer_list<std::string> args){
-			typename std::initializer_list<string>::iterator init_list_it, init_list_end;
+			typename std::initializer_list<std::string>::iterator init_list_it, init_list_end;
 			init_list_it = args.begin();
 			init_list_end = args.end();
 			for( ; init_list_it != init_list_end; ++init_list_it){
-				out_file << *init_list_it; //<< "\t";
-				if(init_list_it != init_list_end)	//per non mettere uno spazio in fondo. Da migliorare con counter
-					out_file << " ";
+				out_file << *init_list_it << "\t";
+				if(init_list_it != init_list_end)
+					out_file << "\t";
 			}
 			out_file << std::endl;
 		}
 		
 		/*!
-			@brief It writes a line of data
+			@brief	It writes data
+			@detail	Abstract method. The user has to define how to write the data contained
+					in the graph
+			@note	The method asks for an edge descriptor: the user can recover the information
+					about source and target by using the function boost::source(e,G) and
+					boost::target(e,G) of the BGL, and then accessing the vertex properties
+					through the vertex descriptor just obtained
+					
+			@param G The graph
+			@param e The edge descriptor of the edge whose information will be written on the file
+			
 		*/
-		virtual void write_line(Graph const& G, typename boost::graph_traits<Graph>::edge_descriptor const& e){
-			typename boost::graph_traits<Graph>::vertex_descriptor src, tgt;
-			src = boost::source(*e_it, G);
-			tgt = boost::target(*e_it, G);
-			out_file << G[src] << " " << G[tgt] << " " << G[*e_it] << std::endl;
-		}
-		
-		/*!
-			@brief It writes all data from the edge and vertex properties
-			@detail It writes all properties of the graph, one line for each edge, 
-					giving vertex properties as source and target properties of
-					that edge
-			@pre All properties must have an overload of the output operator in which
-					all data concerning the property are displayed in one line, according
-					to some known and predefined order
-		*/
-		//Ha senso?(Se ci sono output strani delle cose base è un casino, o vuol dire che devo preimpostare tutto in quest'ottica). Come si fa? 
-		virtual void write_properties(Graph const& G){
-			//gestire gli header direttamente da qui, o in data_structure?
-			typename boost::graph_traits<Graph>::edge_iterator e_it, e_end;
-			typename boost::graph_traits<Graph>::vertex_descriptor src, tgt;
-			unsigned int n = num_edges(G);
-			unsigned int i = 0;
-			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-				++i;
-				src = boost::source(*e_it, G);
-				tgt = boost::target(*e_it, G);
-				// We print, for each edge: properties of source, properties of target, properties of the edge
-				out_file << G[src] << " " << G[tgt] << " " << G[*e_it];
-				if(i != n)
-					out_file << std::endl;
-			}	//for
-		};	
+		virtual void write_data(BGLgeom::Edge_desc<Graph> const& e, Graph const& G) = 0;
 		
 	protected:
-		// The name of the output file
-		//std::string filename;	//Non serve a niente avere il filename dentro in realtà, gli si può passare sempre diretto così sono anche sicuro che apro sempre e che ha un nome.
 		//! The stream associated to the output file
 		std::ofstream out_file;
-
 };	//writer_ASCII
 
 }	//BGLgeom
