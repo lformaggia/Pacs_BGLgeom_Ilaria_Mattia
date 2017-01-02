@@ -42,6 +42,6 @@ int main(int, char *[]){
 	G[e].geometry.set_target(G[c].coordinates);		
 	
 	std::string filename("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out.vtp");
-	writer_vtk<Graph,3> W(filename.c_str());
+	writer_vtp<Graph,3> W(filename.c_str());
 	W.export_vtp(G);
 }

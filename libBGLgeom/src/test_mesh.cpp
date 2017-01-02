@@ -81,7 +81,7 @@ int main(){
 	G1[e4].mesh.uniform_mesh(1000, G1[e4].geometry );
 	
 	std::string filename1("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test_mesh3D_bspline.vtp");
-	writer_vtk<Graph3D,3> W1(filename1);
+	writer_vtp<Graph3D,3> W1(filename1);
 	W1.export_vtp(G1);
 		
 	return 0;
