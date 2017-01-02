@@ -7,7 +7,7 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	writer_vtk.hpp
+	@file	writer_vtp.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
 	@date	Sept, 2016
 	@brief	Base class to write a .vtp file
@@ -15,8 +15,8 @@
 	@detail
 */
 
-#ifndef HH_WRITER_VTK_HH
-#define HH_WRITER_VTK_HH
+#ifndef HH_WRITER_VTP_HH
+#define HH_WRITER_VTP_HH
 
 #include <string>
 #include <boost/graph/adjacency_list.hpp>
@@ -76,12 +76,12 @@ inline void insert_point<3>(double const* P, Points_ptr & points){
 	@param dim The dimension of the space
 */
 template <typename Graph, unsigned int dim>
-class writer_vtk{
+class writer_vtp{
 	
 	public:
 	
 		//! Default constructor 
-		writer_vtk() {
+		writer_vtp() {
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
   			  writer_vertices = PolyDataWriter_ptr::New();
@@ -106,7 +106,7 @@ class writer_vtk{
 		
 		
 		//! Constructor with filename
-		writer_vtk(std::string _filename) {
+		writer_vtp(std::string _filename) {
 			  std::cout<<"____________________ Writing vtk output...  ____________________"<<std::endl;
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();

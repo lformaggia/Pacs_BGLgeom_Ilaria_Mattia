@@ -10,7 +10,7 @@
 /*!
 	@file main_Formaggia.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Dec, 2016
 	@brief Source code for fractures application
 	@datail
 */
@@ -25,7 +25,7 @@
 #include "reader_fractures_twolines.hpp"
 #include "graph_builder.hpp"
 #include "helper_functions.hpp"
-#include "writer_vtk.hpp"
+#include "writer_vtp.hpp"
 
 using namespace boost;
 using namespace BGLgeom;
