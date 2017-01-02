@@ -10,7 +10,7 @@
 /*!
 	@file main_Formaggia.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Dec, 2016
 	@brief Source code for fractures application
 	@datail
 */
