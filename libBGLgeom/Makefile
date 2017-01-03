@@ -63,13 +63,13 @@ alltest: $(TEST_EXEC)
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking object to executable ---"
 	@mkdir -p $(TEST_DIR)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -L$(TARGET_DIR) -l$(LIBNAME) $< $(LIB_OBJS_STATIC) -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@ $(LDLIBS)
 
 $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 	@echo " "
 	@echo "--- Building test object ---"
 	@mkdir -p $(BUILD_DIR_TEST)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@ $(LDLIBS)
 
 
 install:

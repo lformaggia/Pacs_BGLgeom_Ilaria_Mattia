@@ -16,8 +16,7 @@ BUILD_DIR_TEST    = $(BUILD_DIR)/test
 LIBNAME = BGLgeom
 DYNAMIC_LIBFILE = lib$(LIBNAME).so
 STATIC_LIBFILE  = lib$(LIBNAME).a
-#LIBRARIES += -L$(TARGET_DIR) -l$(LIBNAME)
-#LDLIBS += $(LIBRARIES)
+LDLIBS += -L$(TARGET_DIR) -l$(LIBNAME)
 
 
 # Including headers of BGLgeom librabry to compile 
@@ -43,6 +42,4 @@ HEADERS = $(wildcard $(INCLUDE_DIR)/*.hpp)
 LIBS = $(wildcard $(TARGET_DIR)/*)		#used in make distclean
 DYNAMIC_LIB = $(TARGET_DIR)/$(DYNAMIC_LIBFILE)
 STATIC_LIB  = $(TARGET_DIR)/$(STATIC_LIBFILE)
-
-
 

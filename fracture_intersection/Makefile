@@ -35,7 +35,7 @@ exec: $(EXEC)
 
 $(TARGET_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(TARGET_DIR)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDLIBS) $< -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@ $(LDLIBS)
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR)

@@ -21,9 +21,6 @@ export mkVtkInc = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/inclu
 EIGEN_INC_DIR = $(mkEigenInc)
 VTK_INC_DIR   = $(mkVtkInc)
 VTK_LIB_DIR   = $(mkVtkLib)
-#MUPARSER_INC_DIR=$(mkMuParserInc)
-#MUPARSER_LIB_DIR=$(mkMuParserLib)
-#NURBS ?
 
 #Parsing vtk libraries. In the modules are present also libraries for Python. We filter them out
 VTK_LIBS1 = $(wildcard $(VTK_LIB_DIR)/libvtk*.so.5.10.1) #collecting all libraries
@@ -31,6 +28,8 @@ VTK_LIBS2 = $(notdir $(VTK_LIBS1))
 VTK_LIBS3 = $(basename $(basename $(basename $(basename $(VTK_LIBS2))))) #Discarding .so.5.10.1
 VTK_LIBS4 = $(foreach lib, $(VTK_LIBS3), $(if $(findstring Python, $(lib)),,$(lib)))
 VTK_LIBS  = $(VTK_LIBS4:lib%=%)
+#Libraries needed to the linker
+LDLIBS = -L$(VTK_LIB_DIR) $(foreach lib, $(VTK_LIBS), -l$(lib))
 
 OTHER_INC_DIR=
 OTHER_LIB_DIR=
@@ -60,8 +59,6 @@ ALL_INC_DIR= $(OTHER_INC_DIR) $(EIGEN_INC_DIR) $(VTK_INC_DIR)
 includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc) )
 # E ora creo una variabile che mi permette di chiamarle tutte insieme
 INCLUDES += -I. -I./include $(includes)
-#Libraries needed to the linker
-LDLIBS = -L$(VTK_LIB_DIR) $(foreach lib, $(VTK_LIBS), -l$(lib))
 
 export CPPFLAGS = $(INCLUDES)
 export CXXFLAGS = $(STDFLAG) $(WARNS) $(OPT)
