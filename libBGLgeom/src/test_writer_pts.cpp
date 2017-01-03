@@ -18,9 +18,9 @@ int main(){
 	Graph G;
 	
 	Vertex_desc<Graph> a,b,c;
-	a = add_vertex(G);
-	b = add_vertex(G);
-	c = add_vertex(G);
+	a = add_vertex(G);	//boost
+	b = add_vertex(G);	//boost
+	c = add_vertex(G);	//boost
 	G[a].coordinates = point<3>(0,1,2);
 	G[b].coordinates = point<3>(2,3,5);
 	G[c].coordinates = point<3>(3,1,6);
@@ -34,9 +34,11 @@ int main(){
 	G[c].BC[1].value = 3.5;
 	
 	Edge_desc<Graph> e1,e2;
-	e1 = add_edge(a,b,G).first;
-	e2 = add_edge(b,c,G).first;
+	e1 = add_edge(a,b,G).first;	//boost
+	e2 = add_edge(b,c,G).first;	//boost
 	
+	G[e1].index = 1;
+	G[e2].index = 2;	
 	G[e1].geometry.set_source(G[a].coordinates);
 	G[e1].geometry.set_target(G[b].coordinates);
 	G[e2].geometry.set_source(G[b].coordinates);
@@ -46,7 +48,7 @@ int main(){
 	G[e1].mesh.uniform_mesh(20, G[e1].geometry);	
 	G[e2].mesh.uniform_mesh(20, G[e2].geometry);
 	
-	std::string filename1 = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/testPTS2bc.pts";
+	std::string filename1 = "../data/testPTS2bc.pts";
 	writer_pts<Graph,3,2> W(filename1);
 	W.export_pts(G);
 	
@@ -56,9 +58,9 @@ int main(){
 	Graph2 G2;
 	
 	Vertex_desc<Graph2> d,e,f;
-	d = add_vertex(G2);
-	e = add_vertex(G2);
-	f = add_vertex(G2);
+	d = add_vertex(G2);	//boost
+	e = add_vertex(G2);	//boost
+	f = add_vertex(G2);	//boost
 	G2[d].coordinates = point<3>(0,1,2);
 	G2[e].coordinates = point<3>(2,3,5);
 	G2[f].coordinates = point<3>(3,1,6);
@@ -68,8 +70,8 @@ int main(){
 	G2[f].BC[0].value = 4.5;
 	
 	Edge_desc<Graph2> e3,e4;
-	e3 = add_edge(d,e,G2).first;
-	e4 = add_edge(e,f,G2).first;
+	e3 = add_edge(d,e,G2).first;	//boost
+	e4 = add_edge(e,f,G2).first;	//boost
 	
 	G2[e3].geometry.set_source(G2[d].coordinates);
 	G2[e3].geometry.set_target(G2[e].coordinates);
@@ -82,7 +84,7 @@ int main(){
 	G2[e3].mesh.uniform_mesh(20, G[e3].geometry);	
 	G2[e4].mesh.uniform_mesh(20, G[e4].geometry);
 	
-	std::string filename2 = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/testPTS.pts";
+	std::string filename2 = "../data/testPTS.pts";
 	writer_pts<Graph2,3> W2(filename2);
 	W2.export_pts(G2,true);
 	
