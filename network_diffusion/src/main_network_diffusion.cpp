@@ -36,9 +36,10 @@ int main(){
 	Vertex_desc<Graph> src, tgt;
 	
 	// Reading the file
+	unsigned int count = 1;
 	R.ignore_dummy_lines(2);
 	while(!R.is_eof()){
-		R.get_data_from_line();
+		R.get_data();
 		src_prop = R.get_source_data();
 		tgt_prop = R.get_target_data();
 		e_prop = R.get_edge_data();
@@ -47,26 +48,28 @@ int main(){
 		G[topo_prop.src] = src_prop;
 		G[topo_prop.tgt] = tgt_prop;
 		G[e] = e_prop;
+		G[e].index = count;
+		// Commenting: now we put this commandas directly into the reader
+		/*
 		G[e].geometry.set_source(G[topo_prop.src].coordinates);
 		G[e].geometry.set_target(G[topo_prop.tgt].coordinates);
+		*/
 	}	//while
 	
 	Edge_iter<Graph> e_it, e_end;
-	unsigned int count = 1;
 	//Printing out data for Graph1
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
 		src = source(*e_it, G);
 		tgt = target(*e_it, G);
-		std::cout << "Edge " << count << ": " << std::endl;
+		std::cout << "Edge " << G[*e_it].index << ": " << std::endl;
 		std::cout << G[src].coordinates << ", " << G[tgt].coordinates;
 		std::cout << "; Diameter:  " << G[*e_it].diam << std::endl;
 		++count;
 	}
 	
 	// Creating a mesh on every edge
-	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
-		G[*e_it].mesh = G[*e_it].geometry.uniform_mesh(1);
-	}
+	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)
+		G[*e_it].mesh.uniform_mesh(20, G[*e_it].geometry);
 	
 	// Writing on a pts output
 	std::string out_pts_filename("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/network_diffusion/data/rattm93a.pts");

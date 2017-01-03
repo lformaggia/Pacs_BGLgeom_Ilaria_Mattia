@@ -29,7 +29,8 @@
 
 namespace NetDiff{
 
-using BGLgeom::operator>>;	//Per leggere i punti! vedi: http://stackoverflow.com/questions/36286448/no-match-and-cannot-bind-lvalue-errors-while-overloading-operator-with
+//Per leggere i point! Vedi: http://stackoverflow.com/questions/36286448/no-match-and-cannot-bind-lvalue-errors-while-overloading-operator-with
+using BGLgeom::operator>>;
 
 class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 													 NetDiff::Edge_prop,
@@ -47,12 +48,8 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 												discard1(),
 												discard2() {}
 												
-		// Now the overriding of the abstract method
-		//! Nothing to do
-		void get_other_data(){};
-		
 		//! Reading form input
-		void get_data_from_line(){
+		void get_data(){
 			this->in_file >> discard1 >> src >> tgt >> diam >> discard2 >> SRC >> TGT;
 		}
 		
@@ -68,7 +65,10 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 		
 		//! Returning data on the edge
 		NetDiff::Edge_prop get_edge_data(){
-			return NetDiff::Edge_prop(diam);
+			NetDiff::Edge_prop E(diam);
+			E.geometry.set_source(SRC);
+			E.geometry.set_target(TGT);
+			return E;
 		}
 		
 		//! Returning topological data

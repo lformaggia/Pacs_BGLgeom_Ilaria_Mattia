@@ -120,18 +120,7 @@ class reader_ASCII {
 			@brief Reads one line and put the data read from the istringstream in the variables defined
 					in the attributes of the derived class defined by the user
 		*/		
-		virtual void get_data_from_line() = 0;
-		
-		/*!
-			@brief Another method to get data
-			@detail This second method is thougth to be used for reading data
-					which are not defined in one single line (so which do not
-					refer to a single edge, for instance). The user has to
-					provide a full definition on how to read those lines of
-					data. If not needed, the user has to define it as an empty
-					method (i.e. it does nothing)
-		*/
-		virtual void get_other_data() = 0;
+		virtual void get_data() = 0;
 		
 		//! A method to get the right data to append to an edge
 		virtual Edge_data_structure get_edge_data() = 0;

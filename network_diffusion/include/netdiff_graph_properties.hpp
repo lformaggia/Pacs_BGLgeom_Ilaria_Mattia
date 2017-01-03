@@ -8,11 +8,11 @@
 ======================================================================*/
 
 /*!
-	@file netdiff_graph_properties.cpp
+	@file	netdiff_graph_properties.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Properties that the graph for diffusion on network appliocation will have
-	@datail All the data structures have to be provided with at least 
+	@date 	Sept, 2016
+	@brief	Properties that the graph for diffusion on network appliocation will have
+	@datail	All the data structures have to be provided with at least 
 			the default constructor and a constructor, and the copy constructor,
 			assignment operator and move constructor if needed (the default ones
 			may be enough)
@@ -22,7 +22,7 @@
 #define HH_NETDIFF_GRAPH_PROPERTIES_HH
 
 #include "data_structure.hpp"
-#include "linear_edge.hpp"
+#include "linear_geometry.hpp"
 
 namespace NetDiff{
 
@@ -30,15 +30,15 @@ namespace NetDiff{
 using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 
 //! Properties that vertices will have
-struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<3>,3>{
+struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>{
 	//! Diameter
 	double diam;
 	
 	//! Default constructor
-	Edge_prop() : 	BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<3>,3>(),
+	Edge_prop() : 	BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>(),
 					diam() {};
 	//! Constructor
-	Edge_prop(double const& _diam) : BGLgeom::Edge_base_property_static<BGLgeom::linear_edge<3>,3>(),
+	Edge_prop(double const& _diam) : BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>(),
 									diam(_diam) {};
 	//! Explicit declaration of default assignment operator
 	Edge_prop & operator=(Edge_prop const&) = default;
