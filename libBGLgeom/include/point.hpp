@@ -102,7 +102,7 @@ operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const
 template <typename Derived>
 bool
 operator!= (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const& P2){
-	return P1 != P2;
+	return !(P1 == P2);
 }
 
 
