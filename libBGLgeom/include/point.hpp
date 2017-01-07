@@ -19,6 +19,11 @@
 #include <iostream>
 #include <iomanip>
 #include <Eigen/Dense>
+#include <limits>
+
+#ifndef TOL
+#define TOL 20*std::numeric_limits<double>::epsilon()
+#endif
 
 namespace BGLgeom{
 /*!
@@ -90,7 +95,7 @@ operator> (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const&
 template <typename Derived>
 bool
 operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const& P2){
-	return P1 == P2;
+	return (P1-P2).norm() < TOL;
 }
 
 /*!
@@ -100,7 +105,7 @@ operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const
 template <typename Derived>
 bool
 operator!= (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const& P2){
-	return P1 != P2;
+	return !(P1==P2);
 }
 
 

@@ -139,12 +139,9 @@ int main(){
 	G[e3].geometry.set_source(G[e2].geometry(1));
 	G[e3].geometry.set_target(G[d].coordinates);	
 	
-	std::cout << "Hello! I'm vertex A:" << G[e1].geometry(0) << std::endl;
-	std::cout << "Hello! I'm vertex B:" << G[e1].geometry(1) << std::endl;
-	std::cout << "Hello! I'm vertex B:" << G[e2].geometry(0) << std::endl;
-	std::cout << "Hello! I'm vertex C:" << G[e2].geometry(1) << std::endl;
-	std::cout << "Hello! I'm vertex C:" << G[e3].geometry(0) << std::endl;
-	std::cout << "Hello! I'm vertex D:" << G[e3].geometry(1) << std::endl;
+	std::cout << G[e1] << std::endl;
+	std::cout << G[e2] << std::endl;
+	std::cout << G[e3] << std::endl;
 	
 	return 0;
 }

@@ -129,16 +129,16 @@ struct Vertex_base_property{
 	//! A label for the vertex (if needed)
 	std::string label;
 	//! An index for the vertex (if the user wants to keep track of the vertices)
-	unsigned int index;
+	int index;
 	
 	//! Default constructor
-	Vertex_base_property() : coordinates(), BC(), label(), index(0) {};
+	Vertex_base_property() : coordinates(), BC(), label(), index(-1) {};
 	
 	//! Constructor with only the coordinates
 	Vertex_base_property(point_t const& _coordinates) : coordinates(_coordinates),
 														BC(),
 														label(),
-														index(0) {};
+														index(-1) {};
 	
 	//! Constructor with coordinates and index
 	Vertex_base_property(point_t const& _coordinates,
@@ -152,13 +152,13 @@ struct Vertex_base_property{
 						 std::string const& _label) :	coordinates(_coordinates),
 														BC(),
 														label(_label),					 						
-								 						index(0) {};
+								 						index(-1) {};
 						 						
 	//! Constructor with coordinates and BC
 	Vertex_base_property(point_t const& _coordinates,
 						 bc_t const& _BC) :	coordinates(_coordinates),
 											BC(_BC),						 						
-					 						index(0),
+					 						index(-1),
 					 						label() {};
 								
 	//! Full constructor
@@ -218,17 +218,17 @@ struct Edge_base_property_static{
 	//! A label for the vertex (if needed)
 	std::string label;
 	//! An index for the vertex (if the user wants to keep track of the edge)
-	unsigned int index;
+	int index;
 	
 		
 	//! Default constructor
-	Edge_base_property_static() : geometry(), mesh(), label(), index() {};
+	Edge_base_property_static() : geometry(), mesh(), label(), index(-1) {};
 	
 	//! Constructor with label
 	Edge_base_property_static(std::string const& _label) :	geometry(),
 							 								mesh(),
 							 								label(_label),
-							 								index(0) {};
+							 								index(-1) {};
 								 								
 	//! Constructor with index
 	Edge_base_property_static(unsigned int const& _index) :	geometry(),
@@ -264,7 +264,23 @@ struct Edge_base_property_static{
 	void make_variable_mesh(const unsigned int n, std::function<double(double)> const& spacing_function){
 		mesh.variable_mesh(n, spacing_function, geometry);
 	}
-	//!
+	
+	/*!
+		@brief	Overload of operator<<
+		@detail It returns source and target of the edge, i.e. geometry(0) & geometry(1) and, if defined, label and index. Concerning the mesh, it is simply returned TRUE if there's a mesh defined on the edge, FALSE otherwise.
+	*/
+	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_static const& e_prop) {
+		out << e_prop.geometry << std::endl;
+		if(e_prop.index != -1)
+			out << "Index: "<<e_prop.index<<std::endl;
+		else
+			out << "Index: NOT DEFINED" <<std::endl;
+		if(e_prop.label.empty())
+			out << "Label: NOT DEFINED" <<std::endl;
+		else
+			out << "Label: "<<e_prop.label<<std::endl; 
+		return out;
+	}
 	
 };	//Edge_base_property_static
 

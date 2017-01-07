@@ -75,13 +75,12 @@ template <typename Graph, typename Vertex_prop>
 BGLgeom::Vertex_desc<Graph>
 new_vertex(Vertex_prop const& v_prop,
 		   Graph & G, 
-		   const bool check_unique = false,
-		   const double tol = 20*std::numeric_limits<double>::epsilon()){
+		   const bool check_unique = false){
 	
 	if(check_unique){	
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
-			if((v_prop.coordinates - G[*v_it].coordinates).norm() < tol){
+			if(v_prop.coordinates == G[*v_it].coordinates){
 				#ifdef OUT_MSG
 					std::cout<<"Vertex already existing"<<std::endl;	
 				#endif
@@ -101,15 +100,14 @@ template <typename Graph, unsigned int dim>
 BGLgeom::Vertex_desc<Graph>
 new_vertex(BGLgeom::point<dim> const& P,
 		   Graph & G, 
-		   const bool check_unique = false,
-		   const double tol = 20*std::numeric_limits<double>::epsilon()){
+		   const bool check_unique = false){
 	
 	BGLgeom::Vertex_base_property<dim> v_prop(P);
 	
 	if(check_unique){	
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
-			if((P - G[*v_it].coordinates).norm() < tol){
+			if(P == G[*v_it].coordinates){
 				#ifdef OUT_MSG
 					std::cout<<"Vertex already existing"<<std::endl;	
 				#endif
@@ -239,6 +237,10 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
 	
+	if(src.coordinates != _fun(0))
+		std::cerr<<"WARNING: source coordinates "<<src.coordinates<<"do not coincide with the parametrized function evaluated in t=0";
+	else if(tgt.coordinates != _fun(1))
+		std::cerr<<"WARNING: target coordinates "<<src.coordinates<<"do not coincide with the parametrized function evaluated in t=1";
 	// Setting up the geometry
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
@@ -279,6 +281,13 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
+	
+	if(src.coordinates != C.front())
+		std::cerr<<"WARNING: source point "<<src.coordinates<<"does not coincide with the first control point of the b-spline";
+	else if(tgt.coordinates != C.back())
+		std::cerr<<"WARNING: target point "<<src.coordinates<<"does not coincide with the last control point of the b-spline";
+	
+
 	#ifdef OUT_MSG
 		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
 	#endif
@@ -317,6 +326,12 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C,k);
+	
+	if(src.coordinates != C.front())
+		std::cerr<<"WARNING: source point "<<src.coordinates<<"does not coincide with the first control point of the b-spline";
+	else if(tgt.coordinates != C.back())
+		std::cerr<<"WARNING: target point "<<src.coordinates<<"does not coincide with the last control point of the b-spline";
+	
 	#ifdef OUT_MSG
 		std::cout<<"New edge created "<<G[e].geometry<<std::endl;
 	#endif

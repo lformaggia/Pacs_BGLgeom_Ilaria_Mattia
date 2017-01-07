@@ -22,8 +22,7 @@
 using namespace BGLgeom;
 namespace BGLgeom{
 Intersection compute_intersection	(linear_geometry<2> const& edge1,
-									linear_geometry<2> const& edge2,
-	                           		double tol){
+									linear_geometry<2> const& edge2){
 	Intersection out;
 	linear_edge_interface S1(edge1);
 	linear_edge_interface S2(edge2);
@@ -33,9 +32,9 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	auto len1 = norm(v1);
 	auto len2 = norm(v2);
 	// Tolerance for distances
-	double tol_dist=tol*std::max(len1,len2);
+	double tol_dist=TOL*std::max(len1,len2);
 	// I need to scale the tolerance to check parallelism correctly
-	auto tol_sys=2.0*tol*len1*len1*len2*len2;
+	auto tol_sys=2.0*TOL*len1*len1*len2*len2;
 	// First check if segments meets at the end
 	for (unsigned int i=0;i<2;++i){
 	    auto const & P1=S1[i];
@@ -104,7 +103,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	    double const & t2=result.second[1];
 	    //double tol1=tol/len1;
 	    //double tol2=tol/len2;
-	    bool inside = (t1>=-0.5*tol) && (t1<= 1.0+0.5*tol) && (t2>=-0.5*tol) && (t2<= 1.0+0.5*tol);
+	    bool inside = (t1>=-0.5*TOL) && (t1<= 1.0+0.5*TOL) && (t2>=-0.5*TOL) && (t2<= 1.0+0.5*TOL);
 	    if (!inside){
 	        // No intersecion, end here
 	        out.how = intersection_type::No_intersection;
@@ -113,7 +112,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	    } else {
 	        out.intersect=true;
 	        // I could have used the mean
-	        if (std::abs(t1    )<= tol){
+	        if (std::abs(t1    )<= TOL){
 	            if(out.endPointIsIntersection[0][0]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
@@ -123,7 +122,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	                out.endPointIsIntersection[0][0]=true;
 	            }
 	        } //if
-	        if (std::abs(t1-1.0)<= tol){
+	        if (std::abs(t1-1.0)<= TOL){
 	            if(out.endPointIsIntersection[0][1]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
@@ -133,7 +132,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	                out.endPointIsIntersection[0][1]=true;
 	            }
 	        } //if
-	        if (std::abs(t2    )<= tol){
+	        if (std::abs(t2    )<= TOL){
 	            if(out.endPointIsIntersection[1][0]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
@@ -143,7 +142,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	                out.endPointIsIntersection[1][0]=true;
 	            }
 	        } //if
-	        if (std::abs(t2-1.0)<= tol){
+	        if (std::abs(t2-1.0)<= TOL){
 	            if(out.endPointIsIntersection[1][1]){
 	                // already found. End here
 	                out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
@@ -185,7 +184,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	        // IS A2 on S1? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[1][0]){
 	            t=dot((A2-A1),(B1-A1))/(len1*len1);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
+	            if(t>=-0.5*TOL && t<=1+0.5*TOL){
 	                out.intersect=true;
 	                intersectionPoints[out.numberOfIntersections++]=A2;
 	                //out.intersectionPoint[out.numberOfIntersections++]=A2;
@@ -200,7 +199,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	        // IS B2 on S1? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[1][1]){
 	            t=dot((B2-A1),(B1-A1))/(len1*len1);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
+	            if(t>=-0.5*TOL && t<=1+0.5*TOL){
 	                out.intersect=true;
 	                intersectionPoints[out.numberOfIntersections++]=B2;
 	                //out.intersectionPoint[out.numberOfIntersections++]=B2;
@@ -215,7 +214,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	        // IS A1 on S2? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[0][0]){
 	            t=dot((A1-A2),(B2-A2))/(len2*len2);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
+	            if(t>=-0.5*TOL && t<=1+0.5*TOL){
 	                out.intersect=true;
 	                intersectionPoints[out.numberOfIntersections++]=A1;
 	                //out.intersectionPoint[out.numberOfIntersections++]=A1;
@@ -230,7 +229,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	        // IS B1 on S2? Maybe I have already considered it earlier
 	        if(!out.endPointIsIntersection[0][1]){
 	            t=dot((B1-A2),(B2-A2))/(len2*len2);
-	            if(t>=-0.5*tol && t<=1+0.5*tol){
+	            if(t>=-0.5*TOL && t<=1+0.5*TOL){
 	                out.intersect=true;
 	                intersectionPoints[out.numberOfIntersections++]=B1;
 	                //out.intersectionPoint[out.numberOfIntersections++]=B1;

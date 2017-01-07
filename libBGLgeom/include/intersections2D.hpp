@@ -32,6 +32,10 @@
 #include "linear_geometry.hpp"
 #include "point.hpp"
 
+#ifndef TOL
+#define TOL 20*std::numeric_limits<double>::epsilon()
+#endif
+
 //! Helper functions for the algorithms. Using Unnamed namespace
 namespace {
 
@@ -66,7 +70,7 @@ inline std::array<double,2> operator* (double const& k, std::array<double,2> con
 	
 	@param A The matrix of the system
 	@param b Vector of the known terms
-	@param tol Tolerance on the determinant
+	@param tol Tolerance for the determinant
 	
 	@return std::pair<bool,std::array<double,2>> The bool indicates if there is an intersection.
 					In the array there are the parametric coordinates of the intersection
@@ -74,7 +78,8 @@ inline std::array<double,2> operator* (double const& k, std::array<double,2> con
 */
 std::pair<bool, std::array<double,2>> solve 	(std::array<std::array<double,2>,2> const& A,
         										std::array<double,2> const& b,	//qui prima il const& non c'era
-        										double const& tol) {
+        										const double tol){
+        										
 	auto D = A[0][0]*A[1][1] - A[1][0]*A[0][1];	//determinant
 	if (std::abs(D) <= tol)
 	    return std::make_pair(false, std::array<double,2>{0,0});
@@ -213,7 +218,7 @@ struct Intersection {
 @brief Computes intersection betweeen two edges
 
 It handles also the case of intersection at the segment ends
-@note  It is not so rubust becouse it uses the tolerances in a 
+@note  It is not so rubust because it uses the tolerances in a 
 different way: the tolerance tol to test the parametric coordinate
 along the edge line and a scaled tolerance to check distances.
 Another scaled tolerance is used to test ir edges are parallel.
@@ -221,12 +226,10 @@ Another scaled tolerance is used to test ir edges are parallel.
 @pre The edges must have non null length
 @par S1 First Edge
 @par S2 Second Edge
-@par tol A tolerance,it should greater than epsilon for doubles
 @return Intersection. A data structure containing the info about the intersection
 */
 Intersection compute_intersection	(linear_geometry<2> const& edge1,
-									 linear_geometry<2> const& edge2,
-                           			 double tol=20*std::numeric_limits<double>::epsilon());
+									 linear_geometry<2> const& edge2);
                            		
 /*
 	@brief Overload of operator<< to show the infos obtained by the function
