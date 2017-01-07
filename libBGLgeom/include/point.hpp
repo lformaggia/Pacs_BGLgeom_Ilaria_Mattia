@@ -10,7 +10,7 @@
 	@file	point.hpp
 	@author	Ilaria Speranza and Mattia Tantardini
 	@date	Sept, 2016
-	@brief	Description of a point and utilities
+	@brief	Underlying structure of a point and utilities
 */
 
 #ifndef HH_POINT_HH
@@ -20,10 +20,12 @@
 #include <iomanip>
 #include <Eigen/Dense>
 
+//! Tolerance on being zero
+#define tol_dist 1e-8
+
 namespace BGLgeom{
-/*!
-	@brief Alias template for a point in N-th dimensional space, using Eigen::Matrix
-*/
+
+//! Alias template for a point in N-th dimensional space, using Eigen::Matrix
 template <unsigned int N>
 using point = Eigen::Matrix<double,1,N>;
 
@@ -52,12 +54,8 @@ operator<<(std::ostream & out, Eigen::DenseBase<Derived> & m){
 	return out;
 }
 
-
-
-// Write_ASCII
-
 /*!
-	 @brief Operator< overloading			 
+	 @brief Operator< overloading. Implements lexicographic order		 
 	 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
 	 		 if they are equal, compare in the same waythe y coordinate, and so on.		
 */
@@ -85,12 +83,16 @@ operator> (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const&
 
 /*!
 	@brief Operator== overloading			
-	@detail It checks if all the coordinates are equal
+	@detail It checks if all the coordinates are equal, with a default tolerance
 */
 template <typename Derived>
 bool
 operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const& P2){
-	return P1 == P2;
+	for(std::size_t i = 0; i < static_cast<unsigned int>(P1.cols()); ++i){
+		if(P1(0,i) <= P2(0,i)-tol_dist || P1(0,i) >= P2(0,i)+tol_dist)
+			return false;
+	}
+	return true;
 }
 
 /*!
