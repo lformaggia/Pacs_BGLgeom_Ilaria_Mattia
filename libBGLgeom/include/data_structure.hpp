@@ -255,6 +255,17 @@ struct Edge_base_property_static{
 	//! Move assignment
 	Edge_base_property_static & operator=(Edge_base_property_static &&) = default;
 	
+	//! Layer for uniform_mesh method of class mesh
+	void make_uniform_mesh(const unsigned int n){
+		mesh.uniform_mesh(n, geometry);
+	}
+	
+	//! Layer for variable_mesh method of class mesh
+	void make_variable_mesh(const unsigned int n, std::function<double(double)> const& spacing_function){
+		mesh.variable_mesh(n, spacing_function, geometry);
+	}
+	//!
+	
 };	//Edge_base_property_static
 
 
