@@ -18,15 +18,13 @@
 #define HH_GENERIC_GEOMETRY_HH
 
 #include <functional>
-#include <tuple>
 #include <iostream>
-#include <cmath>
 #include <cstdlib>
+#include <vector>
 #include "point.hpp"
 #include "adaptive_quadrature.hpp"
+#include "edge_geometry.hpp"
 #include <Eigen/Dense>
-//#include "mesh.hpp"
-//#include "domain.hpp"
 
 //! The tolerance on being zero
 #define tol_dist 1e-8
@@ -34,26 +32,28 @@
 namespace BGLgeom{
 
 /*!
-	@brief Generic geometry for an edge
-	@detail It requires as the full specification of the expression of the curve,
-			of its firts derivative and of its second derivative (so they must be
-			known a priori)
-	@remark It requires parameterization between 0 and 1. It checks in each method
-			if the given parameter is in this range, otherwise the program abort
+	@brief	Generic geometry for an edge
+	@detail It requires to be constructed the full specification of the expression of the 
+			curve, of its firts derivative and of its second derivative (so they must be
+			known a priori) and parametrized between 0 and 1, since in each evaluation 
+			method checks if the given parameter is in this range, otherwise the program 
+			abort
 	
 	@param dim Dimension of the space	
 */
 template<unsigned int dim>
-class generic_geometry {
+class generic_geometry : public BGLgeom::edge_geometry<dim> {
 
 	using point = BGLgeom::point<dim>;
 	using vect_pts = std::vector<point>;
 	using vect_double = std::vector<double>;
 
 	private:
-	
-		std::function<point(double)> value_fun;      //! stores the function f:[0,1] ->[src,tgt] representing the edge
-		std::function<point(double)> first_der_fun;   
+		//! The analytic expression of the parameterization of the curve
+		std::function<point(double)> value_fun;
+		//! The analytic expression of the first derivative of the curve
+		std::function<point(double)> first_der_fun;
+		//! The analytic expression of the second derivative of the curve
 		std::function<point(double)> second_der_fun;
 		
 	public:
@@ -121,7 +121,7 @@ class generic_geometry {
 		point
 		operator()(double const& t) const {
 			if(t < 0 || t > 1){
-				std::cerr << "generic_geometry::first_der(): parameter value out of bounds" << std::endl;
+				std::cerr << "generic_geometry::operator(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			return value_fun(t);	
@@ -138,7 +138,7 @@ class generic_geometry {
 		
 		//! Evaluation of the first derivative in a given value of the parameter
 		point
-		first_der(const double & t){ 
+		first_der(const double & t) const { 
 			if(t < 0 || t > 1){
 				std::cerr << "generic_geometry::first_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
@@ -148,7 +148,7 @@ class generic_geometry {
 		
 		//! Evaluation in a vector of parameters
 		vect_pts
-		first_der(const vect_double & t){
+		first_der(const vect_double & t) const {
 			vect_pts Fder(t.size());
 			for(std::size_t i = 0; i < t.size(); ++i)
 				Fder[i] = this->first_der(t[i]);
@@ -157,7 +157,7 @@ class generic_geometry {
 		
 		//! Evaluation of the second derivative in a given value of the parameter
 		point 
-		second_der(const double & t){
+		second_der(const double & t) const {
 			if(t < 0 || t > 1){
 				std::cerr << "generic_geometry::second_der(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
@@ -167,7 +167,7 @@ class generic_geometry {
 		
 		//! Evaluation ina vector of parameters
 		vect_pts
-		second_der(vect_double const& t){
+		second_der(vect_double const& t) const {
 			vect_pts Sder(t.size());
 			for(std::size_t i = 0; i < t.size(); ++i)
 				Sder[i] = this->second_der(t[i]);
@@ -175,7 +175,7 @@ class generic_geometry {
 		}
 		
 		//! Evaluation of the curvilinear abscissa
-		double curv_abs(const double & t)  {
+		double curv_abs(const double & t) const {
 			if(t < 0 || t > 1){
 				std::cerr << "generic_geometry::curv_abs(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
@@ -190,7 +190,7 @@ class generic_geometry {
 		
 		//! Evaluation in a vector of parameters
 		vect_double
-		curv_abs(vect_double const& t){
+		curv_abs(vect_double const& t) const {
 			vect_double CA(t.size());
 			for(std::size_t i = 0; i < t.size(); ++i)
 				CA[i] = this->curv_abs(t[i]);
@@ -198,7 +198,7 @@ class generic_geometry {
 		}
 		
 		//! Evaluation of the curvature
-		double curvature(const double & t){
+		double curvature(const double & t) const {
 			if(t < 0 || t > 1){
 				std::cerr << "generic_geometry::curvature(): parameter value out of bounds" << std::endl;
 				exit(EXIT_FAILURE);
@@ -227,7 +227,7 @@ class generic_geometry {
 		
 		//! Evaluation in a vector of parameters
 		vect_double
-		curvature(vect_double const& t){
+		curvature(vect_double const& t) const {
 			vect_double C(t.size());
 			for(std::size_t i = 0; i < t.size(); ++i)
 				C[i] = this->curvature(t[i]);

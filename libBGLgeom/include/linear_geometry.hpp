@@ -19,14 +19,10 @@
 
 #include <iostream>
 #include <vector>
-#include <functional>
-#include <tuple>
-#include <cmath>
 #include <Eigen/Dense>
 #include "point.hpp"
 #include "edge_geometry.hpp"
 #include "mesh.hpp"
-//#include "domain.hpp"
 
 namespace BGLgeom{
 
@@ -63,7 +59,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		linear_geometry(linear_geometry &&) = default;
 		
 		//! Destructor
-		virtual ~linear_geometry(){};
+		virtual ~linear_geometry() = default;
 		
 		//! Assignment operator
 		linear_geometry & operator=(linear_geometry const&) = default;
@@ -92,11 +88,12 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		double length() const { return (TGT-SRC).norm(); }
 	 
 	    /*! 
-	    	@brief Returns the point corresponding to that curvilinear abscissa
-	    	@detail It test if the given parameter belongs to [0,1]. If not, it sets the
+	    	@brief	Evaluates the line at a given value of the parameter
+	    	@detail It tests if the given parameter belongs to [0,1]. If not, it sets the
 	    			parameter to the nearest extreme value, giving a warning on std::cerr
 	    */
-		point operator() (double const& t) const {
+		point
+		operator() (double const& t) const {
 			if(t > 1 || t < 0){
 				std::cerr << "linear_geometry::operator(): parameter value out of bounds" << std::endl;
 				if(t > 1)	//t=1
@@ -107,9 +104,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 			return point((TGT-SRC)*t+SRC);
 		};
 		
-  		/*!
-  			@brief It evaluates a vector of values for the parameter
-  		*/
+  		//! It evaluates the line in a vector of values of the parameter
   		vect_pts
   		operator() (vect_double const& t) const {
     		vect_pts P_vect(t.size());
@@ -127,7 +122,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		first_der(vect_double const& t) const {
 			vect_pts Fder(t.size());
 			for (std::size_t i = 0; i < t.size(); ++i)
-   				Fder[i] = this->first_der(); //(TGT-SRC)*t[i] + SRC;   			
+   				Fder[i] = this->first_der();	
    		 	return Fder;
 		}
 		

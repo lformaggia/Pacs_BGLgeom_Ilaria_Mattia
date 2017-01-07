@@ -29,8 +29,8 @@ namespace BGLgeom{
 /*!
 	@brief Abstract class for an edge
 	@detail	It specifies all the geometric operation that should be carried
-			out on the edge, thougth as a curve in the space (2 or 3 dimensional).
-			It provide also evaluation of this characteristics for a single value
+			out on the edge, thought as a curve in the space (2 or 3 dimensional).
+			It provides also evaluation of this characteristics for a single value
 			or for a vector of values of the parameter
 	@param dim The dimension of the space
 */
