@@ -196,8 +196,8 @@ int main(){
   	Edge_desc<Graph> e;
   	e = new_generic_edge<Graph,3>(a, b, G, alfa, alfa1, alfa2);	//BGLgeom
   	
-  	std::cout << "Hello! I'm the source: " << G[e].geometry(0) << std::endl;
-  	std::cout << "Hello! I'm the target: " << G[e].geometry(1) << std::endl;
+  	std::cout << "Source: " << G[e].geometry(0) << std::endl;
+  	std::cout << "Target: " << G[e].geometry(1) << std::endl;
 	
 	return 0;
 }

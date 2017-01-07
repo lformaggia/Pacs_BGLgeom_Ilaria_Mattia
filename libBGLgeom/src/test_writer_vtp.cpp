@@ -2,6 +2,7 @@
 #include <string>
 #include "data_structure.hpp"
 #include "linear_geometry.hpp"
+#include "graph_builder.hpp"
 #include "writer_vtp.hpp"
 
 using namespace boost;
@@ -20,13 +21,9 @@ int main(int, char *[]){
 	G[b].coordinates = point<3>(1,1,1);
 	G[c].coordinates = point<3>(0,1,0);
 	
-	e = add_edge(a,b,G).first;	//boost
-	G[e].geometry.set_source(G[a].coordinates);
-	G[e].geometry.set_target(G[b].coordinates);
+	e = new_linear_edge(a,b,G);	//BGLgeom
 
-	e = add_edge(a,c,G).first;	//boost
-	G[e].geometry.set_source(G[a].coordinates);
-	G[e].geometry.set_target(G[c].coordinates);		
+	e = new_linear_edge(a,c,G);	//BGLgeom	
 	
 	std::string filename("../data/out.vtp");
 	writer_vtp<Graph,3> W(filename.c_str());

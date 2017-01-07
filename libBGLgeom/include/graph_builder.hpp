@@ -82,13 +82,17 @@ new_vertex(Vertex_prop const& v_prop,
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
 			if((v_prop.coordinates - G[*v_it].coordinates).norm() < tol){
-				std::cout<<"Vertex already existing"<<std::endl;	
+				#ifdef OUT_MSG
+					std::cout<<"Vertex already existing"<<std::endl;	
+				#endif
 				return *v_it;
 			}
 		}
 	}
 	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	std::cout<<"New vertex created"<<std::endl;
+	#ifdef OUT_MSG
+		std::cout<<"New vertex created"<<std::endl;
+	#endif
 	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
 
@@ -106,13 +110,17 @@ new_vertex(BGLgeom::point<dim> const& P,
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
 			if((P - G[*v_it].coordinates).norm() < tol){
-				std::cout<<"Vertex already existing"<<std::endl;	
+				#ifdef OUT_MSG
+					std::cout<<"Vertex already existing"<<std::endl;	
+				#endif
 				return *v_it;
 			}
 		}
 	}
 	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	std::cout<<"New vertex created"<<std::endl;
+	#ifdef OUT_MSG
+		std::cout<<"New vertex created"<<std::endl;
+	#endif
 	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
 
@@ -136,6 +144,9 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#endif
 	return e;
 }	//new_edge (without properties)
 
@@ -152,6 +163,9 @@ new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
 	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
 	check_if_edge_inserted<Graph>(e, inserted);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#endif
 	return e;
 }
 
@@ -186,6 +200,9 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
 	G[e].geometry.set_target(G[tgt].coordinates);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#endif
 	return e;
 }	//new_linear_edge
 
@@ -226,6 +243,9 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
 	G[e].geometry.set_second_der(_second_der);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#endif
 	return e;	
 }	//new_generic_edge
 
@@ -259,6 +279,9 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#endif
 	return e;				 
 }	//new_bspline_edge
 
@@ -294,6 +317,9 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C,k);
+	#ifdef OUT_MSG
+		std::cout<<"New edge created "<<G[e].geometry<<std::endl;
+	#endif
 	return e;				 
 }	//new_bspline_edge
 

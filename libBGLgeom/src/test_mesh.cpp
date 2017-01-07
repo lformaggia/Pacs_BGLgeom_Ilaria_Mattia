@@ -40,7 +40,7 @@ int main(){
 							[pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); },
 							G[e2].geometry );
 	
-	std::string filename("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test_mesh.pts");
+	std::string filename("../data/out_test_mesh.pts");
 	writer_pts<Graph,2> W(filename);
 	W.export_pts(G);
 	
@@ -80,7 +80,7 @@ int main(){
 	G1[e3].mesh.uniform_mesh(10, G1[e3].geometry); // G1[e3].make_uniform_mesh(10);
 	G1[e4].mesh.uniform_mesh(1000, G1[e4].geometry );
 	
-	std::string filename1("/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test_mesh3D_bspline.vtp");
+	std::string filename1("../data/out_test_mesh3D_bspline.vtp");
 	writer_vtp<Graph3D,3> W1(filename1);
 	W1.export_vtp(G1);
 		

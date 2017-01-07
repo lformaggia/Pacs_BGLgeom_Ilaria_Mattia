@@ -43,3 +43,7 @@ LIBS = $(wildcard $(TARGET_DIR)/*)		#used in make distclean
 DYNAMIC_LIB = $(TARGET_DIR)/$(DYNAMIC_LIBFILE)
 STATIC_LIB  = $(TARGET_DIR)/$(STATIC_LIBFILE)
 
+
+# MACRO definitions: if OUT_MSG is defined some outputs about graph construction will be returned on terminal 
+#CPPFLAGS += -DOUT_MSG
+

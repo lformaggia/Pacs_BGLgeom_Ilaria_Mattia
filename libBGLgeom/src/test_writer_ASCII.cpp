@@ -28,14 +28,14 @@ int main(){
 	G[e1].foo_double = 1.0123456789;
 	G[e1].foo_vector.resize(4);
 	G[e1].foo_vector[3] = 101;
-	G[e1].foo_string = "foo1";
+	G[e1].foo_string = "foo.1";
 	G[e2].index = 2;
 	G[e2].foo_double = 2.987654321;
 	G[e2].foo_vector.resize(4);
 	G[e2].foo_vector[3] = 202;
-	G[e2].foo_string = "foo2";
+	G[e2].foo_string = "foo.2";
 	
-	std::string filename = "/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/libBGLgeom/data/out_test_writer_ASCII.txt";
+	std::string filename = "../data/out_test_writer_ASCII.txt";
 	test_writer_ASCII<Graph> W(filename);	// Putting headers
 	W.put_headers({"Edge","SRC","TGT","foo_double","foo_vector[3]","foo_string"});
 	Edge_iter<Graph> e_it, e_end;

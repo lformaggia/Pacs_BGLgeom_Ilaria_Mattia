@@ -86,9 +86,8 @@ class writer_vtp{
   			  writer = PolyDataWriter_ptr::New();
   			  writer_vertices = PolyDataWriter_ptr::New();
   			  
-  			  std::string filename("output_vtk.vtp");
+  			  std::string filename("../data/output_vtk.vtp");
   			  writer -> SetFileName(filename.c_str());
-  			  
   			  
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
@@ -100,14 +99,13 @@ class writer_vtp{
 			  std::string vertex_string("_vertices.vtp");
 			  std::string filename_vertices(filename);
 			  filename_vertices.insert(filename_vertices.end()-4, vertex_string.begin(), vertex_string.begin()+10);
-			
+				
 			  writer_vertices -> SetFileName(filename_vertices.c_str());
 		}
 		
 		
 		//! Constructor with filename
 		writer_vtp(std::string _filename) {
-			  std::cout<<"____________________ Writing vtk output...  ____________________"<<std::endl;
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
   			  writer -> SetFileName(_filename.c_str());
@@ -123,10 +121,8 @@ class writer_vtp{
 			  // Naming the output file for colored vertices
 			  std::string vertex_string("_vertices.vtp");
 			  std::string filename_vertices(_filename.begin(),_filename.end()-4);
-			  std::cout<<filename_vertices.c_str()<<std::endl;		  
+
 			  filename_vertices.append(vertex_string);
-			  
-			  std::cout<<filename_vertices.c_str()<<std::endl;
 			
   			  writer_vertices = PolyDataWriter_ptr::New();			  
 			  writer_vertices -> SetFileName(filename_vertices.c_str());	  
@@ -142,6 +138,7 @@ class writer_vtp{
 		//! It exports the graph in .vtp format (compatible with Paraview). If the edge isn't linear we assume there's a mesh defined on it. If there isn't, a simple straight line will be displayed for that edge, indendently of its geometry
 		 
 		virtual void export_vtp(Graph const& G){
+			std::cout<<"__________ Writing vtk output...  __________"<<std::endl;
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			unsigned int n_vertices = 0;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
@@ -205,8 +202,6 @@ class writer_vtp{
 			containing points and line containers, and it will be the writer input argument */
 			PolyData_ptr polyData = PolyData_ptr::New();
 			PolyData_ptr polyData_vertices = PolyData_ptr::New();
-			
-			std::cout<<"PolyData objects created"<<std::endl;
  
 			// Add the points to the dataset
   			polyData->SetPoints(points);
@@ -216,7 +211,6 @@ class writer_vtp{
   			
   			// Add the vertices to polyData_vertices
   			polyData_vertices -> SetPoints(vertices);
-  			std::cout<<"Vertices set"<<std::endl;
   			
   			// Color vertices
  	   		vtkSmartPointer<vtkVertexGlyphFilter> vertexFilter = vtkSmartPointer<vtkVertexGlyphFilter>::New();
@@ -256,8 +250,6 @@ class writer_vtp{
   			
   			writer -> Write();
   			writer_vertices -> Write();
-  			
-  			std::cout<<"Leaving generate_output()"<<std::endl;
 
 		}; // generate_output
 		
