@@ -12,7 +12,9 @@ VTK_LIBS = $(LIBS6:lib%=%)
 
 
 CXXFLAGS += -std=c++11
-CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/include -I$(mkVtkInc)
+CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/include -I$(mkVtkInc) 
+
+CPPFLAGS += -DNDEBUG 
 
 .PHONY: all clean distclean
 
@@ -21,27 +23,22 @@ CPPFLAGS += -I. -I$(mkEigenInc) -I$(mkBGLInc) -I../include/ -I../../libBGLgeom/i
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c  prova_sort_duplicates.cpp
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) prova_sort_duplicates.o -o prova_sort_duplicates
 	
-main_ila: helper_functions.o intersections2D.o main_ila.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o main_ila.o -o main_ila
+main_fractures: helper_functions.o intersections2D.o main_fractures.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o main_fractures.o -o main_fractures
 	
-main_ila.o:
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_ila.cpp -o $@
-	
-main_new: helper_functions.o intersections2D.o main_new.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) helper_functions.o intersections2D.o main_new.o -o main_new
-	
-main_new.o:
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_new.cpp -o $@	
+main_fractures.o:
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  main_fractures.cpp -o $@
 	
 helper_functions.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  helper_functions.cpp	-o $@
+	
 intersections2D.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -L$(mkVtkLib) $(foreach lib,$(VTK_LIBS), -l$(lib) ) -c  intersections2D.cpp -o $@
 
 	
 	
 clean :
-	$(RM) *.o main_ila main_new
+	$(RM) *.o main_fractures
 	
 distclean: 
 	$(RM) *.o

@@ -38,11 +38,9 @@ class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fr
 													K_n(),
 													df(),
 													source_term() {};
-		//! Nothing to do with this method
-		void get_other_data(){};
-		
+													
 		//! Reading data from line
-		void get_data_from_line(){
+		void get_data(){
 			this->in_file >> SRC >> TGT >> K_t >> K_n >> df >> source_term;
 		}
 		

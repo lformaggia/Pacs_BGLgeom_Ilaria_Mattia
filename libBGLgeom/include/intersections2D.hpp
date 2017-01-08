@@ -70,7 +70,7 @@ inline std::array<double,2> operator* (double const& k, std::array<double,2> con
 	
 	@param A The matrix of the system
 	@param b Vector of the known terms
-	@param tol Tolerance for the determinant
+	@param tol Tolerance on the determinant
 	
 	@return std::pair<bool,std::array<double,2>> The bool indicates if there is an intersection.
 					In the array there are the parametric coordinates of the intersection

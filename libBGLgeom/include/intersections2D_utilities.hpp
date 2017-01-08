@@ -92,14 +92,12 @@ struct Int_layer{
 	
 	//! Constructor
 	Int_layer	(BGLgeom::Intersection const& _I,
-						 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : int_edge(_e),
-																							  int_pts(),
-																							  swapped_comp(false),
-																							  how(_I.how){
+				 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : int_edge(_e),
+																					  swapped_comp(false),
+																					  how(_I.how){
 		int_pts.resize(_I.numberOfIntersections);
 		for(std::size_t i = 0; i < _I.numberOfIntersections; ++i)
 			int_pts[i] = _I.intersectionPoint[i];
-//		how = compute_intersection_type(_I);
 		
 		if(_I.endPointIsIntersection[0][0] == 1) 
 			intersected_extreme_old = 0;

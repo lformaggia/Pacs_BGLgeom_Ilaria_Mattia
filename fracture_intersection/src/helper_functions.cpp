@@ -197,7 +197,9 @@ void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, Fracture
 			e = new_fracture(tgt,v2,G[I.int_edge],G);		
 			
 			boost::remove_edge(I.int_edge,G);
-			std::cout<<"Edge removed"<<std::endl;						
+			#ifndef NDEBUG
+				std::cout<<"Edge removed"<<std::endl;						
+			#endif
 		}
 		
 		
@@ -227,7 +229,9 @@ void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, Fracture
 			
 			update_edge_properties(e,e_prop,G); // in both cases of the if-else clause e is the edge_descr of the edge connecting src and tgt
 			boost::remove_edge(I.int_edge,G);
-			std::cout<<"Edge removed"<<std::endl;
+			#ifndef NDEBUG
+				std::cout<<"Edge removed"<<std::endl;
+			#endif
 		}
 
 
@@ -334,7 +338,9 @@ void refine_graph(Graph &G, const Vertex_d & src, const Vertex_d & tgt, Fracture
 			}	
 			
 			boost::remove_edge(I.int_edge, G);
-			std::cout<<"Edge removed"<<std::endl;		
+			#ifndef NDEBUG
+				std::cout<<"Edge removed"<<std::endl;
+			#endif
 			break;			
 		}
 		
@@ -411,11 +417,13 @@ void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G){
 	e_tmp = new_fracture(v, tgt, G[e], G);	
 	
 	boost::remove_edge(e, G);
-	std::cout<<"Edge removed ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
+	#ifndef NDEBUG
+		std::cout<<"Edge removed ("<<G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
+	#endif
 }
 
 void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G){
-	std::cout << "Updating properties..."<<std::endl;
+	std::cout << "Updating properties of edge "<<G[e].index<<"..."<<std::endl;
 // in the edges requiring update we inserted as properties the old ones, but there is an overlapping with the new inserted edge. Here you can decide how to "mix" the edge properties: just keep the old ones (as it is, so this function will do nothing in this case), just the new ones, or any other combination of the two
 }
 

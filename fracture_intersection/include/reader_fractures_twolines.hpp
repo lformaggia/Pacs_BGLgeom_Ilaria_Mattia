@@ -39,8 +39,6 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 															TGT(),
 															discard1(),
 															discard2() {};
-		//! Nothing to do with this method
-		void get_other_data(){};
 		
 		/*! 
 			@brief Reading data from line
@@ -49,7 +47,7 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 					- 2=target; coordinates; -10=third coordinate \n
 					This two lines form an edge
 		*/
-		void get_data_from_line(){
+		void get_data(){
 			this->in_file >> discard1 >> SRC >> discard2 >> discard1 >> TGT >> discard2;
 		}
 		

@@ -138,7 +138,7 @@ class writer_vtp{
 		//! It exports the graph in .vtp format (compatible with Paraview). If the edge isn't linear we assume there's a mesh defined on it. If there isn't, a simple straight line will be displayed for that edge, indendently of its geometry
 		 
 		virtual void export_vtp(Graph const& G){
-			std::cout<<"__________ Writing vtk output...  __________"<<std::endl;
+			std::cout<<"Writing vtp output..."<<std::endl;
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			unsigned int n_vertices = 0;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)

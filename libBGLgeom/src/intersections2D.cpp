@@ -66,7 +66,9 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	    out.collinear=true;
 	    out.how = intersection_type::Identical;
 	    out.intersectionPoint = translate_array_to_eigen(intersectionPoints, out.numberOfIntersections);
-	    std::cout<<"identical"<<std::endl;
+	    #ifndef NDEBUG
+	    	std::cout<<"identical"<<std::endl;
+	    #endif
 	    return out;
 	}
 	// Now solve the linear system that returns the parametric coordinates of the intersection
@@ -95,7 +97,7 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	    auto P1 = A1+ t[0]*(B1-A1);
 	    auto P2 = A2+ t[1]*(B2-A2);
 	    if(norm(P1-P2)>tol_dist)
-	        std::cerr<<" Something strange, intersection points not coincident. Distance= "<<norm(P1-P2);
+	        std::cerr<<" Something strange, intersection points not coincident. Distance= "<<norm(P1-P2)<<std::endl;
 	#endif        
 	    // The two lines intersect.
 	    // Check whether we are inside the segments
@@ -107,7 +109,6 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	    if (!inside){
 	        // No intersecion, end here
 	        out.how = intersection_type::No_intersection;
-	        std::cout<<"no int"<<std::endl;
 	        return out;
 	    } else {
 	        out.intersect=true;
@@ -254,8 +255,6 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 		compute_intersection_type(out);
 		return out;
 	}
-	
-std::cout<<"Non sono entrato mai Formaggia"<<std::endl;
 
 } //compute_intersection
 
@@ -335,7 +334,6 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 			
 		}	
 	}
-	std::cout<<"Non sono entrato mai Noi"<<std::endl;	
 	return;
 }	//compute_intersection_type
 

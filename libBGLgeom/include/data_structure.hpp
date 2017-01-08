@@ -185,12 +185,24 @@ struct Vertex_base_property{
 	//! Destructor
 	virtual ~Vertex_base_property() = default;
 	
-	/*
 	//! Overload of output operator
-	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& vbp){
-	
+	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& v_prop) {
+		out << "Coordinates: "<<v_prop.coorinates << std::endl;
+		if(v_prop.index != -1)
+			out << "Index: "<<v_prop.index<<std::endl;
+		else
+			out << "Index: NOT DEFINED" <<std::endl;
+		if(v_prop.label.empty())
+			out << "Label: NOT DEFINED" <<std::endl;
+		else
+			out << "Label: "<<v_prop.label<<std::endl;
+		if(v_prop.BC.empty())
+			out << "Boundary condition(s): NOT DEFINED" <<std::endl:
+		else
+			out << "Boundary condition(s): "<<v_prop.BC << std::endl; 
+		return out;
 	}
-	*/
+	
 };	//Vertex_base_property
 
 
@@ -278,7 +290,13 @@ struct Edge_base_property_static{
 		if(e_prop.label.empty())
 			out << "Label: NOT DEFINED" <<std::endl;
 		else
-			out << "Label: "<<e_prop.label<<std::endl; 
+			out << "Label: "<<e_prop.label<<std::endl;
+			
+		out << "Mesh on the edge: "; 
+		if(e_prop.mesh.empty())
+			out << "FALSE" << std::endl;
+		else
+			out << "TRUE" <<std::endl;
 		return out;
 	}
 	
