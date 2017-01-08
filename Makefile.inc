@@ -1,5 +1,4 @@
 ###	BGLgeom Makefile.inc ###
-#Vedi makefile.inc in Example della pacs_repository
 
 # Directory where the library resides
 #che è la mia, l'utente la cambia
@@ -34,32 +33,32 @@ LDLIBS = -L$(VTK_LIB_DIR) $(foreach lib, $(VTK_LIBS), -l$(lib))
 OTHER_INC_DIR=
 OTHER_LIB_DIR=
 
+# Compiler and standard for the compiler
 CXX=g++
-# Since we are only uning c++ I set CC=CXX so that the linker LINK.o is correct
-# make has no separate macro for the linker!
-#CC=$(CXX)
-
-#  DEFINES: Possible -DXX statements
-# Example: -DNDEBUG disactivates asserts
-# DEFINES=
-
-WARNS = -Wall -Wno-deprecated
-
-# Level of optimization
-# Mettere la parte corrispondente dell'esempio del corso se voglio essere più "standard", direi
-OPT = -g
-
 STDFLAG = -std=c++11
 
+# DEFINES: Possible -DXX statements
+# TOL: Tolerance on being zero. Used to check distances for points and segments, mainly. The user can change it.
+DEFINES += -DTOL=1e-10
 
-# collect all includes
-# QUeste sono solo le directory
+# OPT: Level of optimization
+# REALESE: Allows to choose the level of optimization. If set, full optimization, otherwise debug mode
+ifdef RELEASE
+OPT = -O3
+DEFINES += -DNDEBUG
+else
+OPT = -g
+endif
+
+
+# Warning level. The option -Wno-deprecated deactivates annoying warning from BGL
+WARNS = -Wall -Wno-deprecated
+
+# Collect all includes
 ALL_INC_DIR= $(OTHER_INC_DIR) $(EIGEN_INC_DIR) $(VTK_INC_DIR)
-# Così credo che ci appiccichi davanti -I ad ognuna
 includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc) )
-# E ora creo una variabile che mi permette di chiamarle tutte insieme
 INCLUDES += -I. -I./include $(includes)
 
-export CPPFLAGS = $(INCLUDES)
+export CPPFLAGS = $(INCLUDES) $(DEFINES)
 export CXXFLAGS = $(STDFLAG) $(WARNS) $(OPT)
 
