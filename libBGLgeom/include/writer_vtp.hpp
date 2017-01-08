@@ -19,7 +19,6 @@
 #define HH_WRITER_VTP_HH
 
 #include <string>
-#include <boost/graph/adjacency_list.hpp>
 
 #include <vtkVersion.h>
 #include <vtkSmartPointer.h>
@@ -104,23 +103,23 @@ class writer_vtp{
 		}
 		
 		
-		//! Constructor with filename
-		writer_vtp(std::string _filename) {
+		//! Constructor with std::string
+		writer_vtp(std::string _filename) : filename(_filename) {
 			  // Write the file
   			  writer = PolyDataWriter_ptr::New();
-  			  writer -> SetFileName(_filename.c_str());
+  			  writer -> SetFileName(filename.c_str());
 
   			  lines = CellArray_ptr::New();
 			  points = Points_ptr::New();
 			  vertices = Points_ptr::New();
 			  
 			  // Check on the extension of _filename
-			  if(_filename.substr(_filename.length()-3, 3) != "vtp")
+			  if(filename.substr(filename.length()-3, 3) != "vtp")
 				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
 			  
 			  // Naming the output file for colored vertices
 			  std::string vertex_string("_vertices.vtp");
-			  std::string filename_vertices(_filename.begin(),_filename.end()-4);
+			  std::string filename_vertices(filename.begin(), filename.end()-4);
 
 			  filename_vertices.append(vertex_string);
 			
@@ -128,17 +127,38 @@ class writer_vtp{
 			  writer_vertices -> SetFileName(filename_vertices.c_str());	  
 		}
 		
-		/*
-		//! Destructor
-		virtual ~writer_pts(){
-			out_file.close();	//necessary?
+		// Constructor with char*
+		writer_vtp(const char* _filename) : filename(_filename) {
+			  // Write the file
+  			  writer = PolyDataWriter_ptr::New();
+  			  writer -> SetFileName(filename.c_str());
+
+  			  lines = CellArray_ptr::New();
+			  points = Points_ptr::New();
+			  vertices = Points_ptr::New();
+			  
+			  // Check on the extension of _filename
+			  if(filename.substr(filename.length()-3, 3) != "vtp")
+				 std::cerr << "Warning! The output file does not have 'vtp' extension." << std::endl;
+			  
+			  // Naming the output file for colored vertices
+			  std::string vertex_string("_vertices.vtp");
+			  std::string filename_vertices(filename.begin(), filename.end()-4);
+
+			  filename_vertices.append(vertex_string);
+			
+  			  writer_vertices = PolyDataWriter_ptr::New();			  
+			  writer_vertices -> SetFileName(filename_vertices.c_str());	  
 		}
-		*/
 		
-		//! It exports the graph in .vtp format (compatible with Paraview). If the edge isn't linear we assume there's a mesh defined on it. If there isn't, a simple straight line will be displayed for that edge, indendently of its geometry
-		 
+		/*! 
+			@brief	It exports the graph in .vtp format (compatible with Paraview)
+			@detail	If the edge isn't linear we assume there's a mesh defined on it.
+					If there isn't, a simple straight line will be displayed for 
+					that edge, independently of its geometry
+		*/
 		virtual void export_vtp(Graph const& G){
-			std::cout<<"Writing vtp output..."<<std::endl;
+			std::cout << "Writing vtp output..." << std::endl;
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			unsigned int n_vertices = 0;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
@@ -147,18 +167,20 @@ class writer_vtp{
 		}	
 		
 	protected:
-		//! The stream associated to the output file
+		//! The file name
+		std::string filename;
+		//! The streams associated to the output files
 		PolyDataWriter_ptr writer;
 		PolyDataWriter_ptr writer_vertices;
 		//! Containers with all the points
 		Points_ptr points;
 		Points_ptr vertices;
 		//! The array containing all the lines corresponding to the edges
-		CellArray_ptr lines;
+		CellArray_ptr lines;		
 		
-		
+		//! Helper function to ...
 		void add_line(BGLgeom::Edge_desc<Graph> const& e, Graph const& G, unsigned int & count_vertices){
-			// get source and target
+
 			BGLgeom::Vertex_desc<Graph> src = boost::source(e,G);
 			BGLgeom::Vertex_desc<Graph> tgt = boost::target(e,G);
 			
@@ -197,6 +219,7 @@ class writer_vtp{
    			lines->InsertNextCell(polyLine); // insert the new created line to the container of all lines
 		}; // add_line
 		
+		//! Helper function to ...
 		void generate_output(const unsigned int & n_vertices){
 			/* Now all the lines have been stored in lines: we create a PolyData object
 			containing points and line containers, and it will be the writer input argument */
@@ -221,8 +244,7 @@ class writer_vtp{
 			#endif
 	  		vertexFilter->Update();
 	 
-	  		PolyData_ptr polyData_color = vtkSmartPointer<vtkPolyData>::New();
-	  	
+	  		PolyData_ptr polyData_color = vtkSmartPointer<vtkPolyData>::New();	  	
 	  		polyData_color->ShallowCopy(vertexFilter->GetOutput());
 	 
 	  		// Setup colors
@@ -250,7 +272,6 @@ class writer_vtp{
   			
   			writer -> Write();
   			writer_vertices -> Write();
-
 		}; // generate_output
 		
 };	//writer_vtp
