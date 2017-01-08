@@ -81,16 +81,16 @@ new_vertex(Vertex_prop const& v_prop,
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
 		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
 			if(v_prop.coordinates == G[*v_it].coordinates){
-				#ifdef OUT_MSG
-					std::cout<<"Vertex already existing"<<std::endl;	
+				#ifndef NDEBUG
+					std::cout << "Vertex already existing" << std::endl;	
 				#endif
 				return *v_it;
 			}
 		}
 	}
 	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	#ifdef OUT_MSG
-		std::cout<<"New vertex created"<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New vertex created" << std::endl;
 	#endif
 	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
@@ -104,20 +104,20 @@ new_vertex(BGLgeom::point<dim> const& P,
 	
 	BGLgeom::Vertex_base_property<dim> v_prop(P);
 	
-	if(check_unique){	
+	if(check_unique){
 		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
-		for(std::tie(v_it,v_end)=boost::vertices(G); v_it != v_end; ++v_it){
+		for(std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it){
 			if(P == G[*v_it].coordinates){
-				#ifdef OUT_MSG
-					std::cout<<"Vertex already existing"<<std::endl;	
+				#ifndef NDEBUG
+					std::cout << "Vertex already existing" << std::endl;	
 				#endif
 				return *v_it;
 			}
 		}
 	}
 	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	#ifdef OUT_MSG
-		std::cout<<"New vertex created"<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New vertex created" << std::endl;
 	#endif
 	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
@@ -138,12 +138,12 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 			Graph & G){
 	
 	bool inserted;	
-	typename BGLgeom::Edge_desc<Graph> e;
+	BGLgeom::Edge_desc<Graph> e;
 	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
-	#ifdef OUT_MSG
-		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;
 }	//new_edge (without properties)
@@ -151,18 +151,17 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 //! Creates a new edge and assigns its property values
 template <typename Graph, typename Edge_prop>
 BGLgeom::Edge_desc<Graph> 
-new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
-			typename BGLgeom::Vertex_desc<Graph> const& tgt,
+new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
+			BGLgeom::Vertex_desc<Graph> const& tgt,
 			Edge_prop const & E_prop,
 			Graph & G){
 	
 	bool inserted;
-	typename BGLgeom::Edge_desc<Graph> e;
-	
+	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
 	check_if_edge_inserted<Graph>(e, inserted);
-	#ifdef OUT_MSG
-		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;
 }
@@ -176,7 +175,7 @@ new_edge(	typename BGLgeom::Vertex_desc<Graph> const& src,
 			the other properties are left defaulted
 	@note 	It performs a check on the insertion of the edge
 	@pre	This version of the function assumes that the coordinates of the vertices
-			are already defined in the vertex properties of the verticesù
+			are already defined in the vertex properties of the vertices
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
 			
@@ -198,8 +197,8 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
 	G[e].geometry.set_target(G[tgt].coordinates);
-	#ifdef OUT_MSG
-		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;
 }	//new_linear_edge
@@ -213,6 +212,9 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 			parameters to do this. Only the geometry is set up, the other properties 
 			are left defaulted
 	@note 	It performs a check on the insertion of the edge
+	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
+			the coordinates of source and vertex passed in the vertex descriptors. If not,
+			it displays a warning message in the screen
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
 			
@@ -237,16 +239,18 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
 	
-	if(src.coordinates != _fun(0))
-		std::cerr<<"WARNING: source coordinates "<<src.coordinates<<"do not coincide with the parametrized function evaluated in t=0";
-	else if(tgt.coordinates != _fun(1))
-		std::cerr<<"WARNING: target coordinates "<<src.coordinates<<"do not coincide with the parametrized function evaluated in t=1";
+	if(G[src].coordinates != _fun(0))
+		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
+				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+	if(G[tgt].coordinates != _fun(1))
+		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
+				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
 	// Setting up the geometry
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
 	G[e].geometry.set_second_der(_second_der);
-	#ifdef OUT_MSG
-		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New edge created. " << G[e].geometry << std::endl;
 	#endif
 	return e;	
 }	//new_generic_edge
@@ -259,6 +263,9 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 			It takes care of setting up the geometry, so some additional parameters are
 			required. Only the geometry is set up, the other properties are left defaulted
 	@note 	It performs a check on the insertion of the edge
+	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
+			the coordinates of source and vertex passed in the vertex descriptors. If not,
+			it displays a warning message in the screen
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
 			
@@ -281,15 +288,16 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
-	
-	if(src.coordinates != C.front())
-		std::cerr<<"WARNING: source point "<<src.coordinates<<"does not coincide with the first control point of the b-spline";
-	else if(tgt.coordinates != C.back())
-		std::cerr<<"WARNING: target point "<<src.coordinates<<"does not coincide with the last control point of the b-spline";
-	
 
-	#ifdef OUT_MSG
-		std::cout<<"New edge created. "<<G[e].geometry<<std::endl;
+	if(G[src].coordinates != C.front())
+		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
+				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+	if(G[tgt].coordinates != C.back())
+		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
+				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
+
+	#ifndef NDEBUG
+		std::cout << "New edge created. " << G[e].geometry << std::endl;
 	#endif
 	return e;				 
 }	//new_bspline_edge
@@ -302,6 +310,9 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 			It takes care of setting up the geometry, so some additional parameters are
 			required. Only the geometry is set up, the other properties are left defaulted
 	@note 	It performs a check on the insertion of the edge
+	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
+			the coordinates of source and vertex passed in the vertex descriptors. If not,
+			it displays a warning message in the screen
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
 			
@@ -327,13 +338,15 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C,k);
 	
-	if(src.coordinates != C.front())
-		std::cerr<<"WARNING: source point "<<src.coordinates<<"does not coincide with the first control point of the b-spline";
-	else if(tgt.coordinates != C.back())
-		std::cerr<<"WARNING: target point "<<src.coordinates<<"does not coincide with the last control point of the b-spline";
+	if(G[src].coordinates != C.front())
+		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
+				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+	if(G[tgt].coordinates != C.back())
+		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
+				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
 	
-	#ifdef OUT_MSG
-		std::cout<<"New edge created "<<G[e].geometry<<std::endl;
+	#ifndef NDEBUG
+		std::cout << "New edge created " << G[e].geometry << std::endl;
 	#endif
 	return e;				 
 }	//new_bspline_edge
