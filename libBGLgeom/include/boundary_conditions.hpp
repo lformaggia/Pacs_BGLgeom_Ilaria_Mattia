@@ -17,6 +17,8 @@
 #ifndef HH_BOUNDARY_CONDITION_HH
 #define HH_BOUNDARY_CONDITION_HH
 
+#include <iostream>
+
 namespace BGLgeom{
 /*!
 	@brief An enum class defining the type of a boundary condition

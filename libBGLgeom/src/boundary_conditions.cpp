@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <type_traits>
 
 using namespace BGLgeom;
 
@@ -40,14 +41,15 @@ std::istream & operator>>(std::istream & in, boundary_condition & BC){
 		return in;
 	}
 	// Should not reach this
-	std::cerr << "boundary_conditions: Something wrong in input operation." << std::endl;
+	std::cerr << "BGLgeom::boundary_conditions: Something wrong in input operation." << std::endl;
 	return in;
 }	//operator>>
 
 
 std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
+	
 	if(BC.type == BC_type::NONE){
-		out << "BC NONE";	//se faccio << BC.type stampa solo il numero. devo fare controlli per stampare string
+		out << "BC NONE";
 		return out;
 	} else if(BC.type == BC_type::INT){
 		out << "BC INT";
@@ -66,7 +68,8 @@ std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
 		return out;
 	}
 	// Should not reach this
-	std::cerr << "boundary_conditions: something wrong in output operation." << std::endl;
+	std::cerr << (BC.type == BC_type::NONE) << std::endl;
+	std::cerr << "BGLgeom::boundary_conditions: something wrong in output operation." << std::endl;
 	return out;
 }	//operator<<
 
