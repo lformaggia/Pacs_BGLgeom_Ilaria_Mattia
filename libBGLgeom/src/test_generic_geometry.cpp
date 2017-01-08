@@ -3,6 +3,8 @@
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
 #include "mesh.hpp"
+#include "writer_vtp.hpp"
+#include "writer_pts.hpp"
 #include <functional>
 #include <cmath>
 #include <vector>
@@ -189,15 +191,22 @@ int main(){
   	};
   	
   	Vertex_desc<Graph> a,b;
-  	a = add_vertex(G); 	//boost
-  	b = add_vertex(G);	//boost
-  	//No need to set the coordinates, in this moment
+  	Vertex_base_property<3> src_prop(alfa(0));
+  	Vertex_base_property<3> tgt_prop(alfa(1));
+  	a = new_vertex(src_prop,G); 	//BGLgeom
+  	b = new_vertex(tgt_prop,G);		//BGLgeom
   	
   	Edge_desc<Graph> e;
   	e = new_generic_edge<Graph,3>(a, b, G, alfa, alfa1, alfa2);	//BGLgeom
   	
-  	std::cout << "Source: " << G[e].geometry(0) << std::endl;
-  	std::cout << "Target: " << G[e].geometry(1) << std::endl;
+  	//Creating a uniform mesh
+  	G[e].make_uniform_mesh(100);
+  	
+  	// Output
+  	writer_pts<Graph,3> Wpts("../data/out_test_generic_geometry.pts");
+  	writer_vtp<Graph,3> Wvtp("../data/out_test_generic_geometry.vtp");
+  	Wpts.export_pts(G);
+  	Wvtp.export_vtp(G);
 	
 	return 0;
 }
