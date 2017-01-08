@@ -21,8 +21,10 @@ int main(){
 	std::cout << "Comparison: P1 < P2? " << operator<(P1,P2) << std::endl;
 	std::cout << "Comparison: P1 > P2? " << (P1 > P2) << std::endl;
 	std::cout << "Comparison: P1 == P2? " << (P1 == P2) << std::endl;
-	std::cout << "Comparison: P1 == P3? " << (P1 == P3) << std::endl;
 	std::cout << "Comparison: P1 != P2? " << (P1 != P2) << std::endl;
+	std::cout << "Comparison: P1 == P3? " << (P1 == P3) << std::endl;
+	std::cout << "Comparison: P1 != P3? " << (P1 != P3) << std::endl;
+	
 	
 	return 0;
 }
