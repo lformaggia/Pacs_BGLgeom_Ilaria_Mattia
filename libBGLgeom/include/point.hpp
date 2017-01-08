@@ -95,14 +95,14 @@ operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const
 
 /*!
 	@brief Operator!= overloading			
-	@detail It checks if the two points are different
+	@detail It checks if the two points are different, with a default tolerance.
+			It is implemented as the negation of the operator==
 */
 template <typename Derived>
 bool
 operator!= (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const& P2){
 	return !(P1==P2);
 }
-
 
 } //BGLgeom
 
