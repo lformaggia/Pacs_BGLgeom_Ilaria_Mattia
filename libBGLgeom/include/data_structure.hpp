@@ -69,10 +69,7 @@
 #include <memory>
 #include <array>
 #include <string>
-#include <tuple>
-#include <vector>
 #include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
@@ -158,8 +155,8 @@ struct Vertex_base_property{
 	Vertex_base_property(point_t const& _coordinates,
 						 bc_t const& _BC) :	coordinates(_coordinates),
 											BC(_BC),						 						
-					 						index(-1),
-					 						label() {};
+					 						label(),
+					 						index(-1) {};
 								
 	//! Full constructor
 	Vertex_base_property(point_t const& _coordinates,
@@ -185,21 +182,28 @@ struct Vertex_base_property{
 	//! Destructor
 	virtual ~Vertex_base_property() = default;
 	
-	//! Overload of output operator
+	/*!
+		@brief Overload of output operator
+		@detail It prints out what is in the vertex property. Shows "NOT DEFINED" if
+				the corresponding value was left defaulted
+	*/
 	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& v_prop) {
-		out << "Coordinates: "<<v_prop.coorinates << std::endl;
+		out << "Coordinates: " << v_prop.coorinates << std::endl;
 		if(v_prop.index != -1)
-			out << "Index: "<<v_prop.index<<std::endl;
+			out << "Index: " << v_prop.index << std::endl;
 		else
-			out << "Index: NOT DEFINED" <<std::endl;
+			out << "Index: NOT DEFINED" << std::endl;
 		if(v_prop.label.empty())
-			out << "Label: NOT DEFINED" <<std::endl;
+			out << "Label: NOT DEFINED" << std::endl;
 		else
-			out << "Label: "<<v_prop.label<<std::endl;
+			out << "Label: "<< v_prop.label << std::endl;
 		if(v_prop.BC.empty())
-			out << "Boundary condition(s): NOT DEFINED" <<std::endl:
-		else
-			out << "Boundary condition(s): "<<v_prop.BC << std::endl; 
+			out << "Boundary condition(s): NOT DEFINED" << std::endl:
+		else{
+			out << "Boundary condition(s): " << std::endl;
+			for(std::size_t i = 0; i < v_prop.BC.size(); ++i)
+				 out << "\t" << i++1 << ")" << v_prop.BC[i] << std::endl; 
+		}
 		return out;
 	}
 	
@@ -221,11 +225,7 @@ struct Edge_base_property_static{
 
 	//! The class handling the parameterization of the edge
 	geom_t geometry;
-	/*! 
-		@brief The container for the mesh
-		@detail - first: mesh points \n
-				- second: the values of the parameter from which the mesh was generated
-	*/
+	//! The struct handling the mesh
 	mesh_t mesh;
 	//! A label for the vertex (if needed)
 	std::string label;
@@ -261,42 +261,46 @@ struct Edge_base_property_static{
 	//! Move_constructor
 	Edge_base_property_static(Edge_base_property_static &&) = default;
 	
+	//! Destructor
+	virtual ~Edge_base_property_static() = default;
+	
 	//! Assignment operator
 	Edge_base_property_static & operator=(Edge_base_property_static const&) = default;
 	
 	//! Move assignment
 	Edge_base_property_static & operator=(Edge_base_property_static &&) = default;
 	
-	//! Layer for uniform_mesh method of class mesh
+	//! Helper method to create a mesh using the uniform_mesh() method of struct mesh
 	void make_uniform_mesh(const unsigned int n){
 		mesh.uniform_mesh(n, geometry);
 	}
 	
-	//! Layer for variable_mesh method of class mesh
+	//! Helper method to create a mesh using the variable_mesh() method of struct mesh
 	void make_variable_mesh(const unsigned int n, std::function<double(double)> const& spacing_function){
 		mesh.variable_mesh(n, spacing_function, geometry);
 	}
 	
 	/*!
 		@brief	Overload of operator<<
-		@detail It returns source and target of the edge, i.e. geometry(0) & geometry(1) and, if defined, label and index. Concerning the mesh, it is simply returned TRUE if there's a mesh defined on the edge, FALSE otherwise.
+		@detail It prints out what is in the edge property, explaining the geometry of 
+				the edge and its source and target. It shows "NOT DEFINED" if the 
+				corresponding value was left defaulted. Concerning the mesh, it returns
+				whether a mesh on the edge was computed or not.
 	*/
 	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_static const& e_prop) {
 		out << e_prop.geometry << std::endl;
 		if(e_prop.index != -1)
-			out << "Index: "<<e_prop.index<<std::endl;
+			out << "Index: " << e_prop.index << std::endl;
 		else
-			out << "Index: NOT DEFINED" <<std::endl;
+			out << "Index: NOT DEFINED" << std::endl;
 		if(e_prop.label.empty())
-			out << "Label: NOT DEFINED" <<std::endl;
+			out << "Label: NOT DEFINED" << std::endl;
 		else
-			out << "Label: "<<e_prop.label<<std::endl;
-			
-		out << "Mesh on the edge: "; 
+			out << "Label: " << e_prop.label << std::endl;			
 		if(e_prop.mesh.empty())
-			out << "FALSE" << std::endl;
+			out << "Mesh: empty" << std::endl;
 		else
-			out << "TRUE" <<std::endl;
+			out << "Mesh: already computed" <<std::endl;
 		return out;
 	}
 	
