@@ -3,14 +3,18 @@
 #include "data_structure.hpp"
 #include "mesh.hpp"
 #include "point.hpp"
+#include "writer_pts.hpp"
+#include "writer_vtp.hpp"
 #include <vector>
 #include <iostream>
 #include <iomanip>
 #include <boost/graph/adjacency_list.hpp>
+#include <type_traits>
 
 
 using namespace BGLgeom;
 using namespace boost;
+using BGLgeom::operator<<;
 
 int main(){
 
@@ -39,7 +43,6 @@ int main(){
 	std::cout << "\tt=0   : " << B.second_der(0) << std::endl;
 	std::cout << "\tt=0.5 : " << B.second_der(0.5) << std::endl;
 	std::cout << "\tt=1   : " << B.second_der(1) << std::endl;
-//	std::cout << "\tt=10  : " << B.second_der(10) << std::endl;
 	
 	std::cout << "Curvilinear abscissa: " << std::endl;
 	std::cout << "\tt=0   : " << B.curv_abs(0) << std::endl;
@@ -120,13 +123,21 @@ int main(){
 	Graph G;
 	
 	Vertex_desc<Graph> src, tgt;
-	src = add_vertex(G);
-	tgt = add_vertex(G);
+	Vertex_base_property<3> src_prop(CPs.front());
+	Vertex_base_property<3> tgt_prop(CPs.back());
+	src = new_vertex(src_prop,G);	//BGLgeom
+	tgt = new_vertex(tgt_prop,G);	//BGLgeom
 	Edge_desc<Graph> e;
 	e = new_bspline_edge<Graph,3>(src, tgt, CPs, G);
 	
-	std::cout << "\tt=0   : " << G[e].geometry(0) << std::endl;
-	std::cout << "\tt=0.34: " << G[e].geometry.second_der(0.34) << std::endl;
+	// Creating a mesh on the edge
+	G[e].make_uniform_mesh(100);
+	
+	// Writing infos in the output
+	writer_pts<Graph,3> Wpts("../data/out_test_bspline.pts");
+	writer_vtp<Graph,3> Wvtp("../data/out_test_bspline.vtp");
+	Wpts.export_pts(G);
+	Wvtp.export_vtp(G);
 	
 	return 0;
 }
