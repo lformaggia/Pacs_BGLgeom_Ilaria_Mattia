@@ -22,6 +22,7 @@
 #include <cmath>
 #include <limits>
 #include <functional>
+#include <boost/graph/adjacency_list.hpp>
 
 #include "data_structure.hpp"
 #include "generic_geometry.hpp"
@@ -241,16 +242,16 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	if(G[src].coordinates != _fun(0))
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
-				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=0" << std::endl;
 	if(G[tgt].coordinates != _fun(1))
 		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
-				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
 	// Setting up the geometry
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
 	G[e].geometry.set_second_der(_second_der);
 	#ifndef NDEBUG
-		std::cout << "New edge created. " << G[e].geometry << std::endl;
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;	
 }	//new_generic_edge
@@ -291,13 +292,13 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 
 	if(G[src].coordinates != C.front())
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
-				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=0" << std::endl;
 	if(G[tgt].coordinates != C.back())
 		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
-				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
 
 	#ifndef NDEBUG
-		std::cout << "New edge created. " << G[e].geometry << std::endl;
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;				 
 }	//new_bspline_edge
@@ -340,13 +341,13 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	if(G[src].coordinates != C.front())
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
-				<< "do not coincide with the parametrized function evaluated in t=0" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=0" << std::endl;
 	if(G[tgt].coordinates != C.back())
 		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
-				<< "do not coincide with the parametrized function evaluated in t=1" << std::endl;
+				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
 	
 	#ifndef NDEBUG
-		std::cout << "New edge created " << G[e].geometry << std::endl;
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;				 
 }	//new_bspline_edge

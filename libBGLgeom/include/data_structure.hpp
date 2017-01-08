@@ -188,7 +188,7 @@ struct Vertex_base_property{
 				the corresponding value was left defaulted
 	*/
 	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& v_prop) {
-		out << "Coordinates: " << v_prop.coorinates << std::endl;
+		out << "Coordinates: " << v_prop.coordinates << std::endl;
 		if(v_prop.index != -1)
 			out << "Index: " << v_prop.index << std::endl;
 		else
@@ -198,11 +198,11 @@ struct Vertex_base_property{
 		else
 			out << "Label: "<< v_prop.label << std::endl;
 		if(v_prop.BC.empty())
-			out << "Boundary condition(s): NOT DEFINED" << std::endl:
+			out << "Boundary condition(s): NOT DEFINED" << std::endl;
 		else{
 			out << "Boundary condition(s): " << std::endl;
 			for(std::size_t i = 0; i < v_prop.BC.size(); ++i)
-				 out << "\t" << i++1 << ")" << v_prop.BC[i] << std::endl; 
+				 out << "\t" << i+1 << ") " << v_prop.BC[i] << std::endl; 
 		}
 		return out;
 	}
