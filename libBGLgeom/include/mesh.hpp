@@ -89,7 +89,7 @@ struct mesh{
 		@return	True if the containers are empty, false if not
 	*/
 	bool
-	empty(){
+	empty() const {
 		if(real.empty() && parametric.empty())
 			return true;
 		else{
