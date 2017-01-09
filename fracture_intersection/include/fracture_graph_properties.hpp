@@ -30,7 +30,7 @@ namespace Fracture{
 	parameters: K_t, K_n, df, source_term
 */
 //! The edge data structure
-struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<2>,2>{
+struct Edge_prop : public BGLgeom::Edge_base_property<BGLgeom::linear_geometry<2>,2>{
 	//! Parameter K_t (Permeabilità tangenziale)
 	double K_t;
 	//! Parameter K_n (Permeabilità normale)
@@ -42,7 +42,7 @@ struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_geo
 
 	
 	//! Default constructor
-	Edge_prop() :	BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<2>,2>(),
+	Edge_prop() :	BGLgeom::Edge_base_property<BGLgeom::linear_geometry<2>,2>(),
 					K_t(0),
 					K_n(0),
 					df(0),
@@ -54,7 +54,7 @@ struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_geo
 				 double const& _K_n,
 				 double const& _df,				 
 				 double const& _source_term) :
-							BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<2>,2>(),
+							BGLgeom::Edge_base_property<BGLgeom::linear_geometry<2>,2>(),
 							K_t(_K_t),
 							K_n(_K_n),
 							df(_df),
