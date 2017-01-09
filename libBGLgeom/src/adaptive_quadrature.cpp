@@ -17,9 +17,8 @@ int depth_reached = 0;
 double
 trapz (std::function<double (double)> f, double a, double b)
 {
-  double retval = 0.0;
   double h = b - a;
-  retval = .5 * h * (f(a) + f(b));
+  return .5 * h * (f(a) + f(b));
 };
 
 double
