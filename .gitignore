@@ -23,13 +23,13 @@ fracture_intersection/obj/*
 fracture_intersection/bin/*
 fracture_intersection/test/*
 fracture_intersection/data/*.pts
-fracture_intersection/data/*.vtk
+fracture_intersection/data/*.vtp
 network_diffusion/doc/*
 network_diffusion/obj/*
 network_diffusion/bin/*
 network_diffucion/test/*
 network_diffusion/data/*.pts
-network_diffusion/data/*.vtk
+network_diffusion/data/*.vtp
 vtk/*
 bin/*
 Filetxt/*
