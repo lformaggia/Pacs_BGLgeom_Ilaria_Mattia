@@ -23,7 +23,7 @@ int main(){
 
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_prop, Edge_prop>;
 	
-	std::string filename("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/network_diffusion/data/rattm93a.txt");
+	std::string filename("../data/rattm93a.txt");
 	
 	Graph G;
 	reader_netdiff R(filename);
@@ -64,17 +64,16 @@ int main(){
 		std::cout << "Edge " << G[*e_it].index << ": " << std::endl;
 		std::cout << G[src].coordinates << ", " << G[tgt].coordinates;
 		std::cout << "; Diameter:  " << G[*e_it].diam << std::endl;
-		++count;
 	}
 	
 	// Creating a mesh on every edge
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)
-		G[*e_it].mesh.uniform_mesh(20, G[*e_it].geometry);
+		G[*e_it].make_uniform_mesh(20);
 	
 	// Writing on a pts output
-	std::string out_pts_filename("/D/Progetto_pacs/Pacs_project_Ilaria_Mattia/network_diffusion/data/rattm93a.pts");
+	std::string out_pts_filename("../data/rattm93a.pts");
 	writer_pts<Graph,3> W(out_pts_filename);
 	W.export_pts(G);
 	
 	return 0;
-};
+}
