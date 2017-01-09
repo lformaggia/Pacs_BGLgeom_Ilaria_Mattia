@@ -19,8 +19,6 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-#include <cmath>
-#include <limits>
 #include <functional>
 #include <boost/graph/adjacency_list.hpp>
 
@@ -46,32 +44,30 @@ void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inse
 	}
 }	//check_edge_inserted
 
-
-
-//! Giving to source node v all properties through assigning the Source_data_structure
-template <typename Graph, typename Vertex_prop>
-void give_vertex_properties	(Vertex_prop const& V_prop,
-							 BGLgeom::Vertex_desc<Graph> const& v,
-							 Graph & G){
-	G[v] = V_prop;
-}	//give_vertex_properties
-
-//! Giving to edge e all properties through assigning the Edge_data_structure
-template <typename Graph, typename Edge_prop>
-void give_edge_properties	(Edge_prop const& E_prop,
-							 BGLgeom::Edge_desc<Graph> const& e,
-							 Graph & G){
-	G[e] = E_prop;
-}	//give_edge_properties
-
-
+/*!
+	@brief	Creates a new vertex in the graph
+	@detail	The new vertex has all the properties with a defaulted value
+	
+	@param G The graph where to insert the new vertex
+	@return The vertex descriptor of the new vertex
+*/
 template <typename Graph>
 BGLgeom::Vertex_desc<Graph>
 new_vertex(Graph & G){	
 	return boost::add_vertex(G);
 }	//new_vertex
 
+/*!
+	@brief	Creates a new vertex in the graph with the given properties
 
+	@param v_prop The properties to be assigned to the new vertex
+	@param G The graph where to insert the new vertex
+	@param check_unique Boolean: set true if you want to check wheter the
+			coordinates of the vertex you want to insert are already present
+			in the graph (i.e. if there is or no another vertex with the same 
+			coordinates in the graph)
+	@return The vertex descriptor of the new vertex
+*/
 template <typename Graph, typename Vertex_prop>
 BGLgeom::Vertex_desc<Graph>
 new_vertex(Vertex_prop const& v_prop,
@@ -96,41 +92,15 @@ new_vertex(Vertex_prop const& v_prop,
 	return boost::add_vertex(v_prop,G);	
 }	//new_vertex
 
-
-template <typename Graph, unsigned int dim>
-BGLgeom::Vertex_desc<Graph>
-new_vertex(BGLgeom::point<dim> const& P,
-		   Graph & G, 
-		   const bool check_unique = false){
-	
-	BGLgeom::Vertex_base_property<dim> v_prop(P);
-	
-	if(check_unique){
-		BGLgeom::Vertex_iter<Graph> v_it,v_end;	
-		for(std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it){
-			if(P == G[*v_it].coordinates){
-				#ifndef NDEBUG
-					std::cout << "Vertex already existing" << std::endl;	
-				#endif
-				return *v_it;
-			}
-		}
-	}
-	// if we arrived here, either check_unique = false or check_unique = true but there is no vertex with the same coordinates
-	#ifndef NDEBUG
-		std::cout << "New vertex created" << std::endl;
-	#endif
-	return boost::add_vertex(v_prop,G);	
-}	//new_vertex
-
-
 /*!
-	@brief Creates an edge giving the right properties to source and target vertex and to the edge itself
-	@detail Topological information, such as source and target vertices, has to be passed as
-			standard parameters of the function
-	@remark It looses some efficiency due to the creation of an edge descriptor and a bool at
-			every call of the function. It also perfom an extra control (not needed in much
-			cases, see documentation of boost::add_edge)
+	@brief	Creates a new edge in the graph
+	@detail The edge properties are not assigned, so are left with a default value.
+			This function checks for the right insertion of the edge
+	
+	@param src The vertex descriptor of the source
+	@param tgt The vertex descriptor of the target
+	@param G The graph where to insert the new edge
+	@return The edge descriptor of the new edge inserted
 */
 template <typename Graph>
 BGLgeom::Edge_desc<Graph> 
@@ -139,8 +109,7 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 			Graph & G){
 	
 	bool inserted;	
-	BGLgeom::Edge_desc<Graph> e;
-	
+	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
 	#ifndef NDEBUG
@@ -149,7 +118,16 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	return e;
 }	//new_edge (without properties)
 
-//! Creates a new edge and assigns its property values
+/*!
+	@brief	Creates a new edge in the graph assigning it the given properties
+	@detail This function checks for the right insertion of the edge
+	
+	@param src The vertex descriptor of the source
+	@param tgt The vertex descriptor of the target
+	@param e_prop The edge properties to be assigned to the edge
+	@param G The graph where to insert the new edge
+	@return The edge descriptor of the new edge inserted
+*/
 template <typename Graph, typename Edge_prop>
 BGLgeom::Edge_desc<Graph> 
 new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
@@ -165,10 +143,10 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;
-}
+}	//new_edge (with properties)
 
 /*!
-	@brief	Adding a new linear edge to the graph
+	@brief	Adds a new linear edge to the graph
 	@remark	Use this only when you set "linear_geometry<dim>" as template parameter of the
 			Edge_base_property
 	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
@@ -182,7 +160,7 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
-	@param G The graph
+	@param G The graph where to insert the new edge
 	@return The edge descriptor of the new edge
 */
 template <typename Graph>
@@ -221,7 +199,7 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
-	@param G The graph
+	@param G The graph where to insert the new edge
 	@param _fun Parametrized function describing the curve of the edge
 	@param _first_der Parametrized function describing the first derivative of the curve
 	@param _second_der Parametrized function describing the second derivative of the curve
@@ -272,7 +250,7 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
-	@param G The graph
+	@param G The graph where to insert the new edge
 	@param C The vector of control points
 	@return The edge descriptor of the new edge
 */
@@ -319,7 +297,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
-	@param G The graph
+	@param G The graph where to insert the new edge
 	@param C The vector of control points
 	@param k The knot vector for the bspline
 	@return The edge descriptor of the new edge
