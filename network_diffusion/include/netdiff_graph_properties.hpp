@@ -30,15 +30,15 @@ namespace NetDiff{
 using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 
 //! Properties that vertices will have
-struct Edge_prop : public BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>{
+struct Edge_prop : public BGLgeom::Edge_base_property<BGLgeom::linear_geometry<3>,3>{
 	//! Diameter
 	double diam;
 	
 	//! Default constructor
-	Edge_prop() : 	BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>(),
+	Edge_prop() : 	BGLgeom::Edge_base_property<BGLgeom::linear_geometry<3>,3>(),
 					diam() {};
 	//! Constructor
-	Edge_prop(double const& _diam) : BGLgeom::Edge_base_property_static<BGLgeom::linear_geometry<3>,3>(),
+	Edge_prop(double const& _diam) : BGLgeom::Edge_base_property<BGLgeom::linear_geometry<3>,3>(),
 									diam(_diam) {};
 	//! Explicit declaration of default assignment operator
 	Edge_prop & operator=(Edge_prop const&) = default;
