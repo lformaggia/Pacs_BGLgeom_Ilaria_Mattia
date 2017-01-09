@@ -3,6 +3,8 @@
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
 #include "mesh.hpp"
+#include "writer_vtp.hpp"
+#include "writer_pts.hpp"
 #include <vector>
 #include <tuple>
 #include <cmath>
@@ -123,25 +125,34 @@ int main(){
 	point<3> D(5,6,7);
 	
 	Vertex_desc<Graph> a,b,c,d;
-	a = add_vertex(G);	//boost
-	b = add_vertex(G);	//boost
-	c = add_vertex(G);	//boost
-	d = add_vertex(G);	//boost
-	G[a].coordinates = A;
-	G[b].coordinates = B;
-	G[c].coordinates = C;
-	G[d].coordinates = D;
+	Vertex_base_property<3> a_prop(A);
+	Vertex_base_property<3> b_prop(B);
+	Vertex_base_property<3> c_prop(C);
+	Vertex_base_property<3> d_prop(D);
+	a = new_vertex(a_prop, G);	//BGLgeom
+	b = new_vertex(b_prop, G);	//BGLgeom
+	c = new_vertex(c_prop, G);	//BGLgeom
+	d = new_vertex(d_prop, G);	//BGLgeom
 	
 	Edge_desc<Graph> e1, e2, e3;
 	e1 = new_linear_edge(a, b, G);	//BGLgeom
 	e2 = new_linear_edge(b, c, G);	//BGLgeom
-	e3 = add_edge(c, d, G).first;	//boost
-	G[e3].geometry.set_source(G[e2].geometry(1));
-	G[e3].geometry.set_target(G[d].coordinates);	
+	e3 = new_linear_edge(c, d, G);	//BGLgeom
 	
 	std::cout << G[e1] << std::endl;
 	std::cout << G[e2] << std::endl;
 	std::cout << G[e3] << std::endl;
+	
+	// Computing a mesh on the edges
+	G[e1].make_uniform_mesh(100);
+	G[e2].make_uniform_mesh(50);
+	G[e3].make_variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	
+	// Produving output
+	writer_pts<Graph,3> Wpts("../data/out_test_linear_geometry.pts");
+	writer_vtp<Graph,3> Wvtp("../data/out_test_linear_geometry.vtp");
+	Wpts.export_pts(G);
+	Wvtp.export_vtp(G);
 	
 	return 0;
 }
