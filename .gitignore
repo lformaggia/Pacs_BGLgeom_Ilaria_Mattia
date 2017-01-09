@@ -9,6 +9,7 @@
 *~
 
 # Folders:
+Report/*
 old_project_structure/*
 libBGLgeom/doc/*
 libBGLgeom/obj/*
