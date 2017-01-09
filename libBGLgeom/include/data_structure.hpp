@@ -285,7 +285,7 @@ struct Edge_base_property_static{
 		@detail It prints out what is in the edge property, explaining the geometry of 
 				the edge and its source and target. It shows "NOT DEFINED" if the 
 				corresponding value was left defaulted. Concerning the mesh, it returns
-				whether a mesh on the edge was computed or not.
+				whether a mesh on the edge was computed (and present) or not.
 	*/
 	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_static const& e_prop) {
 		out << e_prop.geometry << std::endl;
