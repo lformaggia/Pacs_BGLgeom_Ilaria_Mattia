@@ -1,3 +1,33 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	test_bspline_geometry.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Testing class bspline_geometry and creation of mesh on an edge
+			with this geometry
+	
+	@detail	We perfom these different tests: \n
+			- Creation of a simple 2-dimensional B-spline with degree 2;
+				Evaluation of that spline at different values of the parameter,
+				using both methods that accept one single parameter and methods
+				accepting vectors of paramters; \n
+			- Creation of a 3-dimensional B-spline with degree 3; creation of a 
+				uniform mesh on it and evaluation of the spline, of its first and 
+				second derivatives in the point of the mesh. This example was 
+				taken from a code by prof. Carlo De Falco; \n
+			- Creation of a graph with two edges, one like in the second example 
+				and a new one. Creation of a uniform mesh on the first, and of a 
+				variable size mesh on the second. Production of pts and vtp output
+				for this graph
+*/
+
 #include "bspline_geometry.hpp"
 #include "graph_builder.hpp"
 #include "data_structure.hpp"
@@ -9,15 +39,15 @@
 #include <iostream>
 #include <iomanip>
 #include <boost/graph/adjacency_list.hpp>
-#include <type_traits>
-
+#include <cmath>
 
 using namespace BGLgeom;
 using namespace boost;
 using BGLgeom::operator<<;
 
 int main(){
-
+	
+	constexpr double pi = std::atan(1.0)*4.0;
 
 	std::vector<point<2>> control_pts;
 	control_pts.push_back(point<2>(0,0));
@@ -122,16 +152,27 @@ int main(){
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_geometry<>,3> >;
 	Graph G;
 	
-	Vertex_desc<Graph> src, tgt;
-	Vertex_base_property<3> src_prop(CPs.front());
-	Vertex_base_property<3> tgt_prop(CPs.back());
-	src = new_vertex(src_prop,G);	//BGLgeom
-	tgt = new_vertex(tgt_prop,G);	//BGLgeom
-	Edge_desc<Graph> e;
-	e = new_bspline_edge<Graph,3>(src, tgt, CPs, G);
+	std::vector<point<3>> CPs2 = {point<3>(0,			 0,		 0),	// 1st c.p.
+							      point<3>(-1./6.,	-1./7.,	-1./8.),	// 2nd c.p.
+							      point<3>(-2./6.,	-2./7., -3./8.),	// 3rd c.p.
+							      point<3>(-.5,		-3./7.,	-5./8.),	// 4th c.p.
+							      point<3>(-5./6.,	-5./7.,	-7./8.),	// 5th c.p.
+							      point<3>(-1,			-1,		-1)};	// 6th c.p.
+	
+	Vertex_desc<Graph> a,b,c;
+	Vertex_base_property<3> a_prop(CPs.front());
+	Vertex_base_property<3> b_prop(CPs.back());
+	Vertex_base_property<3> c_prop(CPs2.back());
+	a = new_vertex(a_prop, G);	//BGLgeom
+	b = new_vertex(b_prop, G);	//BGLgeom
+	c = new_vertex(c_prop, G);	//BGLgeom
+	Edge_desc<Graph> e1, e2;
+	e1 = new_bspline_edge<Graph,3>(a, b, CPs, G);	//BGLgeom
+	e2 = new_bspline_edge<Graph,3>(a, c, CPs2, G);	//BGLgeom
 	
 	// Creating a mesh on the edge
-	G[e].make_uniform_mesh(100);
+	G[e1].make_uniform_mesh(100);
+	G[e2].make_variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
 	
 	// Writing infos in the output
 	writer_pts<Graph,3> Wpts("../data/out_test_bspline.pts");

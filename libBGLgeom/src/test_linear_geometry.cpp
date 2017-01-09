@@ -1,3 +1,29 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	test_linear_geometry.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Testing class linear_geometry and creation of mesh on an edge
+			with this geometry
+	
+	@detail	We perfom these different test: \n
+			- Creation of a straigth line to test consistency with the 
+				generic_geometry class. Evaluation of the geometric characteristics 
+				for different values of the parameter, using both methods 
+				that accept one single parameter and methods accepting vectors 
+				of paramters. Creation of a uniform and a variable size mesh on it. \n
+			- Creation of a graph with three linear edges. Creation of a uniform 
+				and variable size mesh on them. Production of a pts and vtp
+				output
+*/
+
 #include "linear_geometry.hpp"
 #include "point.hpp"
 #include "data_structure.hpp"
@@ -6,7 +32,6 @@
 #include "writer_vtp.hpp"
 #include "writer_pts.hpp"
 #include <vector>
-#include <tuple>
 #include <cmath>
 
 using namespace BGLgeom;
