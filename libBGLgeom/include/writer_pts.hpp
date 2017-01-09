@@ -114,6 +114,7 @@ class writer_pts{
 					exit(EXIT_FAILURE);
 				}
 				// Writing on file
+				std::cout << "Writing pts file ..." << std::endl;
 				out_file << "BEGIN_LIST" << std::endl;
 				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
 					this->export_edge(G, *e_it, src, tgt, i);

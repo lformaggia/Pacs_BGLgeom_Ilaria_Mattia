@@ -158,7 +158,7 @@ class writer_vtp{
 					that edge, independently of its geometry
 		*/
 		virtual void export_vtp(Graph const& G){
-			std::cout << "Writing vtp output..." << std::endl;
+			std::cout << "Writing vtp file ..." << std::endl;
 			BGLgeom::Edge_iter<Graph> e_it, e_end;
 			unsigned int n_vertices = 0;
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
