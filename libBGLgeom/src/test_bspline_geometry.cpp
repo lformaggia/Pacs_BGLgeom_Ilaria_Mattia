@@ -149,7 +149,7 @@ int main(){
 	// Now we try to build a graph with one bspline edge
 	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout <<  "Creating a graph" << std::endl << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<bspline_geometry<>,3> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<bspline_geometry<>,3> >;
 	Graph G;
 	
 	std::vector<point<3>> CPs2 = {point<3>(0,			 0,		 0),	// 1st c.p.

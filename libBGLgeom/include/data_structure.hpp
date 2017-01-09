@@ -215,16 +215,14 @@ struct Vertex_base_property{
 
 /*!
 	@brief	Minimal data structure for the edge geometrical properties in "static" version
-	@detail	The type of the geometry of the edge is choose as template parameter
-	@note	"Static" in the name means that the geometry of the graph can be
-			decided at compile time with the choice of the template parameter. This
-			implies that all the edges in the graph will have the same geometry
+	@detail	The type of the geometry of the edge is choose as template parameter.
+			This implies that all edges in the graph will have the same geometry
 	
 	@param Geom Type of the geometry for the edge
 	@param dim The dimension of the space
 */
 template <typename Geom, unsigned int dim>
-struct Edge_base_property_static{
+struct Edge_base_property{
 	//! Definition of some types which may be useful to see outside the struct
 	using geom_t = Geom;
 	using mesh_t = typename BGLgeom::mesh<dim>;
@@ -240,47 +238,47 @@ struct Edge_base_property_static{
 	
 		
 	//! Default constructor
-	Edge_base_property_static() : geometry(), mesh(), label(), index(-1) {};
+	Edge_base_property() : geometry(), mesh(), label(), index(-1) {};
 	
 	//! Constructor with the geometry
-	Edge_base_property_static(geom_t const& _geometry) :	geometry(_geometry),
+	Edge_base_property(geom_t const& _geometry) :	geometry(_geometry),
 															mesh(),
 															label(),
 															index(-1) {};
 	
 	//! Constructor with label
-	Edge_base_property_static(std::string const& _label) :	geometry(),
+	Edge_base_property(std::string const& _label) :	geometry(),
 							 								mesh(),
 							 								label(_label),
 							 								index(-1) {};
 								 								
 	//! Constructor with index
-	Edge_base_property_static(unsigned int const& _index) :	geometry(),
+	Edge_base_property(unsigned int const& _index) :	geometry(),
 							 								mesh(),
 							 								label(),
 							 								index(_index) {};
 	
 	//! Constructor with label and index
-	Edge_base_property_static	(std::string const& _label,
+	Edge_base_property	(std::string const& _label,
 								 unsigned int const& _index) :	geometry(),
 								 								mesh(),
 								 								label(_label),
 								 								index(_index) {};
 	
 	//! Copy constructor
-	Edge_base_property_static(Edge_base_property_static const&) = default;
+	Edge_base_property(Edge_base_property const&) = default;
 	
 	//! Move_constructor
-	Edge_base_property_static(Edge_base_property_static &&) = default;
+	Edge_base_property(Edge_base_property &&) = default;
 	
 	//! Destructor
-	virtual ~Edge_base_property_static() = default;
+	virtual ~Edge_base_property() = default;
 	
 	//! Assignment operator
-	Edge_base_property_static & operator=(Edge_base_property_static const&) = default;
+	Edge_base_property & operator=(Edge_base_property const&) = default;
 	
 	//! Move assignment
-	Edge_base_property_static & operator=(Edge_base_property_static &&) = default;
+	Edge_base_property & operator=(Edge_base_property &&) = default;
 	
 	//! Helper method to create a mesh using the uniform_mesh() method of struct mesh
 	void make_uniform_mesh(unsigned int const& n){
@@ -299,7 +297,7 @@ struct Edge_base_property_static{
 				corresponding value was left defaulted. Concerning the mesh, it returns
 				whether a mesh on the edge was computed (and present) or not.
 	*/
-	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_static const& e_prop) {
+	friend std::ostream & operator<<(std::ostream & out, Edge_base_property const& e_prop) {
 		out << e_prop.geometry << std::endl;
 		if(e_prop.index != -1)
 			out << "Index: " << e_prop.index << std::endl;
@@ -316,7 +314,7 @@ struct Edge_base_property_static{
 		return out;
 	}
 	
-};	//Edge_base_property_static
+};	//Edge_base_property
 
 }	//BGLgeom
 

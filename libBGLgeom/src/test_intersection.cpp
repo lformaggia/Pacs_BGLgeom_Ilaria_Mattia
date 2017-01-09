@@ -10,7 +10,7 @@
 
 using namespace BGLgeom;
 using namespace boost;
-using Graph = adjacency_list<vecS,vecS,directedS,Vertex_base_property<2>,Edge_base_property_static<linear_geometry<2>,2>>;
+using Graph = adjacency_list<vecS,vecS,directedS,Vertex_base_property<2>,Edge_base_property<linear_geometry<2>,2>>;
 
 int main(){
 

@@ -204,7 +204,7 @@ int main(){
   	// BUilding a simple Graph
   	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout << std::endl << "Creating a graph with a generic edge" << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<generic_geometry<3>,3> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<generic_geometry<3>,3> >;
 	Graph G;
 	
 	auto alfa = [](double x) -> point<3>{

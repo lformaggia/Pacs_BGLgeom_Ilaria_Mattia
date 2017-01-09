@@ -14,7 +14,7 @@ using namespace BGLgeom;
 int main(){
 
 	// testing a graph with two boundary conditions in the vertex properties
-	using Graph = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3,2>,Edge_base_property_static<linear_geometry<3>,3> >;
+	using Graph = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3,2>,Edge_base_property<linear_geometry<3>,3> >;
 	Graph G;
 	
 	Vertex_desc<Graph> a,b,c;
@@ -48,13 +48,13 @@ int main(){
 	G[e1].mesh.uniform_mesh(20, G[e1].geometry);	
 	G[e2].mesh.uniform_mesh(20, G[e2].geometry);
 	
-	std::string filename1 = "../data/testPTS2bc.pts";
+	std::string filename1 = "../data/test_2BC_writer_pts.pts";
 	writer_pts<Graph,3,2> W(filename1);
 	W.export_pts(G);
 	
 	
 	// Now testing the writer on the additional infos to print
-	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,Edge_base_property_static<linear_geometry<3>,3> >;
+	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,Edge_base_property<linear_geometry<3>,3> >;
 	Graph2 G2;
 	
 	Vertex_desc<Graph2> d,e,f;
@@ -84,7 +84,7 @@ int main(){
 	G2[e3].mesh.uniform_mesh(20, G[e3].geometry);	
 	G2[e4].mesh.uniform_mesh(20, G[e4].geometry);
 	
-	std::string filename2 = "../data/testPTS.pts";
+	std::string filename2 = "../data/test_moreinfo_writer_pts.pts";
 	writer_pts<Graph2,3> W2(filename2);
 	W2.export_pts(G2,true);
 	

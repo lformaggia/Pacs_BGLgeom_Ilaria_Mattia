@@ -141,7 +141,7 @@ int main(){
 	// BUilding a simple Graph
 	std::cout << "========================= ON GRAPH ========================" << std::endl;
 	std::cout << "Creating a graph" << std::endl << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property_static<linear_geometry<3>,3> >;
+	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<linear_geometry<3>,3> >;
 	Graph G;
 	
 	point<3> A(0,0,0);
