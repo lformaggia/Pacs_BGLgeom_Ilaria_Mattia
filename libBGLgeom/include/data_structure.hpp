@@ -69,6 +69,7 @@
 #include <memory>
 #include <array>
 #include <string>
+#include <utility>
 #include <boost/graph/graph_traits.hpp>
 
 #include "point.hpp"
@@ -119,8 +120,10 @@ struct Vertex_base_property{
 	//! Coordinates of the vertex
 	point_t coordinates;
 	/*!
-		@brief Boundary conditions on the vertex
-		@detail
+		@brief	Boundary conditions on the vertex
+		@detail	An array is used to contain all the possible boundary condition.
+				This allows the user to set different boundary conditions (which 
+				may be needed by its specific problem) in the same vertex
 	*/
 	std::array<bc_t, num_bc> BC;
 	//! A label for the vertex (if needed)
@@ -211,10 +214,13 @@ struct Vertex_base_property{
 
 
 /*!
-	@brief Minimal data structure for the edge geometrical properties in "static" version
+	@brief	Minimal data structure for the edge geometrical properties in "static" version
 	@detail	The type of the geometry of the edge is choose as template parameter
+	@note	"Static" in the name means that the geometry of the graph can be
+			decided at compile time with the choice of the template parameter. This
+			implies that all the edges in the graph will have the same geometry
 	
-	@param Geom Type of the geometry it is wanted for the edge
+	@param Geom Type of the geometry for the edge
 	@param dim The dimension of the space
 */
 template <typename Geom, unsigned int dim>
@@ -235,6 +241,12 @@ struct Edge_base_property_static{
 		
 	//! Default constructor
 	Edge_base_property_static() : geometry(), mesh(), label(), index(-1) {};
+	
+	//! Constructor with the geometry
+	Edge_base_property_static(geom_t const& _geometry) :	geometry(_geometry),
+															mesh(),
+															label(),
+															index(-1) {};
 	
 	//! Constructor with label
 	Edge_base_property_static(std::string const& _label) :	geometry(),
@@ -271,12 +283,12 @@ struct Edge_base_property_static{
 	Edge_base_property_static & operator=(Edge_base_property_static &&) = default;
 	
 	//! Helper method to create a mesh using the uniform_mesh() method of struct mesh
-	void make_uniform_mesh(const unsigned int n){
+	void make_uniform_mesh(unsigned int const& n){
 		mesh.uniform_mesh(n, geometry);
 	}
 	
 	//! Helper method to create a mesh using the variable_mesh() method of struct mesh
-	void make_variable_mesh(const unsigned int n, std::function<double(double)> const& spacing_function){
+	void make_variable_mesh(unsigned int const& n, std::function<double(double)> const& spacing_function){
 		mesh.variable_mesh(n, spacing_function, geometry);
 	}
 	
@@ -305,54 +317,6 @@ struct Edge_base_property_static{
 	}
 	
 };	//Edge_base_property_static
-
-
-/*!
-	@brief Minimal data structure for the edge geometrical properties in "dynamic" version
-	@detail	This contains a unique pointer to the base abstract class edge_geometry, from
-			which all the concrete types of geometry derive
-*/
-template <unsigned int dim>
-struct Edge_base_property_dynamic{
-	//! The type for the container of the mesh
-	using mesh_t = BGLgeom::mesh<dim>;
-
-	//! The pointer to the base class
-	std::unique_ptr<BGLgeom::edge_geometry<dim>> geometry;
-	//! The container for the mesh
-	//mesh_t mesh;
-	
-	//! Default constructor
-	Edge_base_property_dynamic()  {};
-	
-	//! Constructor. Maybe is better not to provide it since the constructor of different type of geometry are different
-	//Edge_base_property_static(Geom_t _geometry) : {};
-	
-	//! Copy constructor
-	Edge_base_property_dynamic(Edge_base_property_dynamic const&) = default;
-	
-	//! Move_constructor
-	Edge_base_property_dynamic(Edge_base_property_dynamic &&) = default;
-	
-	//! Assignment operator
-	Edge_base_property_dynamic & operator=(Edge_base_property_dynamic const&) = default;
-	
-	//! Move assignment
-	Edge_base_property_dynamic & operator=(Edge_base_property_dynamic &&) = default;
-	
-	//! Qui potrebbe avere senso mettere un output operator
-	friend std::ostream & operator<<(std::ostream & out, Edge_base_property_dynamic const& ebpd){
-		return out;
-	}
-	
-};	//Edge_base_property_dynamic
-
-/*
-template<unsigned int dim, 
-		 typename Vertex_prop = Vertex_base_property<dim>, 
-		 typename Edge_prop = Edge_base_property_static<BGLgeom::linear_edge<dim>,dim>>
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex_prop , Edge_prop>;
-*/
 
 }	//BGLgeom
 
