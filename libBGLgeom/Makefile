@@ -30,10 +30,10 @@ library: static dynamic
 static: $(LIB_OBJS_STATIC)
 	@echo " "
 	@echo "--- Building static library ---"
-	@mkdir -p $(TARGET_DIR)
+	@mkdir -p $(LIB_DIR)
 	ar -r -s $(STATIC_LIB) $(LIB_OBJS_STATIC)
 	ranlib $(STATIC_LIB)
-	@echo "--- Completed ---"
+	@echo "--- COMPLETED ---"
 	
 $(BUILD_DIR_STATIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	@echo " "
@@ -46,9 +46,9 @@ dynamic: CXXFLAGS += -fPIC
 dynamic: $(LIB_OBJS_DYNAMIC)
 	@echo " "
 	@echo "--- Building dynamic library ---"
-	@mkdir -p $(TARGET_DIR)
+	@mkdir -p $(LIB_DIR)
 	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
-	@echo "--- Completed ---"
+	@echo "--- COMPLETED ---"
 	
 $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	@echo " "
@@ -58,7 +58,7 @@ $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 
 	
 alltest: $(TEST_EXEC)
-	@echo "--- Completed ---"
+	@echo "--- COMPLETED ---"
 
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
 	@echo "--- Linking object to executable ---"
@@ -76,7 +76,7 @@ install:
 	@echo "--- Installing library ---"
 	@mkdir -p $(INSTALL_PATH)/include/BGLgeom
 	cp $(HEADERS) $(INSTALL_PATH)/include/BGLgeom
-	@echo "--- Installed ---"
+	@echo "--- INSTALLED ---"
 
 
 doc:
@@ -84,7 +84,7 @@ doc:
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
 	pdflatex $(DOC_DIR)/latex/refman.pdf
-	@echo "--- Completed ---"
+	@echo "--- COMPLETED ---"
 
 
 clean:
@@ -92,5 +92,5 @@ clean:
 
 
 distclean: clean
-	-rm -rv $(TARGET_DIR) $(TEST_DIR) $(DOC_DIR)
+	-rm -rv $(LIB_DIR) $(TEST_DIR) $(DOC_DIR)
 
