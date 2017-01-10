@@ -78,7 +78,7 @@ install:
 	@mkdir -p $(INSTALL_PATH)/include
 	cp $(HEADERS) $(INSTALL_PATH)/include
 	@mkdir -p $(INSTALL_PATH)/lib
-	cp $(LIB_DIR)/$(DYNAMIC_LIBFILE) $(LIB_DIR)/$(STATIC_LIBFILE) $(INSTALL_PATH)/lib
+	cp $(DYNAMIC_LIB).1.0 $(STATIC_LIB) $(INSTALL_PATH)/lib
 	@echo "--- INSTALLED ---"
 
 
