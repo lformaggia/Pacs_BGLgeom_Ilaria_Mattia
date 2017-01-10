@@ -49,6 +49,7 @@ int main(){
 		G[topo_prop.tgt] = tgt_prop;
 		G[e] = e_prop;
 		G[e].index = count;
+		count++;
 		// Commenting: now we put this commandas directly into the reader
 		/*
 		G[e].geometry.set_source(G[topo_prop.src].coordinates);
