@@ -69,8 +69,6 @@
 #include <memory>
 #include <array>
 #include <string>
-#include <utility>
-#include <boost/graph/graph_traits.hpp>
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
@@ -78,29 +76,6 @@
 #include "mesh.hpp"
 
 namespace BGLgeom{
-
-/*!
-	@brief Some useful alias for very often used types from BGL
-	@detail We provide alias for vertex and edge descriptors, vertex
-			and edge iterators.
-*/
-
-//! Vertex descriptor type alias
-template <typename Graph>
-using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
-
-//! Vertex iterator type alias
-template <typename Graph>
-using Vertex_iter = typename boost::graph_traits<Graph>::vertex_iterator;
-
-//! Edge descriptor type alias
-template <typename Graph>
-using Edge_desc = typename boost::graph_traits<Graph>::edge_descriptor;
-
-//! Edge iterator type alias
-template <typename Graph>
-using Edge_iter = typename boost::graph_traits<Graph>::edge_iterator;
-
 
 /*!
 	@brief Minimal data structure for the vertex geometrical properties
@@ -242,28 +217,36 @@ struct Edge_base_property{
 	
 	//! Constructor with the geometry
 	Edge_base_property(geom_t const& _geometry) :	geometry(_geometry),
-															mesh(),
-															label(),
-															index(-1) {};
+													mesh(),
+													label(),
+													index(-1) {};
 	
 	//! Constructor with label
 	Edge_base_property(std::string const& _label) :	geometry(),
-							 								mesh(),
-							 								label(_label),
-							 								index(-1) {};
+					 								mesh(),
+					 								label(_label),
+					 								index(-1) {};
 								 								
 	//! Constructor with index
-	Edge_base_property(unsigned int const& _index) :	geometry(),
-							 								mesh(),
-							 								label(),
-							 								index(_index) {};
+	Edge_base_property(int const& _index) :	geometry(),
+			 								mesh(),
+			 								label(),
+			 								index(_index) {};
 	
 	//! Constructor with label and index
 	Edge_base_property	(std::string const& _label,
-								 unsigned int const& _index) :	geometry(),
-								 								mesh(),
-								 								label(_label),
-								 								index(_index) {};
+						 int const& _index) :	geometry(),
+				 								mesh(),
+				 								label(_label),
+				 								index(_index) {};
+	
+	//! Full constructor
+	Edge_base_property	(geom_t _geometry, 
+						 std::string const& _label, 
+						 int const& _index) :	geometry(_geometry), 
+						 						mesh(),
+						 						label(_label),
+						 						index(_index) {};
 	
 	//! Copy constructor
 	Edge_base_property(Edge_base_property const&) = default;
