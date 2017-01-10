@@ -15,8 +15,6 @@ libBGLgeom/doc/*
 libBGLgeom/obj/*
 libBGLgeom/test/*
 libBGLgeom/lib/*
-libBGLgeom/prova_lib/*
-libBGLgeom/bspline_curve/*
 libBGLgeom/data/*
 fracture_intersection/doc/*
 fracture_intersection/obj/*
@@ -30,6 +28,3 @@ network_diffusion/bin/*
 network_diffucion/test/*
 network_diffusion/data/*.pts
 network_diffusion/data/*.vtp
-vtk/*
-bin/*
-Filetxt/*
