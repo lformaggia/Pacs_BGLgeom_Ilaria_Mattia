@@ -1,10 +1,29 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	test_intersection.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Little test to show how works the code that compute intersection
+			provided by prof. Formaggia
+	
+	@detail	We compute an intersection between two linear edges. The coordinates
+			of the extremes points for the two edges can be easily changed, to 
+			see how the output and various intersection situation change
+*/
+
 #include "intersections2D.hpp"
 #include "intersections2D_utilities.hpp"
 #include "point.hpp"
 #include "linear_geometry.hpp"
 #include "data_structure.hpp"
 #include <iostream>
-#include <array>
 
 #include <boost/graph/adjacency_list.hpp>
 

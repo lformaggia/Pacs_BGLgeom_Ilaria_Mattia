@@ -13,7 +13,7 @@
 	@brief	Testing class linear_geometry and creation of mesh on an edge
 			with this geometry
 	
-	@detail	We perfom these different test: \n
+	@detail	We perfom these different tests: \n
 			- Creation of a straigth line to test consistency with the 
 				generic_geometry class. Evaluation of the geometric characteristics 
 				for different values of the parameter, using both methods 

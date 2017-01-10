@@ -1,11 +1,38 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	test_writer_pts.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Testing class writer_pts to show how it works and how to 
+			produce pts output
+	
+	@detail	We perfom two different tests: \n
+			- Creation of a graph with two boundary conditions in the 
+				vertex properties. Values assigned to them, then 
+				computation a uniform mesh on every edge. Production of 
+				the pts output files \n
+			- Creation of a standard graph. Values assigned to the 
+				properties and computation of a uniform mesh on the edges. 
+				Production of the pts output files, asking for the 
+				evaluation of the main geometrical properties of each
+				edge in correspondence of the points of the mesh
+*/
+
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
 
 #include <boost/graph/adjacency_list.hpp>
 #include "writer_pts.hpp"
 #include "data_structure.hpp"
+#include "graph_builder.hpp"
 #include "linear_geometry.hpp"
 
 using namespace boost;
@@ -48,7 +75,7 @@ int main(){
 	G[e1].mesh.uniform_mesh(20, G[e1].geometry);	
 	G[e2].mesh.uniform_mesh(20, G[e2].geometry);
 	
-	std::string filename1 = "../data/test_2BC_writer_pts.pts";
+	std::string filename1 = "../data/out_test_2BC_writer_pts.pts";
 	writer_pts<Graph,3,2> W(filename1);
 	W.export_pts(G);
 	
@@ -84,7 +111,7 @@ int main(){
 	G2[e3].mesh.uniform_mesh(20, G[e3].geometry);	
 	G2[e4].mesh.uniform_mesh(20, G[e4].geometry);
 	
-	std::string filename2 = "../data/test_moreinfo_writer_pts.pts";
+	std::string filename2 = "../data/out_test_moreinfo_writer_pts.pts";
 	writer_pts<Graph2,3> W2(filename2);
 	W2.export_pts(G2,true);
 	

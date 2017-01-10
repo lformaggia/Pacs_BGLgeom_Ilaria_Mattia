@@ -1,3 +1,21 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	test_writer_ASCII.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Testing class writer_ASCII to show how to produce an ASCII output
+	
+	@detail	Based on the graph properties and concrete writer defined in 
+			test_writer_ASCII.hpp
+*/
+
 #include "test_writer_ASCII.hpp"
 #include "data_structure.hpp"
 #include "graph_builder.hpp"
