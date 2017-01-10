@@ -65,11 +65,16 @@ int main(){
 	BGLgeom::Edge_base_property<BGLgeom::linear_geometry<2>,2> h1_prop(lin1);
 	h1 = boost::add_edge(c1, d1, h1_prop, G1).first;
 	
-	// Assigning properties to edges
+	// Setting up geometries
 	G1[e1].geometry.set_source(G1[a1].coordinates);
 	G1[e1].geometry.set_target(G1[b1].coordinates);
 	G1[f1].geometry.set_source(G1[b1].coordinates);
 	G1[f1].geometry.set_target(G1[c1].coordinates);
+	
+	// Assigning properties
+	G1[e1].label = "edge 1 graph 1";
+	G1[f1].label = "edge 2 graph 1";
+	G1[h1].label = "whatever, graph 1";
 	
 	// Iterating over the edges and printing an output
 	typename boost::graph_traits<Graph>::edge_iterator e_it1, e_end1;
@@ -108,13 +113,18 @@ int main(){
 	BGLgeom::Edge_base_property<BGLgeom::linear_geometry<2>,2> h2_prop(lin2);
 	h2 = BGLgeom::new_edge(c2, d2, h2_prop, G2);
 	
-	// Assigning properties to edges
+	// Setting up geometries
 	G2[e2].geometry.set_source(G2[a2].coordinates);
 	G2[e2].geometry.set_target(G2[b2].coordinates);
 	/*	//No need to do this, already done in new_linear_edge
 	G2[f2].geometry.set_source(G2[b2].coordinates);
 	G2[f2].geometry.set_target(G2[c2].coordinates);
 	*/
+	
+	// Assigning properties
+	G2[e2].label = "edge 1 graph 2";
+	G2[f2].label = "edge 2 graph 2";
+	G2[h2].label = "whatever, graph 2";
 	
 	// Iterating over the edges and printing an output
 	BGLgeom::Edge_iter<Graph> e_it2, e_end2;
