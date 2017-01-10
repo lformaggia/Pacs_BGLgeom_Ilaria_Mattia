@@ -23,6 +23,7 @@
 #define HH_INTERSECTIONS2D_UTILITIES_HH
 
 #include "data_structure.hpp"
+#include "graph_builder.hpp"
 #include "linear_geometry.hpp"
 #include "intersections2D.hpp"
 
