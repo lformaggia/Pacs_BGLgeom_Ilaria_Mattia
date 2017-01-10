@@ -30,6 +30,31 @@
 namespace BGLgeom{
 
 /*!
+	@defgroup	Accessing Graph items	Some useful alias for types from BGL, used
+										to access vertex and edges
+	@detail We provide alias for vertex and edge descriptors, vertex
+			and edge iterators.
+	@{
+*/
+//! Vertex descriptor alias type
+template <typename Graph>
+using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
+
+//! Vertex iterator alias type
+template <typename Graph>
+using Vertex_iter = typename boost::graph_traits<Graph>::vertex_iterator;
+
+//! Edge descriptor alias type
+template <typename Graph>
+using Edge_desc = typename boost::graph_traits<Graph>::edge_descriptor;
+
+//! Edge iterator alias type
+template <typename Graph>
+using Edge_iter = typename boost::graph_traits<Graph>::edge_iterator;
+/*! @} */
+
+
+/*!
 	@breif Helper function to check if an edge is correctly inserted in graph
 	@detail It prints an error message on the screen if the insertion of the
 			edge failed according to the scenarios described in the reference
@@ -43,6 +68,36 @@ void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inse
 		std::cerr << "See documentation of the Boost Graph Library on function boost::add_edge." << std::endl;
 	}
 }	//check_edge_inserted
+
+/*!
+	@brief	Gets the edge iterators to the firts and to the last edge in the graph
+	@detail	Utilities to hidden boost::edges(G) and to allow to use only one namespace
+	
+	@param G The graph
+	@return A std::pair containing: \n
+			- first: the edge iterator pointing to the first edge in the graph \n
+			- second: the edge iterator pointing to the last edge in the graph
+*/
+template <typename Graph>
+std::pair< BGLgeom::Edge_iter<Graph>, BGLgeom::Edge_iter<Graph> >
+edges(Graph const& G) {
+	return boost::edges(G);
+}
+
+/*!
+	@brief Gets the vertex iterators to the first and to the last vertex in the graph
+	@detail	Utilities to hidden boost::vertices(G) and to allow to use only one namespace
+	
+	@param G The graph
+	@return A std::pair containing: \n
+			- first: the vertex iterator pointing to the first edge in the graph \n
+			- second: the vertex iterator pointing to the last edge in the graph
+*/
+template <typename Graph>
+std::pair< BGLgeom::Vertex_iter<Graph>, BGLgeom::Vertex_iter<Graph> >
+vertices(Graph const& G) {
+	return boost::vertices(G);
+}
 
 /*!
 	@brief	Creates a new vertex in the graph
@@ -113,7 +168,12 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
 	check_if_edge_inserted<Graph>(e, inserted);
 	#ifndef NDEBUG
-		std::cout << "New edge created: " << G[e].geometry << std::endl;
+		/*
+		We do not print infos about geometry (<< G[e].geometry) since 
+		its source and target may not be defined yet, especially in 
+		the linear case	
+		*/
+		std::cout << "New edge created" << std::endl;
 	#endif
 	return e;
 }	//new_edge (without properties)
