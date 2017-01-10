@@ -75,8 +75,10 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 
 install:
 	@echo "--- Installing library ---"
-	@mkdir -p $(INSTALL_PATH)/include/BGLgeom
-	cp $(HEADERS) $(INSTALL_PATH)/include/BGLgeom
+	@mkdir -p $(INSTALL_PATH)/include
+	cp $(HEADERS) $(INSTALL_PATH)/include
+	@mkdir -p $(INSTALL_PATH)/lib
+	cp $(LIB_DIR)/$(DYNAMIC_LIBFILE) $(LIB_DIR)/$(STATIC_LIBFILE) $(INSTALL_PATH)/lib
 	@echo "--- INSTALLED ---"
 
 

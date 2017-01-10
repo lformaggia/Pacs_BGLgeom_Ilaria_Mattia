@@ -1,7 +1,8 @@
 ###	BGLgeom Makefile.inc ###
 
-# Directory where the library resides
-#che è la mia, l'utente la cambia
+
+# Directory where the project resides.
+## USER MUST EDIT! ##
 PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
 # libBGLgeom is stored here:
 export BGLGEOM_DIR = $(PROJECT_DIR)/libBGLgeom
@@ -10,10 +11,11 @@ export NETW_DIR = $(PROJECT_DIR)/network_diffusion
 # example on fracture intersection is sotred here
 export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 
-INSTALL_PATH ?= /usr/local
+# Installation path
+## USER MUST EDIT! ##
+INSTALL_PATH = /D/BGLgeom
 
-
-#Creating variable for path to vtk includes
+# Creating variable for path to vtk includes
 export mkVtkInc = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
 
 # Directories for needed library
@@ -21,20 +23,17 @@ EIGEN_INC_DIR = $(mkEigenInc)
 VTK_INC_DIR   = $(mkVtkInc)
 VTK_LIB_DIR   = $(mkVtkLib)
 
-#Parsing vtk libraries. In the modules are present also libraries for Python. We filter them out
+# Parsing vtk libraries. In the modules are present also libraries for Python. We filter them out
 VTK_LIBS1 = $(wildcard $(VTK_LIB_DIR)/libvtk*.so.5.10.1) #collecting all libraries
 VTK_LIBS2 = $(notdir $(VTK_LIBS1))
 VTK_LIBS3 = $(basename $(basename $(basename $(basename $(VTK_LIBS2))))) #Discarding .so.5.10.1
 VTK_LIBS4 = $(foreach lib, $(VTK_LIBS3), $(if $(findstring Python, $(lib)),,$(lib)))
 VTK_LIBS  = $(VTK_LIBS4:lib%=%)
-#Libraries needed to the linker
+# Libraries needed to the linker
 LDLIBS = -L$(VTK_LIB_DIR) $(foreach lib, $(VTK_LIBS), -l$(lib))
 
-OTHER_INC_DIR=
-OTHER_LIB_DIR=
-
 # Compiler and standard for the compiler
-CXX=g++
+CXX = g++
 STDFLAG = -std=c++11
 
 # DEFINES: Possible -DXX statements
@@ -49,7 +48,6 @@ DEFINES += -DNDEBUG
 else
 OPT = -g
 endif
-
 
 # Warning level. The option -Wno-deprecated deactivates annoying warning from BGL
 WARNS = -Wall -Wno-deprecated
