@@ -25,7 +25,7 @@ int main(int, char *[]){
 
 	e = new_linear_edge(a,c,G);	//BGLgeom	
 	
-	std::string filename("../data/out.vtp");
+	std::string filename("../data/out_test_writer_vtp.vtp");
 	writer_vtp<Graph,3> W(filename.c_str());
 	W.export_vtp(G);
 }
