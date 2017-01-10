@@ -25,7 +25,7 @@
 #include <sstream>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "data_structure.hpp"
+#include "graph_builder.hpp"
 #include "point.hpp"
 #include "mesh.hpp"
 
