@@ -87,12 +87,13 @@ class writer_pts{
 		/*! 
 			@brief It exports the mesh and the info contained in the graph in an pts file
 			@detail If the parameter add_geometric_info is passed as true, this will print
-					in a separate file, named "filename"_addinfo.pts, the evaluation of the
-					first derivative and of the curvature in corrispondence of the point
-					of the mesh
-			@pre	A parametric mesh is required to be presented in the "second" record
-					of the member "mesh" in the base edge properties. If empty, the writer
-					will stop reporting an error
+					in a separate file, named "filename"_moreinfo.pts, the evaluation of the
+					first derivative, of the second derivative and of the curvature in 
+					corrispondence of the points of the mesh
+			@pre	When the second parameter is set true, a parametric mesh is required 
+					to be present on the edge. If it is empty, the writer will produce 
+					an output evaluating the geometric quantities only in correspondence 
+					of source and target
 		*/
 		void
 		export_pts(Graph const& G, bool add_geometric_info = false){
@@ -127,7 +128,7 @@ class writer_pts{
 				// Changing filename
 				std::string temp_filename(filename);
 				std::ostringstream temp;
-				temp << "_addinfo";
+				temp << "_moreinfo";
 				temp_filename.insert(filename.length()-4, temp.str());
 				// Opening file
 				try{
@@ -154,6 +155,7 @@ class writer_pts{
 	
 		/*!
 			@brief Inner method to output a single edge
+			
 			@param G	The Graph
 			@param e	Edge_descriptor for the current edge
 			@param src	Vertex_descriptor for the current source
@@ -179,11 +181,13 @@ class writer_pts{
 			write_point_pts<dim>(out_file, G[tgt].coordinates);
 			out_file << std::setw(8) << "end" << std::endl;
 			// Writing the mesh (without source and target)
-			for(std::size_t i = 1; i < G[e].mesh.real.size()-1; ++i){
-				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
-				write_point_pts<dim>(out_file, G[e].mesh.real[i]);
-				out_file << std::setw(10) << "point" << std::endl;
-			}
+			if(G[e].mesh.real.size() > 0){	// A mesh is present on the edge
+				for(std::size_t i = 1; i < G[e].mesh.real.size()-1; ++i){
+					out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+					write_point_pts<dim>(out_file, G[e].mesh.real[i]);
+					out_file << std::setw(10) << "point" << std::endl;
+				}	//for
+			}	//if
 			out_file << "END_ARC" << std::endl;
 		}	//export_edge
 		
@@ -195,18 +199,32 @@ class writer_pts{
 					- the evaluation of the curvature. \n
 					All this info are computed in correspondence of the points of the
 					mesh present on the edge
+			@note	If a parametric mesh is not present on the edge, this will 
+					evaluate the geometric properties only in corrispondence of 
+					source and target
 		*/
 		void
 		export_info(Graph const& G,
 					BGLgeom::Edge_desc<Graph> const& e){
 			out_file << "BEGIN_ARC" << std::endl;
-			for(std::size_t i = 0; i < G[e].mesh.parametric.size(); ++i){
-				out_file << std::setw(8) << std::setprecision(2) << G[e].index;
-				write_point_pts<dim>(out_file, G[e].geometry.first_der(G[e].mesh.parametric[i]) );
-				write_point_pts<dim>(out_file, G[e].geometry.second_der(G[e].mesh.parametric[i]) );
-				out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature(G[e].mesh.parametric[i]);
-				out_file << std::endl;
-			}
+			if(G[e].mesh.parametric.size() < 2){	// There isn't a parametric mesh on the edge
+				// Evaluation only in source (t=0) and target (t=1)
+				for(int t = 0; t < 2; ++t){
+					out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+					write_point_pts<dim>(out_file, G[e].geometry.first_der(t));
+					write_point_pts<dim>(out_file, G[e].geometry.second_der(t));
+					out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature(t);
+					out_file << std::endl;
+				}	//for
+			} else {
+				for(std::size_t i = 0; i < G[e].mesh.parametric.size(); ++i){
+					out_file << std::setw(8) << std::setprecision(2) << G[e].index;
+					write_point_pts<dim>(out_file, G[e].geometry.first_der(G[e].mesh.parametric[i]) );
+					write_point_pts<dim>(out_file, G[e].geometry.second_der(G[e].mesh.parametric[i]) );
+					out_file << std::setw(16) << std::setprecision(8) << G[e].geometry.curvature(G[e].mesh.parametric[i]);
+					out_file << std::endl;
+				}	//for
+			}	//else
 			out_file << "END_ARC" << std::endl;		
 		}	//export_info
 };	//writer_pts
