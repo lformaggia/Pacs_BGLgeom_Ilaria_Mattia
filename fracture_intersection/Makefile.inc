@@ -29,4 +29,4 @@ CPPFLAGS += -I$(BGLGEOM_DIR)/include
 
 # Linking libraries
 # Non bello metterlo qui però
-LDLIBS += -L$(BGLGEOM_DIR)/prova_lib -lBGLgeom 
+LDLIBS += -L$(BGLGEOM_DIR)/lib -lBGLgeom 

@@ -3,8 +3,10 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
-#include"data_structure.hpp"
+#include "graph_builder.hpp"
 #include "fracture_graph_properties.hpp"
+#include "point.hpp"
+#include "linear_geometry.hpp"
 
 namespace BGLgeom{
 
