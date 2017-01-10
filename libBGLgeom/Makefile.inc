@@ -1,10 +1,11 @@
 # Directories local variables
-LIB_DIR  = lib
+LIB_DIR     = lib
 BUILD_DIR   = obj
 SOURCE_DIR  = src
 INCLUDE_DIR = include
 DOC_DIR     = doc
 TEST_DIR    = test
+DATA_DIR    = data
 
 # Directories where to put object files
 BUILD_DIR_STATIC  = $(BUILD_DIR)/static

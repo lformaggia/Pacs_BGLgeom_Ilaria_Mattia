@@ -58,6 +58,7 @@ $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 
 	
 alltest: $(TEST_EXEC)
+	@mkdir -p $(DATA_DIR)
 	@echo "--- COMPLETED ---"
 
 $(TEST_DIR)/%: $(BUILD_DIR_TEST)/%.o
@@ -92,5 +93,5 @@ clean:
 
 
 distclean: clean
-	-rm -rv $(LIB_DIR) $(TEST_DIR) $(DOC_DIR)
+	-rm -rv $(LIB_DIR) $(TEST_DIR) $(DOC_DIR) $(DATA_DIR)
 
