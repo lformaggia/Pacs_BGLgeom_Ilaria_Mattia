@@ -13,7 +13,6 @@ SOURCE_DIR  = src
 BUILD_DIR   = obj
 INCLUDE_DIR = include
 DOC_DIR     = doc
-DIR_TO_BE_CREATED = $(TARGET_DIR) $(BUILD_DIR)
 
 # File names
 SRCS          = $(wildcard $(SOURCE_DIR)/*.cpp)
@@ -28,5 +27,4 @@ EXEC          = $(addprefix $(TARGET_DIR)/, $(notdir $(SRCS_MAIN:.cpp=)))
 CPPFLAGS += -I$(BGLGEOM_DIR)/include
 
 # Linking libraries
-# Non bello metterlo qui però
 LDLIBS += -L$(BGLGEOM_DIR)/lib -lBGLgeom 

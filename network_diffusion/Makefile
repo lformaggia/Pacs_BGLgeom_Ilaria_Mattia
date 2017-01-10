@@ -27,15 +27,14 @@ help:
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all" 
-	@echo $(EXEC)
 
 all: exec doc clean
 
-exec: $(EXEC)
+exec: $(OBJS_NOT_MAIN) $(EXEC)
 
 $(TARGET_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(TARGET_DIR)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $< -o $@ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OBJS_NOT_MAIN) $< -o $@ $(LDLIBS)
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR)
