@@ -9,8 +9,9 @@
 /*!
 	@file	point.hpp
 	@author	Ilaria Speranza and Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Underlying structure of a point and utilities
+	@date	Jan, 2017
+	@brief	Definition of the type used to represent points in this 
+			library, and definition of some utilities for points
 */
 
 #ifndef HH_POINT_HH

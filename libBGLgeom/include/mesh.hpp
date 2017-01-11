@@ -9,8 +9,8 @@
 /*!
 	@file	mesh.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	
+	@date	Jan, 2017
+	@brief	Struct to handle meshes as graph properties
 */
 
 #ifndef HH_MESH_HH
@@ -72,7 +72,7 @@ struct mesh{
 	//! Destructor
 	virtual ~mesh() = default;
 	
-	//! Clear both the container
+	//! Clear both the real and the parametric mesh
 	void
 	clear(){
 		real.clear();
@@ -93,7 +93,7 @@ struct mesh{
 		if(real.empty() && parametric.empty())
 			return true;
 		else{
-			if(real.empty() || parametric.empty()){
+			if( (real.empty() && !parametric.empty()) || (!real.empty() && parametric.empty()) ){
 				std::cerr << "BGLgeom::mesh::empty(): error, unexpected behaviuor!" << std::endl;
 				exit(EXIT_FAILURE);
 			}
