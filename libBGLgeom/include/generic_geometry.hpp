@@ -9,9 +9,8 @@
 /*!
 	@file	generic_geometry.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Concrete class for a generic edge geometry 
-	@detail
 */
 
 #ifndef HH_GENERIC_GEOMETRY_HH
@@ -33,11 +32,11 @@ namespace BGLgeom{
 
 /*!
 	@brief	Generic geometry for an edge
-	@detail It requires to be constructed the full specification of the expression of the 
+	@detail To be constructed, it requires the full specification of the expression of the 
 			curve, of its firts derivative and of its second derivative (so they must be
-			known a priori) and parametrized between 0 and 1, since in each evaluation 
-			method checks if the given parameter is in this range, otherwise the program 
-			abort
+			known a priori) They also must be parametrized between 0 and 1.
+			Each evaluation method checks if the given parameter is in this range, 
+			otherwise the program abort
 	
 	@param dim Dimension of the space	
 */

@@ -9,9 +9,8 @@
 /*!
 	@file	edge_geometry.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Virtual base class for the geometry of an edge
-	@detail 
+	@date	Jan, 2017
+	@brief	Abstract base class for the geometry of an edge
 */
 
 #ifndef HH_EDGE_GEOMETRY_HH
@@ -27,9 +26,15 @@ namespace BGLgeom{
 
 
 /*!
-	@brief Abstract class for an edge
+	@brief	Abstract class for an edge
 	@detail	It specifies all the geometric operation that should be carried
-			out on the edge, thought as a curve in the space (2 or 3 dimensional).
+			out on an edge, thought as a curve in the space (2 or 3 dimensional). 
+			In particular, it defines, for a given value of the parameter: \n
+			- evaluation of the curve; \n
+			- evaluation of the first derivative; \n
+			- evaluation of the second derivative; \n
+			- evaluation of the curvature; \n
+			- evaluation of the curvilinear ascissa. \n
 			It provides also evaluation of this characteristics for a single value
 			or for a vector of values of the parameter
 	@param dim The dimension of the space

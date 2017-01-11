@@ -167,6 +167,10 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		}
 		/*! @} */
 		
+		//! Length of the curve
+		double length() { return this->curv_abs(1); }
+		double length() const { return this->curv_abs(1); }
+		
 		//! Evaluation of the curve at a given value of the parameter
 		point 
 		operator() (double const& t) const {

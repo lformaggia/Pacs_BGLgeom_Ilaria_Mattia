@@ -9,9 +9,8 @@
 /*!
 	@file	linear_geometry.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Concrete class for a linear geometry on an edge
-	@detail 
 */
 
 #ifndef HH_LINEAR_GEOMETRY_HH
@@ -27,8 +26,8 @@
 namespace BGLgeom{
 
 /*!
-	@brief The class handling the linear geometry for an edge
-	@detail It is parametrized with parameter between 0 and 1
+	@brief	The class handling the linear geometry for an edge
+	@detail It is parametrized between 0 and 1
 	
 	@param dim Dimension of the space
 */
@@ -38,7 +37,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 	private:
 		//! Coordinates of the source of the edge
 		BGLgeom::point<dim> SRC;
-		//! Coordinates of the starget of the edge
+		//! Coordinates of the target of the edge
 		BGLgeom::point<dim> TGT;
 
 	public:
