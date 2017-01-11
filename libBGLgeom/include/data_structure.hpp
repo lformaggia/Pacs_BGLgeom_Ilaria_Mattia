@@ -9,57 +9,44 @@
 /*!
 	@file	data_structure.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Definition of some useful alias type and data structures 
-			for properties of edges and vertices
-
-	@detail This file includes the definition of the minimal set of 
-			geometric properties that will be used as vertex and edge
-			properties in a graph that requires a geometric description.
-			Two struct are defined: one for the vertex properties, one
-			for the edge properties. \n
-			If a user needs to define other different properties to be
-			attached as vertex or edge properties in his graph, he can
-			define new struct by himself inheriting from these ones. In
-			this way he can continue using the geometrical structure of
-			the graph. \n
-			All the data structures will be provided with a constructor,
-			a copy constructor, a move constructor and the assignment
-			operator. This because the idea is that the user can inherit
-			form them to create his own user-defined data structures. But
-			in this way, through inheritance, the user-defined class won't
-			be anymore aggragates, and thus their initialization through
-			the initializer list will be no longer available. We provide
-			constructor for this reason, to allow the user to create
-			and use properly his own data structures. Default constructor
-			is mandatory because it is used by basic function of BGL which
-			create the graph (boost::add_vertex and boost::add_edge).\n
-			For each data structure will be also provided the definitions
-			of all types inside that data structure, in such a way that 
-			they will be visible outside the class through the scope
-			resolution operator (::). As a rule, the defined type will
-			recall in the name that of the variable, to which will be 
-			append a "_t" (= _type) at the end. \n
-			We also provide an overload of the output operator in some
-			data structures. This may not be used by users, but it is 
-			quite necessary in order to implement a writer class which
-			gives an automatic and reasonable output.
-	@remark We will provide two different implementation of the data+
-			structure for the edges: a "static" one and a "dynamic" one. \n
-			The "static" one is implemented using template for the choice
-			of the edge geometry's type: linear, generic, or other. In
-			this way the user can define at compile time the type of
-			geometry he needs, and as a consequence all edges in the graph
-			will have that geometry. \n
-			The "dynamic" one is implemented using a pointer that points
-			to an object that implements the geometry of that edge: in 
-			this way the user is allowed to choose different types of
-			geometry for different edges in the graph. It may be useful
-			if it is needed more precision only in some part of the graph,
-			or to save computational resources.
-		
-		@todo Updating BGLgeom_edge_property in order to contain mesh
-				generator and fem problems solutors
+	@date	Jan, 2017
+	@brief	Definition of the base vertex and edge geometrical properties
+	
+	This file defines two data structure: one for the vertex properties, 
+	and one for the edge properties. Each one of them contains the minimal 
+	data we thought were necessary for a graph in a geometrical context, 
+	and for a graph that will be mainly used to generate meshes on which 
+	FEM problems will run. Therefore the vertex property contains a struct 
+	to handle boundary condition that may be present on the vertex (we 
+	also considered the case the user need more than one boundary condition)
+	and the edge property contains a struct to handle creation of meshes. 
+	The truly geometric properties are: the coordinates in the space for 
+	the vertex, and a class handling the geometry of the edge for the edges. 
+	We also provide both properties with a label and an index record, to 
+	allow the user to index or label vertices and edge as he/she prefers.
+	
+	@remark	The two struct are thought to be base class. For the applications, 
+			it may be necessary to include to vertex and edge properties 
+			more data and functionalities. To do this, it is enough to 
+			inherit form this base class and define the wider vertex or 
+			edge property with all new data, classes, methods that the 
+			user wants. Remember only that it is mandatory to provide 
+			at least the default constructor for the inherited struct, 
+			since the BGL function used in this library to create a new 
+			edge in the graph requires to the vertex and edge properties 
+			to be default constructible. 	
+			
+	@todo	The Edge_base_property provided here is a struct templatized 
+			on the type of the geometry. This implies that all the edges 
+			in the graph will have the same fixed geometry. It may be 
+			useful or interesting in term of efficiency to implement also 
+			an edge property that can accept for each edge a different 
+			geometry. This may be useful for particular applications, 
+			for instance a graph where only some edges are required to 
+			be modelled with a complex curve (using bspline or generic 
+			geometry, for instance),but all the other edge are linear, 
+			and so the user could use the ligther and faster linear 
+			geometry.
 */
 
 #ifndef HH_DATA_STRUCTURE_HH
