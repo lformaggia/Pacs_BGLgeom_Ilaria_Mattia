@@ -1,5 +1,5 @@
 /*======================================================================
-                        "[nome_progetto]"
+                        "BGLgeom library"
         Course on Advanced Programming for Scientific Computing
                       Politecnico di Milano
                           A.Y. 2015-2016
@@ -7,12 +7,11 @@
          Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file intersections2D.cpp
-	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Classes and functions to compute intersections between two linear edges. Implementation
-	
-	@detail
+	@file	intersections2D.cpp
+	@author Luca Formaggia, Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Implementation of classes and functions to compute 
+			intersections between two linear edges. 
 */
 
 #include "intersections2D.hpp"

@@ -1,3 +1,18 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	rk45.hpp
+	@author	Luca Formaggia
+	@date	Jan, 2017
+	@brief	Deefinitions of functions to solve ODE systems
+*/
+
 #include "rk45.hpp"
 #include <cmath>
 #include <algorithm> // for max

@@ -8,10 +8,9 @@
 ======================================================================*/
 /*!
 	@file	bspline_geometry.hpp
-	@author	Carlo de Falco
-	@date	Dec, 2016
+	@author	Carlo de Falco, Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
 	@brief	Definition of a B-spline geometry for an edge
-	@detail 
 */
 
 #ifndef HH_BSPLINE_GEOMETRY_HH

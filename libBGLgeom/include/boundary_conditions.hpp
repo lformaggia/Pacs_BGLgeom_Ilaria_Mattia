@@ -9,9 +9,8 @@
 /*!
 	@file	boundary_condition.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Data structure for boundary condition on a vertex
-	@detail 
+	@date	Jan, 2017
+	@brief	Struct for boundary condition on a vertex
 */
 
 #ifndef HH_BOUNDARY_CONDITION_HH
@@ -21,7 +20,7 @@
 
 namespace BGLgeom{
 /*!
-	@brief An enum class defining the type of a boundary condition
+	@brief	An enum class defining the possible types of a boundary condition
 	@detail The types of boundary conditions are: \n
 			- NONE: the vertex doesn't contain a boundary condition. No value (defaulted to zero); \n
 			- INT: Means "Internal". Thougth to be used in contiguous vertices of the graph. No value (defaulted to zero); \n
@@ -33,9 +32,9 @@ namespace BGLgeom{
 enum class BC_type {NONE, INT, DIR, NEU, MIX, OTHER};
 
 /*!
-	@brief The struct defining a single general boundary condition
+	@brief	The struct defining a single general boundary condition
 	@detail It contains the type of the boundary condition (one among those defined
-			in BC_t) and the value associated to it.
+			in BC_type) and the value associated to it.
 */
 struct boundary_condition{		
 	//! Type of the boundary condition

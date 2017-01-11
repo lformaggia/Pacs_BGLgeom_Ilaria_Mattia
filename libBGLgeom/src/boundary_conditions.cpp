@@ -1,8 +1,22 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	boundary_condition.cpp
+	@author	Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Implementation of input and output operator for the boundary 
+			condition struct
+*/
+
 #include "boundary_conditions.hpp"
 #include <string>
 #include <iostream>
-#include <iomanip>
-#include <type_traits>
 
 using namespace BGLgeom;
 
@@ -46,8 +60,7 @@ std::istream & operator>>(std::istream & in, boundary_condition & BC){
 }	//operator>>
 
 
-std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
-	
+std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){	
 	if(BC.type == BC_type::NONE){
 		out << "BC NONE";
 		return out;
@@ -68,7 +81,6 @@ std::ostream & operator<<(std::ostream & out, boundary_condition const& BC){
 		return out;
 	}
 	// Should not reach this
-	std::cerr << (BC.type == BC_type::NONE) << std::endl;
 	std::cerr << "BGLgeom::boundary_conditions: something wrong in output operation." << std::endl;
 	return out;
 }	//operator<<

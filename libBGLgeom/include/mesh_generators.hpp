@@ -8,9 +8,10 @@
 ======================================================================*/
 /*!
 	@file	mesh_generator.hpp
-	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Utilities to generate a 1D mesh, that will be the parametric one
+	@author	Luca Formaggia
+	@date	Jan, 2017
+	@brief	Utilities to generate a 1D mesh
+	@note	Code from the example of the PACS course
 */
 
 #ifndef HH_MESH_GENERATOR_HH

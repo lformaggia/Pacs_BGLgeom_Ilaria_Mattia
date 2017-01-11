@@ -1,3 +1,19 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	mesh_generator.hpp
+	@author	Luca Formaggia
+	@date	Jan, 2017
+	@brief	Utilities to generate a 1D mesh, definitions
+	@note	Code from the example of the PACS course
+*/
+
 #include <stdexcept>
 #include <algorithm>
 #include "rk45.hpp"

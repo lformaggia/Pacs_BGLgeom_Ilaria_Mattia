@@ -1,7 +1,20 @@
-#include <cmath>
-#include <iomanip>
-#include <iostream>
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
+/*!
+	@file	adaptive_quadrature.cpp
+	@author Ilaria Speranza & Mattia Tantardini
+	@date	Jan, 2017
+	@brief	Implementation of the integrand function
+*/
 
+#include <cmath>
+#include <functional>
 #include "adaptive_quadrature.hpp"
 
 #define tol 1.0e-12
@@ -57,4 +70,3 @@ integrate (std::function<double (double)> f, double a, double b)
 };
 
 }	//BGLgeom
-
