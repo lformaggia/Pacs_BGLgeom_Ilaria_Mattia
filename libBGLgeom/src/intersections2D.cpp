@@ -90,9 +90,9 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 	auto result=solve(A,b,tol_sys);
 	// Standard case, the two lines are not parallel
 	if(result.first==true){
+	#ifndef NDEBUG
 	    auto const & t = result.second;
 	    // Make a stupid check (only in debugging phase)
-	#ifndef NDEBUG
 	    auto P1 = A1+ t[0]*(B1-A1);
 	    auto P2 = A2+ t[1]*(B2-A2);
 	    if(norm(P1-P2)>tol_dist)
