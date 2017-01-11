@@ -9,7 +9,7 @@
 /*!
 	@file	writer_ASCII.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Base abstract class to write infos about the graph on tabular files.
 
 	@detail	This abstract class provides the user some methods and functionality

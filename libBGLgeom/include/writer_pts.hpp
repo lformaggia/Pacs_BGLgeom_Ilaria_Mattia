@@ -9,7 +9,7 @@
 /*!
 	@file	writer_pts.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Base class to write a .pts file
 
 	@detail

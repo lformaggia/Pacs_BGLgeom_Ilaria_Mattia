@@ -9,7 +9,7 @@
 /*!
 	@file	writer_vtp.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Base class to write a .vtp file
 
 	@detail

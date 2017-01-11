@@ -9,11 +9,9 @@
 /*!
 	@file	reader_ASCII.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Base abstract class to read input file
-
-	@detail	This abstract class provides the user some methods and functionality
-			to read data form the input file
+	@date	Jan, 2016
+	@brief	Base abstract class to read input file with tabular ASCII 
+			format
 */
 
 #ifndef HH_READER_ASCII_HH
@@ -29,24 +27,25 @@
 namespace BGLgeom{
 
 /*! 
-	@brief Empty struct for topological data
+	@brief	Empty struct for topological data
 	@detail The user may not need topological data. He can use this
-			empty struct as template parameter in the reader class
+			empty struct as template parameter in its concrete 
+			reader class
 */
 struct no_topological_data {};
 
 /*!
-	@brief Abstract class that implements the functionality to read a file and get data from it	
+	@brief	Abstract class that implements the functionality to read a file and get data from it	
 	@detail The users has to specify, in the derived class, all variables he need in
 			order to store information read from the input file. Then, through the definition
 			of Edge_data_structure and Vertex_data_structure, he can get separately all the
 			information to put on edges and vertices
 	
 	@param Vertex_data_structure A struct where the user has to define type and name
-								of the variables he needs to append to edge as
+								of the variables he needs to append to the edges as
 								edge bundled property
 	@param Edge_data_structure A struct where the user has to define type and name
-								of the variables he needs to append to vertices as
+								of the variables he needs to append to the vertices as
 								vertex bundled property
 	@param Topological_data_structure A struct where the user has to define type and name
 										of the variables he needs to manage the topology
@@ -71,12 +70,14 @@ class reader_ASCII {
 			}
 		}
 		
-		//magari questi fue comunque non servono...
 		//! Copy constructor
 		reader_ASCII(reader_ASCII const&) = default;
 		
 		//! Assignment operator
 		reader_ASCII & operator=(reader_ASCII const&) = default;
+		
+		//! Destructor
+		virtual ~reader_ASCII() = default;
 		
 		//! Set the input file to read
 		virtual void set_input(std::string _filename){
@@ -106,7 +107,8 @@ class reader_ASCII {
 		
 		//! To know outside the class if we have reached the end of file
 		virtual bool is_eof(){
-			in_file.get(find_eof);	//nell'ultima riga c'è end of line e poi eof, quindi devo leggere ogni volta due caratteri per sapere se sono in fondo
+			// In the last row there are end of line and then eof, so we need to read each time two characters to know if we reached eof
+			in_file.get(find_eof);
 			if(find_eof == std::ifstream::traits_type::eof() || in_file.peek() == std::ifstream::traits_type::eof()){
 				in_file.close();
 				return true;
@@ -117,7 +119,7 @@ class reader_ASCII {
 		}
 		
 		/*! 
-			@brief Reads one line and put the data read from the istringstream in the variables defined
+			@brief	Reads one line and put the data read from the istringstream in the variables defined
 					in the attributes of the derived class defined by the user
 		*/		
 		virtual void get_data() = 0;
@@ -141,11 +143,6 @@ class reader_ASCII {
 		std::ifstream in_file;
 		//! Helper variable to make the class read properly the end of file
 		char find_eof;
-		//! String in which the data read from a line are put
-		//std::string line;
-		//! Data put in line are converted in istringstream to be got by the user
-		//std::istringstream iss_line;
-		
 };	//reader_ASCII
 
 }	//BGLgeom
