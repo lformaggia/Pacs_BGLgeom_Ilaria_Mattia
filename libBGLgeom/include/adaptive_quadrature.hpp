@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file	adaptive_quadrature.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	Prototype for an integrating function
 	@detail	It will implement an adaptive quadrature algorithm
 */

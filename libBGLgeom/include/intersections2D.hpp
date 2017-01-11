@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file	intersections2D.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Nov, 2016
+	@date	Jan, 2017
 	@brief	Classes and functions to compute intersections between two linear edges
 	
 	@detail We need to define some additional functionality for std::array just because

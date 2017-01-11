@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file	reader_ASCII.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Jan, 2016
+	@date	Jan, 2017
 	@brief	Base abstract class to read input file with tabular ASCII 
 			format
 */
