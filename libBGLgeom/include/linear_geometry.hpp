@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 #include <Eigen/Dense>
 #include "point.hpp"
 #include "edge_geometry.hpp"
@@ -97,10 +98,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		operator() (double const& t) const {
 			if(t > 1 || t < 0){
 				std::cerr << "linear_geometry::operator(): parameter value out of bounds" << std::endl;
-				if(t > 1)	//t=1
-					return TGT;
-				else	//t=0
-					return SRC;
+				exit(EXIT_FAILURE);
 			}
 			return point((TGT-SRC)*t+SRC);
 		};
@@ -148,10 +146,7 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		curv_abs(const double & t) const {
 			if(t < 0 || t > 1){
 				std::cerr << "linear_geometry::curv_abs(): parameter value out of bounds" << std::endl;
-				if(t > 1)	//x=length
-					return (TGT-SRC).norm();
-				else	//x=0
-					return 0;;
+				exit(EXIT_FAILURE);
 			}
 			return (TGT-SRC).norm() * t;
 		}

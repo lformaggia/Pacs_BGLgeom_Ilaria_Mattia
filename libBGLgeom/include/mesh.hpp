@@ -83,11 +83,10 @@ struct mesh{
 	
 	/*!
 		@brief	Check if a mesh have already been computed and is present in the container
-		@detail	If only one of the two container is empty, it launches a message error and
-				stop the program, since this thing is not the desired behaviour of this
-				class. This may happen since the user has public access to the members, so
-				for some strange reason (or for error) he may clean only one of them, leaving
-				the other non-empty, and thus causing possible unexpected behaviour
+		
+		If only one of the two container is empty, it launches an error message and 
+		return false
+		
 		@return	True if the containers are empty, false if not
 	*/
 	bool
@@ -95,10 +94,10 @@ struct mesh{
 		if(real.empty() && parametric.empty())
 			return true;
 		else{
-			if( (real.empty() && !parametric.empty()) || (!real.empty() && parametric.empty()) ){
-				std::cerr << "BGLgeom::mesh::empty(): error, unexpected behaviuor!" << std::endl;
-				exit(EXIT_FAILURE);
-			}
+			if( real.empty() && !parametric.empty() )
+				std::cerr << "BGLgeom::mesh::empty(): warning, mesh.real is empty, while mesh.parametric is not" << std::endl;
+			if( !real.empty() && parametric.empty() )
+				std::cerr << "BGLgeom::mesh::empty(): warning, mesh.parametric is empty, while mesh.real is not" << std::endl;
 			return false;
 		}
 	}
