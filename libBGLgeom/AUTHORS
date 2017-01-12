@@ -1,0 +1,13 @@
+January 2017
+
+"BGLgeom library"
+
+Course on Advance programming for scientific computing,
+Academic year 2015-2016
+
+Project by Ilaria Speranza and Mattia Tantardini
+
+Some source files for the library, or parts of them, were refactored 
+from source files kindly provided by prof. Carlo De Falco (bspline, 
+adaptive_quadrature) and by prof. Luca Formaggia (intersection2D, 
+mesh_generators).
