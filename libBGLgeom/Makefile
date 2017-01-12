@@ -23,7 +23,7 @@ help:
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all"
 	
-all: library test install doc clean
+all: library alltest install doc clean
 
 library: static dynamic
 
@@ -88,7 +88,7 @@ doc:
 	@echo "--- Making documentation ---"
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
-	pdflatex $(DOC_DIR)/latex/refman.tex
+	./make_doc_pdf.sh
 	@echo "--- COMPLETED ---"
 
 
