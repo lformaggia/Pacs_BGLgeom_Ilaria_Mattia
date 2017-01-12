@@ -13,16 +13,16 @@
 	@brief	Testing class writer_pts to show how it works and how to 
 			produce pts output
 	
-	@detail	We perfom two different tests: \n
-			- Creation of a graph with two boundary conditions in the 
-				vertex properties. Values assigned to them, then 
-				computation a uniform mesh on every edge. Production of 
-				the pts output files \n
-			- Creation of a standard graph. Values assigned to the 
-				properties and computation of a uniform mesh on the edges. 
-				Production of the pts output files, asking for the 
-				evaluation of the main geometrical properties of each
-				edge in correspondence of the points of the mesh
+	We perfom two different tests: \n
+	- Creation of a graph with two boundary conditions in the 
+		vertex properties. Values assigned to them, then 
+		computation a uniform mesh on every edge. Production of 
+		the pts output files \n
+	- Creation of a standard graph. Values assigned to the 
+		properties and computation of a uniform mesh on the edges. 
+		Production of the pts output files, asking for the 
+		evaluation of the main geometrical properties of each
+		edge in correspondence of the points of the mesh
 */
 
 #include <iostream>

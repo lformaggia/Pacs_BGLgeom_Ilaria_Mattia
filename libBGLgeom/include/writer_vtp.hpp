@@ -11,8 +11,6 @@
 	@author	Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	Base class to write a .vtp file
-
-	@detail
 */
 
 #ifndef HH_WRITER_VTP_HH
@@ -67,7 +65,8 @@ inline void insert_point<3>(double const* P, Points_ptr & points){
 
 /*!
 	@brief	Class to export a .vtp file
-	@detail This writer outputs a .vtp file containing the graphical representation of the graph 	
+	
+	This writer outputs a .vtp file containing the graphical representation of the graph 	
 	@pre	The graph that has to be exported is expected to have at least all the
 			properties defined in data_structure.hpp
 		
@@ -153,9 +152,10 @@ class writer_vtp{
 		
 		/*! 
 			@brief	It exports the graph in .vtp format (compatible with Paraview)
-			@detail	If the edge isn't linear we assume there's a mesh defined on it.
-					If there isn't, a simple straight line will be displayed for 
-					that edge, independently of its geometry
+			
+			If the edge isn't linear we assume there's a mesh defined on it.
+			If there isn't, a simple straight line will be displayed for 
+			that edge, independently of its geometry
 		*/
 		virtual void export_vtp(Graph const& G){
 			std::cout << "Writing vtp file ..." << std::endl;

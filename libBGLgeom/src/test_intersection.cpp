@@ -13,9 +13,9 @@
 	@brief	Little test to show how works the code that compute intersection
 			provided by prof. Formaggia
 	
-	@detail	We compute an intersection between two linear edges. The coordinates
-			of the extremes points for the two edges can be easily changed, to 
-			see how the output and various intersection situation change
+	We compute an intersection between two linear edges. The coordinates
+	of the extremes points for the two edges can be easily changed, to 
+	see how the output and various intersection situation change
 */
 
 #include "intersections2D.hpp"

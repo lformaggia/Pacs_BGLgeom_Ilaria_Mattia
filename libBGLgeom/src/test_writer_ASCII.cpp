@@ -12,8 +12,8 @@
 	@date	Jan, 2017
 	@brief	Testing class writer_ASCII to show how to produce an ASCII output
 	
-	@detail	Based on the graph properties and concrete writer defined in 
-			test_writer_ASCII.hpp
+	Based on the graph properties and concrete writer defined in 
+	test_writer_ASCII.hpp
 */
 
 #include "test_writer_ASCII.hpp"

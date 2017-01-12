@@ -13,8 +13,8 @@
 	@brief	Testing class writer_vtp to show how it works and how to 
 			produce vtp output
 	
-	@detail	Creation a simple graph, assignment of some properties and 
-			production of the vtp output
+	Creation a simple graph, assignment of some properties and 
+	production of the vtp output
 			
 */
 

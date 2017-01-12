@@ -27,7 +27,8 @@ namespace BGLgeom{
 
 /*!
 	@brief	The class handling the linear geometry for an edge
-	@detail It is parametrized between 0 and 1
+	
+	It is parametrized between 0 and 1
 	
 	@param dim Dimension of the space
 */
@@ -88,8 +89,9 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 	 
 	    /*! 
 	    	@brief	Evaluates the line at a given value of the parameter
-	    	@detail It tests if the given parameter belongs to [0,1]. If not, it sets the
-	    			parameter to the nearest extreme value, giving a warning on std::cerr
+	    	
+	    	It tests if the given parameter belongs to [0,1]. If not, it sets the
+	    	parameter to the nearest extreme value, giving a warning on std::cerr
 	    */
 		point
 		operator() (double const& t) const {
@@ -137,8 +139,9 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 
 		/*! 
 			@brief Curvilinear abscissa.
-			@detail If the parameter is out of bound, the method sets it to the nearest
-					extreme value and continues the computation, giving a warning on std::cerr
+			
+			If the parameter is out of bound, the method sets it to the nearest
+			extreme value and continues the computation, giving a warning on std::cerr
 			@param t Value of the parameter (between 0 and 1) where to evaluate the curvilinear abscissa
 		*/
 		double
@@ -174,7 +177,8 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		
 		/*!
 			@brief	Overload of operator<<
-			@detail It only tells the coordinates of its extremes. May be useful for debugging
+			
+			It only tells the coordinates of its extremes. May be useful for debugging
 		*/
 		friend std::ostream & operator<<(std::ostream & out, linear_geometry<dim> const& edge) {
 			out << "(linear)\tSource: " << edge.SRC << ", Target: " << edge.TGT;

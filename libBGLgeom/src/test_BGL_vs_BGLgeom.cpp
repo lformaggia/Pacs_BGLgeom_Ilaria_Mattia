@@ -12,9 +12,9 @@
 	@date	Jan, 2017
 	@brief	Showing how to build a graph with BGL and with BGLgeom
 	
-	@detail	In this test we provide two ways to build the same graph with
-			the same properties, in order to show how the native BGL 
-			functions work w.r.t. our newer function implemented in BGLgeom
+	In this test we provide two ways to build the same graph with
+	the same properties, in order to show how the native BGL 
+	functions work w.r.t. our newer function implemented in BGLgeom
 */
 
 #include <boost/graph/adjacency_list.hpp>

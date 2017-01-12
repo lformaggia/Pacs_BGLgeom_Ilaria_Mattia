@@ -28,18 +28,20 @@ namespace BGLgeom{
 
 /*! 
 	@brief	Empty struct for topological data
-	@detail The user may not need topological data. He can use this
-			empty struct as template parameter in its concrete 
-			reader class
+	
+	The user may not need topological data. He can use this
+	empty struct as template parameter in its concrete 
+	reader class
 */
 struct no_topological_data {};
 
 /*!
 	@brief	Abstract class that implements the functionality to read a file and get data from it	
-	@detail The users has to specify, in the derived class, all variables he need in
-			order to store information read from the input file. Then, through the definition
-			of Edge_data_structure and Vertex_data_structure, he can get separately all the
-			information to put on edges and vertices
+	
+	The users has to specify, in the derived class, all variables he need in
+	order to store information read from the input file. Then, through the definition
+	of Edge_data_structure and Vertex_data_structure, he can get separately all the
+	information to put on edges and vertices
 	
 	@param Vertex_data_structure A struct where the user has to define type and name
 								of the variables he needs to append to the edges as
@@ -92,6 +94,7 @@ class reader_ASCII {
 		
 		/*! 
 			@brief Ignore n lines of the input code that the user knows he has not to read
+			
 			@remark It sets the file stream n lines after the previous position
 		*/
 		virtual void ignore_dummy_lines(unsigned int const& n){

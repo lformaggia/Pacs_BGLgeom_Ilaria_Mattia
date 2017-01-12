@@ -11,7 +11,8 @@
 	@author Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	Prototype for an integrating function
-	@detail	It will implement an adaptive quadrature algorithm
+	
+	It will implement an adaptive quadrature algorithm
 */
 
 #ifndef HH_ADAPTIVE_QUADRATURE_HH

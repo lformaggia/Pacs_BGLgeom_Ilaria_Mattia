@@ -9,10 +9,8 @@
 /*!
 	@file reader.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Dec, 2016
 	@brief Class to read ASCII file for fractures application
-
-	@detail 
 */
 
 #ifndef HH_READER_FRACTURES_HH

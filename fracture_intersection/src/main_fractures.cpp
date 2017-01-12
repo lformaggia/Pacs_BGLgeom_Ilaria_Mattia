@@ -12,7 +12,6 @@
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Dec, 2016
 	@brief Source code for fractures application
-	@datail
 */
 
 #include <iostream>
@@ -110,7 +109,7 @@ int main(){
 			Vertex_d next_src;
 			Vertex_d current_src = src;
 			
-			//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
+			//order intvect in increasing or decreasing order based on the relative position of src and tgt 
 			if(G[src].coordinates < G[tgt].coordinates){
 				std::sort(intvect.begin(), intvect.end(), asc_order);
 			}
@@ -154,10 +153,10 @@ int main(){
 	
 	Vertex_it v_it, v_end;
 	
-	for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it) //for loop on al the edges already in the graph
+	for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it) //for loop on all the edges in the graph
 		++count_e;
 		
-	for (std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it) //for loop on al the edges already in the graph
+	for (std::tie(v_it, v_end) = boost::vertices(G); v_it != v_end; ++v_it) //for loop on all the vertices in the graph
 		++count_v;
 	
 	cout<<endl;
@@ -172,6 +171,7 @@ int main(){
 	cout<<endl;
 	cout<<endl;
 	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	cout<<endl;
 	cout<<"________________ GRAPH 2 ________________"<<endl;
@@ -232,7 +232,7 @@ int main(){
 			Vertex_d next_src;
 			Vertex_d current_src = src;
 			
-			//order intvect in decreasing or decreasing order based on the relative position of src and tgt and on the first elem in the intersection vector
+			//order intvect in decreasing or decreasing order based on the relative position of src and tgt 
 			if(G2[src].coordinates < G2[tgt].coordinates){
 				std::sort(intvect.begin(), intvect.end(), asc_order);
 			}
@@ -274,10 +274,10 @@ int main(){
 	count_v = 0;
 	count_e = 0;
 	
-	for (std::tie(e_it, e_end) = boost::edges(G2); e_it != e_end; ++e_it) //for loop on al the edges already in the graph
+	for (std::tie(e_it, e_end) = boost::edges(G2); e_it != e_end; ++e_it) //for loop on all the edges in the graph
 		++count_e;
 		
-	for (std::tie(v_it, v_end) = boost::vertices(G2); v_it != v_end; ++v_it) //for loop on al the edges already in the graph
+	for (std::tie(v_it, v_end) = boost::vertices(G2); v_it != v_end; ++v_it) //for loop on all the vertices already in the graph
 		++count_v;
 	
 	std::cout << "________________ FINAL SETTING GRAPH 2 ________________"<<std::endl;

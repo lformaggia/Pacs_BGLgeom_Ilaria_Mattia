@@ -11,6 +11,7 @@
 	@author	Luca Formaggia
 	@date	Jan, 2017
 	@brief	Utilities to generate a 1D mesh
+	
 	@note	Code from the example of the PACS course
 */
 
@@ -25,8 +26,9 @@ namespace BGLgeom{
 
 	/*!
 		@brief	Defines a 1D domain
-		@detail It is the hidden structure that the following utilities will use
-				to build the mesh
+		
+		It is the hidden structure that the following utilities will use
+		to build the mesh
 		@note	Code from the examples of PACS course
 	*/
 	class Domain1D {
@@ -56,8 +58,9 @@ namespace BGLgeom{
 	using MeshNodes=std::vector<double>;  
 	/*!
 		@brief Abstract class for a 1D mesh generator
-		@detail It is left abstract the calling operator. This one will
-				generate the mesh in the inherited class
+		
+		It is left abstract the calling operator. This one will
+		generate the mesh in the inherited class
 		@note	Code from the esamples of PACS course
 	*/
 	class OneDMeshGenerator{
@@ -76,12 +79,14 @@ namespace BGLgeom{
 	*/	
 	/*! 
 		@brief	Uniform
+		
 		@note	Code from the examples of the PACS course
 	*/
 	class Uniform: public OneDMeshGenerator {
 		public:
 		    /*! 
 		    	@brief Constructor
+		    	
 				@param domain A 1D domain
 				@param num_elements Number of elements
 		    */
@@ -99,20 +104,22 @@ namespace BGLgeom{
   
 	/*!
 		@brief	Variable mesh size (non uniform) 
-		@detail The class accepts a spacing function h=h(x) which should return a strictly 
-			    positive value for all x in the domain:
-			    \f$ h(x)\ge \alpha>0, \quad x\in\Omega \f$. 
-			    The mesh is generated so that
-			    \f[
-			    x_i=\beta\int_0^i h(s)^{-1}ds
-			    \f]
-			    where \f$\beta\f$
+		
+		The class accepts a spacing function h=h(x) which should return a strictly 
+	    positive value for all x in the domain:
+	    \f$ h(x)\ge \alpha>0, \quad x\in\Omega \f$. 
+	    The mesh is generated so that
+	    \f[
+	    x_i=\beta\int_0^i h(s)^{-1}ds
+	    \f]
+	    where \f$\beta\f$
 		@note	Code from the examples of the PACS course
 	*/
 	class VariableSize: public OneDMeshGenerator  {
 		public:
 			/*!
 			    @brief Constructor
+			    
 			    @param domain A 1D domain
 			    @param h Spacing function
 			    @param max_num_elements Maximum number of elements
@@ -124,6 +131,7 @@ namespace BGLgeom{
 							 											M_num_elements(max_num_elements) {};
 			/*! 
 				@brief	Calling operator
+				
 			    @return MeshNodes The nodes of the mesh
 			*/
 			MeshNodes operator()() const;
@@ -140,6 +148,7 @@ namespace BGLgeom{
 
 	/*!
 		@brief	A class to handle the creation of a 1D mesh
+		
 		@note	Code from the examples of PACS course
 	*/
 	class Mesh1D{
@@ -152,6 +161,7 @@ namespace BGLgeom{
 
 			/*! 
 				@brief Constructor for an equally spaced mesh
+				
 				@param d  A domain
 			    @param n  Number of intervals (not nodes!)
 			*/
@@ -159,6 +169,7 @@ namespace BGLgeom{
 
 			/*!
 				@brief Constructor for a variable spaced mesh
+				
 				@param d A domain
 				@param n Max number of intervals (not nodes!)
 				@param generatingFunction 	The function providing the desired spacing (density function for the nodes).
@@ -180,6 +191,7 @@ namespace BGLgeom{
 
 			/*! 
 				@brief Generate mesh (it will destroy old mesh)
+				
 			    @param mg A mesh generator
 			*/
 			void reset(OneDMeshGenerator const & mg);
@@ -199,8 +211,9 @@ namespace BGLgeom{
 			Domain1D domain() const { return myDomain; }
 			/*! 
 				@brief	The mesh size.
-				@detail For non uniform meshes, it returns the maximum distance between
-						two consecutives nodes
+				
+				For non uniform meshes, it returns the maximum distance between
+				two consecutives nodes
 			*/
 			double h() const;
 		private:

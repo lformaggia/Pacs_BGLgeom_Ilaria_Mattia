@@ -11,8 +11,6 @@
 	@author	Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	Base class to write a .pts file
-
-	@detail
 */
 
 #ifndef HH_WRITER_PTS_HH
@@ -44,8 +42,8 @@ write_point_pts(std::ostream & out, BGLgeom::point<dim> const& P){
 
 /*!
 	@brief	Classe to export infos about the graph on a .pts file
-	@detail In particular, this writer wants to write the mesh genarated on the
-			edges of the graph, in order to be properly used by getFEM code
+	In particular, this writer wants to write the mesh genarated on the
+	edges of the graph, in order to be properly used by getFEM code
 	@note	If the number of boundary conditions attached to each vertex through 
 			the vertex properties (using class boundary_condition of this library)
 			is larger than one, this writer will produce a separate pts file for
@@ -86,10 +84,10 @@ class writer_pts{
 		
 		/*! 
 			@brief It exports the mesh and the info contained in the graph in an pts file
-			@detail If the parameter add_geometric_info is passed as true, this will print
-					in a separate file, named "filename"_moreinfo.pts, the evaluation of the
-					first derivative, of the second derivative and of the curvature in 
-					corrispondence of the points of the mesh
+			If the parameter add_geometric_info is passed as true, this will print
+			in a separate file, named "filename"_moreinfo.pts, the evaluation of the
+			first derivative, of the second derivative and of the curvature in 
+			corrispondence of the points of the mesh
 			@pre	When the second parameter is set true, a parametric mesh is required 
 					to be present on the edge. If it is empty, the writer will produce 
 					an output evaluating the geometric quantities only in correspondence 
@@ -193,12 +191,13 @@ class writer_pts{
 		
 		/*!
 			@brief	Exporting to a separate pts file additional geometric infos
-			@detail	It exports for each edge this kind of info: \n
-					- the three component of the first derivative; \n
-					- the three component of the second derivative; \n
-					- the evaluation of the curvature. \n
-					All this info are computed in correspondence of the points of the
-					mesh present on the edge
+			
+			It exports for each edge this kind of info: \n
+			- the three component of the first derivative; \n
+			- the three component of the second derivative; \n
+			- the evaluation of the curvature. \n
+			All this info are computed in correspondence of the points of the
+			mesh present on the edge
 			@note	If a parametric mesh is not present on the edge, this will 
 					evaluate the geometric properties only in corrispondence of 
 					source and target

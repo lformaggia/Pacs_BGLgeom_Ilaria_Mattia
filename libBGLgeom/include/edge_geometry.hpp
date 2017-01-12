@@ -25,16 +25,17 @@ namespace BGLgeom{
 
 /*!
 	@brief	Abstract class for an edge
-	@detail	It specifies all the geometric operation that should be carried
-			out on an edge, thought as a curve in the space (2 or 3 dimensional). 
-			In particular, it defines, for a given value of the parameter: \n
-			- evaluation of the curve; \n
-			- evaluation of the first derivative; \n
-			- evaluation of the second derivative; \n
-			- evaluation of the curvature; \n
-			- evaluation of the curvilinear ascissa. \n
-			It provides also evaluation of this characteristics for a single value
-			or for a vector of values of the parameter
+	
+	It specifies all the geometric operation that should be carried
+	out on an edge, thought as a curve in the space (2 or 3 dimensional). 
+	In particular, it defines, for a given value of the parameter: \n
+	- evaluation of the curve; \n
+	- evaluation of the first derivative; \n
+	- evaluation of the second derivative; \n
+	- evaluation of the curvature; \n
+	- evaluation of the curvilinear ascissa. \n
+	It provides also evaluation of this characteristics for a single value
+	or for a vector of values of the parameter
 	@param dim The dimension of the space
 */
 template <unsigned int dim>
@@ -46,8 +47,9 @@ class edge_geometry {
 	public:
 		/*!
 			@brief Overload of the calling operator
-			@detail This represents the evaluation of the curve at a given value of 
-					the parameter
+			
+			This represents the evaluation of the curve at a given value of 
+			the parameter
 			@return A point in the dim-dimensional space.
 		*/
 		virtual BGLgeom::point<dim>
@@ -59,8 +61,9 @@ class edge_geometry {
 		
 		/*!
 			@brief First derivative of the curve
-			@detail It evaluates each component of the first derivative of the curve
-					at a given value of the parameter
+			
+			It evaluates each component of the first derivative of the curve
+			at a given value of the parameter
 			@return An Eigen matrix containing the three components of the evaluation.
 					We use again as return value a BGLgeom:point<dim>, since the 
 					underlying container is the same
@@ -74,8 +77,9 @@ class edge_geometry {
 		
 		/*!
 			@brief Second derivative of the curve
-			@detail It evaluates each component of the second derivative of the curve
-					at a given value of the parameter
+			
+			It evaluates each component of the second derivative of the curve
+			at a given value of the parameter
 			@return An Eigen matrix containing the three components of the evaluation.
 					We use again as return value a BGLgeom:point<dim>, since the 
 					underlying container is the same
@@ -89,8 +93,9 @@ class edge_geometry {
 		
 		/*!
 			@brief Curvilinear abscissa of the curve
-			@detail It evaluates the curvilinear abscissa of the curve at a given
-					value of the parameter
+			
+			It evaluates the curvilinear abscissa of the curve at a given
+			value of the parameter
 		*/
 		virtual double
 		curv_abs (double const&) const = 0;
@@ -101,7 +106,8 @@ class edge_geometry {
 		
 		/*!
 			@brief Curvature of the curve
-			@detail It evaluates the curvature at a given value of the parameter
+			
+			It evaluates the curvature at a given value of the parameter
 		*/
 		virtual double
 		curvature (double const&) const = 0;

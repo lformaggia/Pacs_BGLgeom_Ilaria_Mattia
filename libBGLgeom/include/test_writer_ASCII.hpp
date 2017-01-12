@@ -12,8 +12,8 @@
 	@date	Jan, 2017
 	@brief	Definition of the concrete class that inherits from writer_ASCII
 	
-	@detail	We define a test edge property for the graph. Then the concrete 
-			writer for that type of graph is defined.
+	We define a test edge property for the graph. Then the concrete 
+	writer for that type of graph is defined.
 */
 
 #ifndef HH_TEST_WRITER_ASCII_HH

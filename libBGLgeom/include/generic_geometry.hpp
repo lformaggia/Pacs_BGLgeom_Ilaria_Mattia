@@ -32,11 +32,12 @@ namespace BGLgeom{
 
 /*!
 	@brief	Generic geometry for an edge
-	@detail To be constructed, it requires the full specification of the expression of the 
-			curve, of its firts derivative and of its second derivative (so they must be
-			known a priori) They also must be parametrized between 0 and 1.
-			Each evaluation method checks if the given parameter is in this range, 
-			otherwise the program abort
+	
+	To be constructed, it requires the full specification of the expression of the 
+	curve, of its firts derivative and of its second derivative (so they must be
+	known a priori) They also must be parametrized between 0 and 1.
+	Each evaluation method checks if the given parameter is in this range, 
+	otherwise the program abort
 	
 	@param dim Dimension of the space	
 */
@@ -235,7 +236,8 @@ class generic_geometry : public BGLgeom::edge_geometry<dim> {
 		
 		/*!
 			@brief	Overload of operator<<
-			@detail It only tells the coordinates of its extremes. May be useful for debugging
+			
+			It only tells the coordinates of its extremes. May be useful for debugging
 		*/
 		friend std::ostream & operator<<(std::ostream & out, generic_geometry<dim> const& edge) {
 			out << "(generic)\tSource: " << edge(0) << ", Target: " << edge(1);

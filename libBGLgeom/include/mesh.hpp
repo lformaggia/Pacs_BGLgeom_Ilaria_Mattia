@@ -28,9 +28,10 @@ namespace BGLgeom{
 
 /*!
 	@brief	A struct to create meshes on graphs' edges
-	@detail	This struct will be both the container for the generated mesh
-			on the edge and the generator for such a mesh. We declare it as
-			a struct because we want public acces to its members.
+	
+	This struct will be both the container for the generated mesh
+	on the edge and the generator for such a mesh. We declare it as
+	a struct because we want public acces to its members.
 	
 	@param Geom The geometry of the edge
 	@param dim The dimension of the space
@@ -45,9 +46,10 @@ struct mesh{
 	vect_pts real;
 	/*!
 		@brief	The vector containing the parametric mesh, used to compute the real one
-		@detail	We keep track of the parametric mesh because the user may want to evaluate
-				some other quantities related to the geometry of the edge (first derivative, 
-				curvature, ecc) in correspondece of the real points of the mesh
+		
+		We keep track of the parametric mesh because the user may want to evaluate
+		some other quantities related to the geometry of the edge (first derivative, 
+		curvature, ecc) in correspondece of the real points of the mesh
 	*/
 	vect parametric;
 	
@@ -103,7 +105,8 @@ struct mesh{
 	
 	/*! 
 		@brief	Creates a uniform parametric mesh, and then evaluates it
-		@detail SRC and TGT are included in the mesh points
+		
+		SRC and TGT are included in the mesh points
 		
 		@param n Number of intervals
 		@param eval Function used to evaluate the parametric mesh (it will be one of the geometries)
@@ -117,7 +120,8 @@ struct mesh{
 	
 	/*! 
 		@brief	Creates a non-uniform parametric mesh and then evaluates it
-		@detail SRC and TGT are included in the mesh points
+		
+		SRC and TGT are included in the mesh points
 		
 		@param n Maximum number of intervals
 		@param spacing_function Spacing function

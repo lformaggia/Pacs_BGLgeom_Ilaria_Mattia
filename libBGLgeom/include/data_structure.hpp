@@ -66,7 +66,6 @@ namespace BGLgeom{
 
 /*!
 	@brief Minimal data structure for the vertex geometrical properties
-	@detail
 
 	@param N Space dimension
 	@param num_bc Dimension of the array containing values of the boundary
@@ -83,9 +82,10 @@ struct Vertex_base_property{
 	point_t coordinates;
 	/*!
 		@brief	Boundary conditions on the vertex
-		@detail	An array is used to contain all the possible boundary condition.
-				This allows the user to set different boundary conditions (which 
-				may be needed by its specific problem) in the same vertex
+		
+		An array is used to contain all the possible boundary condition.
+		This allows the user to set different boundary conditions (which 
+		may be needed by its specific problem) in the same vertex
 	*/
 	std::array<bc_t, num_bc> BC;
 	//! A label for the vertex (if needed)
@@ -149,8 +149,9 @@ struct Vertex_base_property{
 	
 	/*!
 		@brief Overload of output operator
-		@detail It prints out what is in the vertex property. Shows "NOT DEFINED" if
-				the corresponding value was left defaulted
+		
+		It prints out what is in the vertex property. Shows "NOT DEFINED" if
+		the corresponding value was left defaulted
 	*/
 	friend std::ostream & operator<<(std::ostream & out, Vertex_base_property const& v_prop) {
 		out << "Coordinates: " << v_prop.coordinates << std::endl;
@@ -177,8 +178,9 @@ struct Vertex_base_property{
 
 /*!
 	@brief	Minimal data structure for the edge geometrical properties in "static" version
-	@detail	The type of the geometry of the edge is choose as template parameter.
-			This implies that all edges in the graph will have the same geometry
+	
+	The type of the geometry of the edge is choose as template parameter.
+	This implies that all edges in the graph will have the same geometry
 	
 	@param Geom Type of the geometry for the edge
 	@param dim The dimension of the space
@@ -262,10 +264,11 @@ struct Edge_base_property{
 	
 	/*!
 		@brief	Overload of operator<<
-		@detail It prints out what is in the edge property, explaining the geometry of 
-				the edge and its source and target. It shows "NOT DEFINED" if the 
-				corresponding value was left defaulted. Concerning the mesh, it returns
-				whether a mesh on the edge was computed (and present) or not.
+		
+		It prints out what is in the edge property, explaining the geometry of 
+		the edge and its source and target. It shows "NOT DEFINED" if the 
+		corresponding value was left defaulted. Concerning the mesh, it returns
+		whether a mesh on the edge was computed (and present) or not.
 	*/
 	friend std::ostream & operator<<(std::ostream & out, Edge_base_property const& e_prop) {
 		out << e_prop.geometry << std::endl;

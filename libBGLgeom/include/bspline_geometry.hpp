@@ -32,6 +32,7 @@ using vect = std::vector<double>;
 
 /*!
 	@brief	Find the knot span of the parametric point u.
+	
 	@note	This is NOT	Algorithm A2.1 from 'The NURBS BOOK' pg68
 			as that algorithm only works for nonperiodic
 			knot vectors, nonetheless the results should
@@ -49,6 +50,7 @@ int findspan (int n, int p, double u, const vect &U);
 
 /*!
 	@brief	Compute the functions of the basis
+	
 	@note	Algorithm A2.2 from 'The NURBS BOOK' pg70.
 	
 	@param i Knot span (from findspan())
@@ -62,7 +64,7 @@ void basisfun (int i, double t, int p, const vect &U, vect &N);
 
 /*!
 	@brief Class to handle edges described by a bspline
-	@detail
+
 	@note	We do not perform checks on the value of the input parameter when evaluating
 			the curve since this check is already performed by the code in findspan, 
 			which returns an error message and exits.
@@ -273,7 +275,8 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		
 		/*!
 			@brief	Overload of operator<<
-			@detail It only tells the coordinates of its extremes. May be useful for debugging
+			
+			It only tells the coordinates of its extremes. May be useful for debugging
 		*/
 		friend std::ostream & operator<<(std::ostream & out, bspline_geometry<dim,deg> const& edge) {
 			out << "(bspline)\tSource: " << edge(0) << ", Target: " << edge(1);

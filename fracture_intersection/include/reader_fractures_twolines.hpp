@@ -9,10 +9,8 @@
 /*!
 	@file reader.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Dec, 2016
 	@brief Class to read ASCII file for fractures application
-
-	@detail 
 */
 
 #ifndef HH_READER_FRACTURES_TWOLINES_HH
@@ -25,10 +23,11 @@ namespace Fracture{
 
 /*! 
 	@brief The reader based on reader_ASCII to read the data about the fractures
-	@detail In this reader we will read to lines of input file at a time, because
-			the input file has a different structure: it has the coordinates of the 
-			source in the first line, and the coordinates of the target in the 
-			second one.
+	
+	In this reader we will read to lines of input file at a time, because
+	the input file has a different structure: it has the coordinates of the 
+	source in the first line, and the coordinates of the target in the 
+	second one.
 */
 class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop> {
 	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
@@ -42,10 +41,10 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 		
 		/*! 
 			@brief Reading data from line
-			@detail The format of the file is: \n
-					- 1=source; coordinates; -10=third coordinate \n
-					- 2=target; coordinates; -10=third coordinate \n
-					This two lines form an edge
+			The format of the file is: \n
+			- 1=source; coordinates; -10=third coordinate \n
+			- 2=target; coordinates; -10=third coordinate \n
+			This two lines form an edge
 		*/
 		void get_data(){
 			this->in_file >> discard1 >> SRC >> discard2 >> discard1 >> TGT >> discard2;

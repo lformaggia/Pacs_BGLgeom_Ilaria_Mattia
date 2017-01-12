@@ -13,19 +13,19 @@
 	@brief	Testing class bspline_geometry and creation of mesh on an edge
 			with this geometry
 	
-	@detail	We perfom these different tests: \n
-			- Creation of a simple 2-dimensional B-spline with degree 2;
-				Evaluation of that spline at different values of the parameter,
-				using both methods that accept one single parameter and methods
-				accepting vectors of paramters; \n
-			- Creation of a 3-dimensional B-spline with degree 3; creation of a 
-				uniform mesh on it and evaluation of the spline, of its first and 
-				second derivatives in the point of the mesh. This example was 
-				taken from a code by prof. Carlo De Falco; \n
-			- Creation of a graph with two edges, one like in the second example 
-				and a new one. Creation of a uniform mesh on the first, and of a 
-				variable size mesh on the second. Production of pts and vtp output
-				for this graph
+	We perfom these different tests: \n
+	- Creation of a simple 2-dimensional B-spline with degree 2;
+		Evaluation of that spline at different values of the parameter,
+		using both methods that accept one single parameter and methods
+		accepting vectors of paramters; \n
+	- Creation of a 3-dimensional B-spline with degree 3; creation of a 
+		uniform mesh on it and evaluation of the spline, of its first and 
+		second derivatives in the point of the mesh. This example was 
+		taken from a code by prof. Carlo De Falco; \n
+	- Creation of a graph with two edges, one like in the second example 
+		and a new one. Creation of a uniform mesh on the first, and of a 
+		variable size mesh on the second. Production of pts and vtp output
+		for this graph
 */
 
 #include "bspline_geometry.hpp"

@@ -59,8 +59,8 @@ operator<<(std::ostream & out, Eigen::DenseBase<Derived> & m){
 
 /*!
 	 @brief Operator< overloading. Implements lexicographic order		 
-	 @detail Point1 < Point2 if Point1.x is smaller than Point2.x;
-	 		 if they are equal, compare in the same waythe y coordinate, and so on.		
+	 Point1 < Point2 if Point1.x is smaller than Point2.x;
+	 if they are equal, compare in the same waythe y coordinate, and so on.		
 */
 template <typename Derived>
 bool
@@ -75,8 +75,9 @@ operator< (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const&
 }
 
 /*!
-	@brief Operator> overloading			
-	@detail It is the negation of operator<
+	@brief Operator> overloading
+				
+	It is the negation of operator<
 */
 template <typename Derived>
 bool
@@ -85,8 +86,9 @@ operator> (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const&
 }
 
 /*!
-	@brief Operator== overloading			
-	@detail It checks if all the coordinates are equal, with a default tolerance
+	@brief Operator== overloading		
+		
+	It checks if all the coordinates are equal, with a default tolerance
 */
 template <typename Derived>
 bool
@@ -95,9 +97,10 @@ operator== (Eigen::DenseBase<Derived> const& P1, Eigen::DenseBase<Derived> const
 }
 
 /*!
-	@brief Operator!= overloading			
-	@detail It checks if the two points are different, with a default tolerance.
-			It is implemented as the negation of the operator==
+	@brief Operator!= overloading	
+			
+	It checks if the two points are different, with a default tolerance.
+	It is implemented as the negation of the operator==
 */
 template <typename Derived>
 bool

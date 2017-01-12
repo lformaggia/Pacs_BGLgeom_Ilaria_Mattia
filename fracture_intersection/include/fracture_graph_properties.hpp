@@ -12,7 +12,6 @@
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Sept, 2016
 	@brief Properties that the graph for fractures appliocation will have
-	@datail
 */
 
 #ifndef HH_FRACTURE_GRAPH_PROPERTIES_HH

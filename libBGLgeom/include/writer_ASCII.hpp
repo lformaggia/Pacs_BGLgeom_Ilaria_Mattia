@@ -12,8 +12,8 @@
 	@date	Jan, 2017
 	@brief	Base abstract class to write infos about the graph on tabular files.
 
-	@detail	This abstract class provides the user some methods and functionality
-			to write data on file from the graph
+	This abstract class provides the user some methods and functionality
+	to write data on file from the graph
 */
 #ifndef HH_WRITER_ASCII_HH
 #define HH_WRITER_ASCII_HH
@@ -34,11 +34,11 @@ namespace BGLgeom{
 
 /*!
 	@brief	Class handling output operations for a tabular type file
-	@detail	The user is asked to derived its own writer class from this abstract
-			one and to define its own "write_data" method as he wants. This allows
-			him to choose the format that suites the best for him, and to choose
-			which properties (only him knows which they are, if the are not the
-			base ones provided by this library!) to write in the output file
+	The user is asked to derived its own writer class from this abstract
+	one and to define its own "write_data" method as he wants. This allows
+	him to choose the format that suites the best for him, and to choose
+	which properties (only him knows which they are, if the are not the
+	base ones provided by this library!) to write in the output file
 */
 template <typename Graph>
 class writer_ASCII{
@@ -74,8 +74,8 @@ class writer_ASCII{
 		
 		/*!
 			@brief It writes headers of columns
-			@detail Implemented using initializer_list, so it can accept any number of arguments.
-					it puts a tab as a separator of the different columns
+			Implemented using initializer_list, so it can accept any number of arguments.
+			it puts a tab as a separator of the different columns
 		*/
 		virtual void put_headers(std::initializer_list<std::string> args){
 			typename std::initializer_list<std::string>::iterator init_list_it, init_list_end;
@@ -91,8 +91,8 @@ class writer_ASCII{
 		
 		/*!
 			@brief	It writes data
-			@detail	Abstract method. The user has to define how to write the data contained
-					in the graph
+			Abstract method. The user has to define how to write the data contained
+			in the graph
 			@note	The method asks for an edge descriptor: the user can recover the information
 					about source and target by using the function boost::source(e,G) and
 					boost::target(e,G) of the BGL, and then accessing the vertex properties

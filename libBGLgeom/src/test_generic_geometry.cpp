@@ -13,18 +13,18 @@
 	@brief	Testing class generic_geometry and creation of mesh on an edge
 			with this geometry
 	
-	@detail	We perfom these different test: \n
-			- Creation of a straigth line using the generic_geometry class,
-				to test consistency with the linear_geometry one. Evaluation
-				of the geometric characteristics for different values of the 
-				parameter. Creation of a uniform and a variable size mesh on it. \n
-			- Creation of a half-circumference. Evaluation of the geometric 
-				characteristics for different values of the parameter, using 
-				both methods that accept one single parameter and methods
-				accepting vectors of paramters; \n
-			- Creation of a graph with one single edge, representing a spiral.
-				Creation of a uniform mesh on it. Production of a pts and vtp
-				output
+	We perfom these different test: \n
+	- Creation of a straigth line using the generic_geometry class,
+		to test consistency with the linear_geometry one. Evaluation
+		of the geometric characteristics for different values of the 
+		parameter. Creation of a uniform and a variable size mesh on it. \n
+	- Creation of a half-circumference. Evaluation of the geometric 
+		characteristics for different values of the parameter, using 
+		both methods that accept one single parameter and methods
+		accepting vectors of paramters; \n
+	- Creation of a graph with one single edge, representing a spiral.
+		Creation of a uniform mesh on it. Production of a pts and vtp
+		output
 */
 
 #include "generic_geometry.hpp"

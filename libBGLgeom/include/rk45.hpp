@@ -11,8 +11,8 @@
 	@author	Luca Formaggia
 	@date	Jan, 2017
 	@brief	Declaration of functions to solve ODE systems
-	@detail This utilities will be used to compute a 1D variable size 
-			mesh
+	
+	This utilities will be used to compute a 1D variable size mesh
 */
 
 #ifndef HH_RK45INTEGRATOR_HH

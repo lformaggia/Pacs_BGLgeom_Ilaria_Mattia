@@ -13,15 +13,15 @@
 	@brief	Testing class linear_geometry and creation of mesh on an edge
 			with this geometry
 	
-	@detail	We perfom these different tests: \n
-			- Creation of a straigth line to test consistency with the 
-				generic_geometry class. Evaluation of the geometric characteristics 
-				for different values of the parameter, using both methods 
-				that accept one single parameter and methods accepting vectors 
-				of paramters. Creation of a uniform and a variable size mesh on it. \n
-			- Creation of a graph with three linear edges. Creation of a uniform 
-				and variable size mesh on them. Production of a pts and vtp
-				output
+	We perfom these different tests: \n
+	- Creation of a straigth line to test consistency with the 
+		generic_geometry class. Evaluation of the geometric characteristics 
+		for different values of the parameter, using both methods 
+		that accept one single parameter and methods accepting vectors 
+		of paramters. Creation of a uniform and a variable size mesh on it. \n
+	- Creation of a graph with three linear edges. Creation of a uniform 
+		and variable size mesh on them. Production of a pts and vtp
+		output
 */
 
 #include "linear_geometry.hpp"

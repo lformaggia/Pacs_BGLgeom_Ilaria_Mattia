@@ -12,11 +12,11 @@
 	@date	Jan, 2017
 	@brief	More classes and function to handle intersections
 	
-	@detail In this header can ben found some more specific utilities to handle
-			intersections between edges. In particular, we provide a function
-			which computes the "situation", "type" of the intersection, and a struct
-			that can be useful when one need to refine the edges of the graph
-			according to the intersections he found
+	In this header can ben found some more specific utilities to handle
+	intersections between edges. In particular, we provide a function
+	which computes the "situation", "type" of the intersection, and a struct
+	that can be useful when one need to refine the edges of the graph
+	according to the intersections he found
 */
 
 #ifndef HH_INTERSECTIONS2D_UTILITIES_HH
@@ -34,14 +34,14 @@
 namespace BGLgeom{
 /*!
 	@brief An enum class to identify the intersection situation
-	@detail We need to identify how the edges are located in the plane and
-			how they intersect. In this way we can perform the correct actions
-			at graph level to intersect topologically the edges. \n
-			In some cases, or within some algorithms, we already have one edge
-			and we want to know if this one intersects with one new edge that is
-			coming into the graph. We also use "new" and "old" edge w.r.t the order
-			in which the edges are passed into the function compute_intersection:
-			"old" is the already present one, "new" the incoming edge.
+	We need to identify how the edges are located in the plane and
+	how they intersect. In this way we can perform the correct actions
+	at graph level to intersect topologically the edges. \n
+	In some cases, or within some algorithms, we already have one edge
+	and we want to know if this one intersects with one new edge that is
+	coming into the graph. We also use "new" and "old" edge w.r.t the order
+	in which the edges are passed into the function compute_intersection:
+	"old" is the already present one, "new" the incoming edge.
 	
 	@param X Simple cross intersection. We are happy
 	@param T_new The new edge intersects in one of its extremes the old edge
@@ -63,7 +63,8 @@ namespace BGLgeom{
 
 /*!
 	@brief Function to compute the type of intersection
-	@detail It returns one of the situation contained in the enum BGLgeom::intersection_type
+	
+	It returns one of the situation contained in the enum BGLgeom::intersection_type
 */
 
 /*BGLgeom::intersection_type

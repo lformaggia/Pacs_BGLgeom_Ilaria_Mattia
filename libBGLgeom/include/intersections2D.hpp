@@ -12,11 +12,11 @@
 	@date	Jan, 2017
 	@brief	Classes and functions to compute intersections between two linear edges
 	
-	@detail We need to define some additional functionality for std::array just because
-			the storage type for the points in the library is an Eigen std::array<double,2>, while
-			this code (provided by professor Formaggia) is suitable for std::array.
-			That's why we provide also some interface classes to transform data in a
-			format that can be processed by this code.
+	We need to define some additional functionality for std::array just because
+	the storage type for the points in the library is an Eigen std::array<double,2>, while
+	this code (provided by professor Formaggia) is suitable for std::array.
+	That's why we provide also some interface classes to transform data in a
+	format that can be processed by this code.
 */
 
 #ifndef HH_INTERSECTIONS_2D_HH
@@ -96,8 +96,9 @@ namespace BGLgeom{
 
 /*! 
 	@brief An interface for a linear edge
-	@detail This class is thought to manage the description of the geometry
-			of a linear edge, in order to compute intersections.
+	
+	This class is thought to manage the description of the geometry
+	of a linear edge, in order to compute intersections.
 	@remarks The class must have an overload of operator[] in order to run in the 
 				function that computes intersections
 */
@@ -131,7 +132,8 @@ class linear_edge_interface{
 		*/
 		/*! 
 			@brief Overloading of operator[] to access each of the two end points. Usefull in algorithms
-			@detail extremes[0] = source, extremes[1] = target of the edge
+			
+			extremes[0] = source, extremes[1] = target of the edge
 		*/
 		std::array<double,2> operator[](std::size_t i){ return extremes[i]; }
 		std::array<double,2> operator[](std::size_t i) const { return extremes[i]; }
@@ -144,9 +146,10 @@ class linear_edge_interface{
 
 /*!
 	@brief An enum class to identify the intersection situation
-	@detail We need to identify how the edges are located in the plane and
-			how the intersect. In this way we can perform the correct actions
-			at the graph level to intersect topologically the edges
+	
+	We need to identify how the edges are located in the plane and
+	how the intersect. In this way we can perform the correct actions
+	at the graph level to intersect topologically the edges
 	
 	@param X Simple cross intersection. We are happy
 	@param T_new The new edge intersects in one of its extremes the old edge
@@ -238,8 +241,9 @@ std::ostream & operator<< (std::ostream & out, Intersection const& I);
 
 /*
 	@brief Helper function to translate array into eigen
-	@detail Needed to suite the working structure of comupte_intersection
-			with the structure used for points in this library, that is Eigen
+	
+	Needed to suite the working structure of comupte_intersection
+	with the structure used for points in this library, that is Eigen
 */
 std::array<BGLgeom::point<2>,2>
 translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsigned int const& numberOfIntersection);
