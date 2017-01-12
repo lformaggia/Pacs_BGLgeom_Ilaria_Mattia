@@ -4,13 +4,27 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file	graph_builder.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
-	@brief	Some utilities to build a graph
+	@date	Jan, 2017
+	@brief	Utilities to build a graph and adapters to some BGL functions
+	
+	In this file we define some functions needed to build and manage the 
+	graph, and to acces and iterate over its properties.
+	We provide: \n
+	- an alias for edge, vertex descriptors, edge, vertex iterators; \n
+	- the redefinition of some useful and frequently used BGL function: 
+		getting source and target of an edge, getting the edge and vertex 
+		iterators for that graph; \n
+	- the redefinition of the BGL functions concerning the creation of 
+		vertices and edge; \n
+	- some other functions to add edges to the graph knowing a priori 
+		the geometry of an edge, in order to automatize some setting 
+		procedure. This functions in general also perform some additional 
+		checks on the geometric properties.
 */
 
 #ifndef HH_GRAPH_BUILDER_HH

@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file	intersections2D_utilities.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date	Sept, 2016
+	@date	Jan, 2017
 	@brief	More classes and function to handle intersections
 	
 	@detail In this header can ben found some more specific utilities to handle

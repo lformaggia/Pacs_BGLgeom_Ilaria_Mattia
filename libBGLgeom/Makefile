@@ -74,6 +74,7 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 
 
 install:
+	@echo ""
 	@echo "--- Installing library ---"
 	@mkdir -p $(INSTALL_PATH)/include
 	cp $(HEADERS) $(INSTALL_PATH)/include
@@ -83,6 +84,7 @@ install:
 
 
 doc:
+	@echo ""
 	@echo "--- Making documentation ---"
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
