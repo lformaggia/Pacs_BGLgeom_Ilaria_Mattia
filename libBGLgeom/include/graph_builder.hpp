@@ -69,8 +69,8 @@ using Edge_iter = typename boost::graph_traits<Graph>::edge_iterator;
 
 
 /*!
-	@defgroup	Function aliases	Some useful aliases for function from BGL, used
-									very often to create a graph and iterate over it
+	@defgroup	Aliases	Some useful aliases for function from BGL, used
+						very often to create a graph and iterate over it
 
 	They are Utilities to hidden boost::edges(G) and to allow to use only 
 	one namespace (BGLgeom)

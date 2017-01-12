@@ -7,7 +7,7 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	mesh_generator.hpp
+	@file	mesh_generators.hpp
 	@author	Luca Formaggia
 	@date	Jan, 2017
 	@brief	Utilities to generate a 1D mesh

@@ -7,10 +7,10 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	boundary_condition.hpp
+	@file	boundary_conditions.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
-	@brief	Struct for boundary condition on a vertex
+	@brief	Definitions for boundary conditions on a vertex
 */
 
 #ifndef HH_BOUNDARY_CONDITION_HH

@@ -91,8 +91,8 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 	    /*! 
 	    	@brief	Evaluates the line at a given value of the parameter
 	    	
-	    	It tests if the given parameter belongs to [0,1]. If not, it sets the
-	    	parameter to the nearest extreme value, giving a warning on std::cerr
+	    	It tests if the given parameter belongs to [0,1]. If not, it gives 
+	    	a warning on std::cerr and abort the program
 	    */
 		point
 		operator() (double const& t) const {
@@ -138,8 +138,9 @@ class linear_geometry : public BGLgeom::edge_geometry<dim> {
 		/*! 
 			@brief Curvilinear abscissa.
 			
-			If the parameter is out of bound, the method sets it to the nearest
-			extreme value and continues the computation, giving a warning on std::cerr
+			It tests if the given parameter belongs to [0,1]. If not, it gives 
+	    	a warning on std::cerr and abort the program
+	    	
 			@param t Value of the parameter (between 0 and 1) where to evaluate the curvilinear abscissa
 		*/
 		double

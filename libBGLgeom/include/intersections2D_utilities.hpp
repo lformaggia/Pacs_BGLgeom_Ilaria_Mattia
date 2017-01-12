@@ -7,7 +7,7 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	intersections2D_utilities.cpp
+	@file	intersections2D_utilities.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	More classes and function to handle intersections
