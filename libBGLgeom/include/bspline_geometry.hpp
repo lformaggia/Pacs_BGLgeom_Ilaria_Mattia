@@ -129,7 +129,7 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		bspline_geometry & operator=(bspline_geometry &&) = default;
 		
 		/*! 
-			@defgroup Building the bspline if default constructed
+			@defgroup bspline_set Building bspline if default constructed
 			@{
 		*/
 		//! Setting bspline with control points

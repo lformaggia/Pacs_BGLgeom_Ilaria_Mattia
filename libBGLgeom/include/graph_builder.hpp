@@ -44,10 +44,10 @@
 namespace BGLgeom{
 
 /*!
-	@defgroup	Accessing Graph items	Some useful aliases for types from BGL, used
-										to access vertex and edges
-	@detail We provide alias for vertex and edge descriptors, vertex
-			and edge iterators.
+	@defgroup	Accessi_Graph_items	Aliases type for BGL
+	
+	We provide alias for vertex and edge descriptors, vertex
+	and edge iterators.
 	@{
 */
 //! Vertex descriptor alias type
@@ -71,8 +71,9 @@ using Edge_iter = typename boost::graph_traits<Graph>::edge_iterator;
 /*!
 	@defgroup	Function aliases	Some useful aliases for function from BGL, used
 									very often to create a graph and iterate over it
-	@detail	They are Utilities to hidden boost::edges(G) and to allow to use only 
-			one namespace (BGLgeom)
+
+	They are Utilities to hidden boost::edges(G) and to allow to use only 
+	one namespace (BGLgeom)
 	@{
 */
 /*!
@@ -133,14 +134,15 @@ target(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
 
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
-	@detail It prints an error message on the screen if the insertion of the
-			edge failed according to the scenarios described in the reference
-			for the function boost::add_edge: 
-			"For graphs that do not allow parallel edges, if the edge is already 
-			in the graph then a duplicate will not be added and the bool flag 
-			will be false. When the flag is false, the returned edge descriptor 
-			points to the already existing edge." 
-			(quote from http://www.boost.org/doc/libs/1_37_0/libs/graph/doc/adjacency_list.html)
+	
+	It prints an error message on the screen if the insertion of the
+	edge failed according to the scenarios described in the reference
+	for the function boost::add_edge: 
+	"For graphs that do not allow parallel edges, if the edge is already 
+	in the graph then a duplicate will not be added and the bool flag 
+	will be false. When the flag is false, the returned edge descriptor 
+	points to the already existing edge." 
+	(quote from http://www.boost.org/doc/libs/1_37_0/libs/graph/doc/adjacency_list.html)
 */
 template <typename Graph>
 void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inserted){
@@ -154,7 +156,8 @@ void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inse
 /*!
 	@brief	Creates a new vertex in the graph
 	
-	@detail	The new vertex has all the properties with a defaulted value
+	The new vertex has all the properties with a defaulted value
+	
 	@remark	Please, remember that this function leaves all the vertex 
 			properties to its default value. They have to be set in 
 			a following moment
@@ -206,8 +209,9 @@ new_vertex(Vertex_prop const& v_prop,
 /*!
 	@brief	Creates a new edge in the graph
 	
-	@detail The edge properties are not assigned, so are left with a default value.
-			This function checks for the right insertion of the edge
+	The edge properties are not assigned, so are left with a default value.
+	This function checks for the right insertion of the edge
+	
 	@remark	Please, remember that this function leaves all the edge 
 			properties to its default value. They have to be set in 
 			a following moment
@@ -241,7 +245,7 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 /*!
 	@brief	Creates a new edge in the graph assigning it the given properties
 	
-	@detail This function checks for the right insertion of the edge
+	This function checks for the right insertion of the edge
 	
 	@param src The vertex descriptor of the source
 	@param tgt The vertex descriptor of the target
@@ -271,8 +275,10 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	
 	@remark	Use this only when you set "linear_geometry<dim>" as template parameter of the
 			Edge_base_property
-	@detail	It adds a new edge assuming that the underlying geometry is the linear one.
-			It takes care of setting up the geometry.
+			
+	It adds a new edge assuming that the underlying geometry is the linear one.
+	It takes care of setting up the geometry.
+	
 	@note 	It performs a check on the insertion of the edge
 	@pre	This version of the function assumes that the coordinates of the vertices
 			are already defined in the vertex properties of the vertices
@@ -312,9 +318,11 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	@remark	Use this only when you set "generic_geometry<dim>" as template parameter of the
 			Edge_base_property
-	@detail	It adds a new edge assuming that the underlying geometry is the generic one.
-			It takes care of setting up the geometry, and so requires some additional
-			parameters to do this.
+			
+	It adds a new edge assuming that the underlying geometry is the generic one.
+	It takes care of setting up the geometry, and so requires some additional
+	parameters to do this.
+	
 	@note 	It performs a check on the insertion of the edge
 	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
 			the coordinates of source and vertex passed in the vertex descriptors. If not,

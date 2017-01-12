@@ -85,7 +85,7 @@ class generic_geometry : public BGLgeom::edge_geometry<dim> {
 		generic_geometry & operator=(generic_geometry &&) = default;
 		
 		/*!
-			@defgroup Setting methods
+			@defgroup Setting Setting methods for generic_geometry
 			@{		
 		*/
 		void
