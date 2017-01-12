@@ -1,3 +1,10 @@
+# ====================================================================
+#   					"BGLgeom library"
+#      Course on Advanced Programming for Scientific Computing
+#                     Politecnico di Milano
+#                         A.Y. 2015-2016
+#=====================================================================
+
 # Including general Makefile.inc of the project
 MAKEFILEH_DIR=../
 include $(MAKEFILEH_DIR)/Makefile.inc

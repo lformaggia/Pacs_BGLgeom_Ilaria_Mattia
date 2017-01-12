@@ -3,14 +3,7 @@
 #      Course on Advanced Programming for Scientific Computing
 #                     Politecnico di Milano
 #                         A.Y. 2015-2016
-#
-#       Copyright D. Ilaria Speranza & Mattia Tantardini 2017
-# ====================================================================
-#   FILE        : Makefile
-#   DESCRIPTION : General Makefile to build the project
-#   AUTHOR      : Ilaria Speranza & Mattia Tantardini
-#   DATE        : January 2017
-# ====================================================================
+#=====================================================================
 
 -include Makefile.inc
 
