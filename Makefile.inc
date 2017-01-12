@@ -3,7 +3,7 @@
 
 # Directory where the project resides.
 ## USER MUST EDIT! ##
-PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
+PROJECT_DIR=/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia
 # libBGLgeom is stored here:
 export BGLGEOM_DIR = $(PROJECT_DIR)/libBGLgeom
 # example on network diffusion is stored here
@@ -13,7 +13,7 @@ export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 
 # Installation path
 ## USER MUST EDIT! ##
-INSTALL_PATH = /D/BGLgeom
+INSTALL_PATH = /home/pacs_student/Desktop/Prova_lib
 
 # Creating variable for path to vtk includes
 export mkVtkInc = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10

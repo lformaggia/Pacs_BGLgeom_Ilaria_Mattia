@@ -86,7 +86,7 @@ doc:
 	@echo "--- Making documentation ---"
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
-	pdflatex $(DOC_DIR)/latex/refman.pdf
+	pdflatex $(DOC_DIR)/latex/refman.tex
 	@echo "--- COMPLETED ---"
 
 
