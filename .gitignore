@@ -1,6 +1,3 @@
-# Bash scripts:
-*.sh
-
 # Compiled object files:
 *.o
 *.a
