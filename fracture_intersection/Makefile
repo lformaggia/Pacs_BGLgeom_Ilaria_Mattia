@@ -40,6 +40,8 @@ $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 
 doc:
 	@mkdir -p $(DOC_DIR)
+	doxygen Doxyfile
+	./make_doc_pdf.sh
 
 clean:
 	-rm -rv $(BUILD_DIR)
