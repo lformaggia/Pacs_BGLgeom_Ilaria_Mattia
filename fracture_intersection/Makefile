@@ -24,7 +24,10 @@ help:
 	@echo "make exec: ----- Makes executables"
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all object files"
-	@echo "make distclean:  Cleans all" 
+	@echo "make distclean:  Cleans all"
+	@echo ""
+	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
+	@echo "          its target, the target will be build in debug mode"
 
 all: exec doc clean
 

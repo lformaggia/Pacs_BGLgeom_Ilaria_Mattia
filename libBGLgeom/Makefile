@@ -29,6 +29,9 @@ help:
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all"
+	@echo ""
+	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
+	@echo "          its target, the target will be build in debug mode"
 	
 all: library alltest install doc clean
 
