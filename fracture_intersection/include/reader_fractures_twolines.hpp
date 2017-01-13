@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file reader.hpp
+	@file reader_fractures_twolines.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Dec, 2016
+	@date Jan, 2017
 	@brief Class to read ASCII file for fractures application
 */
 
@@ -30,7 +30,7 @@ namespace Fracture{
 	second one.
 */
 class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop> {
-	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
+	//inside public we have to override all the abstract method of reader_ASCII and the constructor
 	public:
 		//! Constructor
 		reader_fractures_twolines(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop>(_filename),
@@ -41,9 +41,10 @@ class reader_fractures_twolines : public BGLgeom::reader_ASCII<Fracture::Vertex_
 		
 		/*! 
 			@brief Reading data from line
+			
 			The format of the file is: \n
-			- 1=source; coordinates; -10=third coordinate \n
-			- 2=target; coordinates; -10=third coordinate \n
+			- 1=source; coordinates; -10=third coordinate (ignored) \n
+			- 2=target; coordinates; -10=third coordinate (ignored) \n
 			This two lines form an edge
 		*/
 		void get_data(){

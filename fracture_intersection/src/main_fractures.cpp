@@ -4,13 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
-
 /*!
-	@file main_Formaggia.cpp
+	@file main_fractures.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Dec, 2016
+	@date Jan, 2017
 	@brief Source code for fractures application
 */
 
@@ -19,7 +18,7 @@
 #include <tuple>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "local_data_structure.hpp"  // using-declarations local to this application 
+#include "type_aliases.hpp"  // using-declarations local to this application 
 #include "reader_fractures.hpp"
 #include "reader_fractures_twolines.hpp"
 #include "graph_builder.hpp"

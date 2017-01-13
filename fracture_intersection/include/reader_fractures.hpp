@@ -4,12 +4,12 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file reader.hpp
+	@file reader_fractures.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Dec, 2016
+	@date Jan, 2017
 	@brief Class to read ASCII file for fractures application
 */
 
@@ -25,7 +25,7 @@ using BGLgeom::operator>>;	// To let the compiler find the overload of operator>
 
 //! The reader based on reader_ASCII to read the data about the fractures
 class reader_fractures : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fracture::Edge_prop> {
-	//inside public we have to override all the abstract method of reader_ASCII and of the constructor
+	//inside public we have to override all the abstract method of reader_ASCII and the constructor
 	public:
 		//! Constructor
 		reader_fractures(std::string _filename) :	BGLgeom::reader_ASCII	<Fracture::Vertex_prop,

@@ -4,13 +4,13 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 
 /*!
 	@file fracture_graph_properties.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Jan, 2017
 	@brief Properties that the graph for fractures appliocation will have
 */
 
