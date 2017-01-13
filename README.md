@@ -15,6 +15,7 @@ own folder:
 - `fracture_intersection` : First application example
 - `network_diffusion` : Second application example
 
+
 #### libBGLgeom
 This library wants to expand the Boost Graph Library (*BGL*) in order to 
 manage geometrical properties needed by graphs for particular applications.
@@ -23,6 +24,7 @@ properties to a graph, such as coordinates for vertices or different
 geometries for the edges. It also provides functionalities to compute 
 meshes, geometrical quantities related to the edges and find intersections 
 between linear edges.
+
 
 #### fracture_intersection
 This example concerns the creation of a graph starting from a raw set of 
@@ -119,3 +121,12 @@ Compiler   : g++-4.9
 
 vtk lib : 5.10
 
+=======
+### fracture_intersection
+This example concerns the creation of a graph starting from a raw set of 
+fracture, i.e. lines, in a plane.
+
+### network_diffusion
+In this example a simple diffusion problem on a graph representing a 
+vascular network is solved.
+>>>>>>> 47605282c00b7048cc8e8c0b9034f56c9eb81563
