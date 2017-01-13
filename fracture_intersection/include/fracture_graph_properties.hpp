@@ -8,7 +8,7 @@
 ======================================================================*/
 
 /*!
-	@file fracture_graph_properties.cpp
+	@file fracture_graph_properties.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Jan, 2017
 	@brief Properties that the graph for fractures appliocation will have
