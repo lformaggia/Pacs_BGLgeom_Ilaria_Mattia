@@ -72,7 +72,7 @@ examples and the documentation and install the library, just type:
 make all
 ```
 
-You can also build each component of the library separatly. Type 
+You can also build each component of the library separately. Type 
 ```
 make help
 ```
@@ -89,9 +89,9 @@ folder and run each test form there.
 
 You need to enter in each of the examples subfolder. In each of them, type
 ```
-make exec
+make all
 ```
-to build the examples and produce the exacutables.
+to produce the exacutables and the doucumentation.
 
 Type
 ```
@@ -101,18 +101,27 @@ for other make commands.
 
 REMEMBER: the default for the compilation is debug mode. If want full 
 optimization, type `RELEASE=yes` inbetween `make` and its target.
+
 *NOTE*: the debug mode mainly enables some more controls and output messages.
 
 ### Run the examples
 
-As for the library's tests, you need to enter the `/bin' folder and run the 
+As for the library's tests, you need to enter the `/bin` folder and run the 
 exacutables form there. Produced output are put in the `/data` folder.
 
+### Documentation
 
+Both the library and the application are provided with documentation.
+Building them with `make all`, all the documentation will automatically 
+produced. Otherwise, if you built components separately, type
+```
+make doc
+```
+in each folder to produce the documentation.
 
-
-
+-----------------------------------------
 ##  DEV ENVIRONMENT
+----------------------------------------
 OS         : Scientific Linux 6.8 (Carbon) 64-bit
 
 Processor  : Intel® Core™ i5-2430M CPU @ 2.40GHz × 4 
@@ -120,13 +129,3 @@ Processor  : Intel® Core™ i5-2430M CPU @ 2.40GHz × 4
 Compiler   : g++-4.9
 
 vtk lib : 5.10
-
-=======
-### fracture_intersection
-This example concerns the creation of a graph starting from a raw set of 
-fracture, i.e. lines, in a plane.
-
-### network_diffusion
-In this example a simple diffusion problem on a graph representing a 
-vascular network is solved.
->>>>>>> 47605282c00b7048cc8e8c0b9034f56c9eb81563
