@@ -77,7 +77,7 @@ $(BUILD_DIR_TEST)/%.o: $(SOURCE_DIR)/%.cpp
 	@echo " "
 	@echo "--- Building test object ---"
 	@mkdir -p $(BUILD_DIR_TEST)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 
 install:
