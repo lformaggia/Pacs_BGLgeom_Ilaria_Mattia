@@ -7,7 +7,7 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	netdiff_graph_properties.cpp
+	@file	netdiff_graph_properties.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date 	Jan, 2017
 	@brief	Properties that the graph for diffusion on network appliocation will have
