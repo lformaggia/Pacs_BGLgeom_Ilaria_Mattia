@@ -4,20 +4,13 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
 	@file reader_netdiff.hpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
-	@brief Class to read form input for network diffusion
-	
-	@detail Application concerning a diffusion problem on a network
-	
-	@remark In this header file the user is asked to implement: a reader class
-			that inherits from reader_ASCII, in which the user has to put all 
-			variables that will be read from input file and override all
-			abstract methods
+	@date Jan, 2017
+	@brief Class to read from input for application on network diffusion
 */
 
 #ifndef HH_READER_NETDIFF_HH
@@ -29,9 +22,10 @@
 
 namespace NetDiff{
 
-//Per leggere i point! Vedi: http://stackoverflow.com/questions/36286448/no-match-and-cannot-bind-lvalue-errors-while-overloading-operator-with
+// To allow the compiler find input operator for points
 using BGLgeom::operator>>;
 
+//! The concrete class to read ASCII input file for the network diffusion example
 class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 													 NetDiff::Edge_prop,
 													 NetDiff::Topological_prop> {
@@ -63,7 +57,12 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 			return NetDiff::Vertex_prop(TGT);
 		}
 		
-		//! Returning data on the edge
+		/*!
+			@brief Returning data on the edge
+			
+			We handle here, instead of in the main, the setting of the linear 
+			geometry of the edge
+		*/
 		NetDiff::Edge_prop get_edge_data(){
 			NetDiff::Edge_prop E(diam);
 			E.geometry.set_source(SRC);
@@ -78,15 +77,18 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 		
 	private:
 		//! Coordinates of source and target
-		// oppure: BGLgeom::point<3> SRC, TGT; //????
 		NetDiff::Vertex_prop::point_t SRC, TGT;
-		//! Vertex descriptors for source and target
+		/*! 
+		@brief Vertex_descriptor for the source
+		@remark We use an unsigned int as vertex descriptor since we know 
+				(from BGL) that the type of adjacency_list we choose to 
+				represent the graph uses unsigned int as vertex descriptor
+	*/
 		unsigned int src, tgt;
 		//! Diameter
 		double diam;
 		//! Dummy variable to discard unused values
 		double discard1, discard2;
-
 
 };	//reader_netdiff
 

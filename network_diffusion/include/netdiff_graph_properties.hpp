@@ -4,18 +4,16 @@
                       Politecnico di Milano
                           A.Y. 2015-2016
                   
-         Copyright (C) 2016 Ilaria Speranza & Mattia Tantardini
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
-
 /*!
 	@file	netdiff_graph_properties.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date 	Sept, 2016
+	@date 	Jan, 2017
 	@brief	Properties that the graph for diffusion on network appliocation will have
-	@datail	All the data structures have to be provided with at least 
-			the default constructor and a constructor, and the copy constructor,
-			assignment operator and move constructor if needed (the default ones
-			may be enough)
+	
+	All the data structures have to be provided with at least 
+	the default constructor.
 */
 
 #ifndef HH_NETDIFF_GRAPH_PROPERTIES_HH
@@ -47,14 +45,25 @@ struct Edge_prop : public BGLgeom::Edge_base_property<BGLgeom::linear_geometry<3
 
 /*!
 	@brief Topological properties of the graph
-	@detail The input file gives us explicit infos about the structure of the
-			graph. We can use this infos to index the vertex descriptors like
-			the given data.
+	
+	The input file gives us explicit infos about the structure of the
+	graph. We can use this infos to index the vertex descriptors like
+	the given data.
 */
 struct Topological_prop{
-	//! Vertex_descriptor for the source
+	/*! 
+		@brief Vertex_descriptor for the source
+		@remark We use an unsigned int as vertex descriptor since we know 
+				(from BGL) that the type of adjacency_list we choose to 
+				represent the graph uses unsigned int as vertex descriptor
+	*/
 	unsigned int src;
-	//! Vertex_descriptor for the target
+	/*! 
+		@brief Vertex_descriptor for the source
+		@remark We use an unsigned int as vertex descriptor since we know 
+				(from BGL) that the type of adjacency_list we choose to 
+				represent the graph uses unsigned int as vertex descriptor
+	*/
 	unsigned int tgt;
 	
 	//! Default constructor

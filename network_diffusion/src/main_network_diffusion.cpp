@@ -1,9 +1,16 @@
+/*======================================================================
+                        "BGLgeom library"
+        Course on Advanced Programming for Scientific Computing
+                      Politecnico di Milano
+                          A.Y. 2015-2016
+                  
+         Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
+======================================================================*/
 /*!
 	@file main_network_diffusion.cpp
 	@author Ilaria Speranza & Mattia Tantardini
-	@date Sept, 2016
+	@date Jan, 2017
 	@brief Application on diffusion on a network
-	@detail
 */
 
 #include <iostream>
