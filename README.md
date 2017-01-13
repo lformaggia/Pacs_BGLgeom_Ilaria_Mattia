@@ -112,7 +112,7 @@ exacutables form there. Produced output are put in the `/data` folder.
 ### Documentation
 
 Both the library and the application are provided with documentation.
-Building them with `make all`, all the documentation will automatically 
+Building them with `make all`, all the documentation will be automatically 
 produced. Otherwise, if you built components separately, type
 ```
 make doc
