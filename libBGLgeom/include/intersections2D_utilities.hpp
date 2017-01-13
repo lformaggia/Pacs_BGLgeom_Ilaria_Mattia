@@ -81,7 +81,7 @@ struct Int_layer{
 	*/
 	//! The type of the intersection
 	BGLgeom::intersection_type how;
-	//! The edge descriptor fo the old edge that intersects the new one
+	//! The edge descriptor for the old edge that intersects the new one
 	BGLgeom::Edge_desc<Graph> int_edge;
 	//! The container for the intersection points
 	std::vector<BGLgeom::point<2>> int_pts;
@@ -94,9 +94,9 @@ struct Int_layer{
 	
 	//! Constructor
 	Int_layer	(BGLgeom::Intersection const& _I,
-				 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : int_edge(_e),
-																					  swapped_comp(false),
-																					  how(_I.how){
+				 BGLgeom::Edge_desc<Graph> const& _e = BGLgeom::Edge_desc<Graph>()) : how(_I.how), 
+				 																	  int_edge(_e),
+																					  swapped_comp(false) {
 		int_pts.resize(_I.numberOfIntersections);
 		for(std::size_t i = 0; i < _I.numberOfIntersections; ++i)
 			int_pts[i] = _I.intersectionPoint[i];
