@@ -21,7 +21,9 @@ export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 INSTALL_PATH = /D/BGLgeom
 
 # Creating variable for path to vtk includes
+## USER MUST EDIT THESE ONLY IF DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
 export mkVtkInc = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
+export mkVtkLib = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
 
 # Directories for needed library
 EIGEN_INC_DIR = $(mkEigenInc)
