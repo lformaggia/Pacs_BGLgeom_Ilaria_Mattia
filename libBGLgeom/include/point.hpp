@@ -58,9 +58,13 @@ operator<<(std::ostream & out, Eigen::DenseBase<Derived> & m){
 }
 
 /*!
-	 @brief Operator< overloading. Implements lexicographic order		 
-	 Point1 < Point2 if Point1.x is smaller than Point2.x;
-	 if they are equal, compare in the same waythe y coordinate, and so on.		
+	@brief Operator< overloading. Implements lexicographic order		
+
+	Point1 < Point2 if Point1.x is smaller than Point2.x; if they are 
+	equal, compare in the same way the y coordinate, and so on.
+
+	@return True if Point1 comes "first" w.r.t. to this ordering, false 
+			otherwise
 */
 template <typename Derived>
 bool
