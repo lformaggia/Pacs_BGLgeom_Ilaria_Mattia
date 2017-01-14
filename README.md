@@ -42,7 +42,7 @@ vascular network is solved.
 You need three libraries to compile this project: the Boost Graph Library,
 Eigen and the vtk library.
 
-###### Boost Graph Library
+##### Boost Graph Library
 
 Version >= 1.61.0 required.
 
@@ -50,7 +50,7 @@ You can download it from here: <https://sourceforge.net/projects/boost/files/>
 
 You don't need to compile anything, since the BGL is a header only library. 
 
-###### VTK library
+##### VTK library
 
 You also need the vtk library, at least version 5.10
 
@@ -61,7 +61,7 @@ Alternatively, at Mox cluster just load the correspondent module:
 module load vtk/5
 ```
 
-###### Eigen
+##### Eigen
 
 Version >= 3 required.
 
