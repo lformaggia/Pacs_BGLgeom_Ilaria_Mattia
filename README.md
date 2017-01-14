@@ -40,7 +40,7 @@ vascular network is solved.
 ### Prerequisites
 
 You need three libraries to compile this project: the Boost Graph Library,
-Eigen and the vtk library.
+Eigen and the VTK library.
 
 ##### Boost Graph Library
 
@@ -52,7 +52,7 @@ You don't need to compile anything, since the BGL is a header only library.
 
 ##### VTK library
 
-You also need the vtk library, at least version 5.10
+Version >= 5.10 required
 
 For more information see: <http://www.vtk.org/download/>
 
@@ -85,7 +85,7 @@ folder. Before doing anything, edit it and change:
 
 Only if you do not use the module system at MOX department or you installed 
 a new version of the vtk library, you also need to change:
-- `mkVtkInc`   with the path where the include files of the vtk library resides
+- `mkVtkInc`   with the path where the include files of the VTK library resides
 - `mkVtkLib`   with the path where the vtk library resides
 - `mkEigenInc` with the path where the Eigen library resides
 
@@ -155,7 +155,7 @@ To view the Latex documentation, type:
 evince doc/latex/refman.pdf
 ```
 
-To open th html documentation, go to `doc/html`, search for the file 
+To open the html documentation, go to `doc/html`, search for the file 
 `index.html` and open it with your browser.
 
 -----------------------------------------
