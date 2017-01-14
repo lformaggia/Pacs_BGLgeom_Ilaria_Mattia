@@ -83,6 +83,14 @@
 		referring to that particular vertex A) to that other vertex descriptor (that 
 		is referring to that particular vertex B), etc. The same for the edge descriptors.
 		
+		@note	We recommended to choose the @a boost::vecS selector for both the 
+				@b OutEdgeList and the @b VertexList template parameters also for 
+				an ease of use reason: choosing these values for them implies that 
+				the vertex descriptors will be of type @a unsigned @a int . This 
+				semplifies a lot readibility and flexibility of code. Otherwise, 
+				chosing other selectors for the template parameter, will produce 
+				vertex descriptors that are not convertible to any base type.
+		
 		
 		@subsection building Create vertices and edges
 		
