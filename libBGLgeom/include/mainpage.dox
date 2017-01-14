@@ -40,10 +40,10 @@
 		
 		- @b OutEdgeList : here you can choose which container to use for this 
 			structure. We recommend to use @a boost::vecS (that refers to the 
-			std::vector). As alternative, if you have to perform a lot insertions 
-			and removals of vertices and edges, you can choose @a boost::listS 
-			(that refers to std:list), that is slightly more efficient for this 
-			type of operations. \n
+			std::vector). As alternative, only if you have to perform a lot 
+			insertions and removals of vertices and edges, you can choose 
+			@a boost::listS (that refers to std:list): this choice is slightly 
+			more efficient for this type of operations. \n
 			
 		- @b VertexList : here you can choose which container to use for this 
 			structure. We recommend to use @a boost::vecS ; as alternative, for 
