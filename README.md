@@ -39,7 +39,20 @@ vascular network is solved.
 ------------------------------------------------
 ### Prerequisites
 
-You need the vtk library, at least version 5.10
+You need three libraries to compile this project: the Boost Graph Library,
+Eigen and the vtk library.
+
+###### Boost Graph Library
+
+Version >= 1.61.0 required.
+
+You can download it from here: <https://sourceforge.net/projects/boost/files/>
+
+You don't need to compile anything, since the BGL is a header only library. 
+
+###### VTK library
+
+You also need the vtk library, at least version 5.10
 
 For more information see: <http://www.vtk.org/download/>
 
@@ -48,22 +61,39 @@ Alternatively, at Mox cluster just load the correspondent module:
 module load vtk/5
 ```
 
+###### Eigen
+
+Version >= 3 required.
+
+For more information see: <http://eigen.tuxfamily.org/index.php?title=Main_Page>
+
+You do not have to compile anything, since the Eigen is a header only library.
+
+Alternatively, at Mox cluster just load the correspondent module:
+```
+module load eigen/3
+```
+
+
 ### Build the library
 
 Along with this project you are provided with a Makefile.inc in this same 
 folder. Before doing anything, edit it and change:
 - `PROJECT_FOLDER` with the path where this folder resides in your system
-- `INSTALL_PATH` with the path you want to install the library to
+- `INSTALL_PATH`   with the path you want to install the library to
+- `mkBGLInc`       with the path where the BGL resides in your system
 
 Only if you do not use the module system at MOX department or you installed 
 a new version of the vtk library, you also need to change:
-- `mkVtkInc` where the include files of the vtk library resides
-- `mkVtkLib` where the vtk library resides
+- `mkVtkInc`   with the path where the include files of the vtk library resides
+- `mkVtkLib`   with the path where the vtk library resides
+- `mkEigenInc` with the path where the Eigen library resides
 
 Now you are ready to build the library.
 
 REMEMBER: the default for the compilation is debug mode. If want full 
 optimization, type `RELEASE=yes` inbetween `make` and its target.
+
 *NOTE*: the debug mode mainly enables some more controls and output messages.
 
 First of all, enter the folder `libBGLgeom`. To build all the library, the 
@@ -118,6 +148,15 @@ produced. Otherwise, if you built components separately, type
 make doc
 ```
 in each folder to produce the documentation.
+
+This command will produce two type of documentation: Latex and html. 
+To view the Latex documentation, type:
+```
+evince doc/latex/refman.pdf
+```
+
+To open th html documentation, go to `doc/html`, search for the file 
+`index.html` and open it with your browser.
 
 -----------------------------------------
 ##  DEV ENVIRONMENT

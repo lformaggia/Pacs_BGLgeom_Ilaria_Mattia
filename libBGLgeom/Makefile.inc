@@ -29,17 +29,17 @@ LDLIBS += -L$(LIB_DIR) -l$(LIBNAME)
 SRCS = $(wildcard $(SOURCE_DIR)/*.cpp)
 OBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(SRCS:.cpp=.o)))
 # Extracting sources and objects for the library
-LIB_SRCS = $(filter-out $(SOURCE_DIR)/test%.cpp,$(SRCS))
+LIB_SRCS = $(filter-out $(SOURCE_DIR)/test%.cpp, $(SRCS))
 LIB_OBJS_STATIC  = $(addprefix $(BUILD_DIR_STATIC)/,  $(notdir $(LIB_SRCS:.cpp=.o)))
 LIB_OBJS_DYNAMIC = $(addprefix $(BUILD_DIR_DYNAMIC)/, $(notdir $(LIB_SRCS:.cpp=.o)))
-#LIB_OBJS = $(addprefix $(BUILD_DIR)/,$(notdir $(LIB_SRCS:.cpp=.o)))
 # Extracting sources and objects for the tests:
-TEST_SRCS = $(filter $(SOURCE_DIR)/test%.cpp,$(SRCS))
-TEST_OBJS = $(addprefix $(BUILD_DIR_TEST)/,$(notdir $(TEST_SRCS:.cpp=.o)))
+TEST_SRCS = $(filter $(SOURCE_DIR)/test%.cpp, $(SRCS))
+TEST_OBJS = $(addprefix $(BUILD_DIR_TEST)/, $(notdir $(TEST_SRCS:.cpp=.o)))
 # Executables for the tests
-TEST_EXEC = $(addprefix $(TEST_DIR)/,$(notdir $(TEST_SRCS:.cpp=)))
+TEST_EXEC = $(addprefix $(TEST_DIR)/, $(notdir $(TEST_SRCS:.cpp=)))
 # Headers
-HEADERS = $(wildcard $(INCLUDE_DIR)/*.hpp)
+HPPS    = $(wildcard $(INCLUDE_DIR)/*.hpp)
+HEADERS = $(filter-out $(INCLUDE_DIR)/test%.hpp, $(HPPS))
 # Libraries
 LIBS = $(wildcard $(LIB_DIR)/*)		#used in make distclean
 DYNAMIC_LIB = $(LIB_DIR)/$(DYNAMIC_LIBFILE)

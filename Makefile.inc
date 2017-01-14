@@ -20,15 +20,21 @@ export FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
 ## USER MUST EDIT! ##
 INSTALL_PATH = /D/BGLgeom
 
+# Creating variable for path to BGL
+## USER MUST EDIT ##
+export mkBGLInc = /D/boost_1_61_0/boost/graph
+
 # Creating variable for path to vtk includes
 ## USER MUST EDIT THESE ONLY IF DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
-export mkVtkInc = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
-export mkVtkLib = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
+export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
+export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
+export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
 
 # Directories for needed library
 EIGEN_INC_DIR = $(mkEigenInc)
 VTK_INC_DIR   = $(mkVtkInc)
 VTK_LIB_DIR   = $(mkVtkLib)
+BGL_INC_DIR   = $(mkBGLInc)
 
 # Parsing vtk libraries. In the modules are present also libraries for Python. We filter them out
 VTK_LIBS1 = $(wildcard $(VTK_LIB_DIR)/libvtk*.so.5.10.1) #collecting all libraries
@@ -60,7 +66,7 @@ endif
 WARNS = -Wall -Wno-deprecated
 
 # Collect all includes
-ALL_INC_DIR= $(OTHER_INC_DIR) $(EIGEN_INC_DIR) $(VTK_INC_DIR)
+ALL_INC_DIR= $(EIGEN_INC_DIR) $(VTK_INC_DIR) $(BGL_INC_DIR)
 includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc) )
 INCLUDES += -I. -I./include $(includes)
 
