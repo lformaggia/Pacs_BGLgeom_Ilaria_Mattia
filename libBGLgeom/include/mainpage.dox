@@ -1,0 +1,191 @@
+/*!
+	@mainpage Introduction
+	
+	@section what_is_BGLgeom What is the BGLgeom library
+		
+		This library wants to extend the Boost Graph Library (BGL) adding 
+		geometrical features and functionalities. A lot of applications 
+		in computational sciences requires a geometrical setting to be 
+		solved. This library is aimed at joining the potentiality of BGL 
+		whit utilities to handle the geometrical setting.
+
+	@section what_is_BGL What is the Boost Graph Library
+	
+		The Boost Graph Library (BGL) is a Boost template library to create, 
+		manage and operate on graphs. It provides different classes to hanlde 
+		a graph and a lot of graph algorithms you can apply to them. It also 
+		provides a very easy way to create a graph with the desired properties 
+		on vertices and edges, thus giving a huge freedom and versatility to 
+		the user.
+		
+	@section basics Basics on BGL
+	
+		In this section we explain how the components of the BGL we chose to 
+		use for the BGLgeom library work.
+		
+	@subsection adjacency_list The class for the graph
+	
+		The class we use to describe a graph is the @a boost::adjacency_list one.
+		This represents a two dimensional structure: there is a container that 
+		contains each vertex, and each vertex is related to another container which 
+		contains all the edges there are going out from that vertex. You can choose 
+		which container to use for both the @a VertexList and the @a OutEdgeList ; 
+		this choiche will affect the space complexity of the graph and the efficiency 
+		of some operation.
+		
+		@note	To declare a graph using this class, remember to add the header 
+				@a <boost/graph/adjacency_list.hpp>
+		
+		The @a adjacency_list is a template class with five template paramters: \n
+		
+		- @b OutEdgeList : here you can choose which container to use for this 
+			structure. We recommend to use @a boost::vecS (that refers to the 
+			std::vector). As alternative, if you have to perform a lot insertions 
+			and removals of vertices and edges, you can choose @a boost::listS 
+			(that refers to std:list), that is slightly more efficient for this 
+			type of operations. \n
+			
+		- @b VertexList : here you can choose which container to use for this 
+			structure. We recommend to use @a boost::vecS ; as alternative, for 
+			the same reasons above, you can choose @a boost::listS . \n
+			
+		- @b Directed : here you can specify if you want a directed or undirected 
+			graph. Set @a boost::directedS or @a boost::undirectedS . \n
+			
+		- @b VertexProperties : set @a boost::no_property if you do not want the 
+			vertices to have any property. Otherwise, just use as template parameter 
+			any class or struct you want to have as property of the vertices. 
+			In this way you will be able to acces all the functionaliies provided 
+			by your class/struct on each edge or vertex, and to store data on them.
+			You are setting what is called a @a bundled_property . We suggest to 
+			always you structs to give easy acces (we'll show after how	to do this) 
+			to the properties. \n
+			
+		- @b EdgeProperties : do exactly in the same way as explained for the vertex 
+			properties. \n
+			
+		On how and why to choose the container for the OutEdgeList and VertexList 
+		template parameters, see http://www.boost.org/doc/libs/1_61_0/libs/graph/doc/using_adjacency_list.html .
+			
+		For all methods and functions related to the @a adjacency_list class see:
+		http://www.boost.org/doc/libs/1_61_0/libs/graph/doc/adjacency_list.html .
+		
+		
+		@subsection descriptors Edge and Vertex descriptors
+		
+		How can you refer to a particular vertex or edge? By using a @b vertex_descriptor 
+		or an @b edge_descriptor. You can declare them by using the native boost syntax
+		(@a boost::graph_traits<Graph_type>::vertex_descriptor and 
+		@a boost::graph_traits<Graph_type>::edge_descriptor )
+		or by using some alias type we provide with the @b BGLgeom library. \n
+		What can you do with them? You refer to a particular vertex or edge: you can acces 
+		to its properties, you can add a new edge from that vertex descriptor (that is 
+		referring to that particular vertex A) to that other vertex descriptor (that 
+		is referring to that particular vertex B), etc. The same for the edge descriptors.
+		
+		
+		@subsection building Create vertices and edges
+		
+		We can easily add vertices and edges to our graph by using th two functions 
+		@a boost::add_vertex and @a boost::add_edge .
+		
+		@code
+		
+		using Graph = boost::adjacency_list<Template_paramters>;
+		Graph G;
+		boost::graph_traits<Graph>::vertex_descriptor src, tgt;
+		boost::graph_traits<Graph>::edge_descriptor e;
+		bool inserted;
+		
+		//inserting the first two vertices in the graph
+		src = boost::add_vertex(G);
+		tgt = boost::add_vertex(G);
+		//inserting the edge
+		std::tie(e, inserted) = boost::add_edge(src,tgt,G);
+		
+		@endcode
+			
+		@note	All the properties of the vertices and edges created in the example 
+				are left defaulted, since the two functions call the default constructor 
+				of the struct passed as vertex and edge property. So, remember to 
+				define a default constructor in your own properties!
+		
+		
+		@subsection iterators Edge and Vertex iterators
+		
+		The @B BGL provides us with some iterators to iterate over all the vertices
+		and the edges of a graph. You can declare them by using the native boost syntax
+		(@a boost::graph_traits<Graph_type>::vertex_iterator and 
+		@a boost::graph_traits<Graph_type>::edge_iterator )
+		or by using some alias type we provide with the @b BGLgeom library. \n
+		An edge or vertex iterator is an iterator that points to that edge or vertex; 
+		dereferencing it you obtain the corresponding edge or vertex descriptor.
+		You can get the vertex iterators for a graph with @a boost::vertices(Graph), 
+		and the edge iterators with @a boost::edges(Graph). They return a 
+		@a std::pair<Iter, Iter> containing in the first position the edge iterator 
+		pointing to the first vertex/edge in the graph, and in the second position 
+		the edge iterator pointing to the last vertex/edge in the graph.
+		
+		
+		@subsection accessing_properties Accessing properties
+		
+		We suppose we are using struct as vertex and edge properties, so we have public 
+		acces to their attributes and methods. You can acces to the struct representing 
+		the property using the acces element operator[], specifying as index the vertex 
+		or edge descriptor. \n
+		We show a simple example on how to set or get edge and vertex properties going 
+		on from the previous example
+		
+		@code
+		
+		// Setting values
+		G[src].property_value1 = value1;
+		G[src].property_value2 = value2;
+		G[tgt].property_value1 = value3;
+		...
+		// calling method1 from the properties of source
+		G[src].method1();
+		// calling method2 from the properties of target
+		G[tgt].method2();
+		// the same for the edge
+		G[e].property_value1 = value1;
+		G[e].method();
+		
+		// Getting properties
+		int val = G[src].property_value1;
+		double val = G[tgt].property_value2;
+		complex_class obj = G[e].complex_class;
+		
+		// Setting and getting the whole property
+		Vertex_prop v1_prop("constructor parameters");
+		Vertex_prop v2_prop("constructor parameters");
+		G[src] = v1_prop;
+		G[tgt] = v2_prop;
+		Edge_prop e_prop = G[e];
+		
+		// with iterators
+		boost::graph_traits<Graph>::vertex_iterator v_it, v_end;
+		std::tie(v_it, v_end) = boost::vertices(G);	//v_it points to source, v_end to target
+		G[*v_it].property_value3 = value4;	//*v_it = src !
+		G[*v_end].property_value3 = value5;	//*v_end = tgt !
+		
+		@endcode
+		
+		@note	You obviously may need to overload in a proper way assignment and 
+				move assignment operator.
+		
+		
+		@subsection references References
+		
+		For any further reference or information, please see: 
+		http://www.boost.org/doc/libs/1_61_0/libs/graph/doc/table_of_contents.html .
+		
+		For a detailed reference of the most used function of the @a adjacency_list 
+		class we used to develop the library, please see:
+		http://www.boost.org/doc/libs/1_61_0/libs/graph/doc/adjacency_list.html .
+		
+		To see another more detailed example on how to use @b BGL and @b BGLgeom to 
+		build a graph, please see the code @a test_BGL_vs_BGLgeom.cpp located in the 
+		source file folder @a src .
+		
+*/
