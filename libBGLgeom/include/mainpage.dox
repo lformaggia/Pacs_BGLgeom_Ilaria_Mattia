@@ -116,7 +116,8 @@
 		@note	All the properties of the vertices and edges created in the example 
 				are left defaulted, since the two functions call the default constructor 
 				of the struct passed as vertex and edge property. So, remember to 
-				define a default constructor in your own properties!
+				always define (at least) a default constructor in your own vertex 
+				and edge properties!
 		
 		
 		@subsection iterators Edge and Vertex iterators

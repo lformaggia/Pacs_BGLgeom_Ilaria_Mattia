@@ -39,8 +39,7 @@ struct no_topological_data {};
 	@brief	Abstract class to read a tabular ASCII file and get data from it	
 	
 	The user will have to define its own concrete reader inheriting from this
-	one. The methods left abstract are of two kinds:
-	
+	one.	
 	Through the function get_data() (where the user has to specify how to read 
 	the input file, i.e. he has to specify the sequence of data read by the 
 	fstream attribute @a in_file) data from file can be read. This data will 
