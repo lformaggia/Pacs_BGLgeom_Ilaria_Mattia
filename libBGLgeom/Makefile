@@ -31,7 +31,7 @@ help:
 	@echo "make distclean:  Cleans all"
 	@echo ""
 	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
-	@echo "          its target, the target will be build in debug mode"
+	@echo "          its target, the target will be built in debug mode"
 	
 all: library alltest install doc clean
 
@@ -98,7 +98,8 @@ doc:
 	@echo "--- Making documentation ---"
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
-	./make_doc_pdf.sh
+	$(MAKE) -C $(DOC_DIR)/latex
+	#./make_doc_pdf.sh
 	@echo "--- COMPLETED ---"
 
 

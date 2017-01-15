@@ -27,7 +27,7 @@ help:
 	@echo "make distclean:  Cleans all"
 	@echo ""
 	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
-	@echo "          its target, the target will be build in debug mode"
+	@echo "          its target, the target will be built in debug mode"
 
 all: exec doc clean
 
@@ -44,7 +44,7 @@ $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 doc:
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
-	./make_doc_pdf.sh
+	$(MAKE) -C $(DOC_DIR)/latex
 
 clean:
 	-rm -rv $(BUILD_DIR)
