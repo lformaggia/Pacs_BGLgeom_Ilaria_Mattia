@@ -36,27 +36,35 @@ namespace BGLgeom{
 struct no_topological_data {};
 
 /*!
-	@brief	Abstract class that implements the functionality to read a file and get data from it	
+	@brief	Abstract class to read a tabular ASCII file and get data from it	
 	
-	The users has to specify, in the derived class, all variables he need in
-	order to store information read from the input file. Then, through the definition
-	of Edge_data_structure and Vertex_data_structure, he can get separately all the
-	information to put on edges and vertices
+	The user will have to define its own concrete reader inheriting from this
+	one. The methods left abstract are of two kinds:
 	
-	@param Vertex_data_structure A struct where the user has to define type and name
-								of the variables he needs to append to the edges as
-								edge bundled property
-	@param Edge_data_structure A struct where the user has to define type and name
-								of the variables he needs to append to the vertices as
-								vertex bundled property
-	@param Topological_data_structure A struct where the user has to define type and name
-										of the variables he needs to manage the topology
-										of the graph while building it. Defaulted to an
-										empty struct
+	Through the function get_data() (where the user has to specify how to read 
+	the input file, i.e. he has to specify the sequence of data read by the 
+	fstream attribute @a in_file) data from file can be read. This data will 
+	be first of all put in some private attributes declared by the user in his 
+	own reader class; then, they will be output packed in the structs used as 
+	vertex and edge properties in the graph. The user has to take care of 
+	specifying how to pack in the right way the data in the right struct; 
+	we provide three abstract method to do this: one outputs the struct that 
+	will be the source vertex property, one the struct that will be the target 
+	vertex property, and one the struct that will be edge property.
+	While doing this operation, in some cases it may be useful for the user to 
+	take also care of setting up the geometry of the edges before outputting the 
+	edge property.
+	
+	
+	@param Vertex_prop The vertex property used for the graph
+	@param Edge_prop The edge property used for the graph
+	@param Topological_data A struct where the user can put the topological
+							information read from the file, such as the 
+							indexes of vertices and edges.
 */
-template 	<typename Vertex_data_structure,
-			typename Edge_data_structure,
-			typename Topological_data_structure = no_topological_data>
+template <typename Vertex_prop,
+		  typename Edge_prop,
+		  typename Topological_data = no_topological_data>
 class reader_ASCII {
 	public:
 		//! Default constructor
@@ -122,22 +130,30 @@ class reader_ASCII {
 		}
 		
 		/*! 
-			@brief	Reads one line and put the data read from the istringstream in the variables defined
-					in the attributes of the derived class defined by the user
+			@brief	Gets data form input file
+			
+			Specify here how to read your input file. Declare as private attribute
+			of your derived class each variable you will use to read the data. 
 		*/		
 		virtual void get_data() = 0;
 		
-		//! A method to get the right data to append to an edge
-		virtual Edge_data_structure get_edge_data() = 0;
+		//! Packs the data in the struct that will be the edge property and outputs it
+		virtual Edge_prop get_edge_data() = 0;
 		
-		//! A method to get the right data to append to the source
-		virtual Vertex_data_structure get_source_data() = 0;
+		//! Packs the data in the struct that will be the source vertex property and outputs it
+		virtual Vertex_prop get_source_data() = 0;
 		
-		//! A method to get the right data to append to the target
-		virtual Vertex_data_structure get_target_data() = 0;
+		//! Packs the data in the struct that will be the target vertex property and outputs it
+		virtual Vertex_prop get_target_data() = 0;
 		
-		//! A method to get the right topological data from a line
-		virtual Topological_data_structure get_topological_data() = 0;
+		/*! 
+			@brief	Packs the data in a struct that will be used for topological
+					purpouse and outputs it
+					
+			Leave this method blank, doing nothing, if you are not reading,
+			or if you don't need, topological data
+		*/
+		virtual Topological_data get_topological_data() = 0;
 	
 	protected:
 		//! The name of the file to be read
