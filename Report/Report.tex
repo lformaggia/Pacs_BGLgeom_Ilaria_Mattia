@@ -115,13 +115,19 @@
 	In this section we present two examples from real situations, where some tools of BGLgeom library prove to be useful.
 
 	\subsection{Fracture Intersection}
-		In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. 
+		In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int}.
 		\begin{figure}
 			\centering 
 			%\includegraphics[width=0.5\textwidth]{frac_inters}
 			\caption{Example}
 			\label{fig:frac_int}
 		\end{figure}
+		
+		\subsection{Intersection types}
+			To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depends respectively on the parallelism and the collinearity of the evaluated edges. \newline
+			We identified 11 different types of intersection between two linear edges (see figure ...): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. \newline
+			
+		
 
 
 
