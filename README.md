@@ -23,7 +23,7 @@ For this purpouse, the library provides easy methods to append geometrical
 properties to a graph, such as coordinates for vertices or different 
 geometries for the edges. It also provides functionalities to compute 
 meshes, geometrical quantities related to the edges and find intersections 
-between linear edges.
+between linear edges. It can handle both the 2 and the 3 dimensional setting.
 
 
 #### fracture_intersection

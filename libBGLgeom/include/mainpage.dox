@@ -7,7 +7,8 @@
 		geometrical features and functionalities. A lot of applications 
 		in computational sciences requires a geometrical setting to be 
 		solved. This library is aimed at joining the potentiality of BGL 
-		whit utilities to handle the geometrical setting.
+		whit utilities to handle the geometrical setting, both 2 or 3 
+		dimensional.
 
 	@section what_is_BGL What is the Boost Graph Library
 	
