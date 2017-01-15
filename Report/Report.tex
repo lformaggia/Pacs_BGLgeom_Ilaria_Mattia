@@ -48,7 +48,12 @@
 % Package to insert code
 \usepackage{xcolor}
 \usepackage{listings}
+\lstset{basicstyle=\small\ttfamily}
 \newcommand{\classname}[1]{\texttt{#1}}
+
+% Maths packages
+\usepackage{amssymb}
+\usepackage{amsmath}
 
 %%% END Article customizations
 
@@ -86,26 +91,93 @@
 		The class has five template parameters and the full protoytpe is: \classname{adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >}. \newline
 		The first two template parameters allow to choose the types of the underlying containers for the bidimensional structure. Choosing them affects space complexity of the graph and efficiency of some operations, such as inserting and removing edges. In our work we always set them to the selector \classname{boost::vecS} (that stands for \texttt{std::vector}) for ease of use and since, form BGL documentation, it is in average the most performant choice for every topological operation. \newline
 		The third template parameter obviously allows to choose between a directed or undirected graph.\newline
-		The last two template parameters are the most interesting ones. 
+		The last two template parameters are the most interesting ones: they allow to choose what are the vertex and the edge properties. The BGL provides an easy way to handle them: the so called \textit{bundled properties}. They simply are classes, or better, structs, which can be passed as template parameter to the \classname{adjacency\_list} class, and they will become its vertex and edge properties, along with all their attributes and memeber functions. This gives a lot of flexibility: for instance, if we want all the vertices to have as properties three doubles, an int, two strings and a member that returns a random number, we only have to define them all in the same struct and pass it as the fourth template parameter of the \classname{adjacency\_list} class. The same for the edges, passing the corresponding struct as fifth template parameter. Moreover, the usage of a struct, instead of a class, enables public member access, and this comes out in a slight more ease of use when accessing the properties. \newline
+		Concluding this description, we underline that choosing different values for the template parameters consits in changing the type of the graph one is using, with consequence on some other tool provided by BGL.
 		
+		\subsubsection{Vertex and edge descriptors}
+		Two specific handles are provided to manipulate vertices and edges: the vertex and the edge descriptors. They may be of different types, depending on the graph type. They in general 'refer' to a particular vertex or edge, thus allowing for instance to access their properties, or to specify in a very readable way topological operations. \newline
+		Two more tools are provided to access a graph: vertex and edge iterators. As the descriptors, the iterators can be of different types depending on the graph type. Specific function return the iterator to the first and last vertex and to the first and last edge in the graph, thus allowing graph traversal. Dereferencing an iterator one will obtain the descriptor of the vertex or edge pointed by that iterator. \newline
+		Both descriptors and iterators are accessible through the \classname{graph\_traits} class.
 		
-		\begin{itemize}
-			\item \texttt{OutEdgeList}: here you can choose which container to use for this 
-			structure. We recommend to use @a boost::vecS (that refers to the 
-			std::vector). As alternative, if you have to perform a lot insertions 
-			and removals of vertices and edges, you can choose @a boost::listS 
-			(that refers to std:list), that is slightly more efficient for this 
-			type of operations.
-			
-			\item \texttt{VertexList} 
-		\end{itemize}
-		 
+		\subsubsection{Accessing properties}
+		Using \textit{bundled properties}, BGL provides an easy way to acces vertex or edge properties: just use the \texttt{operator[]} on a graph object, with index the descriptor of the vertex or edge whose properties one wants; this will consists in accessing the struct used as vertex or edge property. Since a struct has public access, with the dot operator we can immediately read from or write in each attribute or call a member function.
+		
+		% Mettere del codice di esempio qui????
+	
 	
 	\subsection{BGLgeom}
-	% Mettere delle subsubsection con tipo le classi principali, cosa fanno, perché fatte così, ecc
-		\subsubsection{Vertex\_base\_property}
+	This is the library we developed to meet the goals of the project. The name is the union of "BGL", since this wants to be an extension of it, and of "geom", that stands for "geometry", to indicate the aim of the main functionalities added. 
+	\newline\newline
+	The library comes from the need to have a common environment where to build and run very different types of applications, but with a geometrical setting and an underlying graph structure in common. This implies, besides the development of the geometric properties, the implementation of input/output utilities, to make this library produce useful outputs for other softwares. From this point of view, this library can be a common starting point for different projects and applications.
+	\newline\newline	
+	%We build a template library capable to handle 2 and 3 dimensional geometries. Most geometric characteristics, such as points, geometries for the edges, etc, are templatized on the dimension of the space. Another recurrent template parameter is the type of the graph used, needed in most cases to use the tools from BGL. 
+	
+		\subsubsection{What is inside}
+		The library contains many things, that can be gather together into three groups, divided for functionalities:
+		\begin{itemize}
+			\item \textbf{Adapters for BGL}: we provide some layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
+			\item \textbf{Classes to build graph properties}: the main part of the library are all the classes we developed to create for the graph a vertex and an edge property which include the basic geometric requirments.
+			\item \textbf{Geometrical and numerical utilieties}: we included in this library some code to compute integrals, generate meshes, compute intersections between linear edges.
+			\item \textbf{I/O utilities}: we provide one reader class to read tabular ASCII files, and three writer classes to produce three different types of output: ASCII, .pts and .vtp files.
+			\item \textbf{Tests}: we provide source code examples to show how the main classes and writers work.
+		\end{itemize}
+	
+		%forse posso dire prima quali proprietà geometriche abbiamo implemenmtato, come e perché, e poi come le abbiamo messe insieme per poter usare i grafi.
+	
+		\subsubsection{Geometric properties}
+		In this library we do not provide any type of grap. We decided to use the \classname{adjacency\_list} class directly from the BGL, since this already gives a lot of flexibility. We focused on implementing the geometrical properties we was required as \textit{bundled properties} (that are really flexible too), so that we could simply pass them as template parameters to create a graph with the desired characteristics. Moreover, we chose to put in our properties only the functionalities that are really needed for a geometrical description, leaving the user the freedom to add its own characteristics and functionalities. \newline
+		The geometric properties we were asked to developed are:
+		\begin{itemize}
+			\item Coordinates for points.
+			\item Boundary conditions.
+			\item Parameterization for the edges, along with computation of the main characteristics: first and second derivative, curvature, curvilinear abscissa.
+			\item Meshes on the edges.
+		\end{itemize}
+		We templatized all this elements on the dimension of the space.
+		\newline\newline
+		To represent points we used \texttt{Eigen} matrices, with 1 column and n rows. We choose the \texttt{Eigen} because it provides high efficiency and a lot of numerical method to compute in an easy way geometrical quantities.
+		\newline\newline
+		We implemented a class to store a boundary condition as a type and a value. We provide an \texttt{enum class BC\_type} to represent the most common types of boundary conditions.
+		\newline\newline
+		Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library would have been able to manage any possible parameterization of the type
+		\begin{equation*}
+			f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
+		\end{equation*}
+		i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.\newline
+		All this classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
+		\begin{equation*}
+			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+		\end{equation*}
+		They all derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter.
 		
-		\subsubsection{Edge\_base\_property}
+		% Implementation details di ogni classe? Forse con un po' di considerazioni sull'efficienza ci sta
+		
+		
+		\subsubsection{Building a geometric graph (????ok title???)}
+		We developed two structs: \classname{Vertex\_base\_property} and \classname{Edge\_base\_property}, that are thought to be the base vertex and edge property for a graph which wants to have geometric description. They are substantially two containers, which gather other classes, each one handling a specific geometric aspect. \newline
+		In the \classname{Vertex\_base\_property} we included:
+		\begin{itemize}
+			\item The coordinates of the point in the space representing the vertex.
+			\item A \texttt{std::array} to store the boundary conditions on that vertex. We templatized the array on the number of the boundary conditions the user wants, since it may happen for some applications that more than one FEM problem has to be solved on the graph, thus requiring more than one boundary condition for each vertex.
+		\end{itemize}
+		In the \classname{Edge\_base\_property} we included:
+		\begin{itemize}
+			\item A class to hanlde the geometry of an edge, i.e. its parameterization. 
+			\item A class to contain and generate meshes on the edge. The mesh (uniform or variable size) is generated starting from a parametric mesh over a [0,1] segment, and then it is evaluated with the geometry class to produce the real mesh. But also the parametric mesh is recorded inside the class, since it may be useful to evaluate other quantities (for instance curvature) in correspondence of the same points of the mesh.
+		\end{itemize}
+		Both properties are also provided with two more attributes: an index and a label. These may be useful to give to vertices and edges a specific order and to keep track of and reconnaise particular parts of the graph.
+		
+		In addition, the user can \underline{inherit} from them to add everything he needs for its specific application.
+	
+	
+		\subsubsection{Reader class}
+		
+		\subsubsection{Writer classes}
+
+	
+	
+	
+	% Mettere delle subsubsection con tipo le classi principali, cosa fanno, perché fatte così, ecc
 	
 	\subsection{Todos}	%???
 
@@ -115,17 +187,17 @@
 	In this section we present two examples from real situations, where some tools of BGLgeom library prove to be useful.
 
 	\subsection{Fracture Intersection}
-		In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int}.
-		\begin{figure}
-			\centering 
-			%\includegraphics[width=0.5\textwidth]{frac_inters}
-			\caption{Example}
-			\label{fig:frac_int}
-		\end{figure}
-		
-		\subsection{Intersection types}
-			To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depends respectively on the parallelism and the collinearity of the evaluated edges. \newline
-			We identified 11 different types of intersection between two linear edges (see figure ...): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. \newline
+	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int}.
+	\begin{figure}
+		\centering 
+		%\includegraphics[width=0.5\textwidth]{frac_inters}
+		\caption{Example}
+		\label{fig:frac_int}
+	\end{figure}
+	
+		\subsubsection{Intersection types}
+		To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depends respectively on the parallelism and the collinearity of the evaluated edges. \newline
+		We identified 11 different types of intersection between two linear edges (see figure ...): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. \newline
 			
 		
 
@@ -133,5 +205,6 @@
 
 	\subsection{Diffusion on vascular network}
 
+	%Computational issues?? Complexity and time efficiency?
 
 \end{document}
