@@ -135,6 +135,11 @@
 		pointing to the first vertex/edge in the graph, and in the second position 
 		the edge iterator pointing to the last vertex/edge in the graph.
 		
+		@note	The @b BGL provides in total five kinds of iterators: besides vertex 
+				and edge iterators, there are out_edge, in_edge and adjacency iterators.
+				They all are accessible through the @a boost::graph_traits class.
+				They may be very useful while dealing with graph algorithms. 
+		
 		
 		@subsection accessing_properties Accessing properties
 		
