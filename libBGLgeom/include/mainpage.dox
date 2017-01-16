@@ -24,6 +24,9 @@
 		In this section we explain how the components of the BGL we chose to 
 		use for the BGLgeom library work.
 		
+		@remark	You can acces each class, function and type in BGL using the 
+				@a boost namespace.
+		
 	@subsection adjacency_list The class for the graph
 	
 		The class we use to describe a graph is the @a boost::adjacency_list one.
