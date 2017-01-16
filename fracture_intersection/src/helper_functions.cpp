@@ -19,6 +19,7 @@
 #include "graph_builder.hpp"
 #include "type_aliases.hpp"
 
+using namespace std;
 using namespace Fracture;
 // For overload of operators in BGLgeom library, for instance operator< or > for points:
 using namespace BGLgeom;
@@ -75,8 +76,8 @@ void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G){
 	Vertex_d tgt = boost::target(e, G);	
 	Edge_d e_tmp;
 	
-	e_tmp = new_fracture(src, v, G[e], G);
-	e_tmp = new_fracture(v, tgt, G[e], G);	
+	e_tmp = new_linear_edge(src, v, G[e], G);
+	e_tmp = new_linear_edge(v, tgt, G[e], G);	
 	
 	boost::remove_edge(e, G);
 	#ifndef NDEBUG
@@ -84,7 +85,7 @@ void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G){
 	#endif
 }
 
-
+/*
 void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G){
 	// Doing nothing, i.e. keeping the old properties present on this edge
 	#ifndef NDEBUG
@@ -92,25 +93,151 @@ void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Grap
 	#endif
 // in the edges requiring update we inserted as properties the old ones, but there is an overlapping with the new inserted edge. Here you can decide how to "mix" the edge properties: just keep the old ones (as it is, so this function will do nothing in this case), just the new ones, or any other combination of the two
 }
+*/
 
+void create_graph(Graph & G, 
+				  reader_ASCII<Fracture::Vertex_prop, 
+				  Fracture::Edge_prop> & R,
+				  std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties){
+	// Utilities to create the graph:	
+	
+	// Edge iterators to iterate over the graph
+	Edge_it e_it, e_end;
+	// The descriptor of the new added edges (it will be overwritten by any new addition)
+	Edge_d e;
+	//object of class Intersection (BGLgeom)
+	Intersection intobj_tmp; 
 
-Edge_d new_fracture(Vertex_d const& src, Vertex_d const& tgt, Fracture::Edge_prop & edge_prop, Graph & G){
-	// set source and target in the edge property (they may have changed since we are splitting some edges, so that they have new source and target)
-	edge_prop.geometry.set_source(G[src].coordinates);
-	edge_prop.geometry.set_target(G[tgt].coordinates);
+	// To store source and target properties read from the input file (Fracture)
+	Vertex_prop src_prop, tgt_prop; 
+	// To store edge_properties read from the input file (Fracture)
+	Edge_prop e_prop;
+	/*
+	Int_layer (BGLgeom) is an object containing all the info we need about the 
+	type of intersection. For each new pair of points representing a fracture, 
+	intvect will contain the ordered sequence of the intersections between this 
+	new line and the edges already present in the graph.
+	intvect stands for "vector of the intersections"
+	*/
+	std::vector<Int_layer<Graph>> intvect;	
+	/*
+	Boolean to detect non intersecting new edges, i.e. those edges
+	which do not intersect with any other already present in the graph.	
+	*/	
+	bool edge_alone; 
+	// Number of the fracture, used as index
+	unsigned int frac_num = 0;
+	
+	// Other debug utilities: counter for edges and vertices in the graph
+	int count_e = 0;
+	int count_v = 0;
+
+	while(!R.is_eof()){
+		++frac_num;		//updating index for the frcture number
+		std::cout << std::endl;
+		std::cout<< "------------------- READING LINE " << frac_num << "-------------------" << std::endl;
 		
-	std::cout <<"New edge created. "<<edge_prop.geometry<<". Fracture number: "<<edge_prop.index<<std::endl; 
-	return boost::add_edge(src,tgt,edge_prop,G).first;  
-}
+		//#ifndef NDEBUG or #ifndef VERBOSE
+			cout << "Current situation: ";
+			count_v = 0; 
+			Vertex_it vv,vvend;
+			for(std::tie(vv,vvend) = boost::vertices(G); vv!=vvend; ++vv) 
+				++count_v;
+			std::cout << count_v << " vertices, ";
+		//#endif
+		
+		//Getting data form input file
+		R.get_data();
+		src_prop = R.get_source_data();
+		tgt_prop = R.get_target_data();
+		e_prop = R.get_edge_data();
+		e_prop.index = frac_num;
+		
+		// Insertion of new vertices. If the coordinates matches with an already existing one, they returns those vertex descriptors
+		Vertex_d src = new_vertex(src_prop, G, true);
+		Vertex_d tgt = new_vertex(tgt_prop, G, true);		
+		
+		// Creation of the new current line we want to insert
+		const line L(G[src].coordinates, G[tgt].coordinates);		
+		// Preparing variable to the next loop
+		count_e = 0;
+		edge_alone = true;
+		intvect.clear();
+		// Checking for intersection of L with all the edges already present in the graph
+		for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
+			++count_e;			
+			intobj_tmp = BGLgeom::compute_intersection(G[*e_it].geometry, L);
+			if(intobj_tmp.intersect == true){
+				BGLgeom::Int_layer<Graph> intobj(intobj_tmp, *e_it);
+				edge_alone = false;
+				intvect.push_back(intobj);
+			}	
+		} //for
+		
+		//#ifndef NDEBUG
+			std::cout << count_e << " edges." << std::endl;
+		//#endif
+		
+		// Insertion of the new edge, handling intersections if present
+		if(edge_alone){
+			//#ifndef NDEBUG
+				std::cout << "This fracture does not intersect with any of the other fractures already in the graph." << std::endl;
+			//#endif
+			e = new_linear_edge(src,tgt,e_prop,G);
+		} else { // there is at least one intersection	
+			
+			// Order intvect in increasing or decreasing order based on the relative position of src and tgt 
+			if(G[src].coordinates < G[tgt].coordinates)
+				std::sort(intvect.begin(), intvect.end(), asc_order);
+			else
+				std::sort(intvect.begin(), intvect.end(), desc_order);
 
-
+			#ifndef NDEBUG
+				std::cout << "ORDERED VECTOR" << std::endl;	
+				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+					std::cout << I << std::endl;
+			#endif
+			
+			// Removal of duplicated intersection points with Common_extreme or T_old intersection situation
+			auto last = std::unique(intvect.begin(), intvect.end(), is_duplicate);
+			intvect.erase(last, intvect.end());
+			
+			#ifndef NDEBUG
+				std::cout << "VECTOR WITHOUT DUPLICATES" << std::endl;	
+				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+					std::cout << I << std::endl;
+			#endif
+			
+			/* 
+			We now create connections and break old edges proceeding from an 
+			intersection point to the following intersection point, starting 
+			obviously by the source
+			*/
+			Vertex_d next_src;
+			Vertex_d current_src = src;											
+			// First, we resolve the connection between source and first intersection
+			refine_graph(G, src, intvect[0], e_prop, tgt, next_src, update_edge_properties);
+			// Then, all the other ones
+			for(std::size_t i=1; i<intvect.size(); ++i){
+				current_src = next_src;
+				refine_graph(G, current_src, intvect[i], e_prop, tgt, next_src, update_edge_properties);	// graph, current source, current intersection object
+			}	
+			// Finally we connect the last intersection point with the target, but only if their vertex_desciptors do not coincide
+			current_src = next_src;
+			if(!(current_src == tgt))
+				e = new_linear_edge(current_src, tgt, e_prop, G);										
+		}// else 
+	} //while
+}; //create_graph
 
 void refine_graph	(Graph &G, 
 					 const Vertex_d & src, 
-					 const Vertex_d & tgt, 
+					 BGLgeom::Int_layer<Graph> & I,
 					 Fracture::Edge_prop & e_prop, 
-					 BGLgeom::Int_layer<Graph> & I, 
-					 Vertex_d & next_src){
+					 const Vertex_d & tgt, 
+					 Vertex_d & next_src,
+					 std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties){
+					 
 	/* The edge descriptor of the new inserted edges 
 	(it will be overwritten for each new insertion) */
 	Edge_d e;
@@ -123,7 +250,7 @@ void refine_graph	(Graph &G,
 			Fracture::Vertex_prop v_prop(I.int_pts.front());
 			Vertex_d v = new_vertex(v_prop, G);			
 			
-			e = new_fracture(src, v, e_prop, G);
+			e = new_linear_edge(src, v, e_prop, G);
 			cut_old_edge(I.int_edge, v, G);
 			
 			// Setting the source vertex descriptor for the following iteration
@@ -134,7 +261,7 @@ void refine_graph	(Graph &G,
 		case int_type::T_new : {
 			// if the intersection point corresponds to the target I add a new edge
 			if(I.intersected_extreme_new == 1){
-				e = new_fracture(src, tgt, e_prop,G);
+				e = new_linear_edge(src, tgt, e_prop,G);
 				cut_old_edge(I.int_edge, tgt,G);
 				next_src = tgt;
 			}	
@@ -153,7 +280,7 @@ void refine_graph	(Graph &G,
 			else
 				v = boost::target(I.int_edge, G);
 				
-			e = new_fracture(src, v, e_prop, G);
+			e = new_linear_edge(src, v, e_prop, G);
 			
 			// Setting the source vertex descriptor for the following iteration
 			next_src = v;
@@ -170,14 +297,16 @@ void refine_graph	(Graph &G,
 			
 			// If src has same coordinates as v there's nothing to do, so we consider only the opposite case
 			if(!(src == v))
-				e = new_fracture(src, v, e_prop, G);
+				e = new_linear_edge(src, v, e_prop, G);
 			
 			next_src = v;			
 			break;
 		}	//Common_extreme
 		
 		case int_type::Identical : {
- 			update_edge_properties(I.int_edge,e_prop, G); 			
+			// The edge_descriptor contained into object I is totally overlapped by the new edge, therefore I update its properties to take into account this fact
+			update_edge_properties(G[I.int_edge], e_prop);
+
  			//Vertex_d v1;
 			Vertex_d v2;
 
@@ -208,10 +337,13 @@ void refine_graph	(Graph &G,
 			}
 			
 			if(I.intersected_extreme_new == 1){	//it means that src is outside and tgt inside
-				e = new_fracture(src,v1, e_prop, G);
-				e = new_fracture(v1,tgt, G[I.int_edge], G);				
-				update_edge_properties(e,e_prop,G);				
-				e = new_fracture(tgt,v2,G[I.int_edge],G);
+				e = new_linear_edge(src,v1, e_prop, G);
+				
+				e = new_linear_edge(v1,tgt, G[I.int_edge], G);	
+				// Edge e is overlapped by the new edge, therefore I update its properties to take into account this fact			
+				update_edge_properties(G[e],e_prop);				
+				
+				e = new_linear_edge(tgt,v2,G[I.int_edge],G);
 				
 				/* Since next_src = tgt, no new line will be added in the last step 
 				(this is necessarily the last intersection of the vector, otherwise 
@@ -219,9 +351,12 @@ void refine_graph	(Graph &G,
 				next_src = tgt;
 			}		
 			else{	//it means that src is inside and tgt outside
-				e = new_fracture(v1,src,G[I.int_edge],G);
-				e = new_fracture(src,v2,G[I.int_edge],G);
-				update_edge_properties(e,e_prop,G);				
+				e = new_linear_edge(v1,src,G[I.int_edge],G);
+				
+				e = new_linear_edge(src,v2,G[I.int_edge],G);
+				// Edge e is overlapped by the new edge, therefore I update its properties to take into account this fact			
+				update_edge_properties(G[e],e_prop);
+								
 				next_src = v2;
 			}	
 			
@@ -245,11 +380,13 @@ void refine_graph	(Graph &G,
 				v2 = boost::source(I.int_edge, G);						
 			}
 
-			e = new_fracture(v1,src,G[I.int_edge],G);
-			e = new_fracture(src,tgt,G[I.int_edge],G);
+			e = new_linear_edge(v1,src,G[I.int_edge],G);
+			
+			e = new_linear_edge(src,tgt,G[I.int_edge],G);
 			// Updating properties of the overlapped edge
-			update_edge_properties(e, e_prop, G);			
-			e = new_fracture(tgt,v2,G[I.int_edge],G);		
+			update_edge_properties(G[e], e_prop);			
+			
+			e = new_linear_edge(tgt,v2,G[I.int_edge],G);		
 			
 			// Removal of preexisting edge
 			boost::remove_edge(I.int_edge,G);
@@ -274,9 +411,11 @@ void refine_graph	(Graph &G,
 			}
 			
 			if(v1 != src) // otherwise the edge has already been added
-				e = new_fracture(src, v1, e_prop, G);
+				e = new_linear_edge(src, v1, e_prop, G);
 		
- 			update_edge_properties(I.int_edge, e_prop,G);
+			// updating the properties of the overlapped edge
+ 			update_edge_properties(G[I.int_edge], e_prop);
+ 			
 			next_src = v2; 			
  			break;
 		}	//Overlap_outside
@@ -295,16 +434,16 @@ void refine_graph	(Graph &G,
 			}			
 			
 			if(v1 == src){ //the common extreme is the source, because they have the same vertex descriptor
-				e = new_fracture(tgt,v2,G[I.int_edge],G);
-				e = new_fracture(src,tgt, G[I.int_edge],G);
+				e = new_linear_edge(tgt,v2,G[I.int_edge],G);
+				e = new_linear_edge(src,tgt, G[I.int_edge],G);
 			}						
 			else{ //the common extreme is the target
-				e = new_fracture(v1,src,G[I.int_edge],G);
-				e = new_fracture(src,tgt,G[I.int_edge],G);
+				e = new_linear_edge(v1,src,G[I.int_edge],G);
+				e = new_linear_edge(src,tgt,G[I.int_edge],G);
 			}
 			
-			// in both cases of the if-else clause e is the edge_descr of the edge connecting src and tgt
-			update_edge_properties(e,e_prop,G); 
+			// in both cases of the if-else clause e is the edge_descr of the edge connecting src and tgt: here we update its properties
+			update_edge_properties(G[e],e_prop); 
 			
 			// Removal of preexisitng edge
 			boost::remove_edge(I.int_edge,G);
@@ -329,10 +468,11 @@ void refine_graph	(Graph &G,
 			
 			// It means that the common extreme is the target. I have to connect src to v1	
 			if(!(src == v1))
-				e = new_fracture(src,v1, e_prop, G);
+				e = new_linear_edge(src,v1, e_prop, G);
 				
 			// Then we have simply to update the properties of the other part of the edge
-			update_edge_properties(I.int_edge, e_prop,G);
+			update_edge_properties(G[I.int_edge], e_prop);
+			
 			next_src = v2;
 			break;
 		}	//Overlap_extreme_outside

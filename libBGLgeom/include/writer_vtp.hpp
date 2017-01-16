@@ -164,6 +164,7 @@ class writer_vtp{
 			for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it)
 				add_line(*e_it, G, n_vertices);							
 			generate_output(n_vertices);
+			std::cout << "Done" << std::endl;
 		}	
 		
 	protected:

@@ -22,9 +22,11 @@
 #include <cmath>
 #include <limits> 
 
+#include "reader_ASCII.hpp"
 #include "intersections2D_utilities.hpp"
 #include "type_aliases.hpp"
 #include "fracture_graph_properties.hpp"
+
 
 namespace Fracture{
 	
@@ -123,10 +125,13 @@ namespace Fracture{
 		@param new_edge_prop ???????????????????????????????'
 		@param G The graph
 	*/
-	void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G);
+	//void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G);
 	
-	// Maybe not needed
-	Edge_d new_fracture(Vertex_d const& src, Vertex_d const& tgt, Fracture::Edge_prop & edge_prop, Graph & G);
+	
+	void create_graph(Graph & G, 
+					  BGLgeom::reader_ASCII<Fracture::Vertex_prop, 
+					  Fracture::Edge_prop> & R, 
+					  std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties = [](Fracture::Edge_prop & current_prop, const Fracture::Edge_prop & new_prop){} );
 	
 	/*!
 		@brief	Refines the graph
@@ -135,20 +140,21 @@ namespace Fracture{
 		insert and, according to them, creates new vertices and edges and breaks 
 		already present edges
 		
-		@param G The graph
-		@param src Vertex descriptor of the source of the current edge we want to insert. NO!!!!
-		@param tgt vertex descriptor of the target of the current edge we want to insert. Si, credo.
-		@param e_prop ???
-		@param I
-		@param next_src
+		@param G        	The graph
+		@param src 			Vertex descriptor of the source of the current "piece" of edge we are inserting
+		@param I			Object of class Int_layer containing all the information about the intersection we are currently dealing with
+		@param e_prop		Contains the properties of the new edge we are inserting in the graph
+		@param tgt 			Vertex descriptor of the target of the new edge we are inserting in the graph 
+		@param next_src		Vertex descriptor which at the end of the function will contain the src for the next loop iteration
 		maybe: @param update_edge_prop function???
 	*/
 	void refine_graph	(Graph &G, 
-						 const Vertex_d & src, 
-						 const Vertex_d & tgt, 
-						 Fracture::Edge_prop & e_prop, 
+						 const Vertex_d & src,  						 
 						 BGLgeom::Int_layer<Graph> & I, 
-						 Vertex_d & next_src);
+						 Fracture::Edge_prop & e_prop, 
+						 const Vertex_d & tgt,
+						 Vertex_d & next_src,
+						 std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties);
 }	//Fractures
 
 #endif
