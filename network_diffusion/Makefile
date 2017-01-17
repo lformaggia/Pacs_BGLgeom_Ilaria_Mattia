@@ -23,6 +23,7 @@ help:
 	@echo "make all: ------ Makes executables and documentation"
 	@echo "make exec: ----- Makes executables"
 	@echo "make doc: ------ Makes documentation"
+	@echo "make input: ---- Makes input file for the application"
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all"
 	@echo ""
@@ -31,7 +32,10 @@ help:
 
 all: exec doc clean
 
-exec: $(OBJS_NOT_MAIN) $(EXEC)
+exec: input $(OBJS_NOT_MAIN) $(EXEC)
+
+input:
+	octave -q $(SOURCE_DIR)/generate_bifurcation_network.m
 
 $(TARGET_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(TARGET_DIR)
