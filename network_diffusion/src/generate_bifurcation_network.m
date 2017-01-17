@@ -13,7 +13,9 @@
 %		between -1 and 1 is added to each coordinate. We perform
 %		checks not to go out of bounds
 %	out_filanem = name of the output file. Please, always put it 
-%		in the data/ folder
+%		in the data/ folder. The output only stores a list of 
+%		edges: each row displays 'coordinates of source', 
+%		'coordinates of target'
 
 close all
 clear all
