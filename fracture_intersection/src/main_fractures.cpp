@@ -127,8 +127,7 @@ int main(){
 				std::cout << "This fracture does not intersect with any of the other fractures already in the graph." << std::endl;
 			//#endif
 			e = new_fracture(src,tgt,e_prop,G1);
-		}
-		else{ // there is at least one intersection	
+		} else { // there is at least one intersection	
 			
 			// Order intvect in increasing or decreasing order based on the relative position of src and tgt 
 			if(G1[src].coordinates < G1[tgt].coordinates)
@@ -165,10 +164,10 @@ int main(){
 			for(std::size_t i=1; i<intvect.size(); ++i){
 				current_src = next_src;
 				refine_graph(G1, current_src, tgt, e_prop, intvect[i], next_src);	// graph, current source, current intersection object
-			};			
+			}	
 			// Finally we connect the last intersection point with the target, but only if their vertex_desciptors do not coincide
 			current_src = next_src;
-			if(!(current_src == tgt));
+			if(!(current_src == tgt))
 				e = new_fracture(current_src, tgt, e_prop, G1);										
 		}// else 
 	} //while
@@ -231,7 +230,7 @@ int main(){
 		
 		// Insertion of new vertices. If the coordinates matches with an already existing one, they returns those vertex descriptors
 		Vertex_d src = new_vertex(src_prop, G2, true);
-		Vertex_d tgt = new_vertex(tgt_prop, G2, true);		
+		Vertex_d tgt = new_vertex(tgt_prop, G2, true);	
 		
 		// Creation of the new current line we want to insert
 		const line L(G2[src].coordinates, G2[tgt].coordinates);		
@@ -260,8 +259,7 @@ int main(){
 				std::cout << "This fracture does not intersect with any of the other fractures already in the graph." << std::endl;
 			//#endif
 			e = new_fracture(src,tgt,e_prop,G2);
-		}
-		else{ // there is at least one intersection	
+		} else { // there is at least one intersection	
 			
 			// Order intvect in increasing or decreasing order based on the relative position of src and tgt 
 			if(G2[src].coordinates < G2[tgt].coordinates)
@@ -301,13 +299,13 @@ int main(){
 			};			
 			// Finally we connect the last intersection point with the target, but only if their vertex_desciptors do not coincide
 			current_src = next_src;
-			if(!(current_src == tgt));
+			if(!(current_src == tgt))
 				e = new_fracture(current_src, tgt, e_prop, G2);										
 		}// else 
 	} //while
 	
 	// Counting total of vertices and edges
-	count_e = 0;	
+	count_e = 0;
 	for (std::tie(e_it, e_end) = boost::edges(G2); e_it != e_end; ++e_it)
 		++count_e;	
 	//Vertex_it v_it, v_end; Previously declared
@@ -324,4 +322,4 @@ int main(){
 	W2.export_vtp(G2);	
 	
 	return 0;
-};
+}

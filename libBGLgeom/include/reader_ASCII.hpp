@@ -23,6 +23,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <exception>
+#include <cctype>
 
 namespace BGLgeom{
 
@@ -123,13 +124,29 @@ class reader_ASCII {
 				in_file.close();
 				return true;
 			} else {
-				in_file.seekg(-1, in_file.cur); 
-				return false;
-			}
-		}
+				// Maybe at the end of the file there are some empty lines
+				if(find_eof == '\n' && isspace(in_file.peek()) ){
+					in_file.get(find_eof);
+					while( isspace(in_file.peek()) ){
+						in_file.get(find_eof);
+					}
+					in_file.get(find_eof);
+					if(find_eof == std::ifstream::traits_type::eof() || in_file.peek() == std::ifstream::traits_type::eof()){	//reached eof
+						in_file.close();
+						return true;
+					} else {	//there are empty lines between data
+						in_file.seekg(-1, in_file.cur);
+						return false;
+					}
+				} else {
+					in_file.seekg(-1, in_file.cur); 
+					return false;
+				}	//else
+			}	//else
+		}	
 		
 		/*! 
-			@brief	Gets data form input file
+			@brief	Gets data from input file
 			
 			Specify here how to read your input file. Declare as private attribute
 			of your derived class each variable you will use to read the data. 
