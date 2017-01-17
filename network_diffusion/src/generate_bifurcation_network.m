@@ -1,3 +1,20 @@
+% Octave script to generate a tree network with the desired order of
+% bifurcations. The network bifurcates the first time along the z 
+% direction, the second on the x direction, and so on, proceeding 
+% along the y direction. It also provide a random effect on the 
+% final position of each node, but the first two, that are fixed.
+% The network is contained in a 3D cube with unitary side.
+% 
+% Input parameters:
+%	n = number of the order of bifurcation (at least 2 to obtain
+%		a Y configuration.
+%	re = random effect to apply to the nodes. When the new node 
+%		is generated, a draw, multiplied by re, from a uniform 
+%		between -1 and 1 is added to each coordinate. We perform
+%		checks not to go out of bounds
+%	out_filanem = name of the output file. Please, always put it 
+%		in the data/ folder
+
 close all
 clear all
 clc
