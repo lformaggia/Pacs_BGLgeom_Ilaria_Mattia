@@ -46,20 +46,22 @@ using vect = std::vector<double>;
 	
 	@todo	This implementation has linear, rather than log complexity
 */
-int findspan (int n, int p, double u, const vect &U);
+int 
+findspan (int n, int p, double u, const vect &U);
 
 /*!
 	@brief	Compute the functions of the basis
 	
 	@note	Algorithm A2.2 from 'The NURBS BOOK' pg70.
 	
-	@param i Knot span (from findspan())
-	@param t Parametric point
-	@param p Spline degree
-	@param U Knot sequence
-	@return	Vector of the functions of the basis (p+1 dimensional)	
+	@param i (Input) Knot span (from findspan())
+	@param t (Input) Parametric point
+	@param p (Input) Spline degree
+	@param U (Input) Knot sequence
+	@param N (Output) Vector of the functions of the basis (p+1 dimensional)	
 */
-void basisfun (int i, double t, int p, const vect &U, vect &N);
+void
+basisfun (int i, double t, int p, const vect &U, vect &N);
 
 
 /*!
@@ -329,12 +331,12 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		/*!
 			@brief Compute the first derivative of the curve as a bspline
 			
-			@param d Degree of the bspline
-			@param C Vector of the control points (mc x nc matrix stored as column major)
-			@param nc Number of control points
-			@param k Knot sequence (nk x 1 vector)
-			@param dc vector of the derivative control points (output)
-			@param dk Knot sequence of the derivative ((nk-1) x 1 vector) (output)
+			@param d (Input) Degree of the bspline
+			@param C (Input) Vector of the control points (mc x nc matrix stored as column major)
+			@param nc (Input) Number of control points
+			@param k (Input) Knot sequence (nk x 1 vector)
+			@param dc (Output) Bector of the derivative control points (output)
+			@param dk (Output) Knot sequence of the derivative ((nk-1) x 1 vector) (output)
 		*/
 		void
 		bspderiv (int d, const vect_pts &C, int nc,
@@ -353,12 +355,12 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		/*!
 			@brief Evaluates the bspline at the given parametric point
 			
-			@param d Degree of the bspline
-			@param C Vector of the control points
-			@param nc Number of control points
-			@param k Knot sequence (nk x 1 vector)
-			@param t Parametric evaluation point
-			@param P Evaluated point (output)
+			@param d (Input) Degree of the bspline
+			@param C (Input) Vector of the control points
+			@param nc (Input) Number of control points
+			@param k (Input) Knot sequence (nk x 1 vector)
+			@param t (Input) Parametric evaluation point
+			@param P (Output) Evaluated point (output)
 		*/
 		void
 		bspeval (const int d, const vect_pts &C, const int nc,
@@ -377,12 +379,12 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		/*!
 			@brief Evaluates the bspline at the given parametric points
 			
-			@param d Degree of the bspline
-			@param C Vector of the control points
-			@param nc Number of control points
-			@param k Knot sequence (nk x 1 vector)
-			@param t Vector of parametric evaluation point
-			@param P Vector of evaluated point (output)
+			@param d (Input) Degree of the bspline
+			@param C (Input) Vector of the control points
+			@param nc (Input) Number of control points
+			@param k (Input) Knot sequence (nk x 1 vector)
+			@param t (Input) Vector of parametric evaluation point
+			@param P (Output) Vector of evaluated point (output)
 		*/
 		void
 		bspeval (const int d, const vect_pts &C, const int nc,
