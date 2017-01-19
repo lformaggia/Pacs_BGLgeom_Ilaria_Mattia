@@ -320,7 +320,8 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 			Edge_base_property
 			
 	It adds a new edge assuming that the underlying geometry is the linear one.
-	It sets up the geometry and the properties.
+	It directly assigns the properties to the new edge, re-setting in any case 
+	the geometry.
 	
 	@note 	It performs a check on the insertion of the edge
 	@pre	This version of the function assumes that the coordinates of the vertices
@@ -419,7 +420,8 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 			Edge_base_property
 			
 	It adds a new edge assuming that the underlying geometry is the generic one.
-	It sets up the geometry and the properties
+	It assigns directly the properties to the new edge and it takes care of 
+	setting up the geometry (it re-set it also if it is already set)
 	
 	@note 	It performs a check on the insertion of the edge
 	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
@@ -476,6 +478,7 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	It adds a new edge assuming that the underlying geometry is the bspline one.
 	It takes care of setting up the geometry, so some additional parameters are
 	required.
+	
 	@note 	It performs a check on the insertion of the edge
 	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
 			the coordinates of source and vertex passed in the vertex descriptors. If not,
@@ -525,9 +528,11 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	@remark	Use this only when you set "bspline_geometry<dim,deg>" as template parameter of the
 			Edge_base_property
+			
 	It adds a new edge assuming that the underlying geometry is the bspline one.
 	It takes care of setting up the geometry, so some additional parameters are
 	required.
+	
 	@note 	It performs a check on the insertion of the edge
 	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
 			the coordinates of source and vertex passed in the vertex descriptors. If not,
@@ -575,9 +580,11 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	
 	@remark	Use this only when you set "bspline_geometry<dim,deg>" as template parameter of the
 			Edge_base_property
+			
 	It adds a new edge assuming that the underlying geometry is the bspline one.
-	It takes care of setting up the geometry and the properties, so some additional parameters are
-	required.
+	It assigns directly the properties to the new edge and it takes care of 
+	setting up the geometry (it re-set it also if it is already set)
+	
 	@note 	It performs a check on the insertion of the edge
 	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
 			the coordinates of source and vertex passed in the vertex descriptors. If not,
