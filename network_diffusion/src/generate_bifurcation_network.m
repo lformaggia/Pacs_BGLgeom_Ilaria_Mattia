@@ -95,6 +95,10 @@ plot3(points(1,1), points(1,2), points(1,3), '*', 'MarkerSize', 10)
 % Plotting all other points
 hold on
 plot3(points(:,4), points(:,5), points(:,6), '*', 'MarkerSize', 10)
+% Plotting the edge
+for i = 1:size(points,1)
+	plot3(points(i,[1,4]), points(i,[2,5]), points(i,[3,6]), '-g', 'LineWidth', 2)
+end
 grid on
 axis equal
 
