@@ -55,6 +55,11 @@ struct no_topological_data {};
 	take also care of setting up the geometry of the edges before outputting the 
 	edge property.
 	
+	@attention	Remeber that the input file does NOT have any comma as separator 
+				among the different columns of the file. Use spaces or tabulations 
+				instead. This is mandatory, you specify in the @a get_data() 
+				function of the derived class also to read a character, that 
+				will be discarded, inbetween every couple of data	
 	
 	@param Vertex_prop The vertex property used for the graph
 	@param Edge_prop The edge property used for the graph
