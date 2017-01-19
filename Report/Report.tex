@@ -81,9 +81,9 @@
 
 \section{Introduction}
 	\subsection{Purpouse of the project}	%magari anche no??
-	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities to handle graph with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as curves in the space (2 or 3 dimensional). Along with this, classes which implements these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the edges and creation of numerical meshes on them. \newline
+	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities to handle graph with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the edges and creation of numerical meshes on them. \newline
 	All these geometric functionalities we developed are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problemst. \newline
-	Along with this library we provide to example of specific application: one about intersection of fractures in fractured porous media, and one solving a simple diffusion problem on a vascular network. \newline
+	Along with this library we also provide two example of specific application: one about intersection of fractures in fractured porous media, and one solving a simple diffusion problem on a vascular network. \newline
 	A lot of other applications can take advantage from this library: vascular and neural network, electronic circuits, .... 
 
 
@@ -149,17 +149,25 @@
 		\begin{equation*}
 			f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
 		\end{equation*}
-		i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.\newline
-		All this classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
-		\begin{equation*}
-			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
-		\end{equation*}
-		for each geometry. All classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter.
+		i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.
+%		\newline
+%		All this classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
+%		\begin{equation*}
+%			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+%		\end{equation*}
+%		for each geometry. All classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter.
 		%Descrizione di ogni geometry?
 		\paragraph{Meshes.} We provide a class that is at the same time a mesh generator and a container for two type of meshes: the parametric one, generated from the parameterization of the edge, and the real one, that is the evaluation of the parametric mesh on the same edge. We decided to keep also the parametric mesh since it may be useful to evaluate it to get also other quantities, such as curvature, in correspondence of the points of the real mesh.
 		
-		% Implementation details di ogni classe? Forse con un po' di considerazioni sull'efficienza ci sta
-		
+		\subsubsection{Edge geometries}
+		All geometry classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
+		\begin{equation*}
+			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+		\end{equation*}
+		for each geometry. We made this choice to adopt a common interface for the three geometries; all classes performs controls on the value of the parameter: if it is out of bounds, the class will show an error message and stop the execution. All the three classes are templatized on the dimension of the space.
+		\paragraph{Linear geometry.} The \classname{linear\_geometrye} class obviously describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge it describes. This may be memory inefficient in large graphs, since the information about the coordinates are already stored in the vertices, but otherwise it would have required a lot of operations and to build a more complex structure to recover those information. In this way we give directly access inside the class. The coordinates of source and vertex are used to rescale the parameterization from [0,1] to the real position in the space. It is a very efficient class, since it performs only simple algebraic operations to compute evaluation, first derivative and curvilinear abscissa, and returns directly zero for the second derivative and the curvature.
+		\paragraph{Generic geometry.} The \classname{generic\_geometry} class can store the exact parameterization of any curve. We implemented it using the \texttt{std::function} wrapper, and it requires to provide the exact analytic expression of the curve and of its first and second derivative, each one parametrized between 0 and 1 (it is care of the user to do this). The evaluation members just evaluate the functions stored in the private attributes.
+		\paragraph{Bspline geometry.} The \classname{bspline\_geometry} class stores a description of the curve as a bspline. To build this representation, at least vector of control points is required. The class is thus able to store any curve, giving it all the analytic properties of the bspline curves. This class stores as private attributes the control points for the curve, for its first and second derivatives (that are bsplines as well by property); this implies that the class is more memory consumptive. To evaluate the curve and the derivatives, the class performs some more computation than in the other classes.
 		
 		\subsubsection{Building a geometric graph}		
 		\paragraph{The geometric base properties.} We developed the structs \classname{Vertex\_base\_property} and \classname{Edge\_base\_property}, that are thought to be the base vertex and edge property for a graph which wants to have a geometric description. They are substantially two containers, which gather the previous described classes.
@@ -170,10 +178,10 @@
 		\end{itemize}
 		In the \classname{Edge\_base\_property} we included:
 		\begin{itemize}
-			\item One of the geometry class.
-			\item Our mesh class.
+			\item One among th three geometry class.
+			\item A mesh class.
 		\end{itemize}
-		The \classname{Edge\_base\_property} is template on the geometry of the edges we want.
+		The \classname{Edge\_base\_property} is templated on the edge geometry one wants.
 		Both properties are also provided with two more attributes: an index and a label. These may be useful to give to vertices and edges a specific ordering and to keep track of and reconnaise particular parts of the graph.
 		\paragraph{A first Example.} To create a geometric graph with the above properties, we now only have to declare an object of class \classname{adjacency\_list} with \classname{Vertex\_base\_property} as fourth template parameter and with \classname{Edge\_base\_property} as fifth template parameter. For instance:
 \begin{lstlisting}[frame=single]
@@ -185,9 +193,9 @@ using Graph =
 		boost::directedS, Vertex_prop, Edge_prop >;
 Graph G;
 \end{lstlisting}
-		Note that the we created and empty graph and that all the properties, especially geometries for edges, have to be set up with all the needed values while building the graph. Moreover, note that, since the chosen geometry for the edge properties \texttt{Edge\_prop } is \texttt{linear\_geometry}, and since this \texttt{Edge\_prop} is passed as template argument to the \classname{adjacency\_list} class, the whole graph will have edges with linear geometry. This is a kind of 'static' property of the graph. A future development of the library may consider to create a kind of 'dynamic' \texttt{Edge\_base\_property}, that is capable to hanlde different geometries on different edges. %Maybe lo possiamo mettere nei todo's questo. 
+		Note that the we created and empty graph and that all the properties, especially geometries for edges, have to be set up with all the needed values while building the graph. Moreover, note that, since the chosen geometry for the edge properties \texttt{Edge\_prop } is \texttt{linear\_geometry}, and since this \texttt{Edge\_prop} is passed as template argument to the \classname{adjacency\_list} class, the whole graph will have edges with linear geometry. \textit{This is a kind of 'static' property of the graph. A future development of the library may consider to create a kind of 'dynamic' \texttt{Edge\_base\_property}, that is capable to hanlde different geometries on different edges.} %Maybe lo possiamo mettere nei todo's questo. 
 		\paragraph{Extending base properties.} We created our first new geometric graph with the properties provided by our library. But in the applications a lot of other quantities and parameters may be necessary, for instance diameter and pressure for a blood vessel, or permeability for fractures, or any other kind of variable. How to expand the basic geometric properties of vertices and edges we provide to contain the new variables? Just publicly inherit from our base properties, and define at least a default constructor. This is not mandatory unless you use pointers in your derived properties, but we strongly suggest to implement it to prevent bad behaviours. A generic example is:
-\begin{lstlisting}[frame=trbl]
+\begin{lstlisting}[frame=single]
 struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 	double variable1;			// may be pressure
 	int varaible2;				// some flag
@@ -203,19 +211,29 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 \end{lstlisting}
 		The use of inheritance is a fast way to derive your own vertex or edge property with a lot of freedom, and also allows access in a fast and easy way to the inherited geometric properties.
 		\paragraph{Adding vertices and edges.} To add new edges and vertices to a graph the user substanqially uses the already existent \texttt{boost} functions which make that job. We only hid them under external functions which recall the name: \texttt{BGLgeom::new\_vertex} and \texttt{BGLgeom::new\_edge} instead of \texttt{boost::add\_vertex} of \texttt{boost::add\_edge}. We provided different overloads: just adding vertex and edge, adding them along with their properties, performing additional checks on the insertion of the edges. Furthermore, we added three new functions (\texttt{BGLgeom::new\_linear\_edge}, \texttt{BGLgeom::new\_generic\_edge} and \texttt{BGLgeom::new\_bspline\_edge}) to add edges, to provide an easy way to add a new edge to the graph already with its geometry set up in the proper way.	On how to use the functionality we provided to build a graph, see the source code \textit{test\_BGL\_vs\_BGLgeom.cpp}.
-	
-		\subsubsection{Reader class}
-		We wanted to give a tool to read graph topology and properties directly from file. Since the properties are così che non le sappiamo, dobbiamo leggere every type of file, quindi bella lì ASCII! Scegliamo te.
+			
+		\subsubsection{Reader class}		
+		We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a tempalte abstract class. It is templatized on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
+		We left as pure virtual the members those devoted to read data from file and to return the just read data as vertex or edge properties. While deriving his own concrete reader, the user has to specify:
+		\begin{itemize}
+			\item all the variable members needed to store the read data;
+			\item how to read (in the right order) from the file the data for each single edge, using the inner stream attribute, in the member \texttt{get\_data()};
+			\item how to pack the data read into a vertex property which will be assign to the source and target of the edge he is reading in the members \texttt{get\_source\_data()} and \texttt{get\_target\_data()};
+			\item how to pack the data read into the edge property which will be assigned to the new edge in the member \texttt{get\_edge\_data()};
+			\item if topological information are provided, how to pack them in a struct that will contain this kind of information, otherwise he has to define the \texttt{get\_topological\_data()} as a member that returns an empty struct (however in this case it won't be used).
+		\end{itemize}
+		Note that the reader is thought to read one edge at a time from the file and to return the vertex and edge properties related to the edge just read and to its source and target. In this way, it is easy to build a graph in a loop, reading one edge at a time from the file, adding it to the graph and immediately update its properties (and the properties of its source and vertex), before reading and adding a new edge. \textsl{The only drawback of this strategy is some lack of efficiency concerning the vertex properties: it may happen that new edges coming in the graph will have as source and target already existing vertices, and thus the algorithm will update more than once their properties. If the graph has high average rank, this drawback may be solved performing a check whether the source and the target for an incoming edge already exist in the graph, or by keeping track in some way of the vertex descriptor of the vertices already inserted}. \newline
+		As final observation, we remember that the reader is able to read all kind of tabular file which have as delimiter among the various columns spaces or tabulations, but not commas (unless they are read as more data that will be discarded).
 		
 		\subsubsection{Writer classes}
-
-	
-	
-	
-	% Mettere delle subsubsection con tipo le classi principali, cosa fanno, perché fatte così, ecc
+		Three kind of writers are provided to output the graph and its properties; each one produce a different format of output.
+		\paragraph{Writer\_ASCII.} The \texttt{writer\_ASCII} class produces as output a tabular format (.txt, .dat, etc). It is an abstract class with about the same philosophy of the \texttt{reader\_ASCII} class: the user has to define its concrete writer, telling him which properties of the graph to print, and how. The pure virtual member devoted to this is \texttt{write\_data}, which wants as arguments the graph and the edge descriptor of the edge we want to printo information about. Remember that from an edge descriptor one is always able to recover the source and target properties through their vertex descriptors, using the \texttt{BGLgeom::source()} and \texttt{BGLgeom::target()} functions. Also in this case, it will easy to print information about the graph in a loop over all the edges.
+		\paragraph{Writer\_pts.} The \texttt{writer\_pts} class produces a particular kind of output (.pts), with a particular format: it express the graph as a sequence of arcs, and for each arc are printed the boundary conditions on source and target and all point of the mesh defined on it (if present, otherwise only source and target coordinates) are printed. We developed such a writer since we use the GetFem++ library in the application on diffusion in a vascular network, and the .pts format is the input one for Getfem to read meshes, and then solve FEM problems. \newline
+		To meet some requests from people that will use our library with the GetFem one for further applications, we also developed some particular features for the writer. We provided it with an additional template parameter, the number of boundary conditions (defaulted to one): if specified different from 1, it will produce different output files, each one with the same structure but with different boundary conditions. Another feature allows to print in a separate file some geometric information (first and second derivative, curvature) in correspondence of the points of the mesh (if present) on each edge.
+		\paragraph{Writer\_vtp.} The \texttt{writer\_vtp} class produces a .vtp output, i.e. a VTK polygonal data format. It is a particular format provided by the wider VTK library. It consist in an XML file in which all the topology of the graph is coded. The output consists into two file: one coding the edges, and one coding the vertices of the graph. This kind of output is thought to visualization purpouse: using for instance software such as Paraview, the output files can be easily displayed, giving a visual representation of the graph, to which the visualization of other quantities significant for the application can be added.
 	
 	\subsection{Todos}	%???
-
+		\paragraph{Edge base property.} The \classname{Edge\_base\_property} we provide in the library is a kind of 'static' one: it contains one of the three geometries, and the type is chosen passing it through a template parameter. And then the \classname{Edge\_base\_property} itself is passed as template parameter to create the graph. This implies that the geometry of all the edge in the graph will be fixed to the one used as template parameter. This behaviour may be inefficient for some applications, for instance when the underlying graph has almost all linear edges and only few edges that would be better to model with a curve geometry. At this stage, the geometry of such a graph will be fixed to the generic or bspline one for all edges, thus giving some memory and computational inefficiency on the edges that could have been described by the linear geometry. For this reason, it may be interesting from an efficiency point of view to implement a kind of 'dynamic' version of the \classname{Edge\_base\_property}, to make the user be able to select a different geometry for each different edge in the graph.
 
 \section{Applications}
 
