@@ -19,7 +19,9 @@
 #include <iomanip>
 
 using namespace BGLgeom;
+
 namespace BGLgeom{
+
 Intersection compute_intersection	(linear_geometry<2> const& edge1,
 									linear_geometry<2> const& edge2){
 	Intersection out;
@@ -258,11 +260,9 @@ Intersection compute_intersection	(linear_geometry<2> const& edge1,
 } //compute_intersection
 
 	
-// ========= COMPUTING THE INTERSECTION SITUATION ============
-// Identical and No_intersection cases already handled
-	
-void compute_intersection_type(Intersection & out){  // lasciare solo return
-	//calcolo il numero di intersezioni endPoint
+void compute_intersection_type(Intersection & out){
+	// Identical and No_intersection cases already handled in compute_intersection
+	// Computing the number of intersection points
 	unsigned int numEndPointIntersections = 0;
 	for(std::size_t i=0; i<2; ++i){
 		for(std::size_t j=0; j<2; ++j){
@@ -270,7 +270,7 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 				numEndPointIntersections++;
 		}
 	}
-	//Comincio a distinguere i casi. numIntersection == 0 already treated in the previous code
+	// numIntersection == 0 already treated in the compute_intersection function
 	if(out.numberOfIntersections == 1){ 
 		// X intersection
 		if(numEndPointIntersections == 0){
@@ -279,12 +279,12 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 		}
 		//T_new, T_old
 		if(numEndPointIntersections == 1){
-			//edge 1 interseca con uno dei suoi due estremi (0 o 1)
+			// edge 1 intersects with one of its two extremes (0 or 1)
 			if(out.endPointIsIntersection[1][0] || out.endPointIsIntersection[1][1]){
 				out.how = intersection_type::T_new;
 				return;
 			}
-			//edge 0 interseca con uno dei suoi due estremi (0 o 1)
+			// edge 0 intersects with one of its two extremes (0 or 1)
 			if(out.endPointIsIntersection[0][0] || out.endPointIsIntersection[0][1]){
 				out.how = intersection_type::T_old;
 				return;
@@ -296,7 +296,7 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 			return;
 		}
 		
-	} else {		//2 intersezioni, ovvero collinear = true
+	} else {		// 2 intersections, i.e. collinear = true
 		//Overlap_outside; edge 0 (old) intersects in both its extremes (0 and 1) edge 1 (new)
 		if(numEndPointIntersections == 2 && out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){
 			out.how = intersection_type::Overlap_outside;
@@ -307,7 +307,7 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 			out.how = intersection_type::Overlap_inside;
 			return;
 		}
-		//Overlap; Con solo due intersezioni segnalate sono sicuro di essere in questo caso
+		//Overlap;
 		if(	numEndPointIntersections == 2 && (
 			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][0]) ||
 			(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[1][1]) ||
@@ -317,25 +317,22 @@ void compute_intersection_type(Intersection & out){  // lasciare solo return
 				out.how = intersection_type::Overlap;
 				return;
 		}
-		//Overlap_extreme_...	; se si sovrappone un estremo, mi segnala tre intersezioni
+		//Overlap_extreme_... ; if one extreme intersects in another, we have 3 endPointIntersections
 		if(numEndPointIntersections == 3){
-			//Overlap_extreme_inside; devono essere intersezioni tutti e due gli extremes dell'edge1
+			//Overlap_extreme_inside; both extremes of edge 1 must be intersections
 			if(out.endPointIsIntersection[1][0] && out.endPointIsIntersection[1][1]){ 
 					out.how = intersection_type::Overlap_extreme_inside;
 					return;	
-			}
-			
-			//Overlap_extreme_outside; devono essere intersezioni tutti e due gli extremes dell'edge0
+			}			
+			//Overlap_extreme_outside; both extremes of edge 0 must be intersections
 			if(out.endPointIsIntersection[0][0] && out.endPointIsIntersection[0][1]){ 
 					out.how = intersection_type::Overlap_extreme_outside;
 					return;	
-			}
-			
-		}	
-	}
+			}			
+		}	//if	
+	}	//else
 	return;
 }	//compute_intersection_type
-
 
 
 std::ostream & operator<<(std::ostream & out, Intersection const& I){
@@ -398,4 +395,4 @@ translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsign
 	return P;
 }	//translate_array_to_eigen
 
-}
+}	//BGLgeom

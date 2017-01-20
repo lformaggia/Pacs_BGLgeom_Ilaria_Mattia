@@ -8,15 +8,19 @@
 ======================================================================*/
 /*!
 	@file	intersections2D.hpp
-	@author	Ilaria Speranza & Mattia Tantardini
+	@author	Luca Formaggia, Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	Classes and functions to compute intersections between two linear edges
 	
-	We need to define some additional functionality for std::array just because
-	the storage type for the points in the library is an Eigen std::array<double,2>, while
-	this code (provided by professor Formaggia) is suitable for std::array.
-	That's why we provide also some interface classes to transform data in a
-	format that can be processed by this code.
+	Most part of this code (the unnamed namespace and the function compute 
+	intersection) was provided by prof. Formaggia. We refactored some part 
+	of it to provide an interface with our library (for instance we have to 
+	translate the original std::array structure with our Eigen structure we 
+	use to describe points), and we added newer features, such as the 
+	identification of the type of intersection.
+	
+	@remark	This tools are able to handle only intersections between linear
+			edges in a 2D space
 */
 
 #ifndef HH_INTERSECTIONS_2D_HH
@@ -39,7 +43,7 @@
 //! Helper functions for the algorithms. Using Unnamed namespace
 namespace {
 
-//! Scalar product between two std::array<double,2>s
+//! Scalar product between two std::array<double,2>
 inline double dot(std::array<double,2> const& a, std::array<double,2> const& b){
 	return a[0]*b[0] + a[1]*b[1];
 }
@@ -59,7 +63,6 @@ inline std::array<double,2> operator- (std::array<double,2> const& a, std::array
 	return std::array<double,2>{a[0]-b[0], a[1]-b[1]};
 }	
 
-//Both the overloading needed!
 //! Overloading of operator* to represent the multiplication of a std::array<double,2> for a scalar
 inline std::array<double,2> operator* (double const& k, std::array<double,2> const& a){
 	return std::array<double,2>{k*a[0], k*a[1]};
@@ -77,8 +80,8 @@ inline std::array<double,2> operator* (double const& k, std::array<double,2> con
 					(defaulted to (0,0)) if there is no intersection)
 */
 std::pair<bool, std::array<double,2>> solve 	(std::array<std::array<double,2>,2> const& A,
-        										std::array<double,2> const& b,	//qui prima il const& non c'era
-        										const double tol){
+        										std::array<double,2> const& b,
+        										double const& tol){
         										
 	auto D = A[0][0]*A[1][1] - A[1][0]*A[0][1];	//determinant
 	if (std::abs(D) <= tol)
@@ -97,39 +100,37 @@ namespace BGLgeom{
 /*! 
 	@brief An interface for a linear edge
 	
-	This class is thought to manage the description of the geometry
-	of a linear edge, in order to compute intersections.
-	@remarks The class must have an overload of operator[] in order to run in the 
-				function that computes intersections
+	This class will manage the description of the geometry of a linear 
+	edge in the code which computes intersections
+	
+	@remark	The class must have an overload of operator[] in order to 
+			run in the function that computes intersections
 */
 class linear_edge_interface{
 	public:
 		//! Default constructor
-		linear_edge_interface	(BGLgeom::linear_geometry<2> edge){
+		linear_edge_interface(BGLgeom::linear_geometry<2> edge){
 			extremes[0][0] = edge.get_source()(0,0);
 			extremes[0][1] = edge.get_source()(0,1);
 			extremes[1][0] = edge.get_target()(0,0);
-			extremes[1][1] = edge.get_target()(0,1);
-		
+			extremes[1][1] = edge.get_target()(0,1);		
 		}
 	
-		//! Constructor
-		//linear_edge_interface(BGLgeom::point<2> const& SRC, BGLgeom::point<2> const& TGT) : extremes{SRC, TGT}, extremes_are_set(true) {};
-		
 		//! Copy constructor
 		linear_edge_interface(linear_edge_interface const&) = default;
+		
+		//! Move constructor
+		linear_edge_interface(linear_edge_interface &&) = default;
 		
 		//! Assignment operator
 		linear_edge_interface & operator=(linear_edge_interface const&) = default;
 		
-		/*
-		//! Setting the two end points (extremes) of the edge
-		void set(point<2> const& SRC, point<2> const& TGT){
-			extremes[0] = SRC;
-			extremes[1] = TGT;
-			extremes_are_set = true;
-		}
-		*/
+		//! Move assignment
+		linear_edge_interface & operator=(linear_edge_interface &&) = default;
+		
+		//! Destructor
+		virtual ~linear_edge_interface() = default;		
+		
 		/*! 
 			@brief Overloading of operator[] to access each of the two end points. Usefull in algorithms
 			
@@ -139,7 +140,7 @@ class linear_edge_interface{
 		std::array<double,2> operator[](std::size_t i) const { return extremes[i]; }
 				
 	private:
-		//! This container contains coordinates of source (first row), coordinates of target (second row)
+		//! Container for the coordinates of source (first row) and the coordinates of target (second row)
 		std::array<std::array<double,2>, 2> extremes;
 };	//linear_edge_interface
 
@@ -148,7 +149,7 @@ class linear_edge_interface{
 	@brief An enum class to identify the intersection situation
 	
 	We need to identify how the edges are located in the plane and
-	how the intersect. In this way we can perform the correct actions
+	how they intersect. In this way we can perform the correct actions
 	at the graph level to intersect topologically the edges
 	
 	@param X Simple cross intersection. We are happy
@@ -161,7 +162,7 @@ class linear_edge_interface{
 	@param Overlap_extreme_outside The new edge (smaller) is overlappes to the old one and coincides in one extreme
 	@param Identical The two edges are the same
 	@param Common_extreme The two edges have only one extreme in common
-	@param Something_went_wrong Error in computing the intersection
+	@param Something_went_wrong Some error happened while computing the intersection
 	@param No_intersection There are no intersection between the edges
 */
 enum class intersection_type	{X, T_new, T_old, Overlap_outside, Overlap_inside, Overlap,
@@ -218,37 +219,49 @@ struct Intersection {
 
 
 /*!
-@brief Computes intersection betweeen two edges
+	@brief Computes intersection betweeen two edges
 
-It handles also the case of intersection at the segment ends
-@note  It is not so rubust because it uses the tolerances in a 
-different way: the tolerance tol to test the parametric coordinate
-along the edge line and a scaled tolerance to check distances.
-Another scaled tolerance is used to test ir edges are parallel.
+	It handles also the case of intersection at the segment ends
+	
+	@note	It is not so robust because it uses the tolerances in a 
+			different way: the tolerance tol to test the parametric coordinate
+			along the edge line and a scaled tolerance to check distances.
+			Another scaled tolerance is used to test if edges are parallel.
 
-@pre The edges must have non null length
-@par S1 First Edge
-@par S2 Second Edge
-@return Intersection. A data structure containing the info about the intersection
+	@pre The edges must have non null length
+	@par S1 First Edge
+	@par S2 Second Edge
+	@return Intersection. A data structure containing the info about the intersection
 */
-Intersection compute_intersection	(linear_geometry<2> const& edge1,
-									 linear_geometry<2> const& edge2);
+Intersection compute_intersection(linear_geometry<2> const& edge1,
+								  linear_geometry<2> const& edge2);
                            		
-/*
-	@brief Overload of operator<< to show the infos obtained by the function
-*/
+//! Overload of operator<< to show the infos obtained by the function
 std::ostream & operator<< (std::ostream & out, Intersection const& I);
+
+/*!
+	@brief Computing type of intersection
+	
+	This function is able to analize the output of the function 
+	compute_intersection to find which is the intersection situation 
+	among those described in the enum intersection_type. This 
+	operation allows to treat each case in an easier way when 
+	building the graph through successive addition of edges
+	
+	@param I The object of class Intersection returned by the 
+			function compute_intersection. It is passed by reference 
+			the intersection type will be stored in the same object
+*/
+void compute_intersection_type(Intersection & I);
 
 /*
 	@brief Helper function to translate array into eigen
 	
 	Needed to suite the working structure of comupte_intersection
-	with the structure used for points in this library, that is Eigen
+	with the structure used for points in this library, i.e. Eigen
 */
 std::array<BGLgeom::point<2>,2>
 translate_array_to_eigen(std::array<std::array<double,2>,2> const& array, unsigned int const& numberOfIntersection);
-
-void compute_intersection_type(Intersection & out);
 
 } //BGLgeom
 
