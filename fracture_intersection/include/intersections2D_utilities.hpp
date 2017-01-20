@@ -34,8 +34,8 @@ namespace BGLgeom{
 /*!
 	@brief	Class to store specific information about the intersection
 	
-	This class contains all information needed to build the graph by 
-	successive addition of edges in the proper way. It stores specific 
+	This class contains all information needed to build in the proper 
+	way the graph by successive addition of edges. It stores specific 
 	information that will be useful in the algorithm.
 */
 template <typename Graph>
