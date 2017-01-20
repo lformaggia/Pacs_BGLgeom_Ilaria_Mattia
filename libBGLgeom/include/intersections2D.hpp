@@ -40,9 +40,11 @@
 #define TOL 20*std::numeric_limits<double>::epsilon()
 #endif
 
-//! Helper functions for the algorithms. Using Unnamed namespace
-namespace {
-
+//! Helper functions for the algorithms. 
+namespace BGLgeom{
+/*!
+	@defgroup Helper_functions Helper functions for the function compute_intersection
+*/
 //! Scalar product between two std::array<double,2>
 inline double dot(std::array<double,2> const& a, std::array<double,2> const& b){
 	return a[0]*b[0] + a[1]*b[1];
@@ -81,21 +83,9 @@ inline std::array<double,2> operator* (double const& k, std::array<double,2> con
 */
 std::pair<bool, std::array<double,2>> solve 	(std::array<std::array<double,2>,2> const& A,
         										std::array<double,2> const& b,
-        										double const& tol){
-        										
-	auto D = A[0][0]*A[1][1] - A[1][0]*A[0][1];	//determinant
-	if (std::abs(D) <= tol)
-	    return std::make_pair(false, std::array<double,2>{0,0});
-	D=1./D;
-	std::array<double,2> res;
-	res[0] = D * (A[1][1]*b[0] - A[0][1]*b[1]);
-	res[1] = D * (A[0][0]*b[1] - A[1][0]*b[0]);
-	return std::make_pair(true, res);
-}	//solve
+        										double const& tol);
+/*! @} */
 
-}	//namespace
-
-namespace BGLgeom{
 
 /*! 
 	@brief An interface for a linear edge

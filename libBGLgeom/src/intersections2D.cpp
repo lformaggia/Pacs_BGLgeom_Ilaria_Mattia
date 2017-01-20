@@ -22,6 +22,21 @@ using namespace BGLgeom;
 
 namespace BGLgeom{
 
+std::pair<bool, std::array<double,2>> solve 	(std::array<std::array<double,2>,2> const& A,
+        										std::array<double,2> const& b,
+        										double const& tol){
+        										
+	auto D = A[0][0]*A[1][1] - A[1][0]*A[0][1];	//determinant
+	if (std::abs(D) <= tol)
+	    return std::make_pair(false, std::array<double,2>{0,0});
+	D=1./D;
+	std::array<double,2> res;
+	res[0] = D * (A[1][1]*b[0] - A[0][1]*b[1]);
+	res[1] = D * (A[0][0]*b[1] - A[1][0]*b[0]);
+	return std::make_pair(true, res);
+}	//solve
+
+
 Intersection compute_intersection	(linear_geometry<2> const& edge1,
 									linear_geometry<2> const& edge2){
 	Intersection out;
