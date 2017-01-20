@@ -15,18 +15,20 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+#include <algorithm>
+
 #include "helper_functions.hpp"
 #include "graph_builder.hpp"
 #include "type_aliases.hpp"
 
-using namespace std;
 using namespace Fracture;
 // For overload of operators in BGLgeom library, for instance operator< or > for points:
 using namespace BGLgeom;
 
 namespace Fracture{	
 	
-bool asc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2){
+bool asc_order(Fracture::Int_layer<Graph> & I1, Fracture::Int_layer<Graph> &I2){
 	// ordering of I1 in case it contains two intersection points
 	if(I1.int_pts.size()==2 && I1.int_pts[0] > I1.int_pts[1]){
 		std::swap(I1.int_pts[0],I1.int_pts[1]);
@@ -41,7 +43,7 @@ bool asc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2){
 }; //asc_order
 
 
-bool desc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2){
+bool desc_order(Fracture::Int_layer<Graph> & I1, Fracture::Int_layer<Graph> &I2){
 	// ordering of I1 in case it contains two intersection points
 	if(I1.int_pts.size()==2 && I1.int_pts[0] < I1.int_pts[1]){
 		std::swap(I1.int_pts[0],I1.int_pts[1]);
@@ -56,7 +58,7 @@ bool desc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2){
 }; //desc_order
 
 
-bool is_duplicate(const BGLgeom::Int_layer<Graph> & I1, const BGLgeom::Int_layer<Graph> & I2){
+bool is_duplicate(const Fracture::Int_layer<Graph> & I1, const Fracture::Int_layer<Graph> & I2){
 	// Checking if I1 
 	if(I1.how == intersection_type::Common_extreme || I1.how == intersection_type::T_old){
 		for(const point2 & P2: I2.int_pts)
@@ -138,7 +140,7 @@ void create_graph(Graph & G,
 		std::cout<< "------------------- READING LINE " << frac_num << "-------------------" << std::endl;
 		
 		//#ifndef NDEBUG or #ifndef VERBOSE
-			cout << "Current situation: ";
+			std::cout << "Current situation: ";
 			count_v = 0; 
 			Vertex_it vv,vvend;
 			for(std::tie(vv,vvend) = boost::vertices(G); vv!=vvend; ++vv) 
@@ -168,7 +170,7 @@ void create_graph(Graph & G,
 			++count_e;			
 			intobj_tmp = BGLgeom::compute_intersection(G[*e_it].geometry, L);
 			if(intobj_tmp.intersect == true){
-				BGLgeom::Int_layer<Graph> intobj(intobj_tmp, *e_it);
+				Fracture::Int_layer<Graph> intobj(intobj_tmp, *e_it);
 				edge_alone = false;
 				intvect.push_back(intobj);
 			}	
@@ -194,7 +196,7 @@ void create_graph(Graph & G,
 
 			#ifndef NDEBUG
 				std::cout << "ORDERED VECTOR" << std::endl;	
-				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+				for(const Fracture::Int_layer<Graph> & I: intvect)
 					std::cout << I << std::endl;
 			#endif
 			
@@ -204,7 +206,7 @@ void create_graph(Graph & G,
 			
 			#ifndef NDEBUG
 				std::cout << "VECTOR WITHOUT DUPLICATES" << std::endl;	
-				for(const BGLgeom::Int_layer<Graph> & I: intvect)
+				for(const Fracture::Int_layer<Graph> & I: intvect)
 					std::cout << I << std::endl;
 			#endif
 			
@@ -232,7 +234,7 @@ void create_graph(Graph & G,
 
 void refine_graph	(Graph &G, 
 					 const Vertex_d & src, 
-					 BGLgeom::Int_layer<Graph> & I,
+					 Fracture::Int_layer<Graph> & I,
 					 Fracture::Edge_prop & e_prop, 
 					 const Vertex_d & tgt, 
 					 Vertex_d & next_src,

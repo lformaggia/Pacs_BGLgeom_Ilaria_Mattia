@@ -29,7 +29,7 @@
 #include <vector>
 #include <iostream>
 
-namespace BGLgeom{
+namespace Fracture{
 
 /*!
 	@brief	Class to store specific information about the intersection
@@ -111,6 +111,6 @@ operator<< (std::ostream & out, Int_layer<Graph> const& I){
 	return out;
 }	//operator<<
 
-}	//BGLgeom
+}	//Fracture
 
 #endif	//HH_INTERSECTIONS2D_UTILITIES_HH

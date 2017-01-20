@@ -16,11 +16,7 @@
 #ifndef HH_HELPER_FUNCTIONS_HH
 #define HH_HELPER_FUNCTIONS_HH
 
-#include <vector>
-#include <algorithm>
 #include <functional>
-#include <cmath>
-#include <limits> 
 
 #include "reader_ASCII.hpp"
 #include "intersections2D_utilities.hpp"
@@ -49,7 +45,7 @@ namespace Fracture{
 		@return True if the first intersection point of I1 comes first in ascending 
 				order w.r.t. the first intersection point of I2; false otherwise
 	*/
-	bool asc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2);
+	bool asc_order(Fracture::Int_layer<Graph> & I1, Fracture::Int_layer<Graph> &I2);
 	
 	/*!
 		@brief	Computing which intersection point comes first in descending order
@@ -70,7 +66,7 @@ namespace Fracture{
 		@return True if the first intersection point of I1 comes first in descending 
 				order w.r.t. the first intersection point of I2; false otherwise
 	*/
-	bool desc_order(BGLgeom::Int_layer<Graph> & I1, BGLgeom::Int_layer<Graph> &I2);
+	bool desc_order(Fracture::Int_layer<Graph> & I1, Fracture::Int_layer<Graph> &I2);
 	
 	/*!
 		@brief	Checks if two Int_layer objects share a Common_extreme or T_old 
@@ -91,7 +87,7 @@ namespace Fracture{
 		@return True if the two objects share an intersection point with a Common_extreme 
 				or T_old intersection situation; false otherwise
 	*/
-	bool is_duplicate(const BGLgeom::Int_layer<Graph> & I1, const BGLgeom::Int_layer<Graph> & I2);
+	bool is_duplicate(const Fracture::Int_layer<Graph> & I1, const Fracture::Int_layer<Graph> & I2);
 	
 	/*!
 		@brief	Breaking a preexisting edge that intersects in one of its 
@@ -150,7 +146,7 @@ namespace Fracture{
 	*/
 	void refine_graph	(Graph &G, 
 						 const Vertex_d & src,  						 
-						 BGLgeom::Int_layer<Graph> & I, 
+						 Fracture::Int_layer<Graph> & I, 
 						 Fracture::Edge_prop & e_prop, 
 						 const Vertex_d & tgt,
 						 Vertex_d & next_src,
