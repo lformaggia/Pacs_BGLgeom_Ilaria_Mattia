@@ -80,16 +80,13 @@
 \newpage
 
 \section{Introduction}
-	\subsection{Purpouse of the project}	%magari anche no??
-	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities to handle graph with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the edges and creation of numerical meshes on them. \newline
-	All these geometric functionalities we developed are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problemst. \newline
-	Along with this library we also provide two example of specific application: one about intersection of fractures in fractured porous media, and one solving a simple diffusion problem on a vascular network. \newline
-	A lot of other applications can take advantage from this library: vascular and neural network, electronic circuits, .... 
-
+	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
+	All these geometric functionalities we developed to build the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
+	A lot of different kind of applications can take advantage from this library; in particular, we provide two example of specific application: one that creates a graph computing intersection of fractures in a fractured porous media, and one that solves a simple diffusion problem on a vascular network.
 
 \section{The library}
 	\subsection{Briefs on BGL}
-	The BGL is a template library to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning graphs, and a lot of graph algorithms.
+	The BGL is a template library to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning graphs, and a wide variety of graph algorithms.
 	\newline\newline
 	% Metto qui quello che ho messo nella documentazione? adjacency_list e tutto il resto? forse comunque ho bisogno di dire dell'adjacency list, ma
 	Among all these functionalities, we decide to concentrate on a single class to describe a graph and on how implement in an easy to use way the geometrical properties. To explain in more details our implementation choices, we need to spend some words on how that class and the graph properties work.
@@ -232,14 +229,14 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 		To meet some requests from people that will use our library with the GetFem one for further applications, we also developed some particular features for the writer. We provided it with an additional template parameter, the number of boundary conditions (defaulted to one): if specified different from 1, it will produce different output files, each one with the same structure but with different boundary conditions. Another feature allows to print in a separate file some geometric information (first and second derivative, curvature) in correspondence of the points of the mesh (if present) on each edge.
 		\paragraph{Writer\_vtp.} The \texttt{writer\_vtp} class produces a .vtp output, i.e. a VTK polygonal data format. It is a particular format provided by the wider VTK library. It consist in an XML file in which all the topology of the graph is coded. The output consists into two file: one coding the edges, and one coding the vertices of the graph. This kind of output is thought to visualization purpouse: using for instance software such as Paraview, the output files can be easily displayed, giving a visual representation of the graph, to which the visualization of other quantities significant for the application can be added.
 	
-	\subsection{Todos}	%???
+		\subsubsection{Todos}
 		\paragraph{Edge base property.} The \classname{Edge\_base\_property} we provide in the library is a kind of 'static' one: it contains one of the three geometries, and the type is chosen passing it through a template parameter. And then the \classname{Edge\_base\_property} itself is passed as template parameter to create the graph. This implies that the geometry of all the edge in the graph will be fixed to the one used as template parameter. This behaviour may be inefficient for some applications, for instance when the underlying graph has almost all linear edges and only few edges that would be better to model with a curve geometry. At this stage, the geometry of such a graph will be fixed to the generic or bspline one for all edges, thus giving some memory and computational inefficiency on the edges that could have been described by the linear geometry. For this reason, it may be interesting from an efficiency point of view to implement a kind of 'dynamic' version of the \classname{Edge\_base\_property}, to make the user be able to select a different geometry for each different edge in the graph.
 
 \section{Applications}
-
-	In this section we present two examples from real situations, where some tools of BGLgeom library prove to be useful.
+	In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
 
 	\subsection{Fracture Intersection}
+%		\subsubsection{The problem}
 	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int}.
 	\begin{figure}
 		\centering 
@@ -256,8 +253,21 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 
 
 
-	\subsection{Diffusion on vascular network}
-
+	\subsection{Diffusion on a vascular network}
+%		\subsubsection{The problem}
+	Ih this application we model and solve a diffusion problem on a vascular network, taking advantage also of the GetFem++ library, which is specifically built to solve FEM problems. \newline
+	The diffusion problem is simply
+	\begin{equation*}
+		\left\{
+		\begin{aligned}
+		\Delta u = f \\
+		u = 0 
+		\end{aligned}
+		\right.
+	\end{equation*}
+	with boundary conditions .... 	\newline
+	The vascular network we use in the application is a prototype for a network with a sequenze of bifurcations. There is a first single edge, that is the inflow one, that bifurcates in a Y on the plane (z?), then each extreme of this first bifurcation bifurcates again, but this time along the (x?) plane, then the four ends with which we end up bifurcate again on the (z?) plane, and so on . The algorithm can go on iteratively to any order of bifurcation, building a network that will be always contained in a unitary cube. We also considered randomization on the final coordinates of each end point, but the first two (i.e. the first edge will always be in the same position). We perform this random effect by taking a draw from a uniform distribution on [-1,1], and then recaling this draw with the scale parameter $re$, that stands for 'random effect'. We provide with the application a matlab script that generates such a network, given the desired number of orders of bifurcations and the entity(???) of the random effect.
+		
 	%Computational issues?? Complexity and time efficiency?
 
 \end{document}
