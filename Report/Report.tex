@@ -64,6 +64,10 @@
 % Bellezza documento
 \usepackage{microtype}
 
+% Package for smaller captions
+\usepackage[font=small]{caption}
+
+
 %%% END Article customizations
 
 %%% The "real" document content comes below...
@@ -237,18 +241,91 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 
 	\subsection{Fracture Intersection}
 %		\subsubsection{The problem}
-	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int}.
+	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int_example}.
 	\begin{figure}
 		\centering 
-		%\includegraphics[width=0.5\textwidth]{frac_inters}
+		\includegraphics[width=0.5\textwidth]{frac_inters}
 		\caption{Example}
-		\label{fig:frac_int}
+		\label{fig:frac_int_example}
 	\end{figure}
 	
 		\subsubsection{Intersection types}
-		To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depends respectively on the parallelism and the collinearity of the evaluated edges. \newline
-		We identified 11 different types of intersection between two linear edges (see figure ...): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. \newline
-			
+		To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depend respectively on the parallelism and the collinearity of the evaluated edges. \newline
+		We identified 11 different types of intersection between two linear edges (see figure \label{fig:frac_int_type}): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. 
+		\begin{figure}
+			\centering 
+			\includegraphics[width=1\textwidth]{int_type}
+			\caption{Intersection types. In black the edge already in the graph, in red the new one.}
+			\label{fig:frac_int_type}
+		\end{figure}
+		\subsubsection{The algorithm}
+		The file is read fracture by fracture: for each of them the physical properties are stored in the edge\textunderscore property struct and the line number is used as identifier; a vertex descriptor called SRC is associated to the first extremity of the fracture, another called TGT to the second one. These vertex descriptors can be either associated to already existing vertices in case of same coordinates or to new ones otherwise. After the initialization part, we loop over the edges in the graph: for each of them we check if it intersects with the current fracture; if so, the information (edge descriptor of the intersected edge, type, intersection point(s), extremities involved) is stored in a designated struct, and the struct is pushed back in a vector which, by the end of the loop, will therefore contain all the intersections due to the fracture we are currently reading. \\
+		Once the loop over the edges is completed, if the intersection vector is empty, a new edge is created between SRC and TGT and the edge\textunderscore property is bundled to it, otherwise it is first reordered and then some "duplicates" are removed.
+		The reordering phase consists exactly in ordering the vector from the nearest to the source to the farthest one; also the two intersections contained in the same struct (in those cases in which the intersection is a segment nd not a single point) are reordered according to the same criterion.
+		The duplicates removal, instead, consists in keeping just one single struct among all of those related to the same intersection point; in \label{fig:rem_dupl} an example is shown: 
+		\begin{figure}
+		\centering 
+		\includegraphics[width=1\textwidth]{rem_dupl}
+		\caption{Example on duplicates removal}
+		\label{fig:rem_dupl}
+		\end{figure}
+		before adding the new fracture (the red one), the graph has 5 edges and 6 vertices. Looping on the edges, the algorithm correctly detects one intersection with each edge, but there is only one intersection point, E, and no edge has to be modified by the insertion of the new fracture, therefore all the "duplicates" are discarded but one. Note that this happens just in case of multiple intersections of type "Told" or "common extreme". \\
+		Now the vector is ready to be processed. We start passing to the function refine\textunderscore graph SRC and the first struct of the vector: this function performs different actions depending on the intersection type; the common goal is to resolve all the changes due to the insertion of the new fracture and related to that specific segment. The function returns as output the vertex descriptor which will be passed as source at the next iteration together with the second struct in the vector. This procedure goes on until the end of the intersection vector is reached; at the end, the vertex descriptor returned by the last call to refine\textunderscore graps is connected to TGT. \\
+		In case of partial or total overlapping between the new fracture and an existing edge, a conflict between the corresponding edge properties happens: it is up to the user to decide how to solve it, and this is possible passing as optional parameter to create\textunderscore graph a lambda function update\textunderscore edge\textunderscore properties which will be used to inside refine\textunderscore graph to merge old and new properties. The default behaviour is simply to keep the old property, totally discarding the new one.
+		
+		\subsubsection{A simple example}
+		This example refers to \label{fig:example_algo} and it aims at illustrating how the algorithm works.
+		\begin{figure}
+			\centering 
+			\includegraphics[width=1\textwidth]{example_algo}
+			\caption{Fracture in red is going to be added to the graph}
+			\label{fig:example_algo}
+		\end{figure}
+		We consider the insertion of the fifth fracture (e): the previous four (a,b,c,d) have been already added and the graph they created is made of 8 vertices and 6 edges (AE, BE, CE, DE, FE, GH).  
+		Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E.  (see table \label{tab:table1}).
+		Now we are left with a vector of two components: first of all we pass to refine\textunderscore graph the vertex descriptor I (which is the source of the new fracture) and the first intersection struct (related to point E); being the intersection of type T\textunderscore old, this function simply adds an edge between I and E and returns as next source E. At the second step, refine\textunderscore graph takes as input the current source (i.e. the output of the previous call to the function, i.e. E in this example) and the second intersection struct: in case of overlap\textunderscore outside the source is connected to the first intersection (EH), the properties of the old edge (HG) are updated and the second intersection is connected with the target (GJ). In conclusion, the insertion of this new fracture led to the creation of three new edges (all labelled with letter e in order to keep track of the fact they all part of the fifth fracture) and to the property updating of an existing one.
+		
+		\begin{table}[ht]
+		\centering
+		\caption{Simplified representation of the intersection vector}
+		\label{tab:table1}
+			\begin{tabular}[t]{ccc}
+			\toprule
+			Int. edge & Type & Int. point(s)\\
+			\midrule
+			AE & T\textunderscore old & E\\
+			BE & T\textunderscore old & E\\
+			FE & T\textunderscore old & E\\
+			GH & overlap\textunderscore outside & \textbf{G and H}\\ 
+			DE & T\textunderscore old & E\\		
+			CE & T\textunderscore old & E\\
+			\bottomrule
+			\end{tabular} 
+			\hfill
+			\begin{tabular}[t]{ccc}
+			\toprule
+			Int. edge & Type & Int. point(s)\\
+			\midrule
+			AE & T\textunderscore old & E\\
+			BE & T\textunderscore old & E\\
+			FE & T\textunderscore old & E\\
+			DE & T\textunderscore old & E\\		
+			CE & T\textunderscore old & E\\
+			GH & overlap\textunderscore outside & \textbf{H and G}\\ 
+			\bottomrule
+			\end{tabular} 
+			\hfill
+			\begin{tabular}[t]{ccc}
+			\toprule
+			Int. edge & Type & Int. point(s)\\
+			\midrule
+			AE & T\textunderscore old & E\\
+			GH & overlap\textunderscore outside & G and H\\ 
+			\bottomrule
+			\end{tabular}
+		\end{table}
+		
+		
 		
 
 
