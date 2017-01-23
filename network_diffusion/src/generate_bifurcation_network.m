@@ -42,10 +42,11 @@ h_z = L/(n-2);
 
 % Storing the points: (iteration 0)
 points = init;
-
 % First step: linear till the first next point (iteration 1)
 new_point = [ init(1), init(2)+h_y, init(3)];
 points = [points, new_point];   % I use the notation 'source' 'target'
+% Initial boundary condition
+BC = [' DIR 1 INT 0'];
 % From the second iteration
 for i = 2:n
     new_points = [];
@@ -69,7 +70,7 @@ for i = 2:n
                       points(end-j,5) + h_y + re*(-1+2*rand(1)), ...
                       points(end-j,6) + h_z/2 + re*(-1+2*rand(1))];
     end
-    % Now we control wheter the new points are out of bound
+    % Now we control whether the new points are out of bounds
     for k = 1:3
         if new_point1(1,k) - 1 < -1 %coordinate < 0
             new_point1(1,k) = 0;
@@ -85,6 +86,12 @@ for i = 2:n
     % Storing temporary points
     new_points = [new_points; points(end-j,4:6), new_point1];
     new_points = [new_points; points(end-j,4:6), new_point2];
+    if i ~= n
+    	BC = [BC; ' INT 0 INT 0'; ' INT 0 INT 0'];
+    else
+    	BC = [BC; ' INT 0 MIX 0'; ' INT 0 MIX 0'];	% Outflow condition
+    end
+    
     end
     % Storing all new points of this iteration
     points = [points; new_points];
@@ -102,5 +109,7 @@ end
 grid on
 axis equal
 
+%Building final matrix with coordinates and boundary conditions
+final = [num2str(points), BC];
 % Printing the output on a txt file
-dlmwrite(out_filename, points, 'delimiter', '\t', 'precision', '%.8f');
+dlmwrite(out_filename, final, 'delimiter', '');
