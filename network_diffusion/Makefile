@@ -33,10 +33,10 @@ help:
 all: exec doc clean
 
 exec: input $(OBJS_NOT_MAIN) $(EXEC)
-	@mkdir -p $(DATA_DIR)
-	@mkdir -p $(DATA_DIR)/vtk
+	@mkdir -p $(DATA_DIR)/vtk	#Folder for output
 
 input:
+	@mkdir -p $(DATA_DIR)
 	octave -q $(SOURCE_DIR)/generate_bifurcation_network.m
 
 $(TARGET_DIR)/%: $(BUILD_DIR)/%.o
@@ -58,4 +58,5 @@ clean:
 distclean: clean
 	-rm -rv $(TARGET_DIR)
 	-rm -rv $(DOC_DIR)
+	-rm -rv $(DATA_DIR)
 
