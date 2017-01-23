@@ -42,6 +42,14 @@ vascular network is solved.
 You need three libraries to compile this project: the Boost Graph Library,
 Eigen and the VTK library.
 
+##### GetFEM++ library
+
+Version >= 5.0 required. (or module getfem/4.3, che però dà dei warnings?)
+
+##### MANworks library
+
+Github di Stefano. Seguire lì le indicazioni
+
 ##### Boost Graph Library
 
 Version >= 1.61.0 required.
@@ -85,7 +93,8 @@ folder. Before doing anything, edit it and change:
 
 Only if you do not use the module system at MOX department or you installed 
 a new version of the vtk library, you also need to change:
-- `mkVtkInc`   with the path where the include files of the VTK library resides
+- `mkVtkInc`   with the path where the include files of the VTK library resides.
+	Questa tipo è `mkVtkHome` con in più `include/vtk-5.10`, è già definita nei moduli
 - `mkVtkLib`   with the path where the vtk library resides
 - `mkEigenInc` with the path where the Eigen library resides
 
@@ -168,3 +177,7 @@ Processor  : Intel® Core™ i5-2430M CPU @ 2.40GHz × 4
 Compiler   : g++-4.9
 
 vtk lib : 5.10
+GetFEM++ lib:
+Eigen:
+Boost Graph Library:
+MANworks lib:
