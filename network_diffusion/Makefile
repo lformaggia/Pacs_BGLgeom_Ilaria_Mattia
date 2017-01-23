@@ -33,6 +33,8 @@ help:
 all: exec doc clean
 
 exec: input $(OBJS_NOT_MAIN) $(EXEC)
+	@mkdir -p $(DATA_DIR)
+	@mkdir -p $(DATA_DIR)/vtk
 
 input:
 	octave -q $(SOURCE_DIR)/generate_bifurcation_network.m

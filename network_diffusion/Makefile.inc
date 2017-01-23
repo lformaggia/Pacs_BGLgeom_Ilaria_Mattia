@@ -11,6 +11,7 @@ SOURCE_DIR  = src
 BUILD_DIR   = obj
 INCLUDE_DIR = include
 DOC_DIR     = doc
+DATA_DIR    = data
 
 # File names
 SRCS          = $(wildcard $(SOURCE_DIR)/*.cpp)
