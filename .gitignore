@@ -23,5 +23,4 @@ network_diffusion/doc/*
 network_diffusion/obj/*
 network_diffusion/bin/*
 network_diffucion/test/*
-network_diffusion/data/*.pts
-network_diffusion/data/*.vtp
+network_diffusion/data/
