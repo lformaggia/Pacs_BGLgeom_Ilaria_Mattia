@@ -19,6 +19,7 @@
 #include <string>
 #include "reader_ASCII.hpp"
 #include "netdiff_graph_properties.hpp"
+#include "boundary_conditions.hpp"
 
 namespace NetDiff{
 
@@ -27,34 +28,30 @@ using BGLgeom::operator>>;
 
 //! The concrete class to read ASCII input file for the network diffusion example
 class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
-													 NetDiff::Edge_prop,
-													 NetDiff::Topological_prop> {
+													 NetDiff::Edge_prop /*,
+													 NetDiff::Topological_prop*/> {
 	public:
 		//! Constructor
 		reader_netdiff(std::string _filename) : BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
-																		 NetDiff::Edge_prop,
-																		 NetDiff::Topological_prop>(_filename),
+																		 NetDiff::Edge_prop>(_filename),
 												SRC(),
 												TGT(),
-												src(),
-												tgt(),
-												diam(),
-												discard1(),
-												discard2() {}
+												BC_src(),
+												BC_tgt() {}
 												
 		//! Reading form input
 		void get_data(){
-			this->in_file >> discard1 >> src >> tgt >> diam >> discard2 >> SRC >> TGT;
+			this->in_file >> SRC >> TGT >> BC_src >> BC_tgt;
 		}
 		
 		//! Returning data on the source
 		NetDiff::Vertex_prop get_source_data(){
-			return NetDiff::Vertex_prop(SRC);
+			return NetDiff::Vertex_prop(SRC, BC_src);
 		}
 		
 		//! Returning data on the target
 		NetDiff::Vertex_prop get_target_data(){
-			return NetDiff::Vertex_prop(TGT);
+			return NetDiff::Vertex_prop(TGT, BC_tgt);
 		}
 		
 		/*!
@@ -64,31 +61,19 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 			geometry of the edge
 		*/
 		NetDiff::Edge_prop get_edge_data(){
-			NetDiff::Edge_prop E(diam);
-			E.geometry.set_source(SRC);
-			E.geometry.set_target(TGT);
-			return E;
+			return NetDiff::Edge_prop();	//volendo qua si può restituire vuoto, tanto non c'è nessuna property particolare
 		}
 		
 		//! Returning topological data
-		NetDiff::Topological_prop get_topological_data(){
-			return NetDiff::Topological_prop(src,tgt);
+		BGLgeom::no_topological_data get_topological_data(){
+			return BGLgeom::no_topological_data();
 		}
 		
 	private:
 		//! Coordinates of source and target
 		NetDiff::Vertex_prop::point_t SRC, TGT;
-		/*! 
-		@brief Vertex_descriptor for the source
-		@remark We use an unsigned int as vertex descriptor since we know 
-				(from BGL) that the type of adjacency_list we choose to 
-				represent the graph uses unsigned int as vertex descriptor
-	*/
-		unsigned int src, tgt;
-		//! Diameter
-		double diam;
-		//! Dummy variable to discard unused values
-		double discard1, discard2;
+		//! Boundary condition on a vertex
+		BGLgeom::boundary_condition BC_src, BC_tgt;
 
 };	//reader_netdiff
 
