@@ -119,7 +119,7 @@ struct Vertex_base_property{
 	//! Constructor with coordinates and BC
 	Vertex_base_property(point_t const& _coordinates,
 						 bc_t const& _BC) :	coordinates(_coordinates),
-											BC(_BC),						 						
+											BC{_BC},						 						
 					 						label(),
 					 						index(-1) {};
 								
@@ -128,7 +128,7 @@ struct Vertex_base_property{
 						 std::array<bc_t,num_bc> const& _BC,
 						 std::string const& _label,
 						 unsigned int const& _index) : 	coordinates(_coordinates),
-						 								BC(_BC),
+						 								BC{_BC},
 						 								label(_label),
 						 								index(_index) {};
 
