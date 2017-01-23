@@ -26,10 +26,15 @@ namespace NetDiff{
 // To allow the compiler find input operator for points
 using BGLgeom::operator>>;
 
-//! The concrete class to read ASCII input file for the network diffusion example
+/*! 
+	@brief The concrete class to read ASCII input file for the network diffusion example
+	
+	This reader will read information of this type: \n
+	'source coordiantes' 'target coordinates' 'source BC' 'target BC' \n
+	Each line represent an edge.
+*/
 class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
-													 NetDiff::Edge_prop /*,
-													 NetDiff::Topological_prop*/> {
+													 NetDiff::Edge_prop> {
 	public:
 		//! Constructor
 		reader_netdiff(std::string _filename) : BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
@@ -57,14 +62,21 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 		/*!
 			@brief Returning data on the edge
 			
-			We handle here, instead of in the main, the setting of the linear 
-			geometry of the edge
+			We don't have particular properties on the edges in this application,
+			so we return a default edge property. Anyway, there will be no need 
+			to use this member, since creating a new edge already means to 
+			default construct all its properties
 		*/
 		NetDiff::Edge_prop get_edge_data(){
 			return NetDiff::Edge_prop();	//volendo qua si può restituire vuoto, tanto non c'è nessuna property particolare
 		}
 		
-		//! Returning topological data
+		/*!
+			@brief Returning topological data
+			
+			No need of topological data, leaving it blank using the empty
+			struct provided in the BGLgeom
+		*/
 		BGLgeom::no_topological_data get_topological_data(){
 			return BGLgeom::no_topological_data();
 		}

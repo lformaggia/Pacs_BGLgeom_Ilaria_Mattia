@@ -11,9 +11,6 @@
 	@author Ilaria Speranza & Mattia Tantardini
 	@date 	Jan, 2017
 	@brief	Properties that the graph for diffusion on network appliocation will have
-	
-	All the data structures have to be provided with at least 
-	the default constructor.
 */
 
 #ifndef HH_NETDIFF_GRAPH_PROPERTIES_HH
@@ -27,7 +24,9 @@ namespace NetDiff{
 //! Properties that vertices will have
 using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 
+//! Base properties for the edges (no more properties required)
 using Edge_prop = BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3>;
+
 }	//NetDiff
 
 #endif	//HH_NETDIFF_GRAPH_PROPERTIES_HH

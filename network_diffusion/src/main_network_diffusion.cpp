@@ -26,7 +26,6 @@
 #include "problem3d1d.hpp"
 #include "transport3d1d.hpp"
 
-
 using namespace boost;
 using namespace BGLgeom;
 using namespace NetDiff;
@@ -35,21 +34,23 @@ int main(int argc, char* argv[]){
 
 	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_prop, Edge_prop>;
 	
-	std::string filename("../data/bifurcation_network.txt");
+	std::string in_filename("../data/bifurcation_network.txt");
 	
 	Graph G;
-	reader_netdiff R(filename);
+	reader_netdiff R(in_filename);
 	
-	// Utilities to read the data
+	// Utilities to read the data and build the graph
 	Vertex_prop src_prop, tgt_prop;
-	Edge_prop e_prop;
+	//Edge_prop e_prop;
 	Edge_desc<Graph> e;
 	Vertex_desc<Graph> src, tgt;
+	unsigned int count = 0;
 	
 	// Reading the file
-	unsigned int count = 0;
 	while(!R.is_eof()){
+		// Reading data
 		R.get_data();
+		// Creating edge and setting it up
 		src_prop = R.get_source_data();
 		tgt_prop = R.get_target_data();
 		//e_prop = R.get_edge_data();
@@ -58,15 +59,6 @@ int main(int argc, char* argv[]){
 		e = new_linear_edge(src, tgt, G);
 		G[e].index = count;
 		count++;
-	}	//while
-	
-	Edge_iter<Graph> e_it, e_end;
-	//Printing out data for Graph1
-	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it){
-		src = source(*e_it, G);
-		tgt = target(*e_it, G);
-		std::cout << "Edge " << G[*e_it].index << ": " << std::endl;
-		std::cout << G[src].coordinates << ", " << G[tgt].coordinates;
 	}
 	
 	// Creating a mesh on every edge
@@ -76,27 +68,18 @@ int main(int argc, char* argv[]){
 	// Writing on a pts output
 	std::string out_pts_filename("../data/bifurcaion_network.pts");
 	writer_pts<Graph,3> W(out_pts_filename);
-	W.export_pts(G);
+	W.export_pts(G);	
 	
-	
+	std::cout << "--- Solving diffusion problem ---" << std::endl << std::endl;	
 	// Declare a new problem 
-		getfem::transport3d1d p; 
-		  
-		/// fluid problem: velocity field and pressure
-		// Initialize the problem
-		p.problem3d1d::init(argc, argv);
-		// Build the monolithic system 
-		p.problem3d1d::assembly();
-		//transport problem: concentration  
-		//initialize 
-		p.init(argc, argv);
-		//assemble        
-		p.assembly();    
-		//solve     
-		if (!p.solve()) GMM_ASSERT1(false, "solve procedure has failed");  // the export is in the solve at each time step 
-				      
-	
-	
+	getfem::transport3d1d p;	  
+	// Fluid problem: velocity field and pressure
+	p.problem3d1d::init(argc, argv);	// Initialize the problem
+	p.problem3d1d::assembly();			// Build the monolithic system 
+	p.init(argc, argv);					// Initialization with input file     
+	p.assembly();    					// Assemble
+	// Solve the problem
+	if (!p.solve()) GMM_ASSERT1(false, "solve procedure has failed");  // the export in vtk format is in the solve at each time step	
 	
 	return 0;
 }
