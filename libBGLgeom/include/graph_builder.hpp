@@ -147,9 +147,7 @@ target(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
 template <typename Graph>
 void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inserted){
 	if(!inserted){
-		std::cerr << "Error while inserting edge!" << std::endl;
-		std::cerr << "Failed insertion for edge " << e << "." << std::endl;
-		std::cerr << "See documentation of the Boost Graph Library on function boost::add_edge." << std::endl;
+		std::cerr << "Warning! Insertion of an already exixtent edge" << std::endl;
 	}
 }	//check_edge_inserted
 
