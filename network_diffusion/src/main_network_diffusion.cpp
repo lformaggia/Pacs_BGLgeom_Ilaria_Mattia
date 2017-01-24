@@ -62,6 +62,7 @@ int main(int argc, char* argv[]){
 	}
 	
 	// Creating a mesh on every edge
+	Edge_iter<Graph> e_it, e_end;
 	for(std::tie(e_it, e_end) = edges(G); e_it != e_end; ++e_it)
 		G[*e_it].make_uniform_mesh(20);
 	
