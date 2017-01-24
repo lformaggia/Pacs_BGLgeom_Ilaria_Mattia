@@ -23,7 +23,7 @@ OBJS_NOT_MAIN = $(addprefix $(BUILD_DIR)/, $(notdir $(SRCS_NOT_MAIN:.cpp=.o)))
 EXEC          = $(addprefix $(TARGET_DIR)/, $(notdir $(SRCS_MAIN:.cpp=)))
 
 # Including headers from the BGLgeom library
-CPPFLAGS += -I$(BGLGEOM_DIR)/include -I$(INCLUDES_DIFF)
+CPPFLAGS += -I$(BGLGEOM_DIR)/include $(INCLUDES_DIFF)
 
 # Linking libraries
 LDLIBS += -L$(BGLGEOM_DIR)/lib -lBGLgeom $(LDLIBS_DIFF)

@@ -65,11 +65,11 @@ LDLIBS_DIFF = -L$(GETFEM_LIB_DIR) -lgetfem -L$(MANWORKS_LIB_DIR) -lproblem3d1d
 
 # Collect all includes
 ALL_INC_DIR= $(EIGEN_INC_DIR) $(VTK_INC_DIR) $(BGL_INC_DIR)
-includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc) )
+includes := $(foreach inc,$(ALL_INC_DIR),-I$(inc))
 INCLUDES += -I. -I./include $(includes)
 # Includes specific for netwrok_diffusion application
 INC_DIR_DIFF = $(GETFEM_INC_DIR) $(MANWORKS_INC_DIR)
-includes_diff := $(foreach inc, $(INC_DIR_DIFF), -I$(inc) )
+includes_diff := $(foreach inc, $(INC_DIR_DIFF),-I$(inc))
 INCLUDES_DIFF += -I. -I./include $(includes_diff)
 
 # Compiler and standard for the compiler
@@ -92,6 +92,6 @@ endif
 # Warning level. The option -Wno-deprecated deactivates annoying warning from BGL
 WARNS = -Wall -Wno-deprecated
 
-export CPPFLAGS = $(INCLUDES) $(DEFINES)
+export CPPFLAGS = $(DEFINES) $(INCLUDES)
 export CXXFLAGS = $(STDFLAG) $(WARNS) $(OPT)
 
