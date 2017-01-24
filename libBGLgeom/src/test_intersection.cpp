@@ -15,21 +15,15 @@
 	
 	We compute an intersection between two linear edges. The coordinates
 	of the extremes points for the two edges can be easily changed, to 
-	see how the output and various intersection situation change
+	see how the output changes
 */
 
 #include "intersections2D.hpp"
-#include "intersections2D_utilities.hpp"
 #include "point.hpp"
 #include "linear_geometry.hpp"
-#include "data_structure.hpp"
 #include <iostream>
 
-#include <boost/graph/adjacency_list.hpp>
-
 using namespace BGLgeom;
-using namespace boost;
-using Graph = adjacency_list<vecS,vecS,directedS,Vertex_base_property<2>,Edge_base_property<linear_geometry<2>,2>>;
 
 int main(){
 
@@ -43,9 +37,6 @@ int main(){
 
 	Intersection I = compute_intersection(edge1,edge2);
 	std::cout << I << std::endl;
-	std::cout << std::endl;
-	Int_layer<Graph> I2(I);
-	std::cout << I2 << std::endl;
 	
 	return 0;
 }
