@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 		G[*e_it].make_uniform_mesh(20);
 	
 	// Writing on a pts output
-	std::string out_pts_filename("../data/bifurcaion_network.pts");
+	std::string out_pts_filename("../data/bifurcation_network.pts");
 	writer_pts<Graph,3> W(out_pts_filename);
 	W.export_pts(G);	
 	
