@@ -51,12 +51,12 @@ class reader_netdiff : public BGLgeom::reader_ASCII	<NetDiff::Vertex_prop,
 		
 		//! Returning data on the source
 		NetDiff::Vertex_prop get_source_data(){
-			return NetDiff::Vertex_prop(SRC, BC_src);
+			return NetDiff::Vertex_prop(SRC, {BC_src});
 		}
 		
 		//! Returning data on the target
 		NetDiff::Vertex_prop get_target_data(){
-			return NetDiff::Vertex_prop(TGT, BC_tgt);
+			return NetDiff::Vertex_prop(TGT, {BC_tgt});
 		}
 		
 		/*!

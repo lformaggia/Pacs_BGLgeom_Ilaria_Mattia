@@ -56,6 +56,7 @@
 #include <memory>
 #include <array>
 #include <string>
+#include <initializer_list>
 
 #include "point.hpp"
 #include "boundary_conditions.hpp"
@@ -116,21 +117,57 @@ struct Vertex_base_property{
 														label(_label),					 						
 								 						index(-1) {};
 						 						
-	//! Constructor with coordinates and BC
+	//! Constructor with coordinates and BC (std::array)
 	Vertex_base_property(point_t const& _coordinates,
-						 bc_t const& _BC) :	coordinates(_coordinates),
-											BC{_BC},						 						
-					 						label(),
-					 						index(-1) {};
+						 std::array<bc_t, num_bc> const& _BC) :	coordinates(_coordinates),
+																BC(_BC),						 						
+										 						label(),
+										 						index(-1) {};
+										 						
+	//! Constructor with coordinates and BC (std::initializer_list)
+	Vertex_base_property(point_t const& _coordinates,
+						 std::initializer_list<bc_t> const& _BC) :	coordinates(_coordinates),
+																	BC(),						 						
+										 							label(),
+										 							index(-1) {
+		typename std::initializer_list<bc_t>::iterator init_list_it, init_list_end;
+		init_list_it = _BC.begin();
+		init_list_end = _BC.end();
+		std::size_t i = 0;
+		while(init_list_it != init_list_end){
+			BC[i] = *init_list_it;
+			++init_list_it;
+			++i;
+		}
+	}					 	
 								
-	//! Full constructor
+	//! Full constructor (with std::array for BCs)
 	Vertex_base_property(point_t const& _coordinates,
 						 std::array<bc_t,num_bc> const& _BC,
 						 std::string const& _label,
 						 unsigned int const& _index) : 	coordinates(_coordinates),
-						 								BC{_BC},
+						 								BC(_BC),
 						 								label(_label),
 						 								index(_index) {};
+						 								
+	//! Full constructor (with std::initializer_list for BCs)
+	Vertex_base_property(point_t const& _coordinates,
+						 std::initializer_list<bc_t> const& _BC,
+						 std::string const& _label,
+						 unsigned int const& _index) : 	coordinates(_coordinates),
+						 								BC(),
+						 								label(_label),
+						 								index(_index) {
+		typename std::initializer_list<bc_t>::iterator init_list_it, init_list_end;
+		init_list_it = _BC.begin();
+		init_list_end = _BC.end();
+		std::size_t i = 0;
+		while(init_list_it != init_list_end){
+			BC[i] = *init_list_it;
+			++init_list_it;
+			++i;
+		}				 								
+	}
 
 	//! Copy constructor
 	Vertex_base_property(Vertex_base_property const&) = default;
