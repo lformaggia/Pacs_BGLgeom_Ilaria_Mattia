@@ -44,11 +44,21 @@ Eigen and the VTK library.
 
 ##### GetFEM++ library
 
-Version >= 5.0 required. (or module getfem/4.3, che però dà dei warnings?)
+Version >= 5.0 required. 
+
+Download it from: <http://download.gna.org/getfem/html/homepage/download.html>
+
+To compile it, follows the install instruction contained in the `INSTALL` 
+file provided with the library.
 
 ##### MANworks library
 
-Github di Stefano. Seguire lì le indicazioni
+You need the MANworks library developed by Domenico Notaro and Stefano Brambilla.
+
+Download it from: <https://github.com/stefano-brambilla-853558/MANworks>
+
+To properly install it, follow the instruction contained in the `README`. Note 
+that you need to install first the GetFEM library.
 
 ##### Boost Graph Library
 
@@ -177,7 +187,11 @@ Processor  : Intel® Core™ i5-2430M CPU @ 2.40GHz × 4
 Compiler   : g++-4.9
 
 vtk lib : 5.10
-GetFEM++ lib:
-Eigen:
-Boost Graph Library:
-MANworks lib:
+
+GetFEM++ lib: 5.0
+
+Eigen lib: 3
+
+Boost Graph Library: 1.61.0
+
+MANworks lib: 1
