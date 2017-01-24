@@ -39,8 +39,9 @@ vascular network is solved.
 ------------------------------------------------
 ### Prerequisites
 
-You need three libraries to compile this project: the Boost Graph Library,
-Eigen and the VTK library.
+You need five libraries: the Boost Graph Library, Eigen and the VTK 
+library are required for the whole project, while GetFEM++ and the 
+MANworks library are used only for the network diffusion application.
 
 ##### GetFEM++ library
 
