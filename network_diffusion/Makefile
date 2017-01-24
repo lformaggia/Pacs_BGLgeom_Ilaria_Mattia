@@ -21,9 +21,9 @@ include $(MAKEFILEH_DIR)/Makefile.inc
 help:
 	@echo "make help: ----- Prints this help"
 	@echo "make all: ------ Makes executables and documentation"
-	@echo "make exec: ----- Makes executables"
+	@echo "make exec: ----- Makes input network and executables"
 	@echo "make doc: ------ Makes documentation"
-	@echo "make input: ---- Makes input file for the application"
+	@echo "make input: ---- Makes input file to produce the network for the application"
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all"
 	@echo ""
@@ -34,6 +34,7 @@ all: exec doc clean
 
 exec: input $(OBJS_NOT_MAIN) $(EXEC)
 	@mkdir -p $(DATA_DIR)/vtk	#Folder for output
+	@cp src/input.param bin/input.param
 
 input:
 	@mkdir -p $(DATA_DIR)
