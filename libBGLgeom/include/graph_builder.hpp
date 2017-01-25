@@ -144,10 +144,10 @@ target(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
 	points to the already existing edge." 
 	(quote from http://www.boost.org/doc/libs/1_37_0/libs/graph/doc/adjacency_list.html)
 */
-template <typename Graph>
-void check_if_edge_inserted(BGLgeom::Edge_desc<Graph> const& e, bool const& inserted){
+void 
+check_if_edge_inserted(bool const& inserted){
 	if(!inserted){
-		std::cerr << "Warning! Insertion of an already exixtent edge" << std::endl;
+		std::cerr << "Warning! Insertion of an already existent edge" << std::endl;
 	}
 }	//check_edge_inserted
 
@@ -228,7 +228,7 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;	
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	#ifndef NDEBUG
 		/*
 		We do not print infos about geometry (<< G[e].geometry) since 
@@ -261,7 +261,7 @@ new_edge(	BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	#ifndef NDEBUG
 		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
@@ -300,7 +300,7 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
@@ -342,7 +342,7 @@ new_linear_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_source(G[src].coordinates);
@@ -386,14 +386,14 @@ template <typename Graph, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
 new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 				 BGLgeom::Vertex_desc<Graph> const& tgt,
-				 Graph & G,
 				 std::function<BGLgeom::point<dim>(double)> const& _fun,
 				 std::function<BGLgeom::point<dim>(double)> const& _first_der,
-				 std::function<BGLgeom::point<dim>(double)> const& _second_der){
+				 std::function<BGLgeom::point<dim>(double)> const& _second_der,
+				 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	if(G[src].coordinates != _fun(0))
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
@@ -401,6 +401,7 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	if(G[tgt].coordinates != _fun(1))
 		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
 				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
+	
 	// Setting up the geometry
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
@@ -442,14 +443,14 @@ BGLgeom::Edge_desc<Graph>
 new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 				 BGLgeom::Vertex_desc<Graph> const& tgt,
 				 Edge_prop const & E_prop,
-				 Graph & G,
 				 std::function<BGLgeom::point<dim>(double)> const& _fun,
 				 std::function<BGLgeom::point<dim>(double)> const& _first_der,
-				 std::function<BGLgeom::point<dim>(double)> const& _second_der){
+				 std::function<BGLgeom::point<dim>(double)> const& _second_der,
+				 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	if(G[src].coordinates != _fun(0))
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
@@ -457,6 +458,7 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 	if(G[tgt].coordinates != _fun(1))
 		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
 				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
+	
 	// Setting up the geometry
 	G[e].geometry.set_function(_fun);
 	G[e].geometry.set_first_der(_first_der);
@@ -503,7 +505,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C);
@@ -555,7 +557,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C,k);
@@ -609,7 +611,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
 	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
-	check_if_edge_inserted<Graph>(e, inserted);
+	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
 	G[e].geometry.set_bspline(C,k);
