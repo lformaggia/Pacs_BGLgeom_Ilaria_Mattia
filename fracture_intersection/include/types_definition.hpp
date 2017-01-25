@@ -7,7 +7,7 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file type_aliases.hpp
+	@file types_definition.hpp
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Jan, 2017
 	@brief Aliases for the types used in the application
@@ -17,8 +17,8 @@
 	other code will remain working
 */
 
-#ifndef HH_LOCAL_DATA_STRUCTURE_HH
-#define HH_LOCAL_DATA_STRUCTURE_HH
+#ifndef HH_TYPES_DEFINITION_HH
+#define HH_TYPES_DEFINITION_HH
 
 #include <boost/graph/adjacency_list.hpp>
 
@@ -49,4 +49,4 @@ using Edge_d = BGLgeom::Edge_desc<Graph>;
 
 }	//Fracture
 
-#endif
+#endif	//HH_TYPES_DEFINITION_HH
