@@ -16,7 +16,7 @@
 #ifndef HH_NETDIFF_GRAPH_PROPERTIES_HH
 #define HH_NETDIFF_GRAPH_PROPERTIES_HH
 
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "linear_geometry.hpp"
 
 namespace NetDiff{
