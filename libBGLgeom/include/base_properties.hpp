@@ -7,7 +7,7 @@
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
 /*!
-	@file	data_structure.hpp
+	@file	base_properties.hpp
 	@author	Ilaria Speranza & Mattia Tantardini
 	@date	Jan, 2017
 	@brief	Definition of the base vertex and edge geometrical properties
@@ -49,8 +49,8 @@
 			geometry.
 */
 
-#ifndef HH_DATA_STRUCTURE_HH
-#define HH_DATA_STRUCTURE_HH
+#ifndef HH_BASE_PROPERTIES_HH
+#define HH_BASE_PROPERTIES_HH
 
 #include <iostream>
 #include <memory>
@@ -328,4 +328,4 @@ struct Edge_base_property{
 
 }	//BGLgeom
 
-#endif	//HH_DATA_STRUCTURE_HH
+#endif	//HH_BASE_PROPERTIES_HH

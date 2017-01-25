@@ -20,7 +20,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <tuple>
 #include <iostream>
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "graph_builder.hpp"
 #include "linear_geometry.hpp"
 #include "point.hpp"

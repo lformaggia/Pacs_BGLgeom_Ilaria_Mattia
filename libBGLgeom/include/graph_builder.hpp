@@ -36,7 +36,6 @@
 #include <functional>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "data_structure.hpp"
 #include "generic_geometry.hpp"
 #include "linear_geometry.hpp"
 #include "bspline_geometry.hpp"

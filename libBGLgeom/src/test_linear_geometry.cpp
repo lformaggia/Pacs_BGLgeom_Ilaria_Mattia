@@ -26,7 +26,7 @@
 
 #include "linear_geometry.hpp"
 #include "point.hpp"
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "graph_builder.hpp"
 #include "mesh.hpp"
 #include "writer_vtp.hpp"

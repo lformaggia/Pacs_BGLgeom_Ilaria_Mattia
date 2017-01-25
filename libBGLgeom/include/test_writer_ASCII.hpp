@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <string>
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "graph_builder.hpp"
 #include "writer_ASCII.hpp"
 #include "linear_geometry.hpp"

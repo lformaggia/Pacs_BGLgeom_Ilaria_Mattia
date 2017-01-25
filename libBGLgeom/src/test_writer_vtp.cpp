@@ -20,7 +20,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <string>
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "linear_geometry.hpp"
 #include "graph_builder.hpp"
 #include "writer_vtp.hpp"

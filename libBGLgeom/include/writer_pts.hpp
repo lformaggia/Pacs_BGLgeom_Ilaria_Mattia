@@ -29,7 +29,7 @@
 
 namespace BGLgeom{
 
-//! Function to write a point in a pts file format
+//! Helper function to write a point in a pts file format
 template <unsigned int dim>
 void
 write_point_pts(std::ostream & out, BGLgeom::point<dim> const& P){

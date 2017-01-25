@@ -31,7 +31,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include "writer_pts.hpp"
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "graph_builder.hpp"
 #include "linear_geometry.hpp"
 

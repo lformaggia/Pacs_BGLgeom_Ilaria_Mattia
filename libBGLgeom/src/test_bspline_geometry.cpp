@@ -30,7 +30,7 @@
 
 #include "bspline_geometry.hpp"
 #include "graph_builder.hpp"
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "mesh.hpp"
 #include "point.hpp"
 #include "writer_pts.hpp"

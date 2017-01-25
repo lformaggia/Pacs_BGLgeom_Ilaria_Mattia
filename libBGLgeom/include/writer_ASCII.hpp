@@ -23,12 +23,6 @@
 #include <fstream>
 #include <cstdlib>
 #include <initializer_list>
-#include "data_structure.hpp"
-
-/* Not used here, but the user may need to use boost::source or boost::target,
-so in this way he doesn't have to remember to put the header when he derives
-the writer */
-#include <boost/graph/adjacency_list.hpp>
 
 namespace BGLgeom{
 

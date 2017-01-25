@@ -35,8 +35,6 @@
 #define InsertNextTupleValue InsertNextTypedTuple
 #endif
 
-#include "data_structure.hpp"
-
 namespace BGLgeom{
 
 using CellArray_ptr = vtkSmartPointer<vtkCellArray>;

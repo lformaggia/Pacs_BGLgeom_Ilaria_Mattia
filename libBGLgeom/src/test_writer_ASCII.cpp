@@ -17,7 +17,7 @@
 */
 
 #include "test_writer_ASCII.hpp"
-#include "data_structure.hpp"
+#include "base_properties.hpp"
 #include "graph_builder.hpp"
 #include "point.hpp"
 #include <boost/graph/adjacency_list.hpp>
