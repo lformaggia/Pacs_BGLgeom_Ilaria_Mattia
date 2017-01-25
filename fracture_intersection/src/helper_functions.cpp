@@ -20,7 +20,7 @@
 
 #include "helper_functions.hpp"
 #include "graph_builder.hpp"
-#include "type_aliases.hpp"
+#include "types_definition.hpp"
 
 using namespace Fracture;
 // For overload of operators in BGLgeom library, for instance operator< or > for points:

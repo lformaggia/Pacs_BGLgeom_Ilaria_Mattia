@@ -11,6 +11,10 @@
 	@author Ilaria Speranza & Mattia Tantardini
 	@date Jan, 2017
 	@brief Aliases for the types used in the application
+	
+	It is possible to change here the template parameters for the 
+	graph properties if other kind of properties are needed. The 
+	other code will remain working
 */
 
 #ifndef HH_LOCAL_DATA_STRUCTURE_HH

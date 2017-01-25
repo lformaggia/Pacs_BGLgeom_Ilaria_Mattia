@@ -20,7 +20,7 @@
 
 #include "reader_ASCII.hpp"
 #include "intersections2D_utilities.hpp"
-#include "type_aliases.hpp"
+#include "types_definition.hpp"
 #include "fracture_graph_properties.hpp"
 
 

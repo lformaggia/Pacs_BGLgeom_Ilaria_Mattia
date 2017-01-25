@@ -18,7 +18,7 @@
 #include <tuple>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "type_aliases.hpp"  // using-declarations local to this application 
+#include "types_definition.hpp"  // using-declarations local to this application 
 #include "reader_fractures.hpp"
 #include "reader_fractures_twolines.hpp"
 #include "graph_builder.hpp"
