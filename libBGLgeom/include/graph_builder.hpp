@@ -15,10 +15,6 @@
 	In this file we define some functions needed to build and manage the 
 	graph, and to acces and iterate over its properties.
 	We provide: \n
-	- an alias for edge, vertex descriptors, edge, vertex iterators; \n
-	- the redefinition of some useful and frequently used BGL function: 
-		getting source and target of an edge, getting the edge and vertex 
-		iterators for that graph; \n
 	- the redefinition of the BGL functions concerning the creation of 
 		vertices and edge; \n
 	- some other functions to add edges to the graph knowing a priori 
@@ -42,95 +38,6 @@
 #include "graph_access.hpp"
 
 namespace BGLgeom{
-
-/*!
-	@defgroup	Accessi_Graph_items	Aliases type for BGL
-	
-	We provide alias for vertex and edge descriptors, vertex
-	and edge iterators.
-	@{
-*/
-//! Vertex descriptor alias type
-template <typename Graph>
-using Vertex_desc = typename boost::graph_traits<Graph>::vertex_descriptor;
-
-//! Vertex iterator alias type
-template <typename Graph>
-using Vertex_iter = typename boost::graph_traits<Graph>::vertex_iterator;
-
-//! Edge descriptor alias type
-template <typename Graph>
-using Edge_desc = typename boost::graph_traits<Graph>::edge_descriptor;
-
-//! Edge iterator alias type
-template <typename Graph>
-using Edge_iter = typename boost::graph_traits<Graph>::edge_iterator;
-/*! @} */
-
-
-/*!
-	@defgroup	Aliases	Some useful aliases for function from BGL, used
-						very often to create a graph and iterate over it
-
-	They are Utilities to hidden boost::edges(G) and to allow to use only 
-	one namespace (BGLgeom)
-	@{
-*/
-/*!
-	@brief	Gets the edge iterators to the firts and to the last edge in the graph
-	
-	@param G The graph
-	@return A std::pair containing: \n
-			- first: the edge iterator pointing to the first edge in the graph \n
-			- second: the edge iterator pointing to the last edge in the graph
-*/
-template <typename Graph>
-std::pair< BGLgeom::Edge_iter<Graph>, BGLgeom::Edge_iter<Graph> >
-edges(Graph const& G) {
-	return boost::edges(G);
-}	//edges
-
-/*!
-	@brief Gets the vertex iterators to the first and to the last vertex in the graph
-	
-	@param G The graph
-	@return A std::pair containing: \n
-			- first: the vertex iterator pointing to the first edge in the graph \n
-			- second: the vertex iterator pointing to the last edge in the graph
-*/
-template <typename Graph>
-std::pair< BGLgeom::Vertex_iter<Graph>, BGLgeom::Vertex_iter<Graph> >
-vertices(Graph const& G) {
-	return boost::vertices(G);
-}	//vertices
-
-/*!
-	@brief	Gets the vertex descriptor of the source of the given edge
-	
-	@param e The edge descriptor of the edge
-	@param G the graph
-	@return The vertex descriptor of the source of edge e
-*/
-template <typename Graph>
-BGLgeom::Vertex_desc<Graph>
-source(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
-	return boost::source(e, G);
-}
-
-/*!
-	@brief	Gets the vertex descriptor of the target of the given edge
-	
-	@param e The edge descriptor of the edge
-	@param G the graph
-	@return The vertex descriptor of the target of edge e
-*/
-template <typename Graph>
-BGLgeom::Vertex_desc<Graph>
-target(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
-	return boost::target(e, G);
-}
-/*! @} */
-
 
 /*!
 	@breif Helper function to check if an edge is correctly inserted in graph
