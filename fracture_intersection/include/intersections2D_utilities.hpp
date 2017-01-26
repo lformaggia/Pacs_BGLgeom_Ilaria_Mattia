@@ -12,10 +12,10 @@
 	@date	Jan, 2017
 	@brief	More classes and function to handle intersections
 	
-	In this header can ben found some more specific utilities to handle
-	intersections between edges. In particular, we provide a function
-	which computes the "situation", "type" of the intersection, and a struct
-	that can be useful when one need to refine the edges of the graph
+	In this header some more specific utilities to handle
+	intersections between edges can be found. In particular, we provide a function
+	which computes the "type" of the intersection and a struct
+	that can be useful when one needs to refine the edges of the graph
 	according to the intersections he found
 */
 

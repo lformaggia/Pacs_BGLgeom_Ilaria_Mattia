@@ -105,28 +105,16 @@ namespace Fracture{
 	void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G);
 	
 	/*!
-		@brief	Updating edge properties of overlapping edges
+		@brief	Creates the graph while reading the input file
+
+		@param G The graph to be built
+		@param R Concrete reader class to read the input file
+		@param update_edge_properties   (optional) Lambda function used inside function refine_graph (see there its detailed description). The default is the empty function
 		
-		It may happen that two edges intersect with a partial or total overlapping. 
-		In this case, the properties of the edge that originates from the overlap 
-		has to be set according to some critirion
-		
-		@remark In this implememntation we keep as properties the ones present on the old 
-				edge, i.e. the new edge that overlaps does not bring new information to 
-				that edge
-		@remark The user can redefine this function and define how the properties 
-				on that edge should change
-		
-		@param e The edge descriptor of the edge whose properties has to be updated
-		@param new_edge_prop ???????????????????????????????'
-		@param G The graph
 	*/
-	//void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G);
-	
 	
 	void create_graph(Graph & G, 
-					  BGLgeom::reader_ASCII<Fracture::Vertex_prop, 
-					  Fracture::Edge_prop> & R, 
+					  BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop> & R, 
 					  std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties = [](Fracture::Edge_prop & current_prop, const Fracture::Edge_prop & new_prop){} );
 	
 	/*!
@@ -136,13 +124,13 @@ namespace Fracture{
 		insert and, according to them, creates new vertices and edges and breaks 
 		already present edges
 		
-		@param G        	The graph
-		@param src 			Vertex descriptor of the source of the current "piece" of edge we are inserting
-		@param I			Object of class Int_layer containing all the information about the intersection we are currently dealing with
-		@param e_prop		Contains the properties of the new edge we are inserting in the graph
-		@param tgt 			Vertex descriptor of the target of the new edge we are inserting in the graph 
-		@param next_src		Vertex descriptor which at the end of the function will contain the src for the next loop iteration
-		maybe: @param update_edge_prop function???
+		@param G        				The graph
+		@param src 						Vertex descriptor of the source of the current "piece" of edge we are inserting
+		@param I						Object of class Int_layer containing all the information about the intersection we are currently dealing with
+		@param e_prop					Contains the properties of the new edge we are inserting in the graph
+		@param tgt 						Vertex descriptor of the target of the new edge we are inserting in the graph 
+		@param next_src					Vertex descriptor which at the end of the function will contain the src for the next loop iteration
+		@param update_edge_properties   Lambda function which performs the "merge" operation between the edge properties of two overlapping edges (e.g. in the Identical case). Since the considered section of the edge currently inserted overlaps an already existing edge, no new edge will be added, but, through this function, the user has the possibility to decide how to update the edge properties of the overlapped edge (which are passed by reference for this reason); the edge property of the overlapping edge is passed as second parameter. The default behaviour is to keep the actual edge property as it is, without any modification due to the overlapping edge.
 	*/
 	void refine_graph	(Graph &G, 
 						 const Vertex_d & src,  						 
