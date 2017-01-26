@@ -99,8 +99,7 @@ void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Grap
 */
 
 void create_graph(Graph & G, 
-				  reader_ASCII<Fracture::Vertex_prop, 
-				  Fracture::Edge_prop> & R,
+				  Reader & R,
 				  std::function<void(Fracture::Edge_prop &, const Fracture::Edge_prop &)> update_edge_properties){
 	// Utilities to create the graph:	
 	
@@ -183,9 +182,7 @@ void create_graph(Graph & G,
 		
 		// Insertion of the new edge, handling intersections if present
 		if(edge_alone){
-			//#ifndef NDEBUG
-				std::cout << "This fracture does not intersect with any of the other fractures already in the graph." << std::endl;
-			//#endif
+			std::cout << "No intersections" << std::endl;
 			e = new_linear_edge(src,tgt,e_prop,G);
 		} else { // there is at least one intersection	
 			
@@ -211,6 +208,10 @@ void create_graph(Graph & G,
 					std::cout << I << std::endl;
 			#endif
 			
+			#ifdef NDEBUG	//In debug mode there already are more detailed infos about intersections
+				std::cout << "Number of intersection objects: " << intvect.size() << std::endl;
+			#endif
+			
 			/* 
 			We now create connections and break old edges proceeding from an 
 			intersection point to the following intersection point, starting 
@@ -223,7 +224,7 @@ void create_graph(Graph & G,
 			// Then, all the other ones
 			for(std::size_t i=1; i<intvect.size(); ++i){
 				current_src = next_src;
-				refine_graph(G, current_src, intvect[i], e_prop, tgt, next_src, update_edge_properties);	// graph, current source, current intersection object
+				refine_graph(G, current_src, intvect[i], e_prop, tgt, next_src, update_edge_properties); // graph, current source, current intersection object
 			}	
 			// Finally we connect the last intersection point with the target, but only if their vertex_desciptors do not coincide
 			current_src = next_src;

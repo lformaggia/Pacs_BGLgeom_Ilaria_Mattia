@@ -26,6 +26,7 @@
 #include "fracture_graph_properties.hpp"
 #include "point.hpp"
 #include "linear_geometry.hpp"
+#include "reader_ASCII.hpp"
 
 namespace Fracture{
 
@@ -37,6 +38,9 @@ using line = BGLgeom::linear_geometry<2>;
 
 //! Alias for the type of the graph used
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, Fracture::Vertex_prop , Fracture::Edge_prop>;
+
+//! Alias type for the concrete reader
+using Reader = BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop>;
 
 //! Alias for the edge iterators for the graph
 using Edge_it = BGLgeom::Edge_iter<Graph>;
