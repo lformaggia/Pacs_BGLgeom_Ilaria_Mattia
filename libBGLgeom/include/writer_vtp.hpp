@@ -30,6 +30,7 @@
 #include <vtkXMLPolyDataWriter.h>
 #include <vtkVertexGlyphFilter.h>
 #include <vtkPointData.h>
+
 // For compatibility with new VTK generic data arrays
 #ifdef vtkGenericDataArray_h
 #define InsertNextTupleValue InsertNextTypedTuple

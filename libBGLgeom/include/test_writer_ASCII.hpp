@@ -22,7 +22,7 @@
 #include <vector>
 #include <string>
 #include "base_properties.hpp"
-#include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "writer_ASCII.hpp"
 #include "linear_geometry.hpp"
 
@@ -51,8 +51,8 @@ class test_writer_ASCII : public BGLgeom::writer_ASCII<Graph> {
 		//! Defining abstract method
 		void
 		write_data(BGLgeom::Edge_desc<Graph> const& e, Graph const& G){
-			BGLgeom::Vertex_desc<Graph> src = boost::source(e,G);
-			BGLgeom::Vertex_desc<Graph> tgt = boost::target(e,G);
+			BGLgeom::Vertex_desc<Graph> src = BGLgeom::source(e,G);
+			BGLgeom::Vertex_desc<Graph> tgt = BGLgeom::target(e,G);
 			this->out_file << G[e].index << "\t\t" << G[src].coordinates  << "\t\t" << G[tgt].coordinates
 							<< "\t\t" << G[e].foo_double << "\t\t" << G[e].foo_vector[3]
 							<< "\t\t" << G[e].foo_string << std::endl;

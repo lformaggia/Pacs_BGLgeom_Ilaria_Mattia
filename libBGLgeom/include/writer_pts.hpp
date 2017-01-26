@@ -21,9 +21,8 @@
 #include <iomanip>
 #include <string>
 #include <sstream>
-#include <boost/graph/adjacency_list.hpp>
 
-#include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "point.hpp"
 #include "mesh.hpp"
 
@@ -115,7 +114,7 @@ class writer_pts{
 				// Writing on file
 				std::cout << "Writing pts file ..." << std::endl;
 				out_file << "BEGIN_LIST" << std::endl;
-				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
+				for(std::tie(e_it, e_end) = BGLgeom::edges(G); e_it != e_end; ++e_it){
 					this->export_edge(G, *e_it, src, tgt, i);
 				}
 				out_file << "END_LIST";
@@ -137,7 +136,7 @@ class writer_pts{
 				}
 				// Writing on file
 				out_file << "BEGIN_LIST" << std::endl;
-				for(std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
+				for(std::tie(e_it, e_end) = BGLgeom::edges(G); e_it != e_end; ++e_it){
 					this->export_info(G, *e_it);
 				}
 				out_file << "END_LIST";
@@ -168,8 +167,8 @@ class writer_pts{
 					 BGLgeom::Vertex_desc<Graph> & tgt,
 					 unsigned int const& i){
 			out_file << "BEGIN_ARC" << std::endl;
-			src = boost::source(e, G);
-			tgt = boost::target(e, G);
+			src = BGLgeom::source(e, G);
+			tgt = BGLgeom::target(e, G);
 			out_file << G[src].BC[i] << std::endl;
 			out_file << G[tgt].BC[i] << std::endl;
 			out_file<< std::setw(8) << std::setprecision(2) << G[e].index;

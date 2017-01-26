@@ -39,6 +39,7 @@
 #include "generic_geometry.hpp"
 #include "linear_geometry.hpp"
 #include "bspline_geometry.hpp"
+#include "graph_access.hpp"
 
 namespace BGLgeom{
 
