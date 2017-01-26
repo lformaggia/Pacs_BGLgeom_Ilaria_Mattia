@@ -22,8 +22,12 @@ TEST_RHS   = 0;
 EXPORT_PARAM = 0; 
 % Flag to export results
 VTK_EXPORT = 1;
+%Flag to add diffusion terms
+DIFFUSION_T=1;
+DIFFUSION_V=1;
 %Flag to add advection terms
-ADVECTION=0;
+ADVECTION_T=0;
+ADVECTION_V=0;
 %Flag to add reaction terms
 REACTION=0;
 %Flag to take the stationary problem
@@ -31,7 +35,7 @@ STATIONARY=0;
 %Flag for the new formulation
 NEW_FORMULATION = 1;
 % Output directory
-OUTPUT   = '../data/vtk/';
+OUTPUT   = './../data/vtk/';
 %===================================
 %  MESH
 %===================================
@@ -45,8 +49,8 @@ NOISED_T   = '0';
 % Path to import the 3d mesh
 MESH_FILET = ' '; 
 % Path to import the 1d list of points
-MESH_FILEV = '../data/bifurcation_network.pts'; %'/home/nico/workspace/pacs/model3d1d/src/1_uncoupled/segment.pts';  
-MESH_FILEV_TRANSP = '../data/bifurcation_network.pts';
+MESH_FILEV = './../data/bifurcation_network.pts'; 
+MESH_FILEV_TRANSP = './../data/bifurcation_network.pts';
 %===================================
 %  GETFEM DESCRIPTORS
 %===================================
@@ -60,8 +64,8 @@ FEM_TYPET_P = 'FEM_PK_DISCONTINUOUS(3,0)';
 FEM_TYPET_DATA = 'FEM_PK(3,0)';
 FEM_TYPET_C = 'FEM_PK(3,1)';
 % GetFem type for the 1D Finite Element Methods
-FEM_TYPEV   = 'FEM_PK(1,1)';  
-FEM_TYPEV_P = 'FEM_PK(1,0)';  
+FEM_TYPEV   = 'FEM_PK(1,2)';  
+FEM_TYPEV_P = 'FEM_PK(1,1)';  
 FEM_TYPEV_DATA = 'FEM_PK(1,0)';  
 FEM_TYPEV_C = 'FEM_PK(1,1)';  
 % GetFem type for the 3D Integration Method
@@ -92,7 +96,7 @@ Kv = 1.0;
 % Dimensionless average radius of the capillary vessels []
 RADIUS = 0.10;
 %Dimensionless At[]
-At=1.0;
+At=2.0;
 %Dimensionless Av[]
 Av=1.0;
 %Dimensionless Dalpha[]
@@ -144,9 +148,9 @@ dt = 0.2;
 %===================================
 % Faces:   x=0  x=L  y=0  y=L  z=0  z=L
 % BC labels (DIR / MIX)
-BClabel = 'DIR  DIR  DIR  DIR  DIR  DIR'
+BClabel = 'MIX  MIX  DIR  DIR  MIX  MIX'
 % BC values
-BCvalue = '0.0  0.0  0.0  0.0  0.0  0.0'
+BCvalue = '0.0  0.0  -5.0  10.0  0.0  0.0'
 % Coefficient for MIX condition
 BETA = 1.0E-10
 
@@ -157,3 +161,4 @@ BClabel_transp = 'MIX  MIX  MIX  MIX  MIX  MIX'
 BCvalue_transp = '0.0  0.0  0.0  0.0  0.0  0.0'
 % Coefficient for MIX condition
 BETA_transp = 1.0E-1
+

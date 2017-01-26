@@ -19,7 +19,6 @@
 
 close all
 clear all
-clc
 
 % Number of order of bifurcation
 n = 4;
