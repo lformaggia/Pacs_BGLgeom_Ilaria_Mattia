@@ -22,6 +22,7 @@
 #include "reader_netdiff.hpp"
 #include "writer_pts.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 
 #include "problem3d1d.hpp"
 #include "transport3d1d.hpp"
