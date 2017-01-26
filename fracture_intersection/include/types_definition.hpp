@@ -22,7 +22,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
-#include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "fracture_graph_properties.hpp"
 #include "point.hpp"
 #include "linear_geometry.hpp"

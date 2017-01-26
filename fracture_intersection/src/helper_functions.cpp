@@ -20,6 +20,7 @@
 
 #include "helper_functions.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "types_definition.hpp"
 
 using namespace Fracture;

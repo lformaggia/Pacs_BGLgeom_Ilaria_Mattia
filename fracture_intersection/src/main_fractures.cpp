@@ -16,16 +16,13 @@
 #include <iostream>
 #include <string>
 #include <tuple>
-#include <boost/graph/adjacency_list.hpp>
 
 #include "types_definition.hpp"  // using-declarations local to this application 
 #include "reader_fractures.hpp"
 #include "reader_fractures_twolines.hpp"
-#include "graph_builder.hpp"
 #include "helper_functions.hpp"
 #include "writer_vtp.hpp"
 
-using namespace boost;
 using namespace BGLgeom;
 using namespace Fracture;
 
@@ -44,9 +41,9 @@ int main(){
 	int count_e = 0;
 	int count_v = 0;
 	
-	cout << "===================== GRAPH 1 ===================" << endl;
+	std::cout << "===================== GRAPH 1 ===================" << std::endl;
 	std::string filename1("../data/fractureElevenVF.dat");
-	cout << "Input filename: " << filename1 << endl << endl;
+	std::cout << "Input filename: " << filename1 << std::endl << std::endl;
 	
 	Graph G1;
 	
@@ -58,28 +55,26 @@ int main(){
 	create_graph(G1,R1);
 	
 	// Counting total number of vertices and edges	
-	for (std::tie(e_it, e_end) = boost::edges(G1); e_it != e_end; ++e_it)
-		++count_e;	
-		
-	for (std::tie(v_it, v_end) = boost::vertices(G1); v_it != v_end; ++v_it)
+	for (std::tie(e_it, e_end) = edges(G1); e_it != e_end; ++e_it)
+		++count_e;		
+	for (std::tie(v_it, v_end) = vertices(G1); v_it != v_end; ++v_it)
 		++count_v;
 			
-	cout << endl;
+	std::cout << std::endl;
 	std::cout << "________________ FINAL SETTING GRAPH 1 ________________" << std::endl;
-	std::cout << count_v << " vertices and " << count_e << " edges" <<std::endl;
+	std::cout << count_v << " vertices and " << count_e << " edges" << std::endl;
 	
 	//Producing output
 	std::string filename1_out("../data/graph_fractureEleven.vtp");	
 	writer_vtp<Graph,2> W1(filename1_out.c_str());
 	W1.export_vtp(G1);
 	
-	cout<<endl;
-	cout<<endl;
+	std::cout << std::endl << std::endl;
 	
 //==================================== THE OTHER INPUT FILE ==================================
 	
-	cout<<endl;
-	cout<<"========================= GRAPH 2 =========================="<<endl;
+	std::cout << std::endl;
+	std::cout << "========================= GRAPH 2 ==========================" << std::endl;
 	
 	// Reinitializing variables
 	count_e = 0; 
@@ -95,11 +90,11 @@ int main(){
 	create_graph(G2,R2);
 	
 	// Counting total number of vertices and edges
-	for (std::tie(e_it, e_end) = boost::edges(G2); e_it != e_end; ++e_it)
+	for (std::tie(e_it, e_end) = edges(G2); e_it != e_end; ++e_it)
 		++count_e;	
-
-	for (std::tie(v_it, v_end) = boost::vertices(G2); v_it != v_end; ++v_it)
+	for (std::tie(v_it, v_end) = vertices(G2); v_it != v_end; ++v_it)
 		++count_v;
+	
 	std::cout << endl;
 	std::cout << "________________ FINAL SETTING GRAPH 2 ________________" << std::endl;
 	std::cout << count_v << " vertices and " << count_e << " edges" << std::endl;
