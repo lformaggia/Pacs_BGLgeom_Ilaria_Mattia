@@ -8,7 +8,7 @@
 ======================================================================*/
 /*!
 	@file	adaptive_quadrature.cpp
-	@author Ilaria Speranza & Mattia Tantardini
+	@author Carlo de Falco
 	@date	Jan, 2017
 	@brief	Implementation of the integrand function
 */

@@ -8,7 +8,7 @@
 ======================================================================*/
 /*!
 	@file	adaptive_quadrature.hpp
-	@author Ilaria Speranza & Mattia Tantardini
+	@author Carlo de Falco
 	@date	Jan, 2017
 	@brief	Prototype for an integrating function
 	
