@@ -22,6 +22,7 @@
 #include <iostream>
 #include "base_properties.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "linear_geometry.hpp"
 #include "point.hpp"
 

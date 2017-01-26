@@ -19,28 +19,32 @@
 #include "test_writer_ASCII.hpp"
 #include "base_properties.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "point.hpp"
 #include <boost/graph/adjacency_list.hpp>
 #include <string>
 
 using namespace BGLgeom;
-using namespace boost;
 
 int main(){
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<2>, Edge_prop_ASCII>;
+	using Graph = boost::adjacency_list< boost::vecS, 
+										 boost::vecS, 
+										 boost::directedS, 
+										 Vertex_base_property<2>, 
+										 Edge_prop_ASCII>;
 	Graph G;
 	
 	Vertex_desc<Graph> a, b, c;
-	a = add_vertex(G);
-	b = add_vertex(G);
-	c = add_vertex(G);
+	a = new_vertex(G);
+	b = new_vertex(G);
+	c = new_vertex(G);
 	G[a].coordinates = point<2>(0,0);
 	G[b].coordinates = point<2>(1,1);
 	G[c].coordinates = point<2>(2,2);
 	
 	Edge_desc<Graph> e1, e2;
-	e1 = new_linear_edge(a, b, G);	//BGLgeom
-	e2 = new_linear_edge(b, c, G);	//BGLgeom
+	e1 = new_linear_edge(a, b, G);
+	e2 = new_linear_edge(b, c, G);
 	
 	G[e1].index = 1;
 	G[e1].foo_double = 1.0123456789;

@@ -33,21 +33,25 @@
 #include "writer_pts.hpp"
 #include "base_properties.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "linear_geometry.hpp"
 
-using namespace boost;
 using namespace BGLgeom;
 
 int main(){
 
 	// testing a graph with two boundary conditions in the vertex properties
-	using Graph = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3,2>,Edge_base_property<linear_geometry<3>,3> >;
+	using Graph = boost::adjacency_list< boost::vecS, 
+										 boost::vecS, 
+										 boost::undirectedS, 
+										 Vertex_base_property<3,2>, 
+										 Edge_base_property<linear_geometry<3>,3> >;
 	Graph G;
 	
 	Vertex_desc<Graph> a,b,c;
-	a = add_vertex(G);	//boost
-	b = add_vertex(G);	//boost
-	c = add_vertex(G);	//boost
+	a = new_vertex(G);
+	b = new_vertex(G);
+	c = new_vertex(G);
 	G[a].coordinates = point<3>(0,1,2);
 	G[b].coordinates = point<3>(2,3,5);
 	G[c].coordinates = point<3>(3,1,6);
@@ -61,15 +65,11 @@ int main(){
 	G[c].BC[1].value = 3.5;
 	
 	Edge_desc<Graph> e1,e2;
-	e1 = add_edge(a,b,G).first;	//boost
-	e2 = add_edge(b,c,G).first;	//boost
+	e1 = new_linear_edge(a,b,G);
+	e2 = new_linear_edge(b,c,G);
 	
 	G[e1].index = 1;
 	G[e2].index = 2;	
-	G[e1].geometry.set_source(G[a].coordinates);
-	G[e1].geometry.set_target(G[b].coordinates);
-	G[e2].geometry.set_source(G[b].coordinates);
-	G[e2].geometry.set_target(G[c].coordinates);
 	
 	//Creating a uniform mesh
 	G[e1].mesh.uniform_mesh(20, G[e1].geometry);	
@@ -81,13 +81,17 @@ int main(){
 	
 	
 	// Now testing the writer on the additional infos to print
-	using Graph2 = adjacency_list<vecS,vecS,undirectedS,Vertex_base_property<3>,Edge_base_property<linear_geometry<3>,3> >;
+	using Graph2 = boost::adjacency_list< boost::vecS, 
+										  boost::vecS, 
+										  boost::undirectedS, 
+										  Vertex_base_property<3>, 
+										  Edge_base_property<linear_geometry<3>,3> >;
 	Graph2 G2;
 	
 	Vertex_desc<Graph2> d,e,f;
-	d = add_vertex(G2);	//boost
-	e = add_vertex(G2);	//boost
-	f = add_vertex(G2);	//boost
+	d = new_vertex(G2);
+	e = new_vertex(G2);
+	f = new_vertex(G2);
 	G2[d].coordinates = point<3>(0,1,2);
 	G2[e].coordinates = point<3>(2,3,5);
 	G2[f].coordinates = point<3>(3,1,6);
@@ -97,13 +101,9 @@ int main(){
 	G2[f].BC[0].value = 4.5;
 	
 	Edge_desc<Graph2> e3,e4;
-	e3 = add_edge(d,e,G2).first;	//boost
-	e4 = add_edge(e,f,G2).first;	//boost
+	e3 = new_linear_edge(d,e,G2);
+	e4 = new_linear_edge(e,f,G2);
 	
-	G2[e3].geometry.set_source(G2[d].coordinates);
-	G2[e3].geometry.set_target(G2[e].coordinates);
-	G2[e4].geometry.set_source(G2[e].coordinates);
-	G2[e4].geometry.set_target(G2[f].coordinates);
 	G2[e3].index = 1;
 	G2[e4].index = 2;
 	

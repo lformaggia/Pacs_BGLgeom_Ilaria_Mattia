@@ -30,6 +30,7 @@
 
 #include "bspline_geometry.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "base_properties.hpp"
 #include "mesh.hpp"
 #include "point.hpp"
@@ -42,8 +43,6 @@
 #include <cmath>
 
 using namespace BGLgeom;
-using namespace boost;
-using BGLgeom::operator<<;
 
 int main(){
 	
@@ -149,7 +148,11 @@ int main(){
 	// Now we try to build a graph with one bspline edge
 	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout <<  "Creating a graph" << std::endl << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<bspline_geometry<>,3> >;
+	using Graph = boost::adjacency_list< boost::vecS, 
+										 boost::vecS, 
+										 boost::directedS, 
+										 Vertex_base_property<3>, 
+										 Edge_base_property<bspline_geometry<>,3> >;
 	Graph G;
 	
 	std::vector<point<3>> CPs2 = {point<3>(0,			 0,		 0),	// 1st c.p.
@@ -163,12 +166,12 @@ int main(){
 	Vertex_base_property<3> a_prop(CPs.front());
 	Vertex_base_property<3> b_prop(CPs.back());
 	Vertex_base_property<3> c_prop(CPs2.back());
-	a = new_vertex(a_prop, G);	//BGLgeom
-	b = new_vertex(b_prop, G);	//BGLgeom
-	c = new_vertex(c_prop, G);	//BGLgeom
+	a = new_vertex(a_prop, G);
+	b = new_vertex(b_prop, G);
+	c = new_vertex(c_prop, G);
 	Edge_desc<Graph> e1, e2;
-	e1 = new_bspline_edge<Graph,3>(a, b, CPs, G);	//BGLgeom
-	e2 = new_bspline_edge<Graph,3>(a, c, CPs2, G);	//BGLgeom
+	e1 = new_bspline_edge<Graph,3>(a, b, CPs, G);
+	e2 = new_bspline_edge<Graph,3>(a, c, CPs2, G);
 	
 	// Creating a mesh on the edge
 	G[e1].make_uniform_mesh(100);

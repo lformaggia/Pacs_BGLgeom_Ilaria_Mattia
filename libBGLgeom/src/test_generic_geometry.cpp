@@ -31,6 +31,7 @@
 #include "point.hpp"
 #include "base_properties.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "mesh.hpp"
 #include "writer_vtp.hpp"
 #include "writer_pts.hpp"
@@ -40,7 +41,6 @@
 #include <tuple>
 
 using namespace BGLgeom;
-using namespace boost;
 
 int main(){
 	
@@ -204,7 +204,11 @@ int main(){
   	// BUilding a simple Graph
   	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout << std::endl << "Creating a graph with a generic edge" << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<generic_geometry<3>,3> >;
+	using Graph = boost::adjacency_list< boost::vecS, 
+										 boost::vecS, 
+										 boost::directedS, 
+										 Vertex_base_property<3>, 
+										 Edge_base_property<generic_geometry<3>,3> >;
 	Graph G;
 	
 	auto alfa = [](double x) -> point<3>{
@@ -222,11 +226,11 @@ int main(){
   	Vertex_desc<Graph> a,b;
   	Vertex_base_property<3> src_prop(alfa(0));
   	Vertex_base_property<3> tgt_prop(alfa(1));
-  	a = new_vertex(src_prop,G); 	//BGLgeom
-  	b = new_vertex(tgt_prop,G);		//BGLgeom
+  	a = new_vertex(src_prop,G);
+  	b = new_vertex(tgt_prop,G);
   	
   	Edge_desc<Graph> e;
-  	e = new_generic_edge<Graph,3>(a, b, G, alfa, alfa1, alfa2);	//BGLgeom
+  	e = new_generic_edge<Graph,3>(a, b, alfa, alfa1, alfa2, G);
   	
   	//Creating a uniform mesh
   	G[e].make_uniform_mesh(100);

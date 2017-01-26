@@ -28,6 +28,7 @@
 #include "point.hpp"
 #include "base_properties.hpp"
 #include "graph_builder.hpp"
+#include "graph_access.hpp"
 #include "mesh.hpp"
 #include "writer_vtp.hpp"
 #include "writer_pts.hpp"
@@ -141,7 +142,11 @@ int main(){
 	// BUilding a simple Graph
 	std::cout << "========================= ON GRAPH ========================" << std::endl;
 	std::cout << "Creating a graph" << std::endl << std::endl;
-	using Graph = adjacency_list<vecS, vecS, directedS, Vertex_base_property<3>, Edge_base_property<linear_geometry<3>,3> >;
+	using Graph = boost::adjacency_list< boost::vecS, 
+										 boost::vecS, 
+										 boost::directedS, 
+										 Vertex_base_property<3>, 
+										 Edge_base_property<linear_geometry<3>,3> >;
 	Graph G;
 	
 	point<3> A(0,0,0);
@@ -154,15 +159,15 @@ int main(){
 	Vertex_base_property<3> b_prop(B);
 	Vertex_base_property<3> c_prop(C);
 	Vertex_base_property<3> d_prop(D);
-	a = new_vertex(a_prop, G);	//BGLgeom
-	b = new_vertex(b_prop, G);	//BGLgeom
-	c = new_vertex(c_prop, G);	//BGLgeom
-	d = new_vertex(d_prop, G);	//BGLgeom
+	a = new_vertex(a_prop, G);
+	b = new_vertex(b_prop, G);
+	c = new_vertex(c_prop, G);
+	d = new_vertex(d_prop, G);
 	
 	Edge_desc<Graph> e1, e2, e3;
-	e1 = new_linear_edge(a, b, G);	//BGLgeom
-	e2 = new_linear_edge(b, c, G);	//BGLgeom
-	e3 = new_linear_edge(c, d, G);	//BGLgeom
+	e1 = new_linear_edge(a, b, G);
+	e2 = new_linear_edge(b, c, G);
+	e3 = new_linear_edge(c, d, G);
 	
 	std::cout << G[e1] << std::endl;
 	std::cout << G[e2] << std::endl;
