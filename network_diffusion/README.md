@@ -112,6 +112,10 @@ Go to `/bin` and type
 ./main_network_diffusion input.param
 ```
 
+Some output will produced. They are all stored in the `/data` folder. 
+In `/data/vtk` will be stored all the vtk files produced by the solver 
+of the FEM problem. They can be displayed using Paraview
+
 ------------------------------------------
 ### Documentation
 -----------------------------------------
