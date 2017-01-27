@@ -17,6 +17,8 @@ help:
 	@echo "make help: ----- Prints this help"
 	@echo "make library: -- Makes BGLgeom library (static and dynamic), tests, documentation and installs it"
 	@echo "make distclean:  Cleans all"
+	@echo ""
+	@echo "REMEMBER: specify RELEASE=yes inbetween 'make' and 'library' if you want full optimization"
 
 library:
 	$(MAKE) -C $(BGLGEOM_DIR) all
