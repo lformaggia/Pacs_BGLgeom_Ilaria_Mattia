@@ -112,7 +112,7 @@ Now you are ready to build the library.
 
 Just type
 ```
-make RELEASE=yes library
+make RELEASE=yes all
 ```
 to compile the library (static and dynamic version), the associated tests, 
 the documentation (LaTeX and html) and to install the library. Omit 

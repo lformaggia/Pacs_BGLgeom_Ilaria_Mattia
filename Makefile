@@ -9,18 +9,18 @@
 
 -include Makefile.inc
 
-.PHONY: help library distclean
+.PHONY: help all distclean
 
 .DEFAULT_GOAL: help
 
 help:
 	@echo "make help: ----- Prints this help"
-	@echo "make library: -- Makes BGLgeom library (static and dynamic), tests, documentation and installs it"
+	@echo "make all: ------ Makes BGLgeom library (static and dynamic), tests, documentation and installs it"
 	@echo "make distclean:  Cleans all"
 	@echo ""
 	@echo "REMEMBER: specify RELEASE=yes inbetween 'make' and 'library' if you want full optimization"
 
-library:
+all:
 	$(MAKE) -C $(BGLGEOM_DIR) all
 
 distclean:
