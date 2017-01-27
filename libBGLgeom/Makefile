@@ -16,7 +16,7 @@ include $(MAKEFILEH_DIR)/Makefile.inc
 
 #=========================================================================
 
-.PHONY: help all clean distclean doc static dynamic install test library
+.PHONY: help all clean distclean doc library static dynamic install alltest
 
 .DEFAULT_GOAL: help
 
@@ -89,9 +89,9 @@ install:
 	@echo ""
 	@echo "--- Installing library ---"
 	@mkdir -p $(INSTALL_PATH)/include
-	cp $(HEADERS) $(INSTALL_PATH)/include
+	@cp $(HEADERS) $(INSTALL_PATH)/include
 	@mkdir -p $(INSTALL_PATH)/lib
-	cp $(DYNAMIC_LIB).1.0 $(STATIC_LIB) $(INSTALL_PATH)/lib
+	@cp $(DYNAMIC_LIB).1.0 $(STATIC_LIB) $(INSTALL_PATH)/lib
 	@echo "--- INSTALLED ---"
 
 
@@ -101,7 +101,6 @@ doc:
 	@mkdir -p $(DOC_DIR)
 	doxygen Doxyfile
 	$(MAKE) -C $(DOC_DIR)/latex
-	#./make_doc_pdf.sh
 	@echo "--- COMPLETED ---"
 
 
