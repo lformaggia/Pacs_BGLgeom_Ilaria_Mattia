@@ -4,6 +4,10 @@
 
 **Author** : Ilaria Speranza & Mattia Tantardini 
 
+**Mailto** : mtantar@hotmail.it
+
+**Mailto** :
+
 **Date**   : January 2017
 
 -----------------------------------------------
@@ -35,7 +39,7 @@ In this example a simple diffusion problem on a graph representing a
 vascular network is solved.
 
 -------------------------------------------------
-## How to build the project
+## How to build the library
 ------------------------------------------------
 ### Prerequisites
 
@@ -88,6 +92,10 @@ folder. Before doing anything, edit it and change:
 - `PROJECT_FOLDER` with the path where this folder resides in your system
 - `INSTALL_PATH`   with the path you want to install the library to
 - `mkBGLInc`       with the path where the BGL resides in your system
+- `mkGetFEMHome`   with the path to the home folder of the GetFEM library (needed 
+				   only to compile the `netwrok_diffusion` application)
+- `mkMANworksHome` with the path to the home folder of the MANworks library (needed 
+				   only to compile the `netwrok_diffusion` application)
 - `TOL_VALUE`      with a value which represents the tolerance on being 
 				   zero in the comparison of points. If you do not provide
 				   any value, a default one will be used.
@@ -110,7 +118,7 @@ to compile the library (static and dynamic version), the associated tests,
 the documentation (LaTeX and html) and to install the library. Omit 
 `RELEASE=yes` if you want to compile it in debug mode.
 
-*NOTE*: you will always have to specificy RELEASE=yes if you want 
+*NOTE*: you will always have to specificy `RELEASE=yes` if you want 
 full optimization for the code. Debug mode mainly enables some further
 controls and output messages.
 
@@ -121,74 +129,19 @@ make help
 ```
 to view all possible commands and details.
 
-#### Run the tests
+#### Tests and documentation
 
+To see the library's documentation and to run tests, enter the `libBGLgeom` 
+directory and see the `README` file.
 
+------------------------------------------------
+## How to build applications
+------------------------------------------------
 
-### Applications
+To have information on how to build the applications, view documentation, 
+etc, you will find a `README` file in each one of the two folders.
 
-
-First of all, enter the folder `libBGLgeom`. To build all the library, the 
-examples and the documentation and install the library, just type:
-```
-make all
-```
-
-You can also build each component of the library separately. Type 
-```
-make help
-```
-for information about make commands.
-
-### Run the tests for the library
-
-Almost all tests produce an output in pts and vtp format, that will be placed 
-in the `/data` folder. All output path are relative path, so to run properly 
-the exacutables and produce the expected output you need to enter the `/test`
-folder and run each test form there.
-
-### Build the application examples
-
-You need to enter in each of the examples subfolder. In each of them, type
-```
-make all
-```
-to produce the exacutables and the doucumentation.
-
-Type
-```
-make help
-```
-for other make commands.
-
-REMEMBER: the default for the compilation is debug mode. If want full 
-optimization, type `RELEASE=yes` inbetween `make` and its target.
-
-*NOTE*: the debug mode mainly enables some more controls and output messages.
-
-### Run the examples
-
-As for the library's tests, you need to enter the `/bin` folder and run the 
-exacutables form there. Produced output are put in the `/data` folder.
-
-### Documentation
-
-Both the library and the application are provided with documentation.
-Building them with `make all`, all the documentation will be automatically 
-produced. Otherwise, if you built components separately, type
-```
-make doc
-```
-in each folder to produce the documentation.
-
-This command will produce two type of documentation: Latex and html. 
-To view the Latex documentation, type:
-```
-evince doc/latex/refman.pdf
-```
-
-To open the html documentation, go to `doc/html`, search for the file 
-`index.html` and open it with your browser.
+Remember that you have to compile the BGLgeom library first.
 
 -----------------------------------------
 ##  DEV ENVIRONMENT
