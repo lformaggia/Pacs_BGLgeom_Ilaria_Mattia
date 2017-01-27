@@ -39,7 +39,7 @@ In this example a simple diffusion problem on a graph representing a
 vascular network is solved.
 
 -------------------------------------------------
-## How to build the project
+## How to build the library
 ------------------------------------------------
 ### Prerequisites
 
@@ -135,11 +135,11 @@ To see the library's documentation and to run tests, enter the `libBGLgeom`
 directory and see the `README` file.
 
 ------------------------------------------------
-## Build the applications
+## How to build applications
 ------------------------------------------------
 
 To have information on how to build the applications, view documentation, 
-etc, you will find a `README` file in each one of the two folder.
+etc, you will find a `README` file in each one of the two folders.
 
 Remember that you have to compile the BGLgeom library first.
 
