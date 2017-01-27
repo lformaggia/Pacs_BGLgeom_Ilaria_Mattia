@@ -112,9 +112,9 @@ Go to `/bin` and type
 ./main_network_diffusion input.param
 ```
 
-Some output will produced. They are all stored in the `/data` folder. 
+Some output will be produced. They are all stored in the `/data` folder. 
 In `/data/vtk` will be stored all the vtk files produced by the solver 
-of the FEM problem. They can be displayed using Paraview
+of the FEM problem. They can be displayed using Paraview.
 
 ------------------------------------------
 ### Documentation
@@ -134,5 +134,6 @@ evince doc/latex/refman.pdf
 To open the html documentation, go to `doc/html`, search for the file 
 `index.html` and open it with your browser.
 
-
+To open the html documentation, go to `doc/html`, search for the file 
+`index.html` and open it with your browser.
 
