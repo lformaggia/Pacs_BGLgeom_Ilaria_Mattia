@@ -141,7 +141,7 @@ void create_graph(Graph & G,
 	Boolean to detect non intersecting new edges, i.e. those edges
 	which do not intersect with any other already present in the graph.	
 	*/	
-	bool edge_alone; 
+	bool non_intersecting_fracture; 
 	// Number of the fracture, used as index
 	unsigned int frac_num = 0;
 	
@@ -178,7 +178,7 @@ void create_graph(Graph & G,
 		const line L(G[src].coordinates, G[tgt].coordinates);		
 		// Preparing variable to the next loop
 		count_e = 0;
-		edge_alone = true;
+		non_intersecting_fracture = true;
 		intvect.clear();
 		// Checking for intersection of L with all the edges already present in the graph
 		for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
@@ -186,7 +186,7 @@ void create_graph(Graph & G,
 			intobj_tmp = BGLgeom::compute_intersection(G[*e_it].geometry, L);
 			if(intobj_tmp.intersect == true){
 				Fracture::Int_layer<Graph> intobj(intobj_tmp, *e_it);
-				edge_alone = false;
+				non_intersecting_fracture = false;
 				intvect.push_back(intobj);
 			}	
 		} //for
@@ -196,7 +196,7 @@ void create_graph(Graph & G,
 		//#endif
 		
 		// Insertion of the new edge, handling intersections if present
-		if(edge_alone){
+		if(non_intersecting_fracture){
 			std::cout << "No intersections" << std::endl;
 			e = new_linear_edge(src,tgt,e_prop,G);
 		} else { // there is at least one intersection	
