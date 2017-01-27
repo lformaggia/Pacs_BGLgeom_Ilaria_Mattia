@@ -1,15 +1,10 @@
 %======================================================================
-%   "Mixed Finite Element Methods for Coupled 3D/1D Fluid Problems"
-%       Course on Advanced Programming for Scientific Computing
-%                     Politecnico di Milano
-%                         A.Y. 2014-2015
-%                 
-%               Copyright (C) 2015 Domenico Notaro
-%======================================================================
-%	FILE        : input.param
-%  DESCRIPTION : List of parameters for the uncoupled benchmark
-%	AUTHOR      : Domenico Notaro <domenico.not@gmail.com>
-%	DATE        : October 2015
+%                        "BGLgeom library"
+%        Course on Advanced Programming for Scientific Computing
+%                      Politecnico di Milano
+%                          A.Y. 2015-2016
+%                  
+%         		Copyright (C) 2015 Domenico Notaro
 %======================================================================
 
 %  FLAGS
