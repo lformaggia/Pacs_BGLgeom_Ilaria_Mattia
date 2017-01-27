@@ -16,11 +16,18 @@ export mkBGLInc = /D/boost_1_61_0/boost #/graph
 export mkGetFEMHome = /D/GetFEM/5.0
 # Path to MANworks main folder
 export mkMANworksHome = /D/MANworks
+# Tolenrance on being zero (for comparison on points and segments)
+# This variable is needed when including point.hpp and intersections2D.hpp headers, 
+# and this happens for all tests in the library and in both applications. If you do 
+# not want to set this value, a default one is provided.
+TOL_VALUE = 1e-10
 
-# More variables for path to Eigen and VTK.
-## USER MUST EDIT THESE ONLY IF DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
+## EDIT THESE ONLY IF YOU DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
+# Path to VTK includes
 export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
+# Path to VTK libraries
 export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
+# Path to Eigen includes
 export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
 
 
@@ -77,11 +84,11 @@ CXX = g++
 STDFLAG = -std=c++11
 
 # DEFINES: Possible -DXX statements
-# TOL: Tolerance on being zero. Used to check distances for points and segments, mainly. The user can change it.
-DEFINES += -DTOL=1e-10
+# TOL: Tolerance on being zero. Used to check distances for points and segments, mainly.
+DEFINES += -DTOL=$(TOL_VALUE)
 
 # OPT: Level of optimization
-# REALESE: Allows to choose the level of optimization. If set, full optimization, otherwise debug mode
+# REALESE: Allows to choose the level of optimization. If set (RELEASE=yes when compiling), full optimization, otherwise debug mode
 ifdef RELEASE
 OPT = -O3
 DEFINES += -DNDEBUG
