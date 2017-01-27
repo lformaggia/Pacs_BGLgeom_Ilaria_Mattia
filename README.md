@@ -28,7 +28,7 @@ between linear edges. It can handle both the 2 and the 3 dimensional setting.
 
 #### fracture_intersection
 This example concerns the creation of a graph starting from a raw set of 
-fracture, i.e. lines, in a plane.
+fractures, i.e. lines, in a plane.
 
 #### network_diffusion
 In this example a simple diffusion problem on a graph representing a 
@@ -39,33 +39,18 @@ vascular network is solved.
 ------------------------------------------------
 ### Prerequisites
 
-You need five libraries: the Boost Graph Library, Eigen and the VTK 
-library are required for the whole project, while GetFEM++ and the 
-MANworks library are used only for the network diffusion application.
-
-##### GetFEM++ library
-
-Version >= 5.0 required. 
-
-Download it from: <http://download.gna.org/getfem/html/homepage/download.html>
-
-To compile it, follows the install instruction contained in the `INSTALL` 
-file provided with the library.
-
-##### MANworks library
-
-You need the MANworks library developed by Domenico Notaro and Stefano Brambilla.
-
-Download it from: <https://github.com/stefano-brambilla-853558/MANworks>
-
-To properly install it, follow the instruction contained in the `README`. Note 
-that you need to install first the GetFEM library.
+To compile the whole project you need five libraries: the Boost Graph 
+Library, Eigen and the VTK library are required for the whole project, 
+while GetFEM++ and the MANworks library are used only for the network 
+diffusion application.
+We specify here the requirements for the first three libraries; for the 
+last two, see the README file in the 'network_diffusion' folder.
 
 ##### Boost Graph Library
 
 Version >= 1.61.0 required.
 
-You can download it from here: <https://sourceforge.net/projects/boost/files/>
+You can download it from here: <https://sourceforge.net/projects/boost/files/>.
 
 You don't need to compile anything, since the BGL is a header only library. 
 
@@ -94,27 +79,54 @@ module load eigen/3
 ```
 
 
-### Build the library
+### Installation
 
-Along with this project you are provided with a Makefile.inc in this same 
+#### Configuration variables
+
+Along with this project you are provided with a Makefile.inc in this 
 folder. Before doing anything, edit it and change:
 - `PROJECT_FOLDER` with the path where this folder resides in your system
 - `INSTALL_PATH`   with the path you want to install the library to
 - `mkBGLInc`       with the path where the BGL resides in your system
+- `TOL_VALUE`      with a value which represents the tolerance on being 
+				   zero in the comparison of points. If you do not provide
+				   any value, a default one will be used.
 
 Only if you do not use the module system at MOX department or you installed 
 a new version of the vtk library, you also need to change:
 - `mkVtkInc`   with the path where the include files of the VTK library resides.
-	Questa tipo è `mkVtkHome` con in più `include/vtk-5.10`, è già definita nei moduli
 - `mkVtkLib`   with the path where the vtk library resides
 - `mkEigenInc` with the path where the Eigen library resides
 
 Now you are ready to build the library.
 
-REMEMBER: the default for the compilation is debug mode. If want full 
-optimization, type `RELEASE=yes` inbetween `make` and its target.
+#### Build the library
 
-*NOTE*: the debug mode mainly enables some more controls and output messages.
+Just type
+```
+make RELEASE=yes library
+```
+to compile the library (static and dynamic version), the associated tests, 
+the documentation (LaTeX and html) and to install the library. Omit 
+`RELEASE=yes` if you want to compile it in debug mode.
+
+*NOTE*: you will always have to specificy RELEASE=yes if you want 
+full optimization for the code. Debug mode mainly enables some further
+controls and output messages.
+
+Another way to compile the library is to enter the folder `libBGLgeom` 
+and compile it from there. Type 
+```
+make help
+```
+to view all possible commands and details.
+
+#### Run the tests
+
+
+
+### Applications
+
 
 First of all, enter the folder `libBGLgeom`. To build all the library, the 
 examples and the documentation and install the library, just type:
