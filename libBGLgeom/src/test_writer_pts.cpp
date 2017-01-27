@@ -50,6 +50,7 @@
 #include "graph_builder.hpp"
 #include "graph_access.hpp"
 #include "linear_geometry.hpp"
+#include "point.hpp"
 
 using namespace BGLgeom;
 

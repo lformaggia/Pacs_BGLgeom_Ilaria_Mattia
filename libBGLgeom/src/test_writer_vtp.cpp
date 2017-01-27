@@ -40,6 +40,7 @@
 #include "graph_builder.hpp"
 #include "graph_access.hpp"
 #include "writer_vtp.hpp"
+#include "point.hpp"
 
 using namespace BGLgeom;
 
