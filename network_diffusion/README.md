@@ -112,5 +112,23 @@ Go to `/bin` and type
 ./main_network_diffusion input.param
 ```
 
+------------------------------------------
+### Documentation
+-----------------------------------------
+
+To build the documentation for this application, type
+```
+make doc
+```
+
+This command will produce two type of documentation: LaTeX and html. 
+To view the Latex documentation, type:
+```
+evince doc/latex/refman.pdf
+```
+
+To open the html documentation, go to `doc/html`, search for the file 
+`index.html` and open it with your browser.
+
 
 
