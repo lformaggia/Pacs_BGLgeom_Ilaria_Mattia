@@ -53,8 +53,8 @@ VTK_LIB_DIR   = $(mkVtkLib)
 BGL_INC_DIR   = $(mkBGLInc)
 
 ## Project Folders
-# libBGLgeom is stored here:
-BGLGEOM_DIR = $(PROJECT_DIR)/libBGLgeom
+# libBGLgeom is stored here (we consider the installation path)
+BGLGEOM_DIR = $(INSTALL_PATH)
 # Example on network diffusion is stored here
 NETW_DIR = $(PROJECT_DIR)/network_diffusion
 # Example on fracture intersection is sotred here
