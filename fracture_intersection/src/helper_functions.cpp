@@ -99,19 +99,10 @@ void cut_old_edge(Edge_d &e, const Vertex_d & v, Graph & G){
 	
 	boost::remove_edge(e, G);
 	#ifndef NDEBUG
-		std::cout << "Edge removed: " << G[e] << std::endl; //G[src].coordinates<<";"<<G[tgt].coordinates<<")"<<std::endl;
+		std::cout << "Edge removed: " << G[e].geometry << std::endl; 
 	#endif
 }
 
-/*
-void update_edge_properties(Edge_d &e, Fracture::Edge_prop & new_edge_prop, Graph &G){
-	// Doing nothing, i.e. keeping the old properties present on this edge
-	#ifndef NDEBUG
-		std::cout << "Updating properties of edge " << G[e].index << "..." << std::endl;
-	#endif
-// in the edges requiring update we inserted as properties the old ones, but there is an overlapping with the new inserted edge. Here you can decide how to "mix" the edge properties: just keep the old ones (as it is, so this function will do nothing in this case), just the new ones, or any other combination of the two
-}
-*/
 
 void create_graph(Graph & G, 
 				  Reader & R,
@@ -156,7 +147,7 @@ void create_graph(Graph & G,
 			Vertex_it vv,vvend;
 			for(std::tie(vv,vvend) = boost::vertices(G); vv!=vvend; ++vv) 
 				++count_v;
-			std::cout << count_v << " vertices, ";
+			std::cout << count_v << " vertices, "<<std::endl;
 		//#endif
 		
 		//Getting data form input file
@@ -376,7 +367,7 @@ void refine_graph	(Graph &G,
 			
 			boost::remove_edge(I.int_edge, G);
 			#ifndef NDEBUG
-				std::cout<<"Edge removed"<<std::endl;
+				std::cout<<"Edge removed"<< G[e].geometry <<std::endl;
 			#endif
 			break;			
 		}	//Overlap
@@ -405,8 +396,10 @@ void refine_graph	(Graph &G,
 			// Removal of preexisting edge
 			boost::remove_edge(I.int_edge,G);
 			#ifndef NDEBUG
-				std::cout<<"Edge removed"<<std::endl;						
+				std::cout<<"Edge removed"<< G[e].geometry<<std::endl;						
 			#endif
+			
+			next_src = tgt; // setting next_src to tgt so that no new connection will be performed
 			break;
 		}	//Overlap_inside
 		
@@ -462,8 +455,9 @@ void refine_graph	(Graph &G,
 			// Removal of preexisitng edge
 			boost::remove_edge(I.int_edge,G);
 			#ifndef NDEBUG
-				std::cout<<"Edge removed"<<std::endl;
+				std::cout<<"Edge removed"<< G[e].geometry<<std::endl;
 			#endif
+			next_src = tgt; // setting next_src to tgt so that no new connection will be performed
 			break;
 		}	//Overlap_extreme_inside		
 		
