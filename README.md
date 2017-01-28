@@ -4,9 +4,7 @@
 
 **Author** : Ilaria Speranza & Mattia Tantardini 
 
-**Mailto** : mtantar@hotmail.it
-
-**Mailto** :
+**Mailto** : ilaria.speranza@mail.polimi.it, mtantar@hotmail.it
 
 **Date**   : January 2017
 
