@@ -14,9 +14,8 @@ each intersection point as a new vertex, and all the intersecting
 edges will have to be connected in the proper way and with the 
 right properties. 
 
-We also provide a simple hand-made test to show the how the algorithm 
-works in all the different intersection situations (there are very 
-unlucky to happen).
+We also provide a simple hand-made test to show how the algorithm 
+works in all the possible intersection situations.
 
 -----------------------------------------------------
 ### How to build this application
@@ -72,9 +71,9 @@ In the same folder, type
 ```
 to run the test executable.
 
-Some output will be produced. They are all stored in the `/data` folder. 
-The .vtk files can be displayed using Paraview. The `/data/vtk` folder 
-contains all output files produced by the main application.
+Some outputs will be produced. They are all stored in the `/data` folder. 
+The `/data/vtk` folder contains all output files produced by the main 
+application. The .vtk files can be displayed using Paraview. 
 
 ------------------------------------------
 ### Documentation
@@ -85,7 +84,7 @@ To build the documentation for this application, type
 make doc
 ```
 
-This command will produce two type of documentation: LaTeX and html. 
+This command will produce two type of documentations: LaTeX and html. 
 To view the Latex documentation, type:
 ```
 evince doc/latex/refman.pdf

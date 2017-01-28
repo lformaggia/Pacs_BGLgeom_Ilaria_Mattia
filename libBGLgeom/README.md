@@ -47,7 +47,7 @@ module load eigen/3
 
 #### Configuration variables
 
-Along with this project you are provided with a Makefile.inc in this 
+Along with this project you are provided with a Makefile.inc in the **parent** 
 folder. Before doing anything, edit it and change:
 - `PROJECT_FOLDER` with the path where this folder resides in your system
 - `INSTALL_PATH`   with the path you want to install the library to
@@ -91,7 +91,7 @@ to view all possible commands and details.
 #### Tests
 
 Some test are provided. They want to be a way to show how some tools of 
-the library works. You may also take a look to the source code to a more
+the library work. You may also take a look to the source code to a more
 exhaustive comprehencion.
 
 Once compiled the tests, go to `/test` folder and execute them typing
@@ -99,8 +99,8 @@ Once compiled the tests, go to `/test` folder and execute them typing
 ./test_"name_of_the_test"
 ```
 
-Many of the test will produce a .pts or a .vtp output. You can find 
-them all in the `/data` folder. Their name respect the name of the 
+Many of the tests will produce a .pts or a .vtp output. You can find 
+them all in the `/data` folder. Their names respect the name of the 
 test they come from.
 
 
@@ -115,7 +115,7 @@ To build the documentation for this application, type
 make doc
 ```
 
-This command will produce two type of documentation: LaTeX and html. 
+This command will produce two type of documentations: LaTeX and html. 
 To view the Latex documentation, type:
 ```
 evince doc/latex/refman.pdf

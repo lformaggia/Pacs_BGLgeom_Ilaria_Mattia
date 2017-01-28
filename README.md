@@ -46,7 +46,7 @@ Library, Eigen and the VTK library are required for the whole project,
 while GetFEM++ and the MANworks library are used only for the network 
 diffusion application.
 We specify here the requirements for the first three libraries; for the 
-last two, see the README file in the 'network_diffusion' folder.
+last two, see the README file in the `network_diffusion` folder.
 
 ##### Boost Graph Library
 
@@ -91,9 +91,9 @@ folder. Before doing anything, edit it and change:
 - `INSTALL_PATH`   with the path you want to install the library to
 - `mkBGLInc`       with the path where the BGL resides in your system
 - `mkGetFEMHome`   with the path to the home folder of the GetFEM library (needed 
-				   only to compile the `netwrok_diffusion` application)
+				   only to compile the `network_diffusion` application)
 - `mkMANworksHome` with the path to the home folder of the MANworks library (needed 
-				   only to compile the `netwrok_diffusion` application)
+				   only to compile the `network_diffusion` application)
 - `TOL_VALUE`      with a value which represents the tolerance on being 
 				   zero in the comparison of points. If you do not provide
 				   any value, a default one will be used.
@@ -101,7 +101,7 @@ folder. Before doing anything, edit it and change:
 Only if you do not use the module system at MOX department or you installed 
 a new version of the vtk library, you also need to change:
 - `mkVtkInc`   with the path where the include files of the VTK library resides.
-- `mkVtkLib`   with the path where the vtk library resides
+- `mkVtkLib`   with the path where the VTK library resides
 - `mkEigenInc` with the path where the Eigen library resides
 
 Now you are ready to build the library.
@@ -114,9 +114,9 @@ make RELEASE=yes all
 ```
 to compile the library (static and dynamic version), the associated tests, 
 the documentation (LaTeX and html) and to install the library. Omit 
-`RELEASE=yes` if you want to compile it in debug mode.
+`RELEASE=yes` if you want to compile them in debug mode.
 
-*NOTE*: you will always have to specificy `RELEASE=yes` if you want 
+**NOTE**: you will always have to specificy `RELEASE=yes` if you want 
 full optimization for the code. Debug mode mainly enables some further
 controls and output messages.
 

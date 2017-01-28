@@ -46,7 +46,7 @@ You need the MANworks library developed by Domenico Notaro and Stefano Brambilla
 Download it from: <https://github.com/stefano-brambilla-853558/MANworks>
 
 To properly install it, follow the instruction contained in the `README`. Note 
-that you need to install first the GetFEM library.
+that you need to install the GetFEM library first.
 
 
 #### Configuration variables
@@ -93,9 +93,12 @@ You can set some parameter which will affect the resulting network:
 				  file in the `data` folder if the script is executed whitin 
 				  the compilation stage.
 				  
+Obviously, if you change the above parameters, you need to recompile the 
+application with `make RELEASE=yes exec` to produce the new input file.
+				  
 ##### input.param
 
-In the `input.param` file a lot of parameter to describe the problem to be 
+In the `input.param` file a lot of parameters which describe the problem to be 
 solved can be set. The main parameters are the initial flags. We choose to 
 solve a simple diffusion problem with tests value for the problem's parameters.
 
@@ -112,7 +115,7 @@ Go to `/bin` and type
 ./main_network_diffusion input.param
 ```
 
-Some output will be produced. They are all stored in the `/data` folder. 
+Some outputs will be produced. They are all stored in the `/data` folder. 
 In `/data/vtk` will be stored all the vtk files produced by the solver 
 of the FEM problem. They can be displayed using Paraview.
 
@@ -125,14 +128,11 @@ To build the documentation for this application, type
 make doc
 ```
 
-This command will produce two type of documentation: LaTeX and html. 
+This command will produce two type of documentations: LaTeX and html. 
 To view the Latex documentation, type:
 ```
 evince doc/latex/refman.pdf
 ```
-
-To open the html documentation, go to `doc/html`, search for the file 
-`index.html` and open it with your browser.
 
 To open the html documentation, go to `doc/html`, search for the file 
 `index.html` and open it with your browser.
