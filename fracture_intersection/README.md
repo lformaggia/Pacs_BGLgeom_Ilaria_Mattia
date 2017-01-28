@@ -14,6 +14,10 @@ each intersection point as a new vertex, and all the intersecting
 edges will have to be connected in the proper way and with the 
 right properties. 
 
+We also provide a simple hand-made test to show the how the algorithm 
+works in all the different intersection situations (there are very 
+unlucky to happen).
+
 -----------------------------------------------------
 ### How to build this application
 -----------------------------------------------------
@@ -42,18 +46,35 @@ make RELEASE=yes exec
 ```
 to build the application. Omit `RELEASE=yes` if you want debug mode.
 
+#### Build the test
+
+The test is meaningful if compiled in debug mode: in this way all the 
+output messages will be produced. To compile it, type
+```
+make -B test
+```
+The `-B` option force to recompile the source file with the helper 
+functions in debug mode. If you omit it, you won't display the messages.
 
 -------------------------------------------------------
-### Run the application
+### Run the application and the test
 -------------------------------------------------------
 
 Go to `/bin` and type
 ```
 ./main_fracture
 ```
+to run the main application.
+
+In the same folder, type
+```
+./main_example
+```
+to run the test executable.
 
 Some output will be produced. They are all stored in the `/data` folder. 
-The .vtk files can be displayed using Paraview.
+The .vtk files can be displayed using Paraview. The `/data/vtk` folder 
+contains all output files produced by the main application.
 
 ------------------------------------------
 ### Documentation

@@ -22,22 +22,27 @@ include $(MAKEFILEH_DIR)/Makefile.inc
 
 help:
 	@echo "make help: ----- Prints this help"
-	@echo "make all: ------ Makes executables and documentation"
-	@echo "make exec: ----- Makes executables"
+	@echo "make all: ------ Makes executable and documentation"
+	@echo "make exec: ----- Makes executable"
+	@echo "make test: ----- Makes the test"
 	@echo "make doc: ------ Makes documentation"
 	@echo "make clean: ---- Cleans all object files"
 	@echo "make distclean:  Cleans all"
 	@echo ""
 	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
 	@echo "          its target, the target will be built in debug mode"
+	@echo "REMEMBER: use 'make -B test' if you previously compiled the 
+	@echo "          main executable"
 
 all: exec doc clean
 
-exec: $(OBJS_NOT_MAIN) $(EXEC)
+exec: $(OBJS_OTHER) $(EXEC)
+
+test: $(OBJS_OTHER) $(EXEC_TEST)
 
 $(TARGET_DIR)/%: $(BUILD_DIR)/%.o
 	@mkdir -p $(TARGET_DIR)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OBJS_NOT_MAIN) $< -o $@ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OBJS_OTHER) $< -o $@ $(LDLIBS)
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR)
