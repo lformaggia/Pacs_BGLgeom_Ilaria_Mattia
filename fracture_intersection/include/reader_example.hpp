@@ -39,11 +39,11 @@ namespace Fracture{
 using BGLgeom::operator>>;	// To let the compiler find the overload of operator>> for BGLgeom::point
 
 //! The reader based on reader_ASCII to read the data about the lines
-class reader_lines : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fracture::Edge_prop> {
+class reader_example : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fracture::Edge_prop> {
 	//inside public we have to override all the abstract method of reader_ASCII and the constructor
 	public:
 		//! Constructor
-		reader_lines(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop>(_filename),
+		reader_example(std::string _filename) :	BGLgeom::reader_ASCII<Fracture::Vertex_prop, Fracture::Edge_prop>(_filename),
 												SRC(),
 												TGT() {};
 													
@@ -76,7 +76,7 @@ class reader_lines : public BGLgeom::reader_ASCII	<Fracture::Vertex_prop, Fractu
 		//! Coordinates of source and target
 		Fracture::Vertex_prop::point_t SRC, TGT;
 
-};	//reader_lines
+};	//reader_example
 
 }  // namespace Fracture											 						 
 #endif	//HH_READER_FRACTURES_HH

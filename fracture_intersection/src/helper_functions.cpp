@@ -312,15 +312,12 @@ void refine_graph	(Graph &G,
 			// The edge_descriptor contained into object I is totally overlapped by the new edge, therefore I update its properties to take into account this fact
 			update_edge_properties(G[I.int_edge], e_prop);
 
- 			//Vertex_d v1;
 			Vertex_d v2;
 
 			if(!I.swapped_comp){
-				//v1 = boost::source(I.int_edge, G);
 				v2 = boost::target(I.int_edge, G);
 			}
 			else{
-				//v1 = boost::target(I.int_edge, G);
 				v2 = boost::source(I.int_edge, G);				
 			}
 			
