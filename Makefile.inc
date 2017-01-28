@@ -9,15 +9,22 @@
 
 ### USER CONFIGURATION VARIABLES ###
 # Directory where the project resides.
-PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
+#PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
+PROJECT_DIR=/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia
+
 # Installation path
-INSTALL_PATH = /D/BGLgeom
+#INSTALL_PATH = /D/BGLgeom
+INSTALL_PATH = /home/pacs_student/Desktop/BGLgeom
+
 # Path to Boost Graph Library
-export mkBGLInc = /D/boost_1_61_0/boost #/graph
+#export mkBGLInc = /D/boost_1_61_0/boost #/graph
+
 # Path to GetFEM main folder
-export mkGetFEMHome = /D/GetFEM/5.0
+#export mkGetFEMHome = /D/GetFEM/5.0
+
 # Path to MANworks main folder
-export mkMANworksHome = /D/MANworks
+#export mkMANworksHome = /D/MANworks
+
 # Tolenrance on being zero (for comparison on points and segments)
 # This variable is needed when including point.hpp and intersections2D.hpp headers, 
 # and this happens for all tests in the library and in both applications. If you do 
@@ -26,11 +33,11 @@ TOL_VALUE = 1e-10
 
 ## EDIT THESE ONLY IF YOU DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
 # Path to VTK includes
-export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
+#export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
 # Path to VTK libraries
-export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
+#export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
 # Path to Eigen includes
-export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
+#export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
 
 
 ### NOW DO NOT EDIT ANYTHING ###
