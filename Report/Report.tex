@@ -85,28 +85,28 @@
 
 \section{Introduction}
 	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
-	All these geometric functionalities we developed to build the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
-	A lot of different kind of applications can take advantage from this library; in particular, we provide two example of specific application: one that creates a graph computing intersection of fractures in a fractured porous media, and one that solves a simple diffusion problem on a vascular network.
+	All the geometric functionalities we developed in the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
+	A lot of different kind of applications can take advantage from this library; in particular, we provide two example of specific applications: one that creates a graph computing intersection of fractures in a fractured porous media, and the other that solves a simple diffusion problem on a vascular network.
 
 \section{The library}
 	\subsection{Briefs on BGL}
-	The BGL is a template library to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning graphs, and a wide variety of graph algorithms.
+	The BGL is a template library to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning them, and a wide variety algorithms.
 	\newline\newline
 	% Metto qui quello che ho messo nella documentazione? adjacency_list e tutto il resto? forse comunque ho bisogno di dire dell'adjacency list, ma
-	Among all these functionalities, we decide to concentrate on a single class to describe a graph and on how implement in an easy to use way the geometrical properties. To explain in more details our implementation choices, we need to spend some words on how that class and the graph properties work.
+	Among all these functionalities, we decided to focus on a single class to describe a graph and on how implement in an easy to use way the geometrical properties. To explain in more details our implementation choices, we need to spend some words on how that class and the graph properties work.
 	
 		\subsubsection{The adjacency\_list class}
 		\classname{adjacency\_list} is a template class which represents a graph with a two dimensional structure: 
 		a \texttt{VertexList} and a \texttt{OutEdgeList} container. The first one stores all the vertices of the graph, and each vertex contains the other one-dimensional structure which is the list of all the out-edges leaving that vertex (so only out-edges if the graph is directed, all the edges if the graph is undirected). \newline
 		The class has five template parameters and the full protoytpe is: \classname{adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >}. \newline
-		The first two template parameters allow to choose the types of the underlying containers for the bidimensional structure. Choosing them affects space complexity of the graph and efficiency of some operations, such as inserting and removing edges. In our work we always set them to the selector \classname{boost::vecS} (that stands for \texttt{std::vector}) for ease of use and since, form BGL documentation, it is in average the most performant choice for every topological operation. \newline
+		The first two template parameters allow to choose the types of the underlying containers for the bidimensional structure. Choosing them affects space complexity of the graph and efficiency of some operations, such as inserting and removing edges. In our work we always set them to the selector \classname{boost::vecS} (that stands for \texttt{std::vector}) for ease of use and since, from BGL documentation, it is on average the best performing choice for every topological operation. \newline
 		The third template parameter obviously allows to choose between a directed or undirected graph.\newline
 		The last two template parameters are the most interesting ones: they allow to choose what are the vertex and the edge properties. The BGL provides an easy way to handle them: the so called \textit{bundled properties}. They simply are classes, or better, structs, which can be passed as template parameter to the \classname{adjacency\_list} class, and they will become its vertex and edge properties, along with all their attributes and memeber functions. This gives a lot of flexibility: for instance, if we want all the vertices to have as properties three doubles, an int, two strings and a member that returns a random number, we only have to define them all in the same struct and pass it as the fourth template parameter of the \classname{adjacency\_list} class. The same for the edges, passing the corresponding struct as fifth template parameter. Moreover, the usage of a struct, instead of a class, enables public member access, and this comes out in a slight more ease of use when accessing the properties. \newline
 		Concluding this description, we underline that choosing different values for the template parameters consits in changing the type of the graph one is using, with consequence on some other tool provided by BGL.
 		
 		\subsubsection{Vertex and edge descriptors}
 		Two specific handles are provided to manipulate vertices and edges: the vertex and the edge descriptors. They may be of different types, depending on the graph type. They in general 'refer' to a particular vertex or edge, thus allowing for instance to access their properties, or to specify in a very readable way topological operations. \newline
-		Two more tools are provided to access a graph: vertex and edge iterators. As the descriptors, the iterators can be of different types depending on the graph type. Specific function return the iterator to the first and last vertex and to the first and last edge in the graph, thus allowing graph traversal. Dereferencing an iterator one will obtain the descriptor of the vertex or edge pointed by that iterator. \newline
+		Two more tools are provided to access a graph: vertex and edge iterators. As the descriptors, the iterators can be of different types depending on the graph type. Specific function return the iterator to the first and last vertex and to the first and last edge in the graph, thus allowing graph traversal. Dereferencing an iterator, the descriptor of the vertex or edge pointed by that iterator are obtained. \newline
 		Both descriptors and iterators are accessible through the \classname{graph\_traits} class.
 		
 		\subsubsection{Accessing properties}
@@ -126,8 +126,8 @@
 		The library contains many things:
 		\begin{itemize}
 			\item \textbf{Adapters for BGL}: we provide some layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
-			\item \textbf{Classes to build graph properties}: the main part of the library are all the classes we developed to create for the graph a vertex and an edge property which include the basic geometric requirments.
-			\item \textbf{Geometrical and numerical utilieties}: we included in this library some code to compute integrals, generate meshes, compute intersections between linear edges.
+			\item \textbf{Classes to build graph properties}: the main part of the library are all the classes we developed to create a vertex and an edge property including the basic geometric requirements.
+			\item \textbf{Geometrical and numerical utilities}: we included in this library some code to compute integrals, generate meshes, compute intersections between linear edges.
 			\item \textbf{I/O utilities}: we provide one reader class to read tabular ASCII files, and three writer classes to produce three different types of output: ASCII, .pts and .vtp files.
 			\item \textbf{Tests}: we provide source code examples to show how the main classes and writers work.
 		\end{itemize}
@@ -135,7 +135,7 @@
 		%forse posso dire prima quali proprietà geometriche abbiamo implemenmtato, come e perché, e poi come le abbiamo messe insieme per poter usare i grafi.
 	
 		\subsubsection{Geometric properties}
-		In this library we do not provide any type of grap. We decided to use the \classname{adjacency\_list} class directly from the BGL, since this already gives a lot of flexibility. We focused on implementing the geometrical properties we was required as \textit{bundled properties} (that are really flexible too), so that we could simply pass them as template parameters to create a graph with the desired characteristics. Moreover, we chose to put in our properties only the functionalities that are really needed for a geometrical description, leaving the user the freedom to add its own characteristics and functionalities. \newline
+		In this library we do not provide any type of grap. We decided to use the \classname{adjacency\_list} class directly from the BGL, since this already gives a lot of flexibility. We focused on implementing the geometrical properties we were required as \textit{bundled properties} (that are really flexible too), so that we could simply pass them as template parameters to create a graph with the desired characteristics. Moreover, we chose to put in our properties only the functionalities that are really needed for a geometrical description, leaving the user the freedom to add its own characteristics and functionalities. \newline
 		The geometric properties we were asked to developed are:
 		\begin{itemize}
 			\item Coordinates for points.
@@ -143,10 +143,10 @@
 			\item Parameterization for the edges, along with computation of the main characteristics: first and second derivative, curvature, curvilinear abscissa.
 			\item Meshes on the edges.
 		\end{itemize}
-		We templatized all this elements on the dimension of the space.				
-		\paragraph{Points.}	To represent points we used \texttt{Eigen} matrices, with 1 column and n rows. We choose the \texttt{Eigen} because it provides high efficiency and a lot of numerical method to compute in an easy way geometrical quantities.
-		\paragraph{Boundary conditions.} We implemented a class to store a boundary condition as a type and a value. We provide an \texttt{enum class BC\_type} to represent the most common types of boundary conditions.
-		\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library would have been able to manage any possible parameterization of the type
+		We templated all this elements on the dimension of the space.				
+		\paragraph{Points.}	To represent points we used \texttt{Eigen} matrices, with 1 column and n rows. We choose the \texttt{Eigen} because it provides high efficiency and a lot of numerical methods to compute in an easy way geometrical quantities.
+		\paragraph{Boundary conditions.} We implemented a class to store a boundary condition as a type and a value. We provided an \texttt{enum class BC\_type} to represent the most common types of boundary conditions.
+		\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library should have been able to manage any possible parameterization of the type
 		\begin{equation*}
 			f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
 		\end{equation*}
@@ -241,7 +241,7 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 
 	\subsection{Fracture Intersection}
 %		\subsubsection{The problem}
-	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \label{fig:frac_int_example}.
+	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \ref{fig:frac_int_example}.
 	\begin{figure}
 		\centering 
 		\includegraphics[width=0.5\textwidth]{frac_inters}
@@ -250,8 +250,19 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 	\end{figure}
 	
 		\subsubsection{Intersection types}
-		To compute the intersection between two given edges we use a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom, after adapting it to our specific data structeres: it outputs the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned) and two boolean variables, whose value depend respectively on the parallelism and the collinearity of the evaluated edges. \newline
-		We identified 11 different types of intersection between two linear edges (see figure \label{fig:frac_int_type}): we built then a layer class which associates each possible outcome of Professor Formaggia's code with one and only one of the overmentioned 11 intersection types. 
+		To compute the intersection between two given edges we used a piece of code, developed by Professor Formaggia, which we included as a utility in our libary BGLgeom (\texttt{intersections2D.hpp}), after adapting it to our specific data structeres, as a struct, \texttt{Intersection}: it stores the number of intersections, the intersection point (if the intersection is not just a point but a segment, its two extremes are returned), two boolean variables, whose value depend respectively on the parallelism and the collinearity of the evaluated edges, and the intersection type.\newline
+		The intersection type is an enum class with 12 different values, 10 corresponding to real intersections and listed in figure \ref{fig:frac_int_type}, plus two handling the case with no intersection and the case of some unexpected behaviour.
+		Depending on the intersection type, different actions will be performed during the graph construction.
+		For this specific application we also created in file \texttt{fraxture\textunderscore intersection/include/intersections2D\textunderscore utilities.hpp} a struct called \texttt{Int\textunderscore layer}, whose constructor takes as input an \texttt{Intersection} struct and computes from it variables of interest:
+		\begin{itemize}
+			\item how: intersection type, directly copied from \texttt{Intersection}
+			\item int\textunderscore edge: edge descriptor of the intersected edge
+			\item int\textunderscore pts: intersection point(s), directly copied from \texttt{Intersection}
+			\item swapped\textunderscore comp: boolean equal to 1 when there are two intersection points and they are swapped while ordering the intersection vector
+			\item intersected\textunderscore extreme\textunderscore old: boolean equal to 0 if the source of the "old" edge (that already in the graph) is an intersection point, equal to 1 if the target of the "old" edge is involved. This variable is used only when we already know from the intersection type that one and only one extremity of the "old" edge is an intersection point.
+			\item intersected\textunderscore extreme\textunderscore new: boolean equal to 0 if the source of the "new" edge (the fracture currently added) is an intersection point, equal to 1 if the target of the "new" edge is involved. This variable is used only when we already know from the intersection type that one and only one extremity of the "new" edge is an intersection point.
+		\end{itemize}
+		
 		\begin{figure}
 			\centering 
 			\includegraphics[width=1\textwidth]{int_type}
@@ -259,10 +270,34 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 			\label{fig:frac_int_type}
 		\end{figure}
 		\subsubsection{The algorithm}
-		The file is read fracture by fracture: for each of them the physical properties are stored in the edge\textunderscore property struct and the line number is used as identifier; a vertex descriptor called SRC is associated to the first extremity of the fracture, another called TGT to the second one. These vertex descriptors can be either associated to already existing vertices in case of same coordinates or to new ones otherwise. After the initialization part, we loop over the edges in the graph: for each of them we check if it intersects with the current fracture; if so, the information (edge descriptor of the intersected edge, type, intersection point(s), extremities involved) is stored in a designated struct, and the struct is pushed back in a vector which, by the end of the loop, will therefore contain all the intersections due to the fracture we are currently reading. \\
-		Once the loop over the edges is completed, if the intersection vector is empty, a new edge is created between SRC and TGT and the edge\textunderscore property is bundled to it, otherwise it is first reordered and then some "duplicates" are removed.
-		The reordering phase consists exactly in ordering the vector from the nearest to the source to the farthest one; also the two intersections contained in the same struct (in those cases in which the intersection is a segment nd not a single point) are reordered according to the same criterion.
-		The duplicates removal, instead, consists in keeping just one single struct among all of those related to the same intersection point; in \label{fig:rem_dupl} an example is shown: 
+		Here we illustrate, through pseudocode and then with a detailed description, how the function \texttt{create\textunderscore graph} works.
+		\begin{lstlisting}
+		while(!eof){
+			fracture = getline()
+			create fracture edge_property 
+			int_vect.clear()
+			for e in edges(G){
+				compute_intersection(e, fracture)
+				if intersection exists{
+					create Int_Layer with intersection information
+					int_vect.push_back(Int_Layer)
+				}	
+			}
+			if int_vect.empty(){
+				add_edge to graph with fracture edge properties
+			}
+			else{
+				reorder int_vect
+				remove_duplicates inside int_vect
+				refine_graph(fracture, int_vect)  
+			}
+		}		
+		
+		\end{lstlisting}
+		The file is read fracture by fracture: for each of them the physical properties are stored in the edge\textunderscore property struct and the line number is used as identifier; a vertex descriptor called SRC is associated to the first extremity of the fracture, another called TGT to the second one. These vertex descriptors can be either associated to already existing vertices in case of same coordinates or to new ones otherwise. After the initialization part, we loop over the edges in the graph: for each of them the function \texttt{compute\textunderscore intersection} checks for intersections with the current fracture; if so, the corresponding \texttt{Int\textunderscore Layer} struct is created and pushed back in a vector which, by the end of the loop, will therefore contain all the intersections with the fracture we are currently reading. \\
+		Once the loop over the edges is completed, if the intersection vector is empty, a new edge is created between SRC and TGT and the edge\textunderscore property is bundled to it, otherwise the vector is first reordered and then some "duplicates" are removed.
+		The reordering phase consists exactly in ordering the vector from the nearest to the source to the farthest one; also the two intersections contained in the same struct (in those cases in which the intersection is a segment and not a single point) are reordered according to the same criterion (and if they are swapped the boolean variable \texttt{swapped} in the \texttt{Int\textunderscore layer} is switched from 0 to 1).
+		The duplicates removal, performed by function \texttt{remove\textunderscore duplicates}, consists in keeping just one single struct among all of those related to the same intersection point; in \ref{fig:rem_dupl} an example is shown: 
 		\begin{figure}
 		\centering 
 		\includegraphics[width=1\textwidth]{rem_dupl}
@@ -270,11 +305,11 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 		\label{fig:rem_dupl}
 		\end{figure}
 		before adding the new fracture (the red one), the graph has 5 edges and 6 vertices. Looping on the edges, the algorithm correctly detects one intersection with each edge, but there is only one intersection point, E, and no edge has to be modified by the insertion of the new fracture, therefore all the "duplicates" are discarded but one. Note that this happens just in case of multiple intersections of type "Told" or "common extreme". \\
-		Now the vector is ready to be processed. We start passing to the function refine\textunderscore graph SRC and the first struct of the vector: this function performs different actions depending on the intersection type; the common goal is to resolve all the changes due to the insertion of the new fracture and related to that specific segment. The function returns as output the vertex descriptor which will be passed as source at the next iteration together with the second struct in the vector. This procedure goes on until the end of the intersection vector is reached; at the end, the vertex descriptor returned by the last call to refine\textunderscore graps is connected to TGT. \\
-		In case of partial or total overlapping between the new fracture and an existing edge, a conflict between the corresponding edge properties happens: it is up to the user to decide how to solve it, and this is possible passing as optional parameter to create\textunderscore graph a lambda function update\textunderscore edge\textunderscore properties which will be used to inside refine\textunderscore graph to merge old and new properties. The default behaviour is simply to keep the old property, totally discarding the new one.
+		Now the vector is ready to be processed. We start passing to the function \texttt{refine\textunderscore graph} SRC and the first struct of the vector: this function performs different actions depending on the intersection type; the common goal is to resolve all the changes due to the insertion of the new fracture and related to that specific segment. The function returns as output the vertex descriptor which will be passed as source at the next iteration together with the second struct in the vector. This procedure goes on until the end of the intersection vector is reached; at the end, the vertex descriptor returned by the last call to \texttt{refine\textunderscore graph} is connected to TGT. \\
+		In case of partial or total overlapping between the new fracture and an existing edge, a conflict between the corresponding edge properties happens: it is up to the user to decide how to solve it, and this is possible passing as optional parameter to \texttt{create\textunderscore graph} a lambda function \texttt{update\textunderscore edge\textunderscore properties} which will be used inside \texttt{refine\textunderscore graph} to merge old and new properties. The default behaviour is simply to keep the old property, totally discarding the new one.
 		
 		\subsubsection{A simple example}
-		This example refers to \label{fig:example_algo} and it aims at illustrating how the algorithm works.
+		This example refers to \ref{fig:example_algo} and it aims at illustrating how the algorithm works.
 		\begin{figure}
 			\centering 
 			\includegraphics[width=1\textwidth]{example_algo}
@@ -282,7 +317,7 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 			\label{fig:example_algo}
 		\end{figure}
 		We consider the insertion of the fifth fracture (e): the previous four (a,b,c,d) have been already added and the graph they created is made of 8 vertices and 6 edges (AE, BE, CE, DE, FE, GH).  
-		Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E.  (see table \label{tab:table1}).
+		Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E.  (see table \ref{tab:table1}).
 		Now we are left with a vector of two components: first of all we pass to refine\textunderscore graph the vertex descriptor I (which is the source of the new fracture) and the first intersection struct (related to point E); being the intersection of type T\textunderscore old, this function simply adds an edge between I and E and returns as next source E. At the second step, refine\textunderscore graph takes as input the current source (i.e. the output of the previous call to the function, i.e. E in this example) and the second intersection struct: in case of overlap\textunderscore outside the source is connected to the first intersection (EH), the properties of the old edge (HG) are updated and the second intersection is connected with the target (GJ). In conclusion, the insertion of this new fracture led to the creation of three new edges (all labelled with letter e in order to keep track of the fact they all part of the fifth fracture) and to the property updating of an existing one.
 		
 		\begin{table}[ht]
@@ -324,8 +359,16 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 			\bottomrule
 			\end{tabular}
 		\end{table}
-		
-		
+	
+	\subsubsection{A more complex example}
+		In file \texttt{test\_all\_int\_cases.txt} we put a list of fractures with no property associated: the main goal of this example is to show that the code performs correctly whatever is the intersection type it has to handle. Indeed, the sequence of fractures is built in such a way that almost every intersection type appears during the construction of the graph. 
+				\begin{figure}
+					\centering 
+					\includegraphics[width=1\textwidth]{graph_building_process}
+					\caption{Fracture in red is going to be added to the graph}
+					\label{fig:graph_steps}
+				\end{figure}
+		In figure \ref{graph_steps} we show how the graph is built step by step, one fracture at a time.
 		
 
 
@@ -343,7 +386,7 @@ struct My_vertex_prop : public BGLgeom::Vertex_base_property<3> {
 		\right.
 	\end{equation*}
 	with boundary conditions .... 	\newline
-	The vascular network we use in the application is a prototype for a network with a sequenze of bifurcations. There is a first single edge, that is the inflow one, that bifurcates in a Y on the plane (z?), then each extreme of this first bifurcation bifurcates again, but this time along the (x?) plane, then the four ends with which we end up bifurcate again on the (z?) plane, and so on . The algorithm can go on iteratively to any order of bifurcation, building a network that will be always contained in a unitary cube. We also considered randomization on the final coordinates of each end point, but the first two (i.e. the first edge will always be in the same position). We perform this random effect by taking a draw from a uniform distribution on [-1,1], and then recaling this draw with the scale parameter $re$, that stands for 'random effect'. We provide with the application a matlab script that generates such a network, given the desired number of orders of bifurcations and the entity(???) of the random effect.
+	The vascular network we use in the application is a prototype for a network with a sequence of bifurcations. There is a first single edge, that is the inflow one, that bifurcates in a Y on the plane (z?), then each extreme of this first bifurcation bifurcates again, but this time along the (x?) plane, then the four ends with which we end up bifurcate again on the (z?) plane, and so on . The algorithm can go on iteratively to any order of bifurcation, building a network that will be always contained in a unitary cube. We also considered randomization on the final coordinates of each end point, but the first two (i.e. the first edge will always be in the same position). We perform this random effect by taking a draw from a uniform distribution on [-1,1], and then recaling this draw with the scale parameter $re$, that stands for 'random effect'. We provide with the application a matlab script that generates such a network, given the desired number of orders of bifurcations and the entity(???) of the random effect.
 		
 	%Computational issues?? Complexity and time efficiency?
 

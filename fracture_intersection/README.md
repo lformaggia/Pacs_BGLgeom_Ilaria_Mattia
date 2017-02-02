@@ -14,6 +14,9 @@ each intersection point as a new vertex, and all the intersecting
 edges will have to be connected in the proper way and with the 
 right properties. 
 
+We also provide a simple hand-made test to show how the algorithm 
+works in all the possible intersection situations.
+
 -----------------------------------------------------
 ### How to build this application
 -----------------------------------------------------
@@ -42,18 +45,35 @@ make RELEASE=yes exec
 ```
 to build the application. Omit `RELEASE=yes` if you want debug mode.
 
+#### Build the test
+
+The test is meaningful if compiled in debug mode: in this way all the 
+output messages will be produced. To compile it, type
+```
+make -B test
+```
+The `-B` option force to recompile the source file with the helper 
+functions in debug mode. If you omit it, you won't display the messages.
 
 -------------------------------------------------------
-### Run the application
+### Run the application and the test
 -------------------------------------------------------
 
 Go to `/bin` and type
 ```
 ./main_fracture
 ```
+to run the main application.
 
-Some output will be produced. They are all stored in the `/data` folder. 
-The .vtk files can be displayed using Paraview.
+In the same folder, type
+```
+./main_example
+```
+to run the test executable.
+
+Some outputs will be produced. They are all stored in the `/data` folder. 
+The `/data/vtk` folder contains all output files produced by the main 
+application. The .vtk files can be displayed using Paraview. 
 
 ------------------------------------------
 ### Documentation
@@ -64,7 +84,7 @@ To build the documentation for this application, type
 make doc
 ```
 
-This command will produce two type of documentation: LaTeX and html. 
+This command will produce two type of documentations: LaTeX and html. 
 To view the Latex documentation, type:
 ```
 evince doc/latex/refman.pdf

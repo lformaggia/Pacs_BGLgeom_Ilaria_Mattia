@@ -33,7 +33,7 @@
 #include <tuple>
 
 #include "types_definition.hpp"  // using-declarations local to this application 
-#include "reader_lines.hpp"
+#include "reader_example.hpp"
 #include "helper_functions.hpp"
 #include "writer_vtp.hpp"
 
@@ -62,7 +62,7 @@ int main(){
 	Graph G;
 	
 	// Reading the file1
-	reader_lines R(filename);	
+	reader_example R(filename);	
 	R.ignore_dummy_lines(1);	
 	
 	// This function handles the entire construction of the graph while reading the input file contained in the reader
@@ -79,7 +79,7 @@ int main(){
 	std::cout << count_v << " vertices and " << count_e << " edges" << std::endl;
 	
 	//Producing output
-	std::string filename_out("../data/graph_test.vtp");	
+	std::string filename_out("../data/out_main_example.vtp");	
 	writer_vtp<Graph,2> W(filename_out.c_str());
 	W.export_vtp(G);
 	
