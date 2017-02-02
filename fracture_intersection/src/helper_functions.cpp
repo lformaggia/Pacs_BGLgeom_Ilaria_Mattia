@@ -168,22 +168,17 @@ void create_graph(Graph & G,
 		
 		// Creation of the new current line we want to insert
 		const line L(G[src].coordinates, G[tgt].coordinates);		
-		// Preparing variable to the next loop
-		count_e = 0;
+		
 		intvect.clear();
 		// Checking for intersection of L with all the edges already present in the graph
 		for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-			++count_e;			
 			intobj_tmp = BGLgeom::compute_intersection(G[*e_it].geometry, L);
 			if(intobj_tmp.intersect == true){
 				Fracture::Int_layer<Graph> intobj(intobj_tmp, *e_it);
 				intvect.push_back(intobj);
 			}	
 		} //for
-		
-		//#ifndef NDEBUG
-			std::cout << count_e << " edges." << std::endl;
-		//#endif
+
 		
 		// Insertion of the new edge, handling intersections if present
 		// if intvect is empty it means that the new fracture does not intersect any of the edges in graph
