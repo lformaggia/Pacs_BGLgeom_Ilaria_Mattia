@@ -1,10 +1,15 @@
 %======================================================================
-%                        "BGLgeom library"
-%        Course on Advanced Programming for Scientific Computing
-%                      Politecnico di Milano
-%                          A.Y. 2015-2016
-%                  
-%         		Copyright (C) 2015 Domenico Notaro
+%   "Mixed Finite Element Methods for Coupled 3D/1D Fluid Problems"
+%       Course on Advanced Programming for Scientific Computing
+%                     Politecnico di Milano
+%                         A.Y. 2016-2017
+%                 
+%               Copyright (C) 2017 Stefano Brambilla
+%======================================================================
+%	FILE        : input_stationary.param
+%  DESCRIPTION      : List of parameters for the network benchmark
+%	AUTHOR      : Stefano Brambilla <s.brambilla93@gmail.com>
+%	DATE        : January 2017
 %======================================================================
 
 %  FLAGS
@@ -17,20 +22,20 @@ TEST_RHS   = 0;
 EXPORT_PARAM = 0; 
 % Flag to export results
 VTK_EXPORT = 1;
-%Flag to add diffusion terms
-DIFFUSION_T=1;
-DIFFUSION_V=1;
+%Flag to take the stationary problem
+STATIONARY=1;
 %Flag to add advection terms
 ADVECTION_T=0;
 ADVECTION_V=0;
+%Flag to add diffusion terms
+DIFFUSION_T=1;
+DIFFUSION_V=1;
 %Flag to add reaction terms
 REACTION=0;
-%Flag to take the stationary problem
-STATIONARY=0;
 %Flag for the new formulation
 NEW_FORMULATION = 1;
 % Output directory
-OUTPUT   = './../data/vtk/';
+OUTPUT     = './../data/vtk/';
 %===================================
 %  MESH
 %===================================
@@ -42,10 +47,10 @@ ORG_T      = '[0,0,0]';
 SIZES_T    = '[1,1,1]';  
 NOISED_T   = '0';
 % Path to import the 3d mesh
-MESH_FILET = ' '; 
+MESH_FILET = './rat98AdimSemiCoarse.msh'; 
 % Path to import the 1d list of points
 MESH_FILEV = './../data/bifurcation_network.pts'; 
-MESH_FILEV_TRANSP = './../data/bifurcation_network.pts';
+MESH_FILEV_TRANSP =  './../data/bifurcation_network.pts';
 %===================================
 %  GETFEM DESCRIPTORS
 %===================================
@@ -82,6 +87,7 @@ NInt = 50;
 %===================================
 %  MODEL PARAMETERS
 %===================================
+
 % Dimensionless conductivity of the tissue
 Kt = 1.0;
 % Dimensionless conductivity of the capillary wall
@@ -89,9 +95,9 @@ Q  = 1.0;
 % Dimensionless conductivity of the capillary bed
 Kv = 1.0;
 % Dimensionless average radius of the capillary vessels []
-RADIUS = 0.10;
+RADIUS = 0.010;
 %Dimensionless At[]
-At=2.0;
+At=1.0;
 %Dimensionless Av[]
 Av=1.0;
 %Dimensionless Dalpha[]
@@ -115,7 +121,7 @@ U  = 166E-06;
 % characteristic length of the problem [m]
 d  = 240E-06;
 % average radius of the capillary vessels []
-%RADIUS = 5E-06;
+%%RADIUS = 5E-06;
 % Viscosity of the blood [kg/ms]
 mu_V = 0.001; 	
 % Viscosity of the interstitial fluid [kg/ms]
@@ -143,17 +149,18 @@ dt = 0.2;
 %===================================
 % Faces:   x=0  x=L  y=0  y=L  z=0  z=L
 % BC labels (DIR / MIX)
-BClabel = 'MIX  MIX  DIR  DIR  MIX  MIX'
+BClabel = 'MIX  MIX  MIX  MIX  MIX  MIX'
 % BC values
-BCvalue = '0.0  0.0  -5.0  10.0  0.0  0.0'
+BCvalue = '0.0  0.0  0.0  0.0  0.0  0.0'
 % Coefficient for MIX condition
 BETA = 1.0E-10
 
 % Faces:   x=0  x=L  y=0  y=L  z=0  z=L
 % BC labels (DIR / MIX)
-BClabel_transp = 'MIX  MIX  MIX  MIX  MIX  MIX'
+BClabel_transp = 'MIX MIX MIX MIX MIX MIX'
 % BC values
 BCvalue_transp = '0.0  0.0  0.0  0.0  0.0  0.0'
-% Coefficient for MIX condition
-BETA_transp = 1.0E-1
-
+% Coefficient for MIX condition in tissue
+BETAtissue_transp = 1.0E-1
+% Coefficient for MIX condition in vessels
+BETAvessel_transp = 1.0E-1

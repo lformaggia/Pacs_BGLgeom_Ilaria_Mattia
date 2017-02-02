@@ -6,21 +6,6 @@
                   
          Copyright (C) 2017 Ilaria Speranza & Mattia Tantardini
 ======================================================================*/
-/*
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
 /*!
 	@file main_network_diffusion.cpp
 	@author Ilaria Speranza & Mattia Tantardini
@@ -37,7 +22,6 @@
 #include "reader_netdiff.hpp"
 #include "writer_pts.hpp"
 #include "graph_builder.hpp"
-#include "graph_access.hpp"
 
 #include "problem3d1d.hpp"
 #include "transport3d1d.hpp"
@@ -92,11 +76,11 @@ int main(int argc, char* argv[]){
 	getfem::transport3d1d p;	  
 	// Fluid problem: velocity field and pressure
 	p.problem3d1d::init(argc, argv);	// Initialize the problem
-	p.problem3d1d::assembly();			// Build the monolithic system 
-	p.init(argc, argv);					// Initialization with input file     
-	p.assembly();    					// Assemble
+	p.problem3d1d::assembly();
+	p.init(argc, argv);
+	p.assembly();    					// Build the monolithic system
 	// Solve the problem
-	if (!p.solve()) GMM_ASSERT1(false, "solve procedure has failed");  // the export in vtk format is in the solve at each time step	
-	
+	if (!p.solve()) GMM_ASSERT1(false, "solve procedure has failed");
+		
 	return 0;
 }
