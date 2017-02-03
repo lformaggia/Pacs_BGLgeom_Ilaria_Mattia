@@ -38,6 +38,7 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
+#include <Eigen/Dense>
 #include "edge_geometry.hpp"
 #include "adaptive_quadrature.hpp"
 
@@ -131,6 +132,81 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 			d2C.resize (nc-2);
 			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
 		};
+		
+		//! Constructor con punti dati
+		bspline_geometry(const vect_pts &P, bool interpolation, std::vector<double> & grev_out){
+
+			nc = P.size();
+			k = make_knots(nc);
+
+			// Greville
+			vect grev(nc);
+			for(std::size_t i = 0; i < nc; ++i){
+				grev[i] = (k[i+1]+k[i+2]+k[i+3]) / deg;
+			}	//for
+			
+			grev_out.resize(nc);
+			grev_out = grev;
+			std::cout << "grev, k" << std::endl;
+			for(std::size_t i = 0; i < nc; ++i){
+				std::cout << grev[i] << ", " << k[i] << std::endl;
+			}
+			
+			int span;
+			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> V = Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>::Zero(nc,nc); //Vandermonde
+			for(std::size_t i = 0; i < grev.size(); ++i){
+				vect N(deg+1);
+				span = findspan(nc-1, deg, grev[i], k);
+				basisfun(span, grev[i], deg, k, N);
+				// Trascriviamo N nella matrice V, alla riga i, colonne da span-3 a span+1
+				V(i, span-deg) = N[0];
+				V(i, span-deg+1) = N[1];
+				V(i, span-deg+2) = N[2];
+				V(i, span-deg+3) = N[3];
+				
+				std::cout << N[0] << ", " << N[1] << ", " << N[2] << ", " << N[3] << std::endl;
+			}
+			
+			for(std::size_t i = 0; i < 7; ++i){
+				for(std::size_t j = 0; j < 7; ++j)
+					std::cout << V(i,j) << " ";
+				std::cout << std::endl;
+			}
+			
+			// Trascriviamo i Punti dati P in un vettore Eigen
+			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> PP(nc,dim);
+			for(std::size_t i = 0; i < nc; ++i)
+				for(std::size_t j = 0; j < dim; ++j)
+					PP(i,j) = P[i](j);
+			
+			// Ora dobbiamo risolvere il sistema lineare V*C = PP -> C = V^-1 * PP
+			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> CC = V.lu().solve(PP);
+			
+			for(std::size_t i = 0; i < 7; ++i){
+				for(std::size_t j = 0; j < 3; ++j)
+					std::cout << CC(i,j) << " ";
+				std::cout << std::endl;
+			}
+			
+			C.resize(nc);
+			//Trasformiamo i control points da Eigen in vect_pts
+			for(std::size_t i = 0; i < nc; ++i)
+				for(std::size_t j = 0; j < dim; ++j)
+					C[i](j) = CC(i,j);
+					
+			// Creiamo il resto della spline
+			// construction of spline for the vector of first derivative
+			dC.resize (nc-1);
+			dk.resize (k.size () - 2, 0.0);
+			std::cout << "aaa" << std::endl;
+			bspderiv (deg, C, nc, k, k.size (), dC, dk);
+			std::cout << "bbb" << std::endl;
+
+			// construction of spline for the vector of second derivative
+			d2k.resize (dk.size () - 2, 0.0);    
+			d2C.resize (nc-2);
+			bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
+		}
 		
 		//! Copy constructor
 		bspline_geometry(bspline_geometry const&) = default;
@@ -387,7 +463,6 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 			s = findspan (nc-1, d, t, k);
 			basisfun (s, t, d, k, N);
 			tmp1 = s - d;
-			//std::cout << tmp1 << ", " << C.size() << std::endl;
 			for (i = 0; i < dim; ++i)
 				for (ii = 0; ii <= d; ++ii)
 			    	P(i) += N[ii] * C[tmp1+ii](i);
@@ -413,8 +488,7 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 			for (std::size_t i_vect = 0; i_vect < nt; ++i_vect){
 			    s = findspan (nc-1, d, t[i_vect], k);
 			    basisfun (s, t[i_vect], d, k, N);
-			    tmp1 = s - d;
-			    			    			
+			    tmp1 = s - d;			    			    			
 			    for (i_pt = 0; i_pt < dim; ++i_pt){
 			    	for (ii = 0; ii <= d; ++ii)
 			        	P_vect[i_vect](i_pt) += N[ii] * C[tmp1 + ii](i_pt);
