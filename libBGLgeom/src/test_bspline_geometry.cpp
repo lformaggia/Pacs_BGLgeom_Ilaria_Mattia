@@ -70,7 +70,8 @@ int main(){
 	control_pts.push_back(point<2>(1,0));
 	
 	std::cout << "================== BSPLINE GEOMETRY ======================" << std::endl << std::endl;
-	bspline_geometry<2,2> B(control_pts);
+	std::cout << "Second degree b-spline in 2-dimensional space" << std::endl;
+	bspline_geometry<2,2> B(control_pts, BSP_type::Approx);
 	std::cout << B << std::endl << std::endl;
 	
 	std::cout << "Evaluation: " << std::endl;
@@ -133,8 +134,8 @@ int main(){
 	std::cout << std::endl;
 	
 	// The example on De Falco demo
-	std::cout << std::endl << "==================== ANOTHER BSPLINE =====================" << std::endl;
-	std::cout << "Now a more difficult example" << std::endl << std::endl;
+	std::cout << std::endl << "=================== ANOTHER BSPLINE ====================" << std::endl;
+	std::cout << "Now a more difficult example: cubic b-spline in 3-dimensional space" << std::endl << std::endl;
 	
 	std::vector<point<3>> CPs = {point<3>(0,      0,   0),	// 1st c.p.
 							     point<3>(2./3.,  1,   0),	// 2nd c.p.
@@ -143,8 +144,7 @@ int main(){
 							     point<3>(11./3., 4,   0),	// 5th c.p.
 							     point<3>(4,      8,   0)};	// 6th c.p.
 	// Bspline edge defaulted at dim=3, deg=3
-	bspline_geometry<> B2;
-	B2.set_bspline(CPs);
+	bspline_geometry<> B2(CPs, BSP_type::Approx);
 	mesh<3> M;
 	M.uniform_mesh(20, B2);
 	std::vector<point<3>> value = M.real;
@@ -162,41 +162,62 @@ int main(){
 	
 	// Now we try to build a graph with one bspline edge
 	std::cout << "==================== ON GRAPH ======================" << std::endl;
-	std::cout <<  "Creating a graph" << std::endl << std::endl;
+	std::cout << "Creating two graphs with two edges with same sources and targets" << std::endl;
+	std::cout << "In the first graph the geometry is bspline Approx, " << 
+				 "instead in the second graph is bspline interp. " << std::endl;
 	using Graph = boost::adjacency_list< boost::vecS, 
 										 boost::vecS, 
 										 boost::directedS, 
 										 Vertex_base_property<3>, 
 										 Edge_base_property<bspline_geometry<>,3> >;
-	Graph G;
+	Graph G1;
+	Graph G2;
 	
 	std::vector<point<3>> CPs2 = {point<3>(0,			 0,		 0),	// 1st c.p.
 							      point<3>(-1./6.,	-1./7.,	-1./8.),	// 2nd c.p.
 							      point<3>(-2./6.,	-2./7., -3./8.),	// 3rd c.p.
 							      point<3>(-.5,		-3./7.,	-5./8.),	// 4th c.p.
-							      point<3>(-5./6.,	-5./7.,	-7./8.),	// 5th c.p.
+							      point<3>(-5./6.,	-5./7., -7./8.),	// 5th c.p.
 							      point<3>(-1,			-1,		-1)};	// 6th c.p.
 	
-	Vertex_desc<Graph> a,b,c;
+	Vertex_desc<Graph> a,b,c,d,e,f;
 	Vertex_base_property<3> a_prop(CPs.front());
 	Vertex_base_property<3> b_prop(CPs.back());
 	Vertex_base_property<3> c_prop(CPs2.back());
-	a = new_vertex(a_prop, G);
-	b = new_vertex(b_prop, G);
-	c = new_vertex(c_prop, G);
-	Edge_desc<Graph> e1, e2;
-	e1 = new_bspline_edge<Graph,3>(a, b, CPs, G);
-	e2 = new_bspline_edge<Graph,3>(a, c, CPs2, G);
+	Vertex_base_property<3> d_prop(CPs.front());
+	Vertex_base_property<3> e_prop(CPs.back());
+	Vertex_base_property<3> f_prop(CPs2.back());
+	a = new_vertex(a_prop, G1);
+	b = new_vertex(b_prop, G1);
+	c = new_vertex(c_prop, G1);
+	d = new_vertex(d_prop, G2);
+	e = new_vertex(e_prop, G2);
+	f = new_vertex(f_prop, G2);
+	Edge_desc<Graph> e1, e2, e3, e4;
+	e1 = new_bspline_edge<Graph,3>(a, b, CPs, BSP_type::Approx, G1);
+	e2 = new_bspline_edge<Graph,3>(a, c, CPs2, BSP_type::Approx, G1);
+	e3 = new_bspline_edge<Graph,3>(d, e, CPs, BSP_type::Interp, G2);
+	e4 = new_bspline_edge<Graph,3>(d, f, CPs2, BSP_type::Interp, G2);
 	
 	// Creating a mesh on the edge
-	G[e1].make_uniform_mesh(100);
-	G[e2].make_variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	G1[e1].make_uniform_mesh(100);
+	G1[e2].make_variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
+	G2[e3].make_uniform_mesh(100);
+	G2[e4].make_variable_mesh(1000, [pi](double const & x)->double{ return (0.05+ 0.1*std::sin(x*pi/10.)); });
 	
 	// Writing infos in the output
-	writer_pts<Graph,3> Wpts("../data/out_test_bspline.pts");
-	writer_vtp<Graph,3> Wvtp("../data/out_test_bspline.vtp");
-	Wpts.export_pts(G);
-	Wvtp.export_vtp(G);
+	std::string out_filename1 = "../data/out_test_bspline_G1";
+	std::cout << "Producing output for graph 1: " << out_filename1 << std::endl;
+	writer_pts<Graph,3> Wpts1("../data/out_test_bspline_G1.pts");
+	writer_vtp<Graph,3> Wvtp1("../data/out_test_bspline_G1.vtp");
+	Wpts1.export_pts(G1);
+	Wvtp1.export_vtp(G1);
+	std::string out_filename2 = "../data/out_test_bspline_G2";
+	std::cout << "Producing output for graph 2: " << out_filename2 << std::endl;
+	writer_pts<Graph,3> Wpts2("../data/out_test_bspline_G2.pts");
+	writer_vtp<Graph,3> Wvtp2("../data/out_test_bspline_G2.vtp");
+	Wpts2.export_pts(G2);
+	Wvtp2.export_vtp(G2);
 	
 	return 0;
 }
