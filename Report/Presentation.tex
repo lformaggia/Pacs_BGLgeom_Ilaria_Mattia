@@ -1,0 +1,81 @@
+\documentclass[11pt]{beamer}
+\usepackage[utf8]{inputenc}
+%\usepackage[]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usetheme{Boadilla}
+
+\AtBeginSection[]{
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
+}
+
+\author{Speranza Ilaria (matr. 854196) \\ Tantardini Mattia (matr. 858603)}
+\title{BGLgeom Library}
+%\subtitle{}
+%\logo{}
+\institute{\textbf{Politecnico di Milano}}
+\date{March 3, 2017}
+\subject{Advanced Programming for Scientific Computing}
+%\setbeamercovered{transparent}
+%\setbeamertemplate{navigation symbols}{}
+
+\begin{document}
+	\begin{frame}
+		\maketitle
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Project's objectives}
+		\begin{itemize}
+			\item Add geometric features to a BGL graph 
+			\item Implement linear, b-spline and "generic" edges
+			\item Provide mesh generator on each edge
+			\item Handle I/O operations from/to useful formats (.pts, .vtp, ASCII) 
+			\item Fracture\_intersection and Network\_diffusion applications 
+		\end{itemize}
+	\end{frame}
+
+	\section{The library}
+		\begin{frame}
+			\frametitle{Briefs on Boost Graph Library}
+			\begin{block}{Adjacency\_list}
+				\texttt{adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >} \newline
+				Template class representing the graph with a two dimensional structure: 
+				a \texttt{VertexList}, containing all the vertices, and an \texttt{OutEdgeList} associated to each vertex, containing all its out-edges.
+			\end{block}
+		
+			\begin{block}{Vertex \& Edge descriptors and iterators}
+				Descriptors are the types for vertices and edges representative objects; iterators allow to traverse graph's vertex and edge sets.
+			\end{block}
+		
+			\begin{block}{Bundled properties}
+				Structs associated to each vertex and each edge containing their properties and methods
+			\end{block}	
+		\end{frame}
+	
+		\begin{frame}
+			\frametitle{BGLgeom}
+			This library has been developed to provide an environment where building and running all those applications which have both a graph topological structure and a geometric description for vertices (position in the space) and edges (which could not be linear).\\
+			BGLgeom implements also some input/output utilities, to make this library 'compatible' with other softwares.
+		\end{frame}
+	
+		\begin{frame}{Inside BGLgeom}
+			\begin{itemize}
+				\item \textbf{Adapters for BGL}: layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
+				\item \textbf{Classes to build graph properties}: the main part of the library; classes to be associated vertices and edges
+				as properties including the basic geometric requirements.
+				\item \textbf{Geometrical and numerical utilities}: Code to compute integrals, generate meshes, compute intersections between linear edges.
+				\item \textbf{I/O utilities}: one reader class to read tabular ASCII files, and three writer classes to produce three different types of output: ASCII, .pts and .vtp files.
+				\item \textbf{Tests}: source code examples to show how the main classes and writers work.
+			\end{itemize}
+		\end{frame}
+\end{document}

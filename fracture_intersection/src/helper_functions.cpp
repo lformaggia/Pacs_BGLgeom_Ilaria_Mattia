@@ -131,10 +131,6 @@ void create_graph(Graph & G,
 
 	// Number of the fracture, used as index
 	unsigned int frac_num = 0;
-	
-	// Other debug utilities: counter for edges and vertices in the graph
-	int count_e = 0;
-	int count_v = 0;
 
 	while(!R.is_eof()){
 		++frac_num;		//updating index for the frcture number
@@ -143,11 +139,20 @@ void create_graph(Graph & G,
 		
 		//#ifndef NDEBUG or #ifndef VERBOSE
 			std::cout << "Current situation: ";
-			count_v = 0; 
-			Vertex_it vv,vvend;
-			for(std::tie(vv,vvend) = boost::vertices(G); vv!=vvend; ++vv) 
+			Vertex_it vv,vv_end;
+			Edge_it ee, ee_end;
+			// restart counting from 0
+			int count_v = 0; 
+			int count_e = 0;
+			for(std::tie(vv,vv_end) = boost::vertices(G); vv!=vv_end; ++vv) 
 				++count_v;
-			std::cout << count_v << " vertices, "<<std::endl;
+				
+			for(std::tie(ee,ee_end) = boost::edges(G); ee!=ee_end; ++ee) 
+				++count_e;				
+			
+			
+			std::cout << count_v << " vertices, "<< count_e <<" edges."<<std::endl;  
+			
 		//#endif
 		
 		//Getting data form input file
@@ -163,22 +168,17 @@ void create_graph(Graph & G,
 		
 		// Creation of the new current line we want to insert
 		const line L(G[src].coordinates, G[tgt].coordinates);		
-		// Preparing variable to the next loop
-		count_e = 0;
+		
 		intvect.clear();
 		// Checking for intersection of L with all the edges already present in the graph
 		for (std::tie(e_it, e_end) = boost::edges(G); e_it != e_end; ++e_it){
-			++count_e;			
 			intobj_tmp = BGLgeom::compute_intersection(G[*e_it].geometry, L);
 			if(intobj_tmp.intersect == true){
 				Fracture::Int_layer<Graph> intobj(intobj_tmp, *e_it);
 				intvect.push_back(intobj);
 			}	
 		} //for
-		
-		//#ifndef NDEBUG
-			std::cout << count_e << " edges." << std::endl;
-		//#endif
+
 		
 		// Insertion of the new edge, handling intersections if present
 		// if intvect is empty it means that the new fracture does not intersect any of the edges in graph
