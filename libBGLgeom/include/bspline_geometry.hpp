@@ -81,6 +81,19 @@ findspan (int n, int p, double u, const vect &U);
 void
 basisfun (int i, double t, int p, const vect &U, vect &N);
 
+/*!
+	@brief	enum class to distinguish how to use and create the bspline
+	
+	B-splines can be used both to smooth (and then approximate) given 
+	points, or to interpolate them. Providing this enum class, we will
+	explicitly ask the user which are his purpouse, since we need in the 
+	constructor and in the setting method to know how to use the vector 
+	of points passed as argument. Specifying "Approx" we will use that 
+	vector as the vector of control points; saying "Interp", instead, 
+	we will use it as the vector of points to interpolate.
+*/
+enum class BSP_type {Approx, Interp};
+
 
 /*!
 	@brief Class to handle edges described by a bspline
@@ -96,116 +109,153 @@ class
 bspline_geometry : public BGLgeom::edge_geometry<dim> {
 
 	public:
-	
+		
 		using point = BGLgeom::point<dim>;
 		using vect_pts = std::vector<point>;
 		
 		//! Default constructor
 		bspline_geometry() : nc(0), k(), C(), dk(), d2k(), dC(), d2C() {};
-
-		//! Constructor with control points
-		bspline_geometry (const vect_pts &C_)
-			: nc(C_.size ()), k(make_knots(nc)), C(C_) {
-
-			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);
-			dk.resize (k.size () - 2, 0.0);
-			bspderiv (deg, C, nc, k, k.size (), dC, dk);
-
-			// construction of spline for the vector of second derivative
-			d2k.resize (dk.size () - 2, 0.0);    
-			d2C.resize (nc-2);
-			bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
-		}
-
-		//! Constructor with control points and knot vector
-		bspline_geometry (const vect_pts &C_, const vect &k_)
-			: nc(C_.size ()), k(k_), C(C_) {
-
-			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);				
-			dk.resize (k.size () - 2, 0.0);
-			bspderiv (deg, C, dim, nc, k, k.size (), dC, dk);
-
-			// construction of spline for the vector of second derivative
-			d2k.resize (dk.size () - 2, 0.0);    
-			d2C.resize (nc-2);
-			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
-		};
 		
-		//! Constructor con punti dati
-		bspline_geometry(const vect_pts &P, bool interpolation, std::vector<double> & grev_out){
-
-			nc = P.size();
-			k = make_knots(nc);
-
-			// Greville
-			vect grev(nc);
-			for(std::size_t i = 0; i < nc; ++i){
-				grev[i] = (k[i+1]+k[i+2]+k[i+3]) / deg;
-			}	//for
+		/*!
+			@brief	Constructor
 			
-			grev_out.resize(nc);
-			grev_out = grev;
-			std::cout << "grev, k" << std::endl;
-			for(std::size_t i = 0; i < nc; ++i){
-				std::cout << grev[i] << ", " << k[i] << std::endl;
-			}
+			Constructor capable to build the bspline in two different ways: \n
+			- using the argument _P as the vector of control points, if the 
+				second argument is specified as "BSP_type::Approx"; \n
+			- using the argument _P as the vector of points to be interpolated 
+				by the bspline, if the second argument is specified as 
+				"BSP_type::Interp". \n
+			In the first case, the vector is copied in the inner private 
+			attribute, the knot vector (uniform) is built, and then control 
+			points and knot vector for the first and the second derivative of 
+			the bspline are computed and stored. \n
+			In the second case, first a uniform knot vector is built and stored. 
+			Then the Greville abscissae are computed and they are used as passage 
+			condition to evaluate the basis functions, thus building the matrix 
+			from which we recover the control points. We then solve, using Eigen 
+			methods, in particular the lu solver, the system V*CC=PP, where V is 
+			the previous mentioned matrix, CC is the vector of control points we 
+			want to find, and PP is the vector of points passed as argument and 
+			traslated into an Eigen vector. Finally, we copy the data in CC in 
+			the private attribute that stores the control points and we build the 
+			bsplines for the first and second derivative, as in the previous case.
 			
-			int span;
-			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> V = Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>::Zero(nc,nc); //Vandermonde
-			for(std::size_t i = 0; i < grev.size(); ++i){
-				vect N(deg+1);
-				span = findspan(nc-1, deg, grev[i], k);
-				basisfun(span, grev[i], deg, k, N);
-				// Trascriviamo N nella matrice V, alla riga i, colonne da span-3 a span+1
-				V(i, span-deg) = N[0];
-				V(i, span-deg+1) = N[1];
-				V(i, span-deg+2) = N[2];
-				V(i, span-deg+3) = N[3];
-				
-				std::cout << N[0] << ", " << N[1] << ", " << N[2] << ", " << N[3] << std::endl;
-			}
-			
-			for(std::size_t i = 0; i < 7; ++i){
-				for(std::size_t j = 0; j < 7; ++j)
-					std::cout << V(i,j) << " ";
-				std::cout << std::endl;
-			}
-			
-			// Trascriviamo i Punti dati P in un vettore Eigen
-			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> PP(nc,dim);
-			for(std::size_t i = 0; i < nc; ++i)
-				for(std::size_t j = 0; j < dim; ++j)
-					PP(i,j) = P[i](j);
-			
-			// Ora dobbiamo risolvere il sistema lineare V*C = PP -> C = V^-1 * PP
-			Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> CC = V.lu().solve(PP);
-			
-			for(std::size_t i = 0; i < 7; ++i){
-				for(std::size_t j = 0; j < 3; ++j)
-					std::cout << CC(i,j) << " ";
-				std::cout << std::endl;
-			}
-			
-			C.resize(nc);
-			//Trasformiamo i control points da Eigen in vect_pts
-			for(std::size_t i = 0; i < nc; ++i)
-				for(std::size_t j = 0; j < dim; ++j)
-					C[i](j) = CC(i,j);
+			@note	The constructor that creates the splines interpolating the 
+					points is implemented only for cubic splines (degree = 3)! 
+					If used for other degrees, the constructor will show a message 
+					error and will abort the program.
+			@todo	Implement the constructor that interpolates the given points 
+					for any degree of the spline. Another possible improvement 
+					concerns the solver used to recover the control points: it 
+					may be used some better solver than the lu method.
 					
-			// Creiamo il resto della spline
-			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);
-			dk.resize (k.size () - 2, 0.0);
-			std::cout << "aaa" << std::endl;
-			bspderiv (deg, C, nc, k, k.size (), dC, dk);
-			std::cout << "bbb" << std::endl;
+			@param _P The points used either as control points or interpolating ones
+			@param _type If "BSP_type::Approx", uses _P as control points; if 
+						 "BSP_type::Interp", uses _P as interpolating points
+		*/
+		bspline_geometry (vect_pts const& _P, BSP_type const& _type){
+			if(_type == BSP_type::Approx){
+				nc = _P.size();
+				k = make_knots(nc);
+				C = _P;
+				
+				// construction of spline for the vector of first derivative
+				dC.resize (nc-1);
+				dk.resize (k.size () - 2, 0.0);
+				bspderiv (deg, C, nc, k, k.size (), dC, dk);
 
-			// construction of spline for the vector of second derivative
-			d2k.resize (dk.size () - 2, 0.0);    
-			d2C.resize (nc-2);
-			bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
+				// construction of spline for the vector of second derivative
+				d2k.resize (dk.size () - 2, 0.0);    
+				d2C.resize (nc-2);
+				bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);				
+			} else {	// _type == BSP_type::Interp
+				if(deg != 3){
+					std::cerr << "ERROR! BGLgeom::bspline_geometry(): " << std::endl;
+					std::cerr <<"\tinterpolating constructor only available for degree = 3 " << 
+						"(cubic bsplines)!" << std::endl;
+					std::cerr << "Aborting" << std::endl;
+					exit(EXIT_FAILURE);
+				} else {
+					nc = _P.size();
+					k = make_knots(nc);
+					// Computing greville abscissae
+					vect grev = this->grev_abs();
+					
+					int span;
+					// Building vandermonde matrix to recover the control points
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> V = 
+						Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>::Zero(nc,nc);
+					for(std::size_t i = 0; i < grev.size(); ++i){
+						vect N(deg+1);
+						span = findspan(nc-1, deg, grev[i], k);
+						basisfun(span, grev[i], deg, k, N);
+						V(i, span-deg) = N[0];
+						V(i, span-deg+1) = N[1];
+						V(i, span-deg+2) = N[2];
+						V(i, span-deg+3) = N[3];
+					}
+
+					// Building an Eigen matrix where to put the known term of the linear system
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> PP(nc,dim);
+					for(std::size_t i = 0; i < nc; ++i)
+						for(std::size_t j = 0; j < dim; ++j)
+							PP(i,j) = _P[i](j);
+					
+					// Solving the linear system V*CC = PP, where CC are the control points we have to find
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> CC = V.lu().solve(PP);
+
+					// Copying the founded control points into the private attribute
+					C.resize(nc);
+					for(std::size_t i = 0; i < nc; ++i)
+						for(std::size_t j = 0; j < dim; ++j)
+							C[i](j) = CC(i,j);
+							
+					// construction of spline for the vector of first derivative
+					dC.resize (nc-1);
+					dk.resize (k.size () - 2, 0.0);
+					bspderiv (deg, C, nc, k, k.size (), dC, dk);
+
+					// construction of spline for the vector of second derivative
+					d2k.resize (dk.size () - 2, 0.0);    
+					d2C.resize (nc-2);
+					bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
+				}
+			}		
+		}	//constructor
+
+		/*!
+			@brief	Constructor with control points and knot vector
+			
+			@param C_ Vector of the control points
+			@param k_ Knot vector
+			@param _type Defaulted to BSP_tyep::Approx. The interpolation is not 
+						 available if the user provides a knot vector, since the
+						 constructor for interpolation creates a uniform knot 
+						 vector.
+		*/
+		bspline_geometry (const vect_pts &C_, const vect &k_, BSP_type const& _type = BSP_type::Approx){
+			if(_type == BSP_type::Approx){
+				nc = C_.size();
+				k = k_;
+				C = C_;
+
+				// construction of spline for the vector of first derivative
+				dC.resize (nc-1);				
+				dk.resize (k.size () - 2, 0.0);
+				bspderiv (deg, C, dim, nc, k, k.size (), dC, dk);
+
+				// construction of spline for the vector of second derivative
+				d2k.resize (dk.size () - 2, 0.0);    
+				d2C.resize (nc-2);
+				bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
+			} else {	// _type == BSP_type::Approx
+				std::cerr << "ERROR! BGLgeom::bspline_geometry(): " << std::endl;
+				std::cerr << "\tinterpolating constructor with given knot vector not available!" << std::endl; 
+				std::cerr << "If you want to interpolate points, use default constructor " <<
+							"(it will create a uniform knot vector by default)" << std::endl;
+				std::cerr << "Aborting" << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 		
 		//! Copy constructor
@@ -227,42 +277,146 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 			@defgroup bspline_set Building bspline if default constructed
 			@{
 		*/
-		//! Setting bspline with control points
-		void
-		set_bspline(vect_pts const& _C){
-			C = _C;
-			nc = _C.size();
-			k = make_knots(nc);
-
-			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);
-			dk.resize (k.size () - 2, 0.0);
-			bspderiv (deg, _C, nc, k, k.size(), dC, dk);
+		/*!
+			@brief	Setting bspline with control points or interpolating points
 			
-			// construction of spline for the vector of second derivative
-			d2k.resize (dk.size () - 2, 0.0);    
-			d2C.resize (nc-2);
-			bspderiv (deg-1, dC, (nc-1), dk, dk.size(), d2C, d2k);
-		}
-		
-		//! Setting bspline with control points and knot vector
+			Works exactly as explained in the constructor documentation.
+		*/
 		void
-		set_bspline(vect_pts const& _C, vect const& _k){
-			C = _C;
-			nc = _C.size();
-			k = _k;
+		set_bspline(vect_pts const& _P, BSP_type const& _type){
+			if(_type == BSP_type::Approx){
+				nc = _P.size();
+				k = make_knots(nc);
+				C = _P;
+				
+				// construction of spline for the vector of first derivative
+				dC.resize (nc-1);
+				dk.resize (k.size () - 2, 0.0);
+				bspderiv (deg, C, nc, k, k.size (), dC, dk);
 
-			// construction of spline for the vector of first derivative
-			dC.resize (nc-1);				
-			dk.resize (k.size () - 2, 0.0);
-			bspderiv (deg, _C, dim, nc, k, k.size(), dC, dk);
+				// construction of spline for the vector of second derivative
+				d2k.resize (dk.size () - 2, 0.0);    
+				d2C.resize (nc-2);
+				bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);				
+			} else {	// _type == BSP_type::Interp
+				if(deg != 3){
+					std::cerr << "ERROR! BGLgeom::bspline_geometry(): " << std::endl;
+					std::cerr <<"\tinterpolating constructor only available for degree = 3 " << 
+						"(cubic bsplines)!" << std::endl;
+					std::cerr << "Aborting" << std::endl;
+					exit(EXIT_FAILURE);
+				} else {
+					nc = _P.size();
+					k = make_knots(nc);
+					// Computing greville abscissae
+					vect grev = this->grev_abs();
+					
+					int span;
+					// Building vandermonde matrix to recover the control points
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> V = 
+						Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>::Zero(nc,nc);
+					for(std::size_t i = 0; i < grev.size(); ++i){
+						vect N(deg+1);
+						span = findspan(nc-1, deg, grev[i], k);
+						basisfun(span, grev[i], deg, k, N);
+						V(i, span-deg) = N[0];
+						V(i, span-deg+1) = N[1];
+						V(i, span-deg+2) = N[2];
+						V(i, span-deg+3) = N[3];
+					}
 
-			// construction of spline for the vector of second derivative
-			d2k.resize (dk.size () - 2, 0.0);    
-			d2C.resize (nc-2);
-			bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size(), d2C, d2k);
+					// Building an Eigen matrix where to put the known term of the linear system
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> PP(nc,dim);
+					for(std::size_t i = 0; i < nc; ++i)
+						for(std::size_t j = 0; j < dim; ++j)
+							PP(i,j) = _P[i](j);
+					
+					// Solving the linear system V*CC = PP, where CC are the control points we have to find
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> CC = V.lu().solve(PP);
+
+					// Copying the founded control points into the private attribute
+					C.resize(nc);
+					for(std::size_t i = 0; i < nc; ++i)
+						for(std::size_t j = 0; j < dim; ++j)
+							C[i](j) = CC(i,j);
+							
+					// construction of spline for the vector of first derivative
+					dC.resize (nc-1);
+					dk.resize (k.size () - 2, 0.0);
+					bspderiv (deg, C, nc, k, k.size (), dC, dk);
+
+					// construction of spline for the vector of second derivative
+					d2k.resize (dk.size () - 2, 0.0);    
+					d2C.resize (nc-2);
+					bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);
+				}
+			}
+		}	//set_bspline
+		
+		/*!
+			@brief	Setting bspline with control points or and given knot vector
+			
+			Works exactly as explained in the constructor documentation.
+		*/
+		void
+		set_bspline(vect_pts const& _C, vect const& _k, BSP_type const& _type = BSP_type::Approx){
+			if(_type == BSP_type::Approx){
+				nc = _C.size();
+				k = _k;
+				C = _C;
+
+				// construction of spline for the vector of first derivative
+				dC.resize (nc-1);				
+				dk.resize (k.size () - 2, 0.0);
+				bspderiv (deg, C, dim, nc, k, k.size (), dC, dk);
+
+				// construction of spline for the vector of second derivative
+				d2k.resize (dk.size () - 2, 0.0);    
+				d2C.resize (nc-2);
+				bspderiv (deg-1, dC, dim, (nc-1), dk, dk.size (), d2C, d2k);
+			} else {	// _type == BSP_type::Approx
+				std::cerr << "ERROR! BGLgeom::bspline_geometry(): " << std::endl;
+				std::cerr << "\tinterpolating constructor with given knot vector not available!" << std::endl; 
+				std::cerr << "If you want to interpolate points, use default constructor " <<
+							"(it will create a uniform knot vector by default)" << std::endl;
+				std::cerr << "Aborting" << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 		/*! @} */
+		
+		/*! 
+			@brief Greville abscissae
+			
+			Computing the greville abscissae associated to this geometry. 
+			Used mainly to construct the spline when interpolating points 
+			are given. May be useful to know the value of the parameter 
+			associated to the interpolating points, if they are points of 
+			particular interest
+			
+			@note	This method requires a valid knot sequence, computed 
+					automatically in the constructors or in the set methods.
+					Do not use this if the geometry is only default constructed!
+			@remark	Available only for cubic splines! (degree = 3). Otherwise, it 
+					aborts the program.
+			@return	The greville abscissae (values of the parameter crresponding 
+					to the interpolated points)
+		*/
+		vect
+		grev_abs(){
+			if(deg != 3){
+				std::cerr << "ERROR! BGLgeom::bspline_geometry::grev(): " <<
+				std::cerr << "\tcomputing of Greville abscissae only available for degree = 3 " << 
+					"(cubic bsplines)!" << std::endl;
+				std::cerr << "Aborting" << std::endl;
+				exit(EXIT_FAILURE);
+			} else {
+				vect grev(nc);
+				for(std::size_t i = 0; i < nc; ++i)
+					grev[i] = (k[i+1]+k[i+2]+k[i+3]) / deg;
+				return grev;
+			}
+		}
 		
 		//! Length of the curve
 		double length() { return this->curv_abs(1); }
@@ -380,7 +534,7 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 
 	private:
 		//! Number of control points
-		int nc;
+		unsigned int nc;
 		//! Knot vector
 		vect k;
 		//! Vector of the control points

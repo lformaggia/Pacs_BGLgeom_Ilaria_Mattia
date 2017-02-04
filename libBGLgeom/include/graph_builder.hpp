@@ -55,7 +55,7 @@
 namespace BGLgeom{
 
 /*!
-	@breif Helper function to check if an edge is correctly inserted in graph
+	@breif Helper function to check if an edge is correctly inserted in the graph
 	
 	It prints an error message on the screen if the insertion of the
 	edge failed according to the scenarios described in the reference
@@ -68,10 +68,9 @@ namespace BGLgeom{
 */
 void 
 check_if_edge_inserted(bool const& inserted){
-	if(!inserted){
-		std::cerr << "Warning! Insertion of an already existent edge" << std::endl;
-	}
-}	//check_edge_inserted
+	if(!inserted)
+		std::cerr << "Warning! Insertion of an already existent edge." << std::endl;
+}
 
 /*!
 	@brief	Creates a new vertex in the graph
@@ -407,15 +406,16 @@ new_generic_edge(BGLgeom::Vertex_desc<Graph> const& src,
 			it displays a warning message in the screen
 	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
 			as edge property of the graph
-	@remark	Please, remember that this function leaves all the edge 
-			properties (but the geometry, that is correctly set up) 
-			to its default value. They have to be set in a following 
-			moment
+	@remark	Please, remember that this function leaves all the edge properties 
+			(but the geometry, that is correctly set up) to its default value. 
+			They have to be set in a following moment
 			
 	@param src Vertex descriptor for the source
 	@param tgt Vertex descriptor fot the target
+	@param P The vector of points, used either as control or interpolating points
+	@param type The type of bspline: BSP_type::Approx (uses P as control points) 
+				or BSP_type::Interp (interpolates the points in P)
 	@param G The graph where to insert the new edge
-	@param C The vector of control points
 	@return The edge descriptor of the new edge
 */
 template <typename Graph, unsigned int dim>
@@ -423,6 +423,7 @@ BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
 					 std::vector<BGLgeom::point<dim>> const& C,
+					 BGLgeom::BSP_type const& type,
 					 Graph & G){
 	bool inserted;
 	BGLgeom::Edge_desc<Graph> e;	
@@ -430,7 +431,7 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 	check_if_edge_inserted(inserted);
 	
 	// Setting up the geometry
-	G[e].geometry.set_bspline(C);
+	G[e].geometry.set_bspline(C, type);
 
 	if(G[src].coordinates != C.front())
 		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
@@ -443,7 +444,62 @@ new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 		std::cout << "New edge created: " << G[e].geometry << std::endl;
 	#endif
 	return e;				 
-}	//new_bspline_edge (with properties)
+}	//new_bspline_edge
+
+/*!
+	@brief	Adding a new bspline edge to the graph along with its properties
+	
+	@remark	Use this only when you set "bspline_geometry<dim,deg>" as template parameter of the
+			Edge_base_property
+	
+	It adds a new edge assuming that the underlying geometry is the bspline one.
+	It takes care of setting up the geometry, so some additional parameters are
+	required.
+	
+	@note 	It performs a check on the insertion of the edge
+	@note	It checks if the ends of the parameterization (t=0 and t=1) conincide with
+			the coordinates of source and vertex passed in the vertex descriptors. If not,
+			it displays a warning message in the screen
+	@pre	Obviously the BGLgeom::Edge_base_property struct or derived is required 
+			as edge property of the graph
+			
+	@param src Vertex descriptor for the source
+	@param tgt Vertex descriptor fot the target
+	@param E_prop Edge properties to be assigned to the edge
+	@param P The vector of points, used either as control or interpolating points
+	@param type The type of bspline: BSP_type::Approx (uses P as control points) 
+				or BSP_type::Interp (interpolates the points in P)
+	@param G The graph where to insert the new edge
+	@return The edge descriptor of the new edge
+*/
+template <typename Graph, typename Edge_prop, unsigned int dim>
+BGLgeom::Edge_desc<Graph>
+new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
+					 BGLgeom::Vertex_desc<Graph> const& tgt,
+					 Edge_prop const& E_prop,
+					 std::vector<BGLgeom::point<dim>> const& C,
+					 BGLgeom::BSP_type const& type,
+					 Graph & G){
+	bool inserted;
+	BGLgeom::Edge_desc<Graph> e;	
+	std::tie(e, inserted) = boost::add_edge(src, tgt, E_prop, G);
+	check_if_edge_inserted(inserted);
+	
+	// Setting up the geometry
+	G[e].geometry.set_bspline(C, type);
+
+	if(G[src].coordinates != C.front())
+		std::cerr << "WARNING: source coordinates " << G[src].coordinates 
+				<< " do not coincide with the parametrized function evaluated in t=0" << std::endl;
+	if(G[tgt].coordinates != C.back())
+		std::cerr << "WARNING: target coordinates " << G[tgt].coordinates
+				<< " do not coincide with the parametrized function evaluated in t=1" << std::endl;
+
+	#ifndef NDEBUG
+		std::cout << "New edge created: " << G[e].geometry << std::endl;
+	#endif
+	return e;				 
+}	//new_bspline_edge
 
 /*!
 	@brief	Adding a new bspline edge to the graph
@@ -526,7 +582,7 @@ template <typename Graph, typename Edge_prop, unsigned int dim>
 BGLgeom::Edge_desc<Graph>
 new_bspline_edge	(BGLgeom::Vertex_desc<Graph> const& src,
 					 BGLgeom::Vertex_desc<Graph> const& tgt,
-				 	 Edge_prop const & E_prop,
+				 	 Edge_prop const& E_prop,
 					 std::vector<BGLgeom::point<dim>> const& C,
 					 std::vector<double> const& k,
 					 Graph & G){
