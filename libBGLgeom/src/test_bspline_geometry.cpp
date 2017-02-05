@@ -37,10 +37,12 @@
 		uniform mesh on it and evaluation of the spline, of its first and 
 		second derivatives in the point of the mesh. This example was 
 		taken from a code by prof. Carlo De Falco; \n
-	- Creation of a graph with two edges, one like in the second example 
-		and a new one. Creation of a uniform mesh on the first, and of a 
-		variable size mesh on the second. Production of pts and vtp output
-		for this graph
+	- Creation of two graph both with two edges, the first using
+		BSP_type::Approx as bspline geometry, while the second using 
+		BSP_type::Interp. This choice to show the differences between 
+		using the same set of points either as control points or as 
+		points to be interpolated. Pts and vtp output is produced for both 
+		the graph.
 */
 
 #include "bspline_geometry.hpp"
@@ -164,7 +166,8 @@ int main(){
 	std::cout << "==================== ON GRAPH ======================" << std::endl;
 	std::cout << "Creating two graphs with two edges with same sources and targets" << std::endl;
 	std::cout << "In the first graph the geometry is bspline Approx, " << 
-				 "instead in the second graph is bspline interp. " << std::endl;
+				 "instead in the second graph it is bspline Interp." << std::endl;
+	std::cout << "Using the same sets of points for both the types of geometries." << std::endl << std::endl;
 	using Graph = boost::adjacency_list< boost::vecS, 
 										 boost::vecS, 
 										 boost::directedS, 
