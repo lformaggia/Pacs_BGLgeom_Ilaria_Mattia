@@ -91,7 +91,7 @@
 	\section{Introduction}
 	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
 	All the geometric functionalities we developed in the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
-	A lot of different kind of applications can take advantage from this library; in particular, we provide two examples of specific applications: one that creates a graph computing the intersections among fractures in a fractured porous media, and the other one that solves a diffusion problem on a vascular network embedded in biological tissue.
+	A lot of different applications can take advantage from this library; in particular, we provide two examples: one that creates a graph computing the intersections among fractures in a fractured porous media, and the other one that solves a diffusion problem on a vascular network embedded in biological tissue.
 	
 	\section{The library}
 	\subsection{Briefs on BGL}
@@ -104,8 +104,8 @@
 	The class has five template parameters and the full protoytpe is: \classname{boost::adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >}. \newline
 	The first two template parameters allow to choose the types of the underlying containers for the bidimensional structure. Choosing them affects space complexity of the graph and efficiency of some operations, such as inserting and removing edges. In our work we always set them to the selector \classname{boost::vecS} (that stands for \texttt{std::vector}) for ease of use (all the vertex descriptors become \texttt{unsigned int}) and since, from BGL documentation, it is on average the best performing choice for every topological operation. \newline
 	The third template parameter obviously allows to choose between a directed or undirected graph through the selectors \texttt{boost::directedS} or \texttt{boost::undirectedS}.\newline
-	The last two template parameters are the most interesting ones: they allow to choose what are the vertex and the edge properties. The BGL provides an easy way to handle them: the so called \textit{bundled properties}. They simply are classes, or better, structs, which can be passed as template parameter to the \classname{adjacency\_list} class, and they will become its vertex and edge properties, along with all their attributes and memeber functions. This gives a lot of flexibility: for instance, if we want all the vertices to have as properties three doubles, an int, two strings and a member that returns a random number, we only have to define them all in the same struct and pass it as the fourth template parameter of the \classname{adjacency\_list} class. The same for the edges, passing the corresponding struct as fifth template parameter. Moreover, the usage of a struct, instead of a class, enables public member access, and this comes out in a slight more ease of use when accessing the properties. \newline
-	Concluding this description, we underline that choosing different values for the template parameters consits in changing the type of the graph one is using, with consequence on some other tool provided by BGL that we are going to explain.
+	The last two template parameters are the most interesting ones: they allow to choose what are the vertex and the edge properties. The BGL provides an easy way to handle them: the so called \textit{bundled properties}. They simply are structs, which can be passed as template parameter to the \classname{adjacency\_list} class, and they will become its vertex and edge properties, along with all their attributes and memeber functions. This gives a lot of flexibility: for instance, if we want all the vertices to have as properties three doubles, an int, two strings and a member that returns a random number, we only have to define them all in the same struct and pass it as the fourth template parameter of the \classname{adjacency\_list} class. The same for the edges, passing the corresponding struct as fifth template parameter. Moreover, the usage of a struct, instead of a class, enables public member access, and this comes out in a slight more ease of use when accessing the properties. \newline
+	Concluding this description, we underline that choosing different values for the template parameters consists in changing the type of the graph, with consequences on some other tools provided by BGL that we are going to explain.
 	
 	\subsubsection{Vertex and edge descriptors adn iterators}
 	Two specific handles are provided to manipulate vertices and edges: the vertex and the edge descriptors. They may be of different types, depending on the graph type. They in general 'refer' to a particular vertex or edge, thus allowing for instance to access their properties, or to specify in a very readable way topological operations. \newline
@@ -157,25 +157,25 @@
 	\begin{equation*}
 	f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
 	\end{equation*}
-	for each geometry. We made this choice to have a common interface for the three geometries. All classes performs controls on the value of the parameter: if it is out of bounds, the class will show an error message and abort the program. All the three classes are templatized on the dimension of the space.
+	for each geometry. We made this choice to have a common interface for the three geometries. All classes performs controls on the value of the parameter: if it is out of bounds, the class will show an error message and abort the program. All the three classes are templated on the dimension of the space.
 	\paragraph{Linear geometry.} The \classname{linear\_geometry} class obviously describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge it describes. This may be memory inefficient in large graphs, since the information about the coordinates are already stored in the vertices, but otherwise it would have required a lot of operations and to build a more complex structure to recover those information. In this way we give directly access inside the class. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. It is a very efficient class for straigth lines, since it performs only simple algebraic operations to compute evaluation, first derivative and curvilinear abscissa, and returns directly zero for the second derivative and the curvature.
 	\paragraph{Generic geometry.} The \classname{generic\_geometry} class can store the exact parameterization of any curve. We implemented it using the \texttt{std::function} wrapper, and it requires to provide the exact analytic expression of the curve and of its first and second derivative, each one parametrized between 0 and 1 (it is care of the user to do this). The evaluation members just evaluate the functions stored in the private attributes.
 	\paragraph{Bspline geometry.} The \classname{bspline\_geometry} class stores a description of the curve as a bspline, giving it all the analytic properties of the bspline curves. The class stores as private attributes the control points and the knot vectors for the curve and for its first and second derivatives (that are bsplines as well by property); this implies that the class is more memory consumptive. To evaluate the curve and the derivatives, the class performs some more computation than in the other classes. \newline	
 	Two ways to build the representation are provided, both requiring a vector of points to be built, coded in the \texttt{enum class} called \texttt{BSP\_type}. Specifying in the constructor the argument \texttt{BSP\_type::Approx}, the given vector of points will be considered as a vector of control points for the curve (so that the curve smooths the control points), while specifying \texttt{BSP\_type::Interp} the same vector of points will be considered as a vector of points to be interpolated by the bspline. In the first case the control points are simply copied in the inner private attribute and a uniform knot vector is built. In the second case, again a uniform knot vector is built by default, and we recover the control points by computing the Greville abscissae and then using them to impose the passage condition. This comes out in solving the linear system $V \mathbf{d} = \mathbf{p}$, where $V$ is the matrix obtained imposing the passage conditions at tha given points, $\mathbf{d}$ is the vector of the unknown control points, and $\mathbf{p}$ is the vector of the given points to be interpolated. We use Eigen matrices to store all these elements, and the \texttt{lu()} Eigen method to solve the system.
 	
 	\subsubsection{Building a geometric graph}		
-	\paragraph{Geometric base properties.} In the \textit{base\_properties.hpp} header file we developed two structs which are thought to be the base vertex and edge property for a graph which wants to have a geometric description: the \classname{Vertex\_base\_property} and \classname{Edge\_base\_property} structs. They are substantially two containers, which gather the previous described classes.
+	\paragraph{Geometric base properties.} In the \textit{base\_properties.hpp} header file we developed two structs which are thought to be the base vertex and edge property for a graph which needs a geometric description: the \classname{Vertex\_base\_property} and \classname{Edge\_base\_property} structs. They are substantially two containers, which gather the previous described classes.
 	In the \classname{Vertex\_base\_property} we included:
 	\begin{itemize}
 		\item The coordinates of the point in the space representing the vertex.
-		\item A \texttt{std::array} to store the boundary conditions on that vertex. We templatized the array on the number of the boundary conditions the user wants, since it may happen for some applications that more than one FEM problem has to be solved on the graph, thus requiring more than one boundary condition for each vertex.
+		\item A \texttt{std::array} to store the boundary conditions on that vertex. We templated the array on the number of the boundary conditions the user wants, since it may happen for some applications that more than one FEM problem has to be solved on the graph, thus requiring more than one boundary condition for each vertex.
 	\end{itemize}
 	In the \classname{Edge\_base\_property} we included:
 	\begin{itemize}
 		\item One among the three geometry class.
 		\item A mesh class.
 	\end{itemize}
-	The \classname{Edge\_base\_property} is templatized on the edge geometry one wants and on the dimension of the space. \newline
+	The \classname{Edge\_base\_property} is templated on the edge geometry and on the dimension of the space. \newline
 	Both properties are also provided with two more attributes: an index and a label. This may be useful to give a specific ordering to vertices and edges and to keep track of particular parts of the graph.
 	\paragraph{A first Example.} To create a geometric graph with the above properties, we now only have to declare an object of class \classname{adjacency\_list} with \classname{Vertex\_base\_property} as fourth template parameter and with \classname{Edge\_base\_property} as fifth template parameter. For instance:
 	\begin{lstlisting}[frame=single]
@@ -226,9 +226,9 @@
 	
 	\subsubsection{Writer classes}
 	Three kind of writers are provided to output the graph and its properties; each one produce a different format of output.
-	\paragraph{Writer\_ASCII.} The \texttt{writer\_ASCII} class produces as output a tabular format (.txt, .dat, etc). It is an abstract class with the same philosophy of the \texttt{reader\_ASCII} class: the user has to define its concrete writer, telling him which properties of the graph to print, and how. The pure virtual member devoted to this is \texttt{write\_data()}, which wants as arguments the graph and the edge descriptor of the edge we want to print information about. Remember that from an edge descriptor one is always able to recover the source and target properties through their vertex descriptors, using the \texttt{BGLgeom::source()} and \texttt{BGLgeom::target()} functions. Also in this case, it will easy to print information about the graph in a loop over all the edges.
-	\paragraph{Writer\_pts.} The \texttt{writer\_pts} class produces a particular kind of output (.pts), with a particular format: it express the graph as a sequence of arcs, and for each arc the boundary conditions on source and target and all points of the mesh defined on it (if present, otherwise only source and target coordinates) are printed. We developed such a writer since we use the GetFem++ library in the application on diffusion in a vascular network, and the .pts is the input format for GetFem to read meshes, and then solve FEM problems. \newline
-	To meet some requests from people that will use our library with the GetFem one for further applications, we also developed some particular features for the writer. We provided it with an additional template parameter, the number of boundary conditions (defaulted to one): if specified different from 1, it will produce different output files, each one with the same structure but with the different boundary conditions. Another feature allows to print in a separate file some geometric information (first and second derivative, curvature) in correspondence of the points of the mesh (if present) on each edge. Just specify \texttt{true} as second argument of the \texttt{export\_pts()} method.
+	\paragraph{Writer\_ASCII.} The \texttt{writer\_ASCII} class produces as output a tabular format (.txt, .dat, etc). It is an abstract class with the same philosophy of the \texttt{reader\_ASCII} class: the user has to define its concrete writer, specifying which properties of the graph to print, and how. The pure virtual member devoted to this is \texttt{write\_data()}, which wants as arguments the graph and the edge descriptor of the edge we want to print information about. Remember that from an edge descriptor one is always able to recover the source and target properties through their vertex descriptors, using the \texttt{BGLgeom::source()} and \texttt{BGLgeom::target()} functions. Also in this case, it will be easy to print information about the graph in a loop over all the edges.
+	\paragraph{Writer\_pts.} The \texttt{writer\_pts} class produces a particular kind of output (.pts), with a particular format: it expresses the graph as a sequence of arcs, and for each arc the boundary conditions on source and target and all points of the mesh defined on it (if present, otherwise only source and target coordinates) are printed. We developed such a writer since we use the GetFem++ library in the application on diffusion in a vascular network, and the .pts is the input format for GetFem to read meshes, and then solve FEM problems. \newline
+	To meet some requests from people that will use our library with the GetFem for further applications, we also developed some particular features for the writer. We provided it with an additional template parameter, the number of boundary conditions (defaulted to one): if specified different from 1, it will produce different output files, each one with the same structure but with the different boundary conditions. Another feature allows to print in a separate file some geometric information (first and second derivative, curvature) in correspondence of the points of the mesh (if present) on each edge. Just specify \texttt{true} as second argument of the \texttt{export\_pts()} method.
 	\paragraph{Writer\_vtp.} The \texttt{writer\_vtp} class produces a .vtp output, i.e. a VTK polygonal data format. It is a particular format provided by the wider VTK library. It consist in an XML file in which all the topology of the graph is coded. The output consists into two files: one coding the edges, and one coding the vertices of the graph. This kind of output is thought to visualization purpouse: using for instance software such as Paraview, the output files can be easily displayed.
 	
 	\subsubsection{Todos}
@@ -242,7 +242,7 @@
 	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \ref{fig:frac_int_example}.
 	\begin{figure}
 		\centering 
-		%\includegraphics[width=0.5\textwidth]{"frac_inters.eps"}
+		\includegraphics[width=0.5\textwidth]{"frac_inters.eps"}
 		\caption{Example}
 		\label{fig:frac_int_example}
 	\end{figure}
@@ -262,7 +262,7 @@
 	
 	\begin{figure}
 		\centering 
-%		\includegraphics[width=1\textwidth]{"int_type"}
+		\includegraphics[width=1\textwidth]{"int_type"}
 		\caption{Intersection types. In black the edge already in the graph, in red the new one.}
 		\label{fig:frac_int_type}
 	\end{figure}
@@ -295,7 +295,7 @@
 	The duplicates removal, performed by the function \texttt{remove\textunderscore duplicates()}, consists in keeping just one single struct among all of those related to the same intersection point; in figure \ref{fig:rem_dupl} an example is shown: 
 	\begin{figure}
 		\centering 
-		%\includegraphics[width=1\textwidth]{rem_dupl}
+		\includegraphics[width=1\textwidth]{rem_dupl}
 		\caption{Example on duplicates removal}
 		\label{fig:rem_dupl}
 	\end{figure}
@@ -307,7 +307,7 @@
 	This example refers to figure \ref{fig:example_algo} and it aims at illustrating how the algorithm works.
 	\begin{figure}
 		\centering 
-		%\includegraphics[width=1\textwidth]{example_algo}
+		\includegraphics[width=1\textwidth]{example_algo}
 		\caption{Fracture in red is going to be added to the graph}
 		\label{fig:example_algo}
 	\end{figure}
@@ -359,7 +359,7 @@
 	In the file \texttt{test\_all\_int\_cases.txt} we put a list of fractures with no property associated: the main goal of this example is to show that the code performs correctly whatever is the intersection type it has to handle. Indeed, the sequence of fractures is built in such a way that almost every intersection type appears during the construction of the graph. 
 	\begin{figure}
 		\centering 
-		%\includegraphics[width=1\textwidth]{graph_building_process}
+		\includegraphics[width=1\textwidth]{graph_building_process}
 		\caption{Fracture in red is going to be added to the graph}
 		\label{fig:graph_steps}
 	\end{figure}
