@@ -48,7 +48,8 @@
 	stringstyle = \color{green},
 	morecomment=[l][\color{magenta}]{\#}}	% code style
 \lstset{tabsize=2}	% tabulation for code
-\lstset{backgroundcolor = \color{yellow!7}}
+\lstset{backgroundcolor = \color{yellow!7}}	% sfondo
+\lstset{numbers=left, numberstyle=\tiny}	% numerazione righe
 \newcommand{\classname}[1]{\texttt{#1}}
 
 % Maths packages
@@ -88,12 +89,12 @@
 	\tableofcontents
 	\newpage
 	
-	\section{Introduction}
-	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
-	All the geometric functionalities we developed in the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
-	A lot of different kind of applications can take advantage from this library; in particular, we provide two examples of specific applications: one that creates a graph computing the intersections among fractures in a fractured porous media, and the other one that solves a diffusion problem on a vascular network embedded in biological tissue.
+\section{Introduction}
+The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
+All the geometric functionalities we developed in the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
+A lot of different kind of applications can take advantage from this library; in particular, we provide two examples of specific applications: one that creates a graph computing the intersections among fractures in a fractured porous media, and the other one that solves a diffusion problem on a vascular network embedded in biological tissue.
 	
-	\section{The library}
+\section{The library}
 	\subsection{Briefs on BGL}
 	The BGL is a header-only template library able to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning them, and a wide variety of algorithms.
 	\newline\newline
@@ -192,7 +193,7 @@
 	\end{lstlisting}
 	Note that the we created and empty graph and that all the properties, especially geometries for edges, have to be set up with all the needed values while building the graph. Moreover, note that, since the chosen geometry for the edge properties \texttt{Edge\_prop} is \texttt{linear\_geometry}, and since this \texttt{Edge\_prop} is passed as template argument to the \classname{adjacency\_list} class, the whole graph will have edges with linear geometry.
 	\paragraph{Extending base properties.} We created our first geometric graph with the properties provided by our library. But in the applications a lot of other quantities and parameters may be necessary, for instance diameter and pressure for a blood vessel, or permeability for fractures, or any other kind of variable. How to expand the basic geometric properties of vertices and edges we provide to contain the new variables? Just publicly inherit from our base properties, and define at least a default constructor, since this is needed for the BGL functions that insert vertices and edges in the graph. A generic example is:
-	\begin{lstlisting}[frame=single]
+	\begin{lstlisting}[frame=single, name=create_graph]
 	#include "base_properties.hpp"
 	
 	struct My_edge_prop : public BGLgeom::Edge_base_property<3> {
@@ -210,6 +211,15 @@
 	\end{lstlisting}
 	The use of inheritance is a fast way to derive your own vertex or edge property with a lot of freedom, and also allows access in a fast and easy way to the inherited geometric properties.
 	\paragraph{Adding vertices and edges.} To add new edges and vertices to a graph the user substantially uses the already existent BGL functions which make those jobs. We only hid them under external functions which recall the name: \texttt{BGLgeom::new\_vertex} and \texttt{BGLgeom::new\_edge} instead of \texttt{boost::add\_vertex} of \texttt{boost::add\_edge}. We provided different overloads: just adding vertex and edge, adding them along with their properties, performing additional checks on the insertion of the edges. Furthermore, we added three new functions (\texttt{BGLgeom::new\_linear\_edge}, \texttt{BGLgeom::new\_generic\_edge} and \texttt{BGLgeom::new\_bspline\_edge}) to add edges, to provide an easy way to add a new edge to the graph already with its geometry set up in the proper way.	On how to use the functionality we provided to build a graph, see the source code \textit{test\_BGL\_vs\_BGLgeom.cpp}.
+	\newline\newline
+	\textcolor{red}{Mettere qua eventualmente la parte di codice in più su come aggiungere vertici e edge! E al limite spostare la frase precedente sotto, rimaneggiandola, tipo dicendo che qui facciamo vedere come si fa con le nostre cose, mentre se uno vuole là fa vedere sia come si fa con le nostre cose ma anche le differenze rispetto a come si faceva con la BGL.}
+	\newline
+	\textcolor{magenta}{Qui sott specifica name=create\_graph se vuoi continuare dall'esempio prima, altrimenti (forse meglio) non mettere niente e comincia con un esempio nuovo, visto che dovrai anche includere graph\_access.hpp e graph\_builder.hpp, e farlo a metà di un codice non avrebbe senso.. Si può mettere anche didascalia come con le figure, ma mi sembra bene integrato nel testo quindi lascerei anche stare.}
+	\newline
+	\textcolor{green}{Ultima cosa, poi la smetto: se aggiungi cose qui, attenzione che in fondo sbarellano tutte le posizione delle immagini. Buon lavoro :)}
+	\begin{lstlisting}[frame=single, name=create_graph]
+		G[e].diameter=value;
+	\end{lstlisting}
 	
 	\subsubsection{Reader class}		
 	We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class. It is templatized on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
@@ -235,8 +245,8 @@
 	\paragraph{Edge base property.} The \classname{Edge\_base\_property} we provide in the library is a kind of 'static' one: it contains one of the three geometries, and the type is chosen passing it through a template parameter. Then the \classname{Edge\_base\_property} itself is passed as template parameter to create the graph. This implies that the geometry of all the edges in the graph will be fixed to the one used as template parameter. This behaviour may be inefficient for some applications, for instance when the underlying graph has almost all linear edges and only few edges with complex geometry. At this stage, the geometry of such a graph will be fixed to the generic or bspline one for all edges, thus giving some memory and computational inefficiency on the edges that could have been described by the linear geometry. For this reason, it may be interesting to implement a kind of 'dynamic' version of the \classname{Edge\_base\_property}, to make the user be able to select a different geometry for each different edge in the graph.
 	\paragraph{B-spline interpolation.} We described in the previous section how we implemented the interpolation of given points with the bspline geometry. The knot vector is made uniform by default, and the system that allows to recover the control points is solved with the Eigen \texttt{lu()} method. Choosing different solutions for the knot vector or a different method to solve the system may improve efficiency.
 	
-	\section{Applications}
-	In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
+\section{Applications}
+In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
 	
 	\subsection{Fracture Intersection}
 	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \ref{fig:frac_int_example}.
@@ -460,26 +470,47 @@
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.9\linewidth]{cv}
+		\includegraphics[width=0.92\linewidth]{cv}
 		\label{fig:cv}
 	\end{figure}
 	
-	\begin{figure}[h]
+	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=0.9\linewidth]{ct1}
+		\includegraphics[width=0.92\linewidth]{ct1}
 		\label{fig:ct1}
 	\end{figure}
 	
-	\begin{figure}[h]
+	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=0.9\linewidth]{ct2}
+		\includegraphics[width=0.92\linewidth]{ct2}
 		\label{fig:ct2}
 	\end{figure}
 	
-	\begin{figure}[h]
+	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=0.9\linewidth]{ct3}
+		\includegraphics[width=0.92\linewidth]{ct3}
 		\label{fig:ct3}
 	\end{figure}
-	
+
+\newpage
+\section{Bibliography}
+Ti metto qui un po' quelle che avevamo detto l'altro giorno e che comunque mi viene in mente, a random:
+\begin{itemize}
+	\item user guide malloppone che ci siamo letti su BGL
+	\item www.stackoverflow.com
+	\item https://www.fim.uni-passau.de/fileadmin/files/lehrstuhl/sauer/geyer/SplinesinIndustry.pdf, rigurado interpolazione bspline
+	\item http://www.boost.org/doc/libs/1\_61\_0/libs/graph/doc/, sito web della BGL
+	\item http://www.gnu.org/software/make/manual/make.html, cose varie su makefile (usato solo per qualche dettaglio)
+	\item http://eigen.tuxfamily.org/dox, documentazione su Eigen
+	\item http://www.stack.nl/~dimitri/doxygen/manual/index.html, documentazione di doxygen (ma non saprei neanche se metterla)
+\end{itemize}
+E mi sembra basta. Sulla parte fratture ci siamo fatti tutto noi, sulla parte Zunny ci ha aiutati Stefano ma non ci siamo dovuti leggere niente alla fine, nè di paraview nè di getfem. Quindi boh, non starei a metterli. Poi comunque vedi tu e riorganizza tutto tu come preferisci, e se ti viene in mente alto aggiungi pure.
+
+\section{Acknowledgements}
+We would like to thank our mate Stefano for his support, both practical and moral, in our pacs project. In particular, since he is working on another PACS project on that topic, he helped us a lot in writing the source code for the vascular microcirculation application, and he also gave us large support in writing the report part concerning that application, expecially the mathematical formulation.
+\newline\newline
+We wants also to thank Pasquale for its technical support when nothing was compiling on our virtual machine. Always helpul, he gave us a lot of advice on how to write a good Makefile and some suggestions on how to design our code and the library structure.
+\newline\newline
+Che dici? Ti piace?
+
 \end{document}
