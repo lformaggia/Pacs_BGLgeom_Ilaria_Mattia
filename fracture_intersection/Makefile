@@ -30,9 +30,9 @@ help:
 	@echo "make distclean:  Cleans all"
 	@echo ""
 	@echo "REMEMBER: without specifying RELEASE=yes inbetween 'make' and"
-	@echo "          its target, the target will be built in debug mode"
-	@echo "REMEMBER: use 'make -B test' if you previously compiled the 
-	@echo "          main executable"
+	@echo "          its target, the target will be built in debug mode."
+	@echo "REMEMBER: use 'make -B test' if you previously compiled the"
+	@echo "          main executable."
 
 all: exec doc clean
 
