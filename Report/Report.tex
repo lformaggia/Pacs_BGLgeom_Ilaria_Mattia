@@ -114,7 +114,7 @@
 	\subsubsection{Vertex and edge descriptors adn iterators}
 	Two specific handles are provided to manipulate vertices and edges: the vertex and the edge descriptors. They may be of different types, depending on the graph type. They in general 'refer' to a particular vertex or edge, thus allowing for instance to access their properties, or to specify in a very readable way topological operations. \newline
 	Two more tools are provided to access a graph: vertex and edge iterators. As the descriptors, the iterators can be of different types depending on the graph type. Specific function return the iterators to the first and the last vertex and to the first and the last edge in the graph, thus allowing graph traversal. Dereferencing an iterator, the descriptor of the vertex or edge pointed by that iterator is obtained. \newline
-	Both descriptors and iterators are always accessible through the \classname{boost::graph\_traits} class, defined both in the \textit{boost/graph/adjacency\_list.hpp} and in the \textit{boost/graph/graph\_traits.hpp} headers. We also provide, in the \textit{graph\_access.hpp} header, some aliases for descriptors and iterators templatized directly on the graph's type, which are easier to handle.
+	Both descriptors and iterators are always accessible through the \classname{boost::graph\_traits} class, defined both in the \textit{boost/graph/adjacency\_list.hpp} and in the \textit{boost/graph/graph\_traits.hpp} headers. We also provide, in the \textit{graph\_access.hpp} header, some aliases for descriptors and iterators templated directly on the graph's type, which are easier to handle.
 	
 	\subsubsection{Accessing properties}
 	Using \textit{bundled properties}, BGL provides an easy way to acces vertex or edge properties: just use the \texttt{operator[]} on a graph object, with index the descriptor of the vertex or edge whose properties one wants; this consists in accessing the struct used as vertex or edge property. Since a struct has public access, with the dot operator we can immediately read from or write in each attribute or call a member function.	
@@ -146,7 +146,7 @@
 		\item Parameterization for the edges, along with computation of the main characteristics: evaluation, first and second derivative, curvature, curvilinear abscissa.
 		\item Meshes on the edges.
 	\end{itemize}
-	All these elements (but the boundary conditions) are templatized on the dimension of the space.				
+	All these elements (but the boundary conditions) are templated on the dimension of the space.				
 	\paragraph{Points.}	To represent points we used \texttt{Eigen} matrices, with 1 column and n rows. We chose the \texttt{Eigen} because it provides high efficiency and a lot of built-in linear algebra methods.
 	\paragraph{Boundary conditions.} We implemented a class to store a boundary condition described as a type and a value. We provided the \texttt{enum class} called \texttt{BGLgeom::BC\_type} to represent the most common types of boundary conditions, labeled as DIR, NEU, MIX, NONE, INT ("internal", between two edges), OTHER.
 	\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library should have been able to manage any possible parameterization of the type
@@ -244,7 +244,7 @@
 	\end{lstlisting}
 	
 	\subsubsection{Reader class}		
-	We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class. It is templatized on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
+	We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class. It is templated on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
 	We left as pure virtual those members devoted to read data from file and to return the just read data as vertex or edge properties. While deriving his own concrete reader, the user has to specify:
 	\begin{itemize}
 		\item all the attributes needed to store the data while reading;
