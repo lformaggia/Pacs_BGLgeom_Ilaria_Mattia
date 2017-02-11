@@ -42,15 +42,16 @@
 % Package to insert code
 \usepackage{xcolor}
 \usepackage{listings}
-\lstset{language=[ISO]C++}	%set code language
+\lstset{language=[ISO]C++}					%set code language
 \lstset{basicstyle=\small\ttfamily,
 	keywordstyle = \color{blue}\bfseries,
 	commentstyle = \color{gray},
 	stringstyle = \color{green},
 	morecomment=[l][\color{magenta}]{\#}}	% code style
-\lstset{tabsize=2}	% tabulation for code
+\lstset{tabsize=2}							% tabulation for code
 \lstset{backgroundcolor = \color{yellow!7}}	% sfondo
 \lstset{numbers=left, numberstyle=\tiny}	% numerazione righe
+\lstset{aboveskip=10pt, belowskip=10pt}		% spaziatura prima e dopo il codice
 \newcommand{\classname}[1]{\texttt{#1}}
 
 % Maths packages
@@ -186,11 +187,11 @@
 	#include "base_properties.hpp"
 	
 	using Edge_prop = 
-	BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+		BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
 	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 	using Graph = 
-	boost::adjacency_list< boost::vecS, boost::vecS, 
-	boost::directedS, Vertex_prop, Edge_prop >;
+		boost::adjacency_list< boost::vecS, boost::vecS, 
+			boost::directedS, Vertex_prop, Edge_prop >;
 	Graph G;
 	\end{lstlisting}
 	Note that the we created and empty graph and that all the properties, especially geometries for edges, have to be set up with all the needed values while building the graph. Moreover, note that, since the chosen geometry for the edge properties \texttt{Edge\_prop} is \texttt{linear\_geometry}, and since this \texttt{Edge\_prop} is passed as template argument to the \classname{adjacency\_list} class, the whole graph will have edges with linear geometry.
@@ -199,16 +200,16 @@
 	#include "base_properties.hpp"
 	
 	struct My_edge_prop : public BGLgeom::Edge_base_property<3> {
-	double variable1;			// may be pressure
-	int varaible2;				// some flag
-	std::string a_string;	// a description
-	my_class object;			// may be solver for FEM problem on edge
+		double variable1;			// may be pressure
+		int varaible2;				// some flag
+		std::string a_string;	// a description
+		my_class object;			// may be solver for FEM problem on edge
 	
-	My_edge_prop() : BGLgeom::Edge_base_property<3>(),
-	variable1(.0),
-	variable2(0),
-	a_string(),
-	object() {};	
+		My_edge_prop() : BGLgeom::Edge_base_property<3>(),
+										 variable1(.0),
+										 variable2(0),
+										 a_string(),
+										 object() {};	
 	};
 	\end{lstlisting}
 	The use of inheritance is a fast way to derive your own vertex or edge property with a lot of freedom, and also allows access in a fast and easy way to the inherited geometric properties.
@@ -217,27 +218,29 @@
 	\begin{lstlisting}[frame=single]
 	#include "graph_access.hpp"
 	#include "graph_builder.hpp"
-	#include "base_properties.hpp"
+	#include "base_properties.hpp"		
+	#include "point.hpp"
 	
 	using Edge_prop = 
-	BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+		BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
 	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 	using Graph = 
-	boost::adjacency_list< boost::vecS, boost::vecS, 
-	boost::directedS, Vertex_prop, Edge_prop >;
+		boost::adjacency_list< boost::vecS, boost::vecS, 
+			boost::directedS, Vertex_prop, Edge_prop >;
 	
 	Graph G;
 	BGLgeom::Vertex_desc<Graph> src, tgt;
 	BGLgeom::Edge_desc<Graph> e;
 	
-	src = new_vertex(G); // add a new vertex 
-	tgt = new_vertex(G); // add another vertex
+	src = BGLgeom::new_vertex(G); // add a new vertex 
+	tgt = BGLgeom::new_vertex(G); // add another vertex
 	G[src].coordinates = BGLgeom::point<3>(1,1,1); // set src coordinates
 	G[tgt].coordinates = BGLgeom::point<3>(2,2,2); // set tgt coordinates
 	
-	e = new_linear_edge(src,tgt,G); // add an edge connecting src to tgt
-	G[e].index = 1; // set edge's index 
-	
+	// add an edge connecting src to tgt
+	e = BGLgeom::new_linear_edge(src, tgt, G);
+	// set edge's index	
+	G[e].index = 1;
 	\end{lstlisting}
 	
 	\subsubsection{Reader class}		
@@ -268,13 +271,7 @@
 	In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
 	
 	\subsection{Fracture Intersection}
-	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \ref{fig:frac_int_example}.
-	\begin{figure}
-		\centering 
-		\includegraphics[width=0.5\textwidth]{"frac_inters"}
-		\caption{Example}
-		\label{fig:frac_int_example}
-	\end{figure}
+	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points and edges representing the fractures.
 	
 	\subsubsection{Intersection types}
 	To compute the intersections between two given edges we used a piece of code, developed by Professor Formaggia, which we included as a utility in our libary (\textit{intersections2D.hpp}), after adapting it to our specific data structures. In particular, the struct \texttt{Intersection} stores the number of intersections, the intersection points (if the intersection is not just a point but a segment, its two extremes are returned), two boolean variables, whose value depend respectively on the parallelism and the collinearity of the evaluated edges, the intersection type and some other information.\newline
@@ -299,23 +296,23 @@
 	Here we illustrate, through pseudocode and then with a detailed description, how the function \texttt{create\textunderscore graph()} works.
 	\begin{lstlisting}[frame=single]
 	while(!eof){
-	fracture = getline()
-	create fracture edge_property 
-	int_vect.clear()
-	for e in edges(G){
-	compute_intersection(e, fracture)
-	if intersection exists{
-	create Int_Layer with intersection information
-	int_vect.push_back(Int_Layer)
-	}	
-	}
-	if int_vect.empty(){
-	add_edge to graph with fracture edge properties
-	} else {
-	reorder int_vect
-	remove_duplicates inside int_vect
-	refine_graph(fracture, int_vect)  
-	}
+		fracture = getline()
+		create fracture edge_property 
+		int_vect.clear()
+		for e in edges(G){
+			compute_intersection(e, fracture)
+			if intersection exists{
+				create Int_Layer with intersection information
+				int_vect.push_back(Int_Layer)
+			}	
+		}
+		if int_vect.empty(){
+			add_edge to graph with fracture edge properties
+		} else {
+			reorder int_vect
+			remove_duplicates inside int_vect
+			refine_graph(fracture, int_vect)  
+		}
 	}
 	\end{lstlisting}
 	The file is read fracture by fracture: for each of them the physical properties are stored in the \texttt{Fracture::Edge\_prop} struct and the line number is used as identifier; a vertex descriptor called \texttt{src} is associated to the first extreme of the fracture, another called \texttt{tgt} to the second one. These vertex descriptors can be either associated to already existing vertices in case of already existing coordinates or to new ones otherwise. After the initialization part, we loop over the edges in the graph: for each of them the function \texttt{compute\textunderscore intersection()} checks for intersections with the current fracture; if so, the corresponding \texttt{Int\textunderscore Layer} struct is created and pushed back in a vector which, by the end of the loop, will therefore contain all the intersections with the fracture we are currently reading. \\
@@ -399,7 +396,7 @@
 	In the file \texttt{test\_all\_int\_cases.txt} we put a list of fractures with no property associated: the main goal of this example is to show that the code performs correctly whatever is the intersection type it has to handle. Indeed, the sequence of fractures is built in such a way that almost every intersection type appears during the construction of the graph. 
 	\begin{figure}
 		\centering 
-		\includegraphics[width=1\textwidth]{graph_building_process}
+		\includegraphics[width=0.8\textwidth]{graph_building_process}
 		\caption{Fracture in red is going to be added to the graph}
 		\label{fig:graph_steps}
 	\end{figure}
@@ -429,8 +426,8 @@
 	the spatial coordinates. Furthermore, we denote with the subscript v their restriction to the capillary
 	bed (vessels), and with t the restriction to the interstitial tissue. The derivation of our model stems
 	from fundamental balance laws regulating the flow in the capillary bed, the extravasation of plasma
-	and solutes and their transport in the interstitial tissue.
-	\newline\newline	
+	and solutes and their transport in the interstitial tissue.	
+	\newline\newline
 	Mass transport is modeled by means of diffusion equations, both in the tissue and in the capillary bed. Furthermore, we want to couple the two problems with a leakage in the vessel walls; then, under the assumption that capillaries
 	can be modeled as cylindrical channels, the magnitude of the mass flux exchanged per unit length
 	between the network of capillaries and the interstitial volume at each point of the capillary vessels
@@ -461,10 +458,8 @@
 	
 	The problem on $\Omega_v$ is a prototype of flow or mass transport problem in a network of cylindrical channels, surrounded by the domain $\Omega_v$ where another flow and transport problems will be defined, according to porous media equations. It is assumed that the interface between these regions is permeable, namely it is crossed by a normal flux proportional to $\kappa_i \left( u_t - u_v \right)$.\\
 	The boundary of $\Omega_v$ is divided as follows: $\partial \Omega_v =\Gamma_{inflow} \cup \Gamma_{outflow} \cup_{i=1}^N \Gamma_i $; then, we impose boundary conditions on $\Omega_v$ such that the mass goes from $\Gamma_{inflow}$ to $\Gamma_{outflow}$.\\
-	
-	
-	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. 
-	
+		
+	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. \newline	
 	As a result, the 3D-1D counterpart of the problem becomes
 	\begin{equation}\label{eq:redweak3D1D}
 	\begin{cases}
@@ -492,7 +487,7 @@
 	We use a C++ code that exhibits one-to-one correspondence with respect to the
 	mathematical models derived. Specifially, we assemble the generic linear
 	system using GetFEM++, an open-source general-purpose finite element library. For the results presented in this report we applied the direct solver SuperLU 3.03 to solve the monolithic linear system.
-	The code has been written by Stefano Brambilla and it is part of another PACS project; the code can be found at the following GitHub page: \texttt{https://github.com/stefano-brambilla-853558/MANworks}
+	The code has been written by Stefano Brambilla and it is part of another PACS project; the code can be found at the following GitHub page: \texttt{https://github.com/stefano-brambilla-853558/MANworks}.
 	\newline\newline
 	The code needs to read from a file containing the structure of the network: so we first developed a Matlab script to generate the coordinates of all the vertices of a network with successive bifurcations on orthogonal planes. We used our library to read this file and construct the relative graph, then we created a 1D mesh on each edge, and in the end we used the graph and its properties to generate the \texttt{diffusion\_network.pts} file, containing the details of the 1D mesh and of the boundary conditions.
 	\newline
@@ -523,7 +518,6 @@
 	\end{figure}
 	\newpage
 	\section{Bibliography}
-	Ti metto qui un po' quelle che avevamo detto l'altro giorno e che comunque mi viene in mente, a random:
 	\begin{itemize}
 		\item user guide malloppone che ci siamo letti su BGL
 		\item www.stackoverflow.com
@@ -534,11 +528,9 @@
 		\item http://www.stack.nl/~dimitri/doxygen/manual/index.html, documentazione di doxygen (ma non saprei neanche se metterla)
 		\item http://www.vtk.org/Wiki/VTK/Examples
 	\end{itemize}
-	E mi sembra basta. Sulla parte fratture ci siamo fatti tutto noi, sulla parte Zunny ci ha aiutati Stefano ma non ci siamo dovuti leggere niente alla fine, nè di paraview nè di getfem. Quindi boh, non starei a metterli. Poi comunque vedi tu e riorganizza tutto tu come preferisci, e se ti viene in mente alto aggiungi pure.
+
 	\section{Acknowledgements}
 	We would like to thank our mate Stefano for his support, both practical and moral, in our PACS project. In particular, since he is working on another PACS project on that topic, he helped us a lot in writing the source code for the vascular microcirculation application, and he also gave us large support in writing the report part concerning that application, expecially the mathematical formulation.
 	\newline\newline
 	We want also to thank Dr. Pasquale Africa for its technical support when nothing was compiling on our virtual machine. Always helpul, he gave us a lot of advice on how to write a good Makefile and some suggestions on how to design our code and the library structure.
-	\newline\newline
-	Che dici? Ti piace?
 \end{document}
