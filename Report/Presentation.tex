@@ -7,6 +7,21 @@
 \usepackage{graphicx}
 \usetheme{Boadilla}
 
+% Package to insert code
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{language=[ISO]C++}					%set code language
+\lstset{basicstyle=\small\ttfamily,
+	keywordstyle = \color{blue}\bfseries,
+	commentstyle = \color{gray},
+	stringstyle = \color{green},
+	morecomment=[l][\color{magenta}]{\#}}	% code style
+\lstset{tabsize=2}							% tabulation for code
+\lstset{backgroundcolor = \color{yellow!7}}	% sfondo
+\lstset{numbers=left, numberstyle=\tiny}	% numerazione righe
+\lstset{aboveskip=10pt, belowskip=10pt}		% spaziatura prima e dopo il codice
+\newcommand{\classname}[1]{\texttt{#1}}
+
 \AtBeginSection[]{
 	\begin{frame}
 		\vfill
@@ -78,4 +93,58 @@
 				\item \textbf{Tests}: source code examples to show how the main classes and writers work.
 			\end{itemize}
 		\end{frame}
+	
+		\begin{frame}
+			\frametitle{Geometric properties}
+			We implemented the geometrical properties we were required as \textit{bundled properties}, which are then associated to each single vertex and edge.
+			\begin{block}{Vertex\_base\_property}
+				\begin{itemize}
+					\item coordinates, describing the physical location of the point in the space
+					\item boundary conditions (possibly more than one)
+					\item label
+					\item index
+				\end{itemize}
+			\end{block}
+			\begin{block}{Edge\_base\_property}
+				\begin{itemize}
+					\item geometry (linear, b-spline, generic)
+					\item mesh
+					\item label
+					\item index
+				\end{itemize}
+			\end{block}		
+		\end{frame}
+		\begin{frame}
+			\frametitle{Edge geometry abstract class}
+			All geometry classes derive from an abstract class, \texttt{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: evaluation of the curve, computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve between 0 and 1, so we actually have parameterizations of the type
+			\begin{equation*}
+			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+			\end{equation*}
+			for each geometry.
+		\end{frame}
+		\begin{frame}
+			\frametitle{Concrete edge geometries}
+			\begin{itemize}
+				\item \textbf{Linear geometry} describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. 
+				\item \textbf{Generic geometry} can store the exact parameterization of any curve; it requires to provide the exact analytic expression of the curve and of its first and second derivative, each one parametrized between 0 and 1.
+				\item \textbf{Bspline geometry} stores as private attributes the control points and the knot vectors for the curve and for its first and second derivatives.	
+				The user can choose between interpolating and approximating b-splines.
+			\end{itemize}
+		\end{frame}
+			
+%		\begin{frame}[fragile]
+%			\frametitle{Example: declaring a geometric graph}
+%			\begin{lstlisting}
+%			#include <boost/graph/adjacency_list.hpp>
+%			#include "base_properties.hpp"
+%			
+%			using Edge_prop = 
+%			BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+%			using Vertex_prop = BGLgeom::Vertex_base_property<3>;
+%			using Graph = 
+%			boost::adjacency_list< boost::vecS, boost::vecS, 
+%			boost::directedS, Vertex_prop, Edge_prop >;
+%			Graph G;
+%			\end{lstlisting}
+%		\end{frame}
 \end{document}
