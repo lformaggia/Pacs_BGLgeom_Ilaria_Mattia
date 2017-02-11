@@ -340,11 +340,10 @@
 	We consider the insertion of the fifth fracture (e): the previous four (a,b,c,d) have been already added and the graph they created is made of 8 vertices and 6 edges (AE, BE, CE, DE, FE, GH).  
 	Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E (see table \ref{tab:table1}).
 	Now we are left with a vector of two components: first of all we pass to \texttt{refine\textunderscore graph()} the vertex descriptor I (which is the source of the new fracture) and the first intersection struct (related to point E); being the intersection of type T\textunderscore old, this function simply adds an edge between I and E and returns as next source E. At the second step, \texttt{refine\textunderscore graph()} takes as input the current source (i.e. the output of the previous call to the function, E in this example) and the second intersection struct: in case of overlap\textunderscore outside the source is connected to the first intersection (EH), the properties of the old edge (HG) are updated and the second intersection is connected with the target (GJ). In conclusion, the insertion of this new fracture led to the creation of three new edges (all labelled with letter e in order to keep track of the fact they all are part of the fifth fracture) and to the property update of an existing edge.
-	
 	\begin{table}[h!]
 		\centering
 		\label{tab:table1}
-		\begin{minipage}{.6\textwidth}
+		\begin{minipage}{.5\textwidth}
 			\centering
 			\begin{tabular}[t]{ccc}
 				\toprule
@@ -360,7 +359,7 @@
 			\end{tabular}
 			\caption*{Initial setting}
 		\end{minipage}%
-		\begin{minipage}{.6\textwidth}
+		\begin{minipage}{.5\textwidth}
 			\centering
 			\begin{tabular}[t]{ccc}
 				\toprule
@@ -377,7 +376,7 @@
 			\caption*{Ordered}
 		\end{minipage}%
 		
-		\begin{minipage}{0.6\textwidth}
+		\begin{minipage}{0.5\textwidth}
 			\centering
 			\begin{tabular}[t]{ccc}
 				\toprule
@@ -396,11 +395,30 @@
 	In the file \texttt{test\_all\_int\_cases.txt} we put a list of fractures with no property associated: the main goal of this example is to show that the code performs correctly whatever is the intersection type it has to handle. Indeed, the sequence of fractures is built in such a way that almost every intersection type appears during the construction of the graph. 
 	\begin{figure}
 		\centering 
-		\includegraphics[width=0.8\textwidth]{graph_building_process}
+		\includegraphics[width=1\textwidth]{graph_building_process}
 		\caption{Fracture in red is going to be added to the graph}
 		\label{fig:graph_steps}
 	\end{figure}
 	In figure \ref{fig:graph_steps} we show how the graph is built step by step, one fracture at a time.
+	
+	\subsubsection{Handling "real" data}
+	In order to test our algorithm, professor Formaggia provided us two lists of fractures. The input files' formats were different, so we implemented two specific readers, inherited by our \texttt{BGLgeom::reader\_ASCII} class, to acquire the fractures' extremities and their properties in the right way. \\
+	The source code is in file \texttt{main\_fractures.cpp} and the graphical result are shown in figure \ref{fig:plots_real_fractures}.
+	\begin{figure}
+		\centering
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			\includegraphics[width=.9\linewidth]{graph1}
+  			\caption*{input file: fractureElevenVF.dat}
+		\end{subfigure}%
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			\includegraphics[width=.9\linewidth]{graph2}
+			\caption*{input file: fractures.txt}
+		\end{subfigure}
+		\caption{plots of resulting graph on Paraview}
+		\label{fig:plots_real_fractures}
+	\end{figure}
 	
 	\subsection{Coupled problems on one-dimensional networks with application to microcirculation}
 	
