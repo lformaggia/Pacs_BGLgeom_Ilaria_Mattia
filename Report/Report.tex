@@ -24,7 +24,8 @@
 \usepackage{array} % for better arrays (eg matrices) in maths
 \usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
 \usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
-\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+%\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{subcaption}
 % These packages are all incorporated in the memoir class to one degree or another...
 
 %%% SECTION TITLE APPEARANCE
@@ -41,15 +42,16 @@
 % Package to insert code
 \usepackage{xcolor}
 \usepackage{listings}
-\lstset{language=[ISO]C++}	%set code language
+\lstset{language=[ISO]C++}					%set code language
 \lstset{basicstyle=\small\ttfamily,
 	keywordstyle = \color{blue}\bfseries,
 	commentstyle = \color{gray},
 	stringstyle = \color{green},
 	morecomment=[l][\color{magenta}]{\#}}	% code style
-\lstset{tabsize=2}	% tabulation for code
+\lstset{tabsize=2}							% tabulation for code
 \lstset{backgroundcolor = \color{yellow!7}}	% sfondo
 \lstset{numbers=left, numberstyle=\tiny}	% numerazione righe
+\lstset{aboveskip=10pt, belowskip=10pt}		% spaziatura prima e dopo il codice
 \newcommand{\classname}[1]{\texttt{#1}}
 
 % Maths packages
@@ -74,6 +76,7 @@
 \def\bui{\overline{u}^{(i)}}
 \def\bvi{\overline{v}^{(i)}}
 
+
 %%% END Article customizations
 
 %%% The "real" document content comes below...
@@ -89,13 +92,12 @@
 	\tableofcontents
 	\newpage
 	
-<<<<<<< HEAD
 	\section{Introduction}
 	The purpose of the project is to extend the Boost Graph Library (BGL) providing it more functionalities and making it capable to handle graphs with geometric properties, that the BGL currently does not support. This mainly means to provide a graph from BGL, that already implements all topological operations, a way to describe its vertices as points and its edges as generic curves in the space (2 or 3 dimensional). Moreover, classes which implement these kind of geometrical properties must be able to carry out geometric and analytic operations, such as computation of first and second derivative of the curves describing edges and creation of numerical meshes on them. \newline
 	All the geometric functionalities we developed in the library are aimed at solving numerical problems which can be modelled using a graph, but which also are in a geometric setting or need it: for instance, to compute flows in a network of blood vessels, meshes are required to solve finite element problems, and so it can be very useful to couple the graph description with the geometric one. \newline
 	A lot of different applications can take advantage from this library; in particular, we provide two examples: one that creates a graph computing the intersections among fractures in a fractured porous media, and the other one that solves a diffusion problem on a vascular network embedded in biological tissue.
 	
-\section{The library}
+	\section{The library}
 	\subsection{Briefs on BGL}
 	The BGL is a header-only template library able to create, handle and operate on graphs. It implements some different classes of graphs, all the topological operations concerning them, and a wide variety of algorithms.
 	\newline\newline
@@ -112,7 +114,7 @@
 	\subsubsection{Vertex and edge descriptors adn iterators}
 	Two specific handles are provided to manipulate vertices and edges: the vertex and the edge descriptors. They may be of different types, depending on the graph type. They in general 'refer' to a particular vertex or edge, thus allowing for instance to access their properties, or to specify in a very readable way topological operations. \newline
 	Two more tools are provided to access a graph: vertex and edge iterators. As the descriptors, the iterators can be of different types depending on the graph type. Specific function return the iterators to the first and the last vertex and to the first and the last edge in the graph, thus allowing graph traversal. Dereferencing an iterator, the descriptor of the vertex or edge pointed by that iterator is obtained. \newline
-	Both descriptors and iterators are always accessible through the \classname{boost::graph\_traits} class, defined both in the \textit{boost/graph/adjacency\_list.hpp} and in the \textit{boost/graph/graph\_traits.hpp} headers. We also provide, in the \textit{graph\_access.hpp} header, some aliases for descriptors and iterators templatized directly on the graph's type, which are easier to handle.
+	Both descriptors and iterators are always accessible through the \classname{boost::graph\_traits} class, defined both in the \textit{boost/graph/adjacency\_list.hpp} and in the \textit{boost/graph/graph\_traits.hpp} headers. We also provide, in the \textit{graph\_access.hpp} header, some aliases for descriptors and iterators templated directly on the graph's type, which are easier to handle.
 	
 	\subsubsection{Accessing properties}
 	Using \textit{bundled properties}, BGL provides an easy way to acces vertex or edge properties: just use the \texttt{operator[]} on a graph object, with index the descriptor of the vertex or edge whose properties one wants; this consists in accessing the struct used as vertex or edge property. Since a struct has public access, with the dot operator we can immediately read from or write in each attribute or call a member function.	
@@ -144,12 +146,12 @@
 		\item Parameterization for the edges, along with computation of the main characteristics: evaluation, first and second derivative, curvature, curvilinear abscissa.
 		\item Meshes on the edges.
 	\end{itemize}
-	All these elements (but the boundary conditions) are templatized on the dimension of the space.				
+	All these elements (but the boundary conditions) are templated on the dimension of the space.				
 	\paragraph{Points.}	To represent points we used \texttt{Eigen} matrices, with 1 column and n rows. We chose the \texttt{Eigen} because it provides high efficiency and a lot of built-in linear algebra methods.
 	\paragraph{Boundary conditions.} We implemented a class to store a boundary condition described as a type and a value. We provided the \texttt{enum class} called \texttt{BGLgeom::BC\_type} to represent the most common types of boundary conditions, labeled as DIR, NEU, MIX, NONE, INT ("internal", between two edges), OTHER.
 	\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library should have been able to manage any possible parameterization of the type
 	\begin{equation*}
-	f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
+		f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
 	\end{equation*}
 	i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.
 	\paragraph{Meshes.} We provide a class that is at the same time a mesh generator and a container for two types of mesh: the parametric one, generated from the parameterization of the edge, and the real one, that is the evaluation of the parametric mesh on the same edge. We decided to store also the parametric mesh since it may be useful to evaluate it to get other quantities, such as curvature, in correspondence of the points of the real mesh.
@@ -157,7 +159,7 @@
 	\subsubsection{Edge geometries}
 	All geometry classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
 	\begin{equation*}
-	f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+		f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
 	\end{equation*}
 	for each geometry. We made this choice to have a common interface for the three geometries. All classes performs controls on the value of the parameter: if it is out of bounds, the class will show an error message and abort the program. All the three classes are templated on the dimension of the space.
 	\paragraph{Linear geometry.} The \classname{linear\_geometry} class obviously describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge it describes. This may be memory inefficient in large graphs, since the information about the coordinates are already stored in the vertices, but otherwise it would have required a lot of operations and to build a more complex structure to recover those information. In this way we give directly access inside the class. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. It is a very efficient class for straigth lines, since it performs only simple algebraic operations to compute evaluation, first derivative and curvilinear abscissa, and returns directly zero for the second derivative and the curvature.
@@ -198,32 +200,51 @@
 	#include "base_properties.hpp"
 	
 	struct My_edge_prop : public BGLgeom::Edge_base_property<3> {
-	double variable1;			// may be pressure
-	int varaible2;				// some flag
-	std::string a_string;	// a description
-	my_class object;			// may be solver for FEM problem on edge
+		double variable1;			// may be pressure
+		int varaible2;				// some flag
+		std::string a_string;	// a description
+		my_class object;			// may be solver for FEM problem on edge
 	
-	My_edge_prop() : BGLgeom::Edge_base_property<3>(),
-		variable1(.0),
-		variable2(0),
-		a_string(),
-		object() {};	
+		My_edge_prop() : BGLgeom::Edge_base_property<3>(),
+										 variable1(.0),
+										 variable2(0),
+										 a_string(),
+										 object() {};	
 	};
 	\end{lstlisting}
 	The use of inheritance is a fast way to derive your own vertex or edge property with a lot of freedom, and also allows access in a fast and easy way to the inherited geometric properties.
-	\paragraph{Adding vertices and edges.} To add new edges and vertices to a graph the user substantially uses the already existent BGL functions which make those jobs. We only hid them under external functions which recall the name: \texttt{BGLgeom::new\_vertex} and \texttt{BGLgeom::new\_edge} instead of \texttt{boost::add\_vertex} of \texttt{boost::add\_edge}. We provided different overloads: just adding vertex and edge, adding them along with their properties, performing additional checks on the insertion of the edges. Furthermore, we added three new functions (\texttt{BGLgeom::new\_linear\_edge}, \texttt{BGLgeom::new\_generic\_edge} and \texttt{BGLgeom::new\_bspline\_edge}) to add edges, to provide an easy way to add a new edge to the graph already with its geometry set up in the proper way.	On how to use the functionality we provided to build a graph, see the source code \textit{test\_BGL\_vs\_BGLgeom.cpp}.
-	\newline\newline
-	\textcolor{red}{Mettere qua eventualmente la parte di codice in più su come aggiungere vertici e edge! E al limite spostare la frase precedente sotto, rimaneggiandola, tipo dicendo che qui facciamo vedere come si fa con le nostre cose, mentre se uno vuole là fa vedere sia come si fa con le nostre cose ma anche le differenze rispetto a come si faceva con la BGL.}
-	\newline
-	\textcolor{magenta}{Qui sott specifica name=create\_graph se vuoi continuare dall'esempio prima, altrimenti (forse meglio) non mettere niente e comincia con un esempio nuovo, visto che dovrai anche includere graph\_access.hpp e graph\_builder.hpp, e farlo a metà di un codice non avrebbe senso.. Si può mettere anche didascalia come con le figure, ma mi sembra bene integrato nel testo quindi lascerei anche stare.}
-	\newline
-	\textcolor{green}{Ultima cosa, poi la smetto: se aggiungi cose qui, attenzione che in fondo sbarellano tutte le posizione delle immagini. Buon lavoro :)}
-	\begin{lstlisting}[frame=single, name=create_graph]
-		G[e].diameter=value;
+	\paragraph{Adding vertices and edges.} In our library we created some layers of functions already existing in BGL, handling the insertion and the deletion of edges and vertices: \texttt{BGLgeom::new\_vertex} and \texttt{BGLgeom::new\_edge} instead of \texttt{boost::add\_vertex} of \texttt{boost::add\_edge}. We did so in order to implement some useful overloads which allow to add a vertex or an edge along with its properties and to perform additional checks during the insertion of a new element (for instance, when adding a new vertex with its coordinates already set, there is the possibility to check whether a vertex with the same coordinates already exists; if so, its vertex descriptor is returned, instead of creating a new vertex). Furthermore, we added three new functions (\texttt{BGLgeom::new\_linear\_edge}, \texttt{BGLgeom::new\_generic\_edge} and \texttt{BGLgeom::new\_bspline\_edge}), to provide an easy way to add a new edge to the graph already with its geometry set up in the proper way.\\
+	Here we present a simple example, in which we create a graph G with two vertices and one edge connecting them; we also show how to access the properties of edges and vertices, once they have been inserted in the graph. For further details, see the source code \textit{test\_BGL\_vs\_BGLgeom.cpp}.	
+	\begin{lstlisting}[frame=single]
+	#include "graph_access.hpp"
+	#include "graph_builder.hpp"
+	#include "base_properties.hpp"		
+	#include "point.hpp"
+	
+	using Edge_prop = 
+		BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
+	using Graph = 
+		boost::adjacency_list< boost::vecS, boost::vecS, 
+			boost::directedS, Vertex_prop, Edge_prop >;
+	
+	Graph G;
+	BGLgeom::Vertex_desc<Graph> src, tgt;
+	BGLgeom::Edge_desc<Graph> e;
+	
+	src = BGLgeom::new_vertex(G); // add a new vertex 
+	tgt = BGLgeom::new_vertex(G); // add another vertex
+	G[src].coordinates = BGLgeom::point<3>(1,1,1); // set src coordinates
+	G[tgt].coordinates = BGLgeom::point<3>(2,2,2); // set tgt coordinates
+	
+	// add an edge connecting src to tgt
+	e = BGLgeom::new_linear_edge(src, tgt, G);
+	// set edge's index	
+	G[e].index = 1;
 	\end{lstlisting}
 	
 	\subsubsection{Reader class}		
-	We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class. It is templatized on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
+	We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class. It is templated on the vertex and edge properties of the graph, thus making the same reader suitable for every kind of vertex and edge property a graph will have. There is a third template parameter, defaulted to an empty struct type, that represents the topological information one wants to read about the graph; they may not be needed, since they can be omitted in particular formats of file (for instance, specifying coordinates of source and target of an edge already tells us the topology; while if indexes for vertices and edges are provided, the topology can be handled in an easier way). \newline
 	We left as pure virtual those members devoted to read data from file and to return the just read data as vertex or edge properties. While deriving his own concrete reader, the user has to specify:
 	\begin{itemize}
 		\item all the attributes needed to store the data while reading;
@@ -246,17 +267,11 @@
 	\paragraph{Edge base property.} The \classname{Edge\_base\_property} we provide in the library is a kind of 'static' one: it contains one of the three geometries, and the type is chosen passing it through a template parameter. Then the \classname{Edge\_base\_property} itself is passed as template parameter to create the graph. This implies that the geometry of all the edges in the graph will be fixed to the one used as template parameter. This behaviour may be inefficient for some applications, for instance when the underlying graph has almost all linear edges and only few edges with complex geometry. At this stage, the geometry of such a graph will be fixed to the generic or bspline one for all edges, thus giving some memory and computational inefficiency on the edges that could have been described by the linear geometry. For this reason, it may be interesting to implement a kind of 'dynamic' version of the \classname{Edge\_base\_property}, to make the user be able to select a different geometry for each different edge in the graph.
 	\paragraph{B-spline interpolation.} We described in the previous section how we implemented the interpolation of given points with the bspline geometry. The knot vector is made uniform by default, and the system that allows to recover the control points is solved with the Eigen \texttt{lu()} method. Choosing different solutions for the knot vector or a different method to solve the system may improve efficiency.
 	
-\section{Applications}
-In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
+	\section{Applications}
+	In this section we present two examples from real situations, using tools from BGLgeom library to model and build the underlying graph and then to solve them. The first one concerns fractures in fractured porous media, while the second one concerns microcirculation in blood vessels.
 	
 	\subsection{Fracture Intersection}
-	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points  and edges representing the fractures. A very simple example is shown in figure \ref{fig:frac_int_example}.
-	\begin{figure}
-		\centering 
-		\includegraphics[width=0.5\textwidth]{"frac_inters.eps"}
-		\caption{Example}
-		\label{fig:frac_int_example}
-	\end{figure}
+	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points and edges representing the fractures.
 	
 	\subsubsection{Intersection types}
 	To compute the intersections between two given edges we used a piece of code, developed by Professor Formaggia, which we included as a utility in our libary (\textit{intersections2D.hpp}), after adapting it to our specific data structures. In particular, the struct \texttt{Intersection} stores the number of intersections, the intersection points (if the intersection is not just a point but a segment, its two extremes are returned), two boolean variables, whose value depend respectively on the parallelism and the collinearity of the evaluated edges, the intersection type and some other information.\newline
@@ -323,48 +338,58 @@ In this section we present two examples from real situations, using tools from B
 		\label{fig:example_algo}
 	\end{figure}
 	We consider the insertion of the fifth fracture (e): the previous four (a,b,c,d) have been already added and the graph they created is made of 8 vertices and 6 edges (AE, BE, CE, DE, FE, GH).  
-	Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E (see table \ref{tab:table1}).
+	Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E (see table below). %\ref{tab:table1}).
 	Now we are left with a vector of two components: first of all we pass to \texttt{refine\textunderscore graph()} the vertex descriptor I (which is the source of the new fracture) and the first intersection struct (related to point E); being the intersection of type T\textunderscore old, this function simply adds an edge between I and E and returns as next source E. At the second step, \texttt{refine\textunderscore graph()} takes as input the current source (i.e. the output of the previous call to the function, E in this example) and the second intersection struct: in case of overlap\textunderscore outside the source is connected to the first intersection (EH), the properties of the old edge (HG) are updated and the second intersection is connected with the target (GJ). In conclusion, the insertion of this new fracture led to the creation of three new edges (all labelled with letter e in order to keep track of the fact they all are part of the fifth fracture) and to the property update of an existing edge.
-	
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
-		\caption{Simplified representation of the intersection vector}
 		\label{tab:table1}
-		\begin{tabular}[t]{ccc}
-			\toprule
-			Int. edge & Type & Int. point(s)\\
-			\midrule
-			AE & T\textunderscore old & E\\
-			BE & T\textunderscore old & E\\
-			FE & T\textunderscore old & E\\
-			GH & overlap\textunderscore outside & \textbf{G and H}\\ 
-			DE & T\textunderscore old & E\\		
-			CE & T\textunderscore old & E\\
-			\bottomrule
-		\end{tabular} 
-		\hfill
-		\begin{tabular}[t]{ccc}
-			\toprule
-			Int. edge & Type & Int. point(s)\\
-			\midrule
-			AE & T\textunderscore old & E\\
-			BE & T\textunderscore old & E\\
-			FE & T\textunderscore old & E\\
-			DE & T\textunderscore old & E\\		
-			CE & T\textunderscore old & E\\
-			GH & overlap\textunderscore outside & \textbf{H and G}\\ 
-			\bottomrule
-		\end{tabular} 
-		\hfill
-		\begin{tabular}[t]{ccc}
-			\toprule
-			Int. edge & Type & Int. point(s)\\
-			\midrule
-			AE & T\textunderscore old & E\\
-			GH & overlap\textunderscore outside & G and H\\ 
-			\bottomrule
-		\end{tabular}
-	\end{table}	
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\begin{tabular}[t]{ccc}
+				\toprule
+				Int. edge & Type & Int. point(s)\\
+				\midrule
+				AE & T\textunderscore old & E\\
+				BE & T\textunderscore old & E\\
+				FE & T\textunderscore old & E\\
+				GH & overlap\textunderscore outside & \textbf{G and H}\\ 
+				DE & T\textunderscore old & E\\		
+				CE & T\textunderscore old & E\\
+				\bottomrule
+			\end{tabular}
+			\caption*{Initial setting}
+		\end{minipage}%
+		\begin{minipage}{.5\textwidth}
+			\centering
+			\begin{tabular}[t]{ccc}
+				\toprule
+				Int. edge & Type & Int. point(s)\\
+				\midrule
+				AE & T\textunderscore old & E\\
+				BE & T\textunderscore old & E\\
+				FE & T\textunderscore old & E\\
+				DE & T\textunderscore old & E\\		
+				CE & T\textunderscore old & E\\
+				GH & overlap\textunderscore outside & \textbf{H and G}\\ 
+				\bottomrule
+			\end{tabular} 
+			\caption*{Ordered}
+		\end{minipage}%
+		
+		\begin{minipage}{0.5\textwidth}
+			\centering
+			\begin{tabular}[t]{ccc}
+				\toprule
+				Int. edge & Type & Int. point(s)\\
+				\midrule
+				AE & T\textunderscore old & E\\
+				GH & overlap\textunderscore outside & G and H\\ 
+				\bottomrule
+			\end{tabular}
+			\caption*{Ordered and without duplicates\\(Final setting)}
+		\end{minipage}
+		\caption{Simplified representation of the intersection vector}
+	\end{table}		
 	
 	\subsubsection{A more complex example}
 	In the file \texttt{test\_all\_int\_cases.txt} we put a list of fractures with no property associated: the main goal of this example is to show that the code performs correctly whatever is the intersection type it has to handle. Indeed, the sequence of fractures is built in such a way that almost every intersection type appears during the construction of the graph. 
@@ -376,6 +401,25 @@ In this section we present two examples from real situations, using tools from B
 	\end{figure}
 	In figure \ref{fig:graph_steps} we show how the graph is built step by step, one fracture at a time.
 	
+	\subsubsection{Handling "real" data}
+	In order to test our algorithm, professor Formaggia provided us two lists of fractures. The input files' formats were different, so we implemented two specific readers, inherited by our \texttt{BGLgeom::reader\_ASCII} class, to acquire the fractures' extremities and their properties in the right way. \\
+	The source code is in file \texttt{main\_fractures.cpp} and the graphical result are shown in figure \ref{fig:plots_real_fractures}.
+	\begin{figure}
+		\centering
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			\includegraphics[width=.9\linewidth]{graph1}
+			\caption*{input file: fractureElevenVF.dat}
+		\end{subfigure}%
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			\includegraphics[width=.9\linewidth]{graph2}
+			\caption*{input file: fractures.txt}
+		\end{subfigure}
+		\caption{plots of resulting graph on Paraview}
+		\label{fig:plots_real_fractures}
+	\end{figure}
+	
 	\subsection{Coupled problems on one-dimensional networks with application to microcirculation}
 	
 	\subsubsection{Mathematical formulation}
@@ -383,9 +427,9 @@ In this section we present two examples from real situations, using tools from B
 	The domain where the model is defined is composed by two parts, $\Omega_t$ and $\Omega_v$ (where $t$ stands for \textit{tissue} and $v$ stands for \textit{vessel}), denoting the interstitial volume and the capillary bed respectively.
 	We assume that the capillaries can be described as cylindrical vessels and  $\Lambda$ denotes the centerline of the capillary network. The capillary radius, $R$, is for simplicity considered to be constant.  We decompose the network $\Lambda$ into individual branches $\Lambda_i$. Branches are parametrized by the arc length $s_i$; a tangent unit vector $\boldsymbol \lambda_i$ is also defined over each branch, defining in this way an arbitrary branch orientation. In particular, the domain $\Omega_f$ can be split into cylindrical branches $\Omega_i$ defined as follows
 	\begin{align*}
-	\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
-	\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
-	\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
+		\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
+		\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
+		\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
 	\end{align*}
 	where $\mathcal{M}_i$ is a mapping from a reference domain $\Lambda^\prime$ to the manifold $\Lambda_i \subset \R^3$ and $\nn_{\Lambda_i}$ denotes a unit normal vector to $\Lambda_i$. We denote with $\Gamma_i$ the lateral surface of $\Omega_i$. 
 	
@@ -400,70 +444,68 @@ In this section we present two examples from real situations, using tools from B
 	the spatial coordinates. Furthermore, we denote with the subscript v their restriction to the capillary
 	bed (vessels), and with t the restriction to the interstitial tissue. The derivation of our model stems
 	from fundamental balance laws regulating the flow in the capillary bed, the extravasation of plasma
-	and solutes and their transport in the interstitial tissue.
-	\newline\newline	
+	and solutes and their transport in the interstitial tissue.	
+	\newline\newline
 	Mass transport is modeled by means of diffusion equations, both in the tissue and in the capillary bed. Furthermore, we want to couple the two problems with a leakage in the vessel walls; then, under the assumption that capillaries
 	can be modeled as cylindrical channels, the magnitude of the mass flux exchanged per unit length
 	between the network of capillaries and the interstitial volume at each point of the capillary vessels
 	is the following:
 	\begin{equation}
-	J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
+		J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
 	\end{equation}
 	being $k_i$ the permability of the vessel wall $\Gamma_i$. \\
 	Finally, using this notation, the problem becomes:
 	\begin{align}
-	\label{eq:fullProblem3D}
-	\begin{cases}
-	- \Delta c_t = 0 &\text{ in } \Omega_t,\\
-	\nonumber
-	- \Delta c_v = 0 & \text{ in } \Omega_v,\\
-	\nonumber
-	-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
-	\nonumber
-	-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
-	\nonumber
-	\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
-	\nonumber
-	c_v = g & \text{ on } \Gamma_{inflow}\\
-	\nonumber
-	\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
-	\end{cases}
+		\label{eq:fullProblem3D}
+		\begin{cases}
+			- \Delta c_t = 0 &\text{ in } \Omega_t,\\
+			\nonumber
+			- \Delta c_v = 0 & \text{ in } \Omega_v,\\
+			\nonumber
+			-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
+			\nonumber
+			-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
+			\nonumber
+			\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
+			\nonumber
+			c_v = g & \text{ on } \Gamma_{inflow}\\
+			\nonumber
+			\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
+		\end{cases}
 	\end{align}
 	
 	The problem on $\Omega_v$ is a prototype of flow or mass transport problem in a network of cylindrical channels, surrounded by the domain $\Omega_v$ where another flow and transport problems will be defined, according to porous media equations. It is assumed that the interface between these regions is permeable, namely it is crossed by a normal flux proportional to $\kappa_i \left( u_t - u_v \right)$.\\
 	The boundary of $\Omega_v$ is divided as follows: $\partial \Omega_v =\Gamma_{inflow} \cup \Gamma_{outflow} \cup_{i=1}^N \Gamma_i $; then, we impose boundary conditions on $\Omega_v$ such that the mass goes from $\Gamma_{inflow}$ to $\Gamma_{outflow}$.\\
 	
-	
-	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. 
-	
+	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. \newline	
 	As a result, the 3D-1D counterpart of the problem becomes
 	\begin{equation}\label{eq:redweak3D1D}
-	\begin{cases}
-	a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
-	\\
-	A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
-	\end{cases}
+		\begin{cases}
+			a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
+			\\
+			A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
+		\end{cases}
 	\end{equation}
 	where $c_v,q_v \in H^1_0(\Lambda)$ denote trial and test functions relative to the weak reduced problem, with the following bilinear forms:
 	%
 	\begin{equation*}
-	a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
-	\quad
-	A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
-	\quad 
-	b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
+		a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
+		\quad
+		A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
+		\quad 
+		b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
 	\end{equation*}
 	A central role in equation \eqref{eq:redweak3D1D} is played by the restriction operator $\overline{(\cdot)}$ that is defined as
 	\begin{equation*}
-	\overline{w}^{(i)} = 
-	\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
+		\overline{w}^{(i)} = 
+		\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
 	\end{equation*}
 	
 	\subsubsection{Code implementation and results}
 	We use a C++ code that exhibits one-to-one correspondence with respect to the
 	mathematical models derived. Specifially, we assemble the generic linear
 	system using GetFEM++, an open-source general-purpose finite element library. For the results presented in this report we applied the direct solver SuperLU 3.03 to solve the monolithic linear system.
-	The code has been written by Stefano Brambilla and it is part of another PACS project; the code can be found at the following GitHub page: \texttt{https://github.com/stefano-brambilla-853558/MANworks}
+	The code has been written by Stefano Brambilla and it is part of another PACS project; the code can be found at the following GitHub page: \texttt{https://github.com/stefano-brambilla-853558/MANworks}.
 	\newline\newline
 	The code needs to read from a file containing the structure of the network: so we first developed a Matlab script to generate the coordinates of all the vertices of a network with successive bifurcations on orthogonal planes. We used our library to read this file and construct the relative graph, then we created a 1D mesh on each edge, and in the end we used the graph and its properties to generate the \texttt{diffusion\_network.pts} file, containing the details of the 1D mesh and of the boundary conditions.
 	\newline
@@ -492,28 +534,22 @@ In this section we present two examples from real situations, using tools from B
 		\includegraphics[width=0.92\linewidth]{ct3}
 		\label{fig:ct3}
 	\end{figure}
+	\newpage
+	
+	\section{References}
+	\begin{itemize}
+		\item Jeremy Siek/Lie-Quan Lee/Andrew Lumsdaine, \textit{The Boost Graph Library - User guide and reference manual}, Addison-Wesley, 2002.
+		\item \textit{www.stackoverflow.com}.
+		\item \textit{https://www.fim.uni-passau.de/fileadmin/files/lehrstuhl/sauer/geyer/SplinesinIndustry.pdf}, concerning b-spline interpolation.
+		\item \textit{http://www.boost.org/doc/libs/1\_61\_0/libs/graph/doc/}, BGL website.
+		\item \textit{http://www.gnu.org/software/make/manual/make.html}, for some support on Makefile.
+		\item \textit{http://eigen.tuxfamily.org/dox}, Eigen documentation.
+		\item \textit{http://www.stack.nl/~dimitri/doxygen/manual/index.html}, Doxygen documentation.
+		\item \textit{http://www.vtk.org/Wiki/VTK/Examples}, some documentation and examples on usage of VTK library.
+	\end{itemize}
 
-\newpage
-\section{Bibliography}
-Ti metto qui un po' quelle che avevamo detto l'altro giorno e che comunque mi viene in mente, a random:
-\begin{itemize}
-	\item user guide malloppone che ci siamo letti su BGL
-	\item www.stackoverflow.com
-	\item https://www.fim.uni-passau.de/fileadmin/files/lehrstuhl/sauer/geyer/SplinesinIndustry.pdf, rigurado interpolazione bspline
-	\item http://www.boost.org/doc/libs/1\_61\_0/libs/graph/doc/, sito web della BGL
-	\item http://www.gnu.org/software/make/manual/make.html, cose varie su makefile (usato solo per qualche dettaglio)
-	\item http://eigen.tuxfamily.org/dox, documentazione su Eigen
-	\item http://www.stack.nl/~dimitri/doxygen/manual/index.html, documentazione di doxygen (ma non saprei neanche se metterla)
-	\item http://www.vtk.org/Wiki/VTK/Examples
-\end{itemize}
-E mi sembra basta. Sulla parte fratture ci siamo fatti tutto noi, sulla parte Zunny ci ha aiutati Stefano ma non ci siamo dovuti leggere niente alla fine, nè di paraview nè di getfem. Quindi boh, non starei a metterli. Poi comunque vedi tu e riorganizza tutto tu come preferisci, e se ti viene in mente alto aggiungi pure.
-
-\section{Acknowledgements}
-We would like to thank our mate Stefano for his support, both practical and moral, in our pacs project. In particular, since he is working on another PACS project on that topic, he helped us a lot in writing the source code for the vascular microcirculation application, and he also gave us large support in writing the report part concerning that application, expecially the mathematical formulation.
-\newline\newline
-We wants also to thank Dr. Pasquale Africa for its technical support when nothing was compiling on our virtual machine. Always helpul, he gave us a lot of advice on how to write a good Makefile and some suggestions on how to design our code and the library structure.
-\newline\newline
-Che dici? Ti piace?
-
+	\section{Acknowledgements}
+	We would like to thank our mate Stefano for his support, both practical and moral, in our PACS project. In particular, since he is working on another PACS project on that topic, he helped us a lot in writing the source code for the vascular microcirculation application, and he also gave us large support in writing the report part concerning that application, expecially the mathematical formulation.
+	\newline\newline
+	We want also to thank Dr. Pasquale Africa for its technical support when nothing was compiling on our virtual machine. Always helpul, he gave us a lot of advice on how to write a good Makefile and some suggestions on how to design our code and the library structure.
 \end{document}
-

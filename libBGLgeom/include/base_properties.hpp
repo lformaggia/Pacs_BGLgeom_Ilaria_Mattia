@@ -27,9 +27,9 @@
 	@date	Jan, 2017
 	@brief	Definition of the base vertex and edge geometrical properties
 	
-	This file defines two data structure: one for the vertex properties, 
+	This file defines two data structures: one for the vertex properties, 
 	and one for the edge properties. Each one of them contains the minimal 
-	data we thought were necessary for a graph in a geometrical context, 
+	data we thought to be necessary for a graph in a geometrical context, 
 	and for a graph that will be mainly used to generate meshes on which 
 	FEM problems will run. Therefore the vertex property contains a struct 
 	to handle boundary condition that may be present on the vertex (we 
@@ -40,8 +40,8 @@
 	We also provide both properties with a label and an index record, to 
 	allow the user to index or label vertices and edge as he/she prefers.
 	
-	@remark	The two struct are thought to be base class. For the applications, 
-			it may be necessary to include to vertex and edge properties 
+	@remark	The two structs are thought to be base class. For the applications, 
+			it may be necessary to include into vertex and edge properties 
 			more data and functionalities. To do this, it is enough to 
 			inherit form this base class and define the wider vertex or 
 			edge property with all new data, classes, methods that the 
@@ -51,15 +51,15 @@
 			edge in the graph requires to the vertex and edge properties 
 			to be default constructible. 	
 			
-	@todo	The Edge_base_property provided here is a struct templatized 
+	@todo	The Edge_base_property provided here is a struct templated 
 			on the type of the geometry. This implies that all the edges 
 			in the graph will have the same fixed geometry. It may be 
-			useful or interesting in term of efficiency to implement also 
+			useful or interesting in terms of efficiency to implement also 
 			an edge property that can accept for each edge a different 
 			geometry. This may be useful for particular applications, 
 			for instance a graph where only some edges are required to 
 			be modelled with a complex curve (using bspline or generic 
-			geometry, for instance),but all the other edge are linear, 
+			geometry, for instance), but all the other edge are linear, 
 			and so the user could use the ligther and faster linear 
 			geometry.
 */
