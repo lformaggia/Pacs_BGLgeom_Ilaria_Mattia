@@ -151,7 +151,7 @@
 	\paragraph{Boundary conditions.} We implemented a class to store a boundary condition described as a type and a value. We provided the \texttt{enum class} called \texttt{BGLgeom::BC\_type} to represent the most common types of boundary conditions, labeled as DIR, NEU, MIX, NONE, INT ("internal", between two edges), OTHER.
 	\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library should have been able to manage any possible parameterization of the type
 	\begin{equation*}
-	f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
+		f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
 	\end{equation*}
 	i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.
 	\paragraph{Meshes.} We provide a class that is at the same time a mesh generator and a container for two types of mesh: the parametric one, generated from the parameterization of the edge, and the real one, that is the evaluation of the parametric mesh on the same edge. We decided to store also the parametric mesh since it may be useful to evaluate it to get other quantities, such as curvature, in correspondence of the points of the real mesh.
@@ -159,7 +159,7 @@
 	\subsubsection{Edge geometries}
 	All geometry classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve inbetween 0 and 1, so we actually have parameterizations of the type
 	\begin{equation*}
-	f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+		f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
 	\end{equation*}
 	for each geometry. We made this choice to have a common interface for the three geometries. All classes performs controls on the value of the parameter: if it is out of bounds, the class will show an error message and abort the program. All the three classes are templated on the dimension of the space.
 	\paragraph{Linear geometry.} The \classname{linear\_geometry} class obviously describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge it describes. This may be memory inefficient in large graphs, since the information about the coordinates are already stored in the vertices, but otherwise it would have required a lot of operations and to build a more complex structure to recover those information. In this way we give directly access inside the class. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. It is a very efficient class for straigth lines, since it performs only simple algebraic operations to compute evaluation, first derivative and curvilinear abscissa, and returns directly zero for the second derivative and the curvature.
@@ -268,7 +268,7 @@
 	\paragraph{B-spline interpolation.} We described in the previous section how we implemented the interpolation of given points with the bspline geometry. The knot vector is made uniform by default, and the system that allows to recover the control points is solved with the Eigen \texttt{lu()} method. Choosing different solutions for the knot vector or a different method to solve the system may improve efficiency.
 	
 	\section{Applications}
-	In this section we present two examples from real situations, using tools from BGLgeom library to model and solve them.
+	In this section we present two examples from real situations, using tools from BGLgeom library to model and build the underlying graph and then to solve them. The first one concerns fractures in fractured porous media, while the second one concerns microcirculation in blood vessels.
 	
 	\subsection{Fracture Intersection}
 	In this example a list of fractures, all lying on the same plane, is given as input. The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points and edges representing the fractures.
@@ -338,7 +338,7 @@
 		\label{fig:example_algo}
 	\end{figure}
 	We consider the insertion of the fifth fracture (e): the previous four (a,b,c,d) have been already added and the graph they created is made of 8 vertices and 6 edges (AE, BE, CE, DE, FE, GH).  
-	Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E (see table \ref{tab:table1}).
+	Since the extremities of the new fracture have coordinates different from all the other existing points, two new vertices I and J are created. Looping over the edges in the graph, we obtain a vector of six intersection structs; we reorder it and we remove four duplicates in point E (see table below). %\ref{tab:table1}).
 	Now we are left with a vector of two components: first of all we pass to \texttt{refine\textunderscore graph()} the vertex descriptor I (which is the source of the new fracture) and the first intersection struct (related to point E); being the intersection of type T\textunderscore old, this function simply adds an edge between I and E and returns as next source E. At the second step, \texttt{refine\textunderscore graph()} takes as input the current source (i.e. the output of the previous call to the function, E in this example) and the second intersection struct: in case of overlap\textunderscore outside the source is connected to the first intersection (EH), the properties of the old edge (HG) are updated and the second intersection is connected with the target (GJ). In conclusion, the insertion of this new fracture led to the creation of three new edges (all labelled with letter e in order to keep track of the fact they all are part of the fifth fracture) and to the property update of an existing edge.
 	\begin{table}[h!]
 		\centering
@@ -409,7 +409,7 @@
 		\begin{subfigure}{.5\textwidth}
 			\centering
 			\includegraphics[width=.9\linewidth]{graph1}
-  			\caption*{input file: fractureElevenVF.dat}
+			\caption*{input file: fractureElevenVF.dat}
 		\end{subfigure}%
 		\begin{subfigure}{.5\textwidth}
 			\centering
@@ -427,9 +427,9 @@
 	The domain where the model is defined is composed by two parts, $\Omega_t$ and $\Omega_v$ (where $t$ stands for \textit{tissue} and $v$ stands for \textit{vessel}), denoting the interstitial volume and the capillary bed respectively.
 	We assume that the capillaries can be described as cylindrical vessels and  $\Lambda$ denotes the centerline of the capillary network. The capillary radius, $R$, is for simplicity considered to be constant.  We decompose the network $\Lambda$ into individual branches $\Lambda_i$. Branches are parametrized by the arc length $s_i$; a tangent unit vector $\boldsymbol \lambda_i$ is also defined over each branch, defining in this way an arbitrary branch orientation. In particular, the domain $\Omega_f$ can be split into cylindrical branches $\Omega_i$ defined as follows
 	\begin{align*}
-	\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
-	\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
-	\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
+		\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
+		\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
+		\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
 	\end{align*}
 	where $\mathcal{M}_i$ is a mapping from a reference domain $\Lambda^\prime$ to the manifold $\Lambda_i \subset \R^3$ and $\nn_{\Lambda_i}$ denotes a unit normal vector to $\Lambda_i$. We denote with $\Gamma_i$ the lateral surface of $\Omega_i$. 
 	
@@ -451,54 +451,54 @@
 	between the network of capillaries and the interstitial volume at each point of the capillary vessels
 	is the following:
 	\begin{equation}
-	J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
+		J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
 	\end{equation}
 	being $k_i$ the permability of the vessel wall $\Gamma_i$. \\
 	Finally, using this notation, the problem becomes:
 	\begin{align}
-	\label{eq:fullProblem3D}
-	\begin{cases}
-	- \Delta c_t = 0 &\text{ in } \Omega_t,\\
-	\nonumber
-	- \Delta c_v = 0 & \text{ in } \Omega_v,\\
-	\nonumber
-	-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
-	\nonumber
-	-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
-	\nonumber
-	\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
-	\nonumber
-	c_v = g & \text{ on } \Gamma_{inflow}\\
-	\nonumber
-	\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
-	\end{cases}
+		\label{eq:fullProblem3D}
+		\begin{cases}
+			- \Delta c_t = 0 &\text{ in } \Omega_t,\\
+			\nonumber
+			- \Delta c_v = 0 & \text{ in } \Omega_v,\\
+			\nonumber
+			-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
+			\nonumber
+			-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
+			\nonumber
+			\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
+			\nonumber
+			c_v = g & \text{ on } \Gamma_{inflow}\\
+			\nonumber
+			\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
+		\end{cases}
 	\end{align}
 	
 	The problem on $\Omega_v$ is a prototype of flow or mass transport problem in a network of cylindrical channels, surrounded by the domain $\Omega_v$ where another flow and transport problems will be defined, according to porous media equations. It is assumed that the interface between these regions is permeable, namely it is crossed by a normal flux proportional to $\kappa_i \left( u_t - u_v \right)$.\\
 	The boundary of $\Omega_v$ is divided as follows: $\partial \Omega_v =\Gamma_{inflow} \cup \Gamma_{outflow} \cup_{i=1}^N \Gamma_i $; then, we impose boundary conditions on $\Omega_v$ such that the mass goes from $\Gamma_{inflow}$ to $\Gamma_{outflow}$.\\
-		
+	
 	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. \newline	
 	As a result, the 3D-1D counterpart of the problem becomes
 	\begin{equation}\label{eq:redweak3D1D}
-	\begin{cases}
-	a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
-	\\
-	A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
-	\end{cases}
+		\begin{cases}
+			a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
+			\\
+			A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
+		\end{cases}
 	\end{equation}
 	where $c_v,q_v \in H^1_0(\Lambda)$ denote trial and test functions relative to the weak reduced problem, with the following bilinear forms:
 	%
 	\begin{equation*}
-	a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
-	\quad
-	A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
-	\quad 
-	b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
+		a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
+		\quad
+		A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
+		\quad 
+		b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
 	\end{equation*}
 	A central role in equation \eqref{eq:redweak3D1D} is played by the restriction operator $\overline{(\cdot)}$ that is defined as
 	\begin{equation*}
-	\overline{w}^{(i)} = 
-	\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
+		\overline{w}^{(i)} = 
+		\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
 	\end{equation*}
 	
 	\subsubsection{Code implementation and results}
@@ -535,16 +535,17 @@
 		\label{fig:ct3}
 	\end{figure}
 	\newpage
-	\section{Bibliography}
+	
+	\section{References}
 	\begin{itemize}
-		\item user guide malloppone che ci siamo letti su BGL
-		\item www.stackoverflow.com
-		\item https://www.fim.uni-passau.de/fileadmin/files/lehrstuhl/sauer/geyer/SplinesinIndustry.pdf, rigurado interpolazione bspline
-		\item http://www.boost.org/doc/libs/1\_61\_0/libs/graph/doc/, sito web della BGL
-		\item http://www.gnu.org/software/make/manual/make.html, cose varie su makefile (usato solo per qualche dettaglio)
-		\item http://eigen.tuxfamily.org/dox, documentazione su Eigen
-		\item http://www.stack.nl/~dimitri/doxygen/manual/index.html, documentazione di doxygen (ma non saprei neanche se metterla)
-		\item http://www.vtk.org/Wiki/VTK/Examples
+		\item Jeremy Siek/Lie-Quan Lee/Andrew Lumsdaine, \textit{The Boost Graph Library - User guide and reference manual}, Addison-Wesley, 2002.
+		\item \textit{www.stackoverflow.com}.
+		\item \textit{https://www.fim.uni-passau.de/fileadmin/files/lehrstuhl/sauer/geyer/SplinesinIndustry.pdf}, concerning b-spline interpolation.
+		\item \textit{http://www.boost.org/doc/libs/1\_61\_0/libs/graph/doc/}, BGL website.
+		\item \textit{http://www.gnu.org/software/make/manual/make.html}, for some support on Makefile.
+		\item \textit{http://eigen.tuxfamily.org/dox}, Eigen documentation.
+		\item \textit{http://www.stack.nl/~dimitri/doxygen/manual/index.html}, Doxygen documentation.
+		\item \textit{http://www.vtk.org/Wiki/VTK/Examples}, some documentation and examples on usage of VTK library.
 	\end{itemize}
 
 	\section{Acknowledgements}
