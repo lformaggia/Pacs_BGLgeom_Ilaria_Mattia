@@ -152,7 +152,7 @@
 	\paragraph{Boundary conditions.} We implemented a class to store a boundary condition described as a type and a value. We provided the \texttt{enum class} called \texttt{BGLgeom::BC\_type} to represent the most common types of boundary conditions, labeled as DIR, NEU, MIX, NONE, INT ("internal", between two edges), OTHER.
 	\paragraph{Edge geometries.} Concerning the geometry and parameterization of the edges, we were asked to be as generic as possible, that is the library should have been able to manage any possible parameterization of the type
 	\begin{equation*}
-		f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
+	f:\mathbb{R}\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3 ,
 	\end{equation*}
 	i.e. from a line to a generic curve in the plane or in the space. We met this goal by developing three different classes: the \classname{linear\_geometry} class for the straight lines, and the \classname{generic\_geometry} and \classname{bspline\_geometry} classes for a generic curve.
 	\paragraph{Meshes.} We provide a class that is at the same time a mesh generator and a container for two types of mesh: the parametric one, generated from the parameterization of the edge, and the real one, that is the evaluation of the parametric mesh on the same edge. We decided to store also the parametric mesh since it may be useful to evaluate it to get other quantities, such as curvature, in correspondence of the points of the real mesh.
@@ -160,7 +160,7 @@
 	\subsubsection{Edge geometries}
 	All geometry classes derive from an abstract class, \classname{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: in our case, they are the evaluation of the curve, the computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve between 0 and 1, so we actually have parameterizations of the type
 	\begin{equation*}
-		f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+	f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
 	\end{equation*}
 	for each geometry. We made this choice to have a common interface for the three geometries. All classes perform controls on the value of the parameter: if it is out of bounds, the class will show an error message and abort the program. All the three classes are templated on the dimension of the space.
 	\paragraph{Linear geometry.} The \classname{linear\_geometry} class obviously describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge it describes. This may be memory inefficient in large graphs, since the information about the coordinates are already stored in the vertices, but otherwise recovering that information would have required a lot of operations and a more complex structure . In this way we give directly access inside the class. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. It is a very efficient class for straigth lines, since it performs only simple algebraic operations to compute evaluation, first derivative and curvilinear abscissa, and returns directly zero for the second derivative and the curvature.
@@ -169,7 +169,7 @@
 	Two ways to build the representation are provided, both requiring a vector of points to be built, coded in the \texttt{enum class} called \texttt{BSP\_type}. Specifying in the constructor the argument \texttt{BSP\_type::Approx}, the given vector of points will be considered as a vector of control points for the curve (so that the curve smooths the control points), while specifying \texttt{BSP\_type::Interp} the same vector of points will be considered as a vector of points to be interpolated by the bspline. In the first case the control points are simply copied in the inner private attribute and a uniform knot vector is built. 
 	Also in the second case a uniform knot vector $t$ is built by default; after that, Greville abscissae $x$ are computed in the following way:
 	\begin{equation*}
-		x_{j} = \frac{1}{3} \sum_{k=1}^3 t_{j+k} \qquad j=1,...,n 
+	x_{j} = \frac{1}{3} \sum_{k=1}^3 t_{j+k} \qquad j=1,...,n 
 	\end{equation*} 
 	These are the sites where the equality $B(\mathbf{x})=\mathbf{p}$ must hold, being $\mathbf{p}$ the input vector of points and $B$ the bspline to be found.
 	This interpolation problem can be easily transferred into the linear system $V \mathbf{d} = \mathbf{p}$, where $V$ is called Vandermonde matrix of the intepolation problem, $\mathbf{d}$ is the vector of the unknown control points, and $\mathbf{p}$ is the vector of the given points to be interpolated. We use Eigen matrices to store all these elements, and the \texttt{lu()} Eigen method to solve the system. \\
@@ -307,24 +307,24 @@
 	%\begin{figure}
 	\begin{lstlisting}[frame=single]
 	while(!eof){
-	fracture = getline()
-	create fracture edge_property 
-	int_vect.clear()
-	for e in edges(G){
-	compute_intersection(e, fracture)
-	if intersection exists{
-	create Int_Layer with intersection information
-	int_vect.push_back(Int_Layer)
-	}	
-	}
-	if int_vect.empty(){
-	add_edge to graph with fracture edge properties
-	} 
-	else {
-	reorder int_vect
-	remove_duplicates inside int_vect
-	refine_graph(fracture, int_vect)  
-	}
+		fracture = getline()
+		create fracture edge_property 
+		int_vect.clear()
+		for e in edges(G){
+			compute_intersection(e, fracture)
+			if intersection exists{
+				create Int_Layer with intersection information
+				int_vect.push_back(Int_Layer)
+			}	
+		}
+		if int_vect.empty(){
+			add_edge to graph with fracture edge properties
+		} 
+		else {
+			reorder int_vect
+			remove_duplicates inside int_vect
+			refine_graph(fracture, int_vect)  
+		}
 	}
 	\end{lstlisting}
 	%	\caption{create\_graph pseudocode}
@@ -443,9 +443,9 @@
 	The domain where the model is defined is composed by two parts, $\Omega_t$ and $\Omega_v$ (where $t$ stands for \textit{tissue} and $v$ stands for \textit{vessel}), denoting the interstitial volume and the capillary bed respectively.
 	We assume that the capillaries can be described as cylindrical vessels and  $\Lambda$ denotes the centerline of the capillary network. The capillary radius, $R$, is for simplicity considered to be constant.  We decompose the network $\Lambda$ into individual branches $\Lambda_i$. Branches are parameterized by the arc length $s_i$; a tangent unit vector $\boldsymbol \lambda_i$ is also defined over each branch, defining in this way an arbitrary branch orientation. In particular, the domain $\Omega_f$ can be split into cylindrical branches $\Omega_i$ defined as follows
 	\begin{align*}
-		\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
-		\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
-		\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
+	\Omega_i = & \{ \xx \in \R^3; \ \xx = \ss + \rr\}; \\
+	\ss \in \Lambda_i = & \mathcal{M}_i(\Lambda^\prime \subset \R^1)\}; \\
+	\rr \in \mathcal{D}_{\Lambda_i}(\ss,R) = & \{ r \nn_{\Lambda_i}; \ r\in(0,R)\};
 	\end{align*}
 	where $\mathcal{M}_i$ is a mapping from a reference domain $\Lambda^\prime$ to the manifold $\Lambda_i \subset \R^3$ and $\nn_{\Lambda_i}$ denotes a unit normal vector to $\Lambda_i$. We denote with $\Gamma_i$ the lateral surface of $\Omega_i$. 
 	
@@ -467,27 +467,27 @@
 	between the network of capillaries and the interstitial volume at each point of the capillary vessels
 	is the following:
 	\begin{equation}
-		J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
+	J := k_i \left( c_v - c_t\right)  \quad \text{on } \Gamma_i,
 	\end{equation}
 	being $k_i$ the permability of the vessel wall $\Gamma_i$. \\
 	Finally, using this notation, the problem becomes:
 	\begin{align}
-		\label{eq:fullProblem3D}
-		\begin{cases}
-			- \Delta c_t = 0 &\text{ in } \Omega_t,\\
-			\nonumber
-			- \Delta c_v = 0 & \text{ in } \Omega_v,\\
-			\nonumber
-			-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
-			\nonumber
-			-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
-			\nonumber
-			\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
-			\nonumber
-			c_v = g & \text{ on } \Gamma_{inflow}\\
-			\nonumber
-			\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
-		\end{cases}
+	\label{eq:fullProblem3D}
+	\begin{cases}
+	- \Delta c_t = 0 &\text{ in } \Omega_t,\\
+	\nonumber
+	- \Delta c_v = 0 & \text{ in } \Omega_v,\\
+	\nonumber
+	-\nabla c_t \cdot n_t = \kappa_i \left( c_t - c_v \right) & \text{ on } \Gamma_i,\\
+	\nonumber
+	-\nabla c_v \cdot n_v  = \kappa_i \left( c_v - c_t \right) & \text{ on } \Gamma_i,\\
+	\nonumber
+	\nabla \cdot c_t = 0 & \text{ on } \partial \Omega_p \setminus \cup_{i=1}^N \Gamma_i,\\
+	\nonumber
+	c_v = g & \text{ on } \Gamma_{inflow}\\
+	\nonumber
+	\nabla \cdot c_v = 0 & \text{ on } \Gamma_{outflow}
+	\end{cases}
 	\end{align}
 	
 	The problem on $\Omega_v$ is a prototype of flow or mass transport problem in a network of cylindrical channels, surrounded by the domain $\Omega_v$ where another flow and transport problems will be defined, according to porous media equations. It is assumed that the interface between these regions is permeable, namely it is crossed by a normal flux proportional to $\kappa_i \left( u_t - u_v \right)$.\\
@@ -496,25 +496,25 @@
 	Applying model reduction techniques, the equations defined on the network of inclusions $\Omega_v$ can be restricted to the one dimensional network $\Lambda$. Differentiation over the branches is defined using the tangent unit vector as ${\partial_{s_i}} = \nabla \cdot \pmb{\lambda}_i\,$ on $ \Lambda_i$, i.e. ${\partial_{s_i}}$ represents the projection of $\nabla$ along $\boldsymbol \lambda_i$. \newline	
 	As a result, the 3D-1D counterpart of the problem becomes
 	\begin{equation}\label{eq:redweak3D1D}
-		\begin{cases}
-			a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
-			\\
-			A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
-		\end{cases}
+	\begin{cases}
+	a(c_t,q_t) + b_\Lambda(\bct,\bqt) = b_\Lambda(c_v,\bqt) & \forall q_t \in H^1_0(\Omega_t),
+	\\
+	A(c_v,q_v) + b_\Lambda(c_v,q_v) = b_\Lambda(\bct,q_v) + \mathcal{F} (q_v) & \forall q_v \in H^1_0(\Lambda),
+	\end{cases}
 	\end{equation}
 	where $c_v,q_v \in H^1_0(\Lambda)$ denote trial and test functions relative to the weak reduced problem, with the following bilinear forms:
 	%
 	\begin{equation*}
-		a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
-		\quad
-		A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
-		\quad 
-		b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
+	a(w,v) = (\nabla w,\nabla v)_{\Omega}, 
+	\quad
+	A(w,v) = \sum_{i=1}^N (\nabla_{\Lambda_i} w, \nabla_{\Lambda_i} v)_{\Lambda_i}, 
+	\quad 
+	b_\Lambda(w,v) = \sum_{i=1}^N \kappa_i (w,v)_{\Lambda_i}.
 	\end{equation*}
 	A central role in equation \eqref{eq:redweak3D1D} is played by the restriction operator $\overline{(\cdot)}$ that is defined as
 	\begin{equation*}
-		\overline{w}^{(i)} = 
-		\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
+	\overline{w}^{(i)} = 
+	\frac{1}{|\partial\mathcal{D}_{\Lambda_i}|} \int_{\partial\mathcal{D}_{\Lambda_i}} w|_{\Lambda_i \times \partial\mathcal{D}_{\Lambda_i}}\,dr\,d\theta\,.
 	\end{equation*}
 	
 	\subsubsection{Code implementation and results}
@@ -550,7 +550,7 @@
 		\includegraphics[width=0.85\linewidth]{ct3}
 		\label{fig:ct3}
 	\end{figure}
-
+	
 	\newpage	
 	\section{References}
 	\begin{itemize}
@@ -568,5 +568,5 @@
 	We would like to thank our mate Stefano for his support, both practical and moral, in our PACS project. In particular, since he is working on another PACS project on that topic, he helped us a lot in writing the source code for the vascular microcirculation application, and he also gave us large support in writing the report part concerning that application, expecially the mathematical formulation.
 	\newline\newline
 	We want also to thank Dr. Pasquale Africa for its technical support when nothing was compiling on our virtual machine. Always helpul, he gave us a lot of advice on how to write a good Makefile and some suggestions on how to design our code and the library structure.
-		
+	
 \end{document}
