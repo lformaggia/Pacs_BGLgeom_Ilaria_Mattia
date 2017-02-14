@@ -195,11 +195,11 @@
 	#include "base_properties.hpp"
 	
 	using Edge_prop = 
-	BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+		BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
 	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 	using Graph = 
-	boost::adjacency_list< boost::vecS, boost::vecS, 
-	boost::directedS, Vertex_prop, Edge_prop >;
+		boost::adjacency_list< boost::vecS, boost::vecS, 
+		boost::directedS, Vertex_prop, Edge_prop >;
 	Graph G;
 	\end{lstlisting}
 	Note that we simply created an empty graph: all the properties, especially geometries for edges, have to be set up while building the graph. Moreover, note that, since the chosen geometry for the edge properties \texttt{Edge\_prop} is \texttt{linear\_geometry}, and since this \texttt{Edge\_prop} is passed as template argument to the \classname{adjacency\_list} class, the whole graph will have edges with linear geometry.
@@ -208,16 +208,16 @@
 	#include "base_properties.hpp"
 	
 	struct My_edge_prop : public BGLgeom::Edge_base_property<3> {
-	double variable1;			// may be pressure
-	int varaible2;				// some flag
-	std::string a_string;	// a description
-	my_class object;			// may be solver for FEM problem on edge
+		double variable1;			// may be pressure
+		int varaible2;				// some flag
+		std::string a_string;	// a description
+		my_class object;			// may be solver for FEM problem on edge
 	
-	My_edge_prop() : BGLgeom::Edge_base_property<3>(),
-	variable1(.0),
-	variable2(0),
-	a_string(),
-	object() {};	
+		My_edge_prop() : BGLgeom::Edge_base_property<3>(),
+			variable1(.0),
+			variable2(0),
+			a_string(),
+			object() {};	
 	};
 	\end{lstlisting}
 	The use of inheritance is a fast way to derive your own vertex or edge property with a lot of freedom, and also allows access in a fast and easy way to the inherited geometric properties.
@@ -230,11 +230,11 @@
 	#include "point.hpp"
 	
 	using Edge_prop = 
-	BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+		BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
 	using Vertex_prop = BGLgeom::Vertex_base_property<3>;
 	using Graph = 
-	boost::adjacency_list< boost::vecS, boost::vecS, 
-	boost::directedS, Vertex_prop, Edge_prop >;
+		boost::adjacency_list< boost::vecS, boost::vecS, 
+		boost::directedS, Vertex_prop, Edge_prop >;
 	
 	Graph G;
 	BGLgeom::Vertex_desc<Graph> src, tgt;
