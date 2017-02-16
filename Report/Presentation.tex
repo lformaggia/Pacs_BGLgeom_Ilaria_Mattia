@@ -38,7 +38,7 @@
 %\subtitle{}
 %\logo{}
 \institute{\textbf{Politecnico di Milano}}
-\date{March 3, 2017}
+\date{March 2, 2017}
 \subject{Advanced Programming for Scientific Computing}
 %\setbeamercovered{transparent}
 %\setbeamertemplate{navigation symbols}{}
@@ -47,7 +47,7 @@
 	\begin{frame}
 		\maketitle
 	\end{frame}
-
+	
 	\begin{frame}
 		\frametitle{Project's objectives}
 		\begin{itemize}
@@ -58,85 +58,123 @@
 			\item Fracture\_intersection and Network\_diffusion applications 
 		\end{itemize}
 	\end{frame}
-
+	
 	\section{The library}
-		\begin{frame}
-			\frametitle{Briefs on Boost Graph Library}
-			\begin{block}{Adjacency\_list}
-				\texttt{adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >} \newline
-				Template class representing the graph with a two dimensional structure: 
-				a \texttt{VertexList}, containing all the vertices, and an \texttt{OutEdgeList} associated to each vertex, containing all its out-edges.
-			\end{block}
+	\begin{frame}
+		\frametitle{Briefs on Boost Graph Library}
+		\begin{block}{Adjacency\_list}
+			\texttt{adjacency\_list< OutEdgeList, VertexList, Directed, VertexProperties, EdgeProperties >} \newline
+			Template class representing the graph with a two dimensional structure: 
+			a \texttt{VertexList}, containing all the vertices, and an \texttt{OutEdgeList} associated to each vertex, containing all its out-edges.
+		\end{block}
 		
-			\begin{block}{Vertex \& Edge descriptors and iterators}
-				Descriptors are the types for vertices and edges representative objects; iterators allow to traverse graph's vertex and edge sets.
-			\end{block}
+		\begin{block}{Vertex \& Edge descriptors and iterators}
+			Descriptors are the types for vertices and edges representative objects; iterators allow to traverse graph's vertex and edge sets.
+		\end{block}
 		
-			\begin{block}{Bundled properties}
-				Structs associated to each vertex and each edge containing their properties and methods
-			\end{block}	
-		\end{frame}
+		\begin{block}{Bundled properties}
+			Structs associated to each vertex and each edge containing their properties and methods
+		\end{block}	
+	\end{frame}
 	
-		\begin{frame}
-			\frametitle{BGLgeom}
-			This library has been developed to provide an environment where building and running all those applications which have both a graph topological structure and a geometric description for vertices (position in the space) and edges (which could not be linear).\\
-			BGLgeom implements also some input/output utilities, to make this library 'compatible' with other softwares.
-		\end{frame}
+	\begin{frame}
+		\frametitle{BGLgeom}
+		This library has been developed to provide an environment where building and running all those applications which have both a graph topological structure and a geometric description for vertices (position in the space) and edges (which could not be linear).\\
+		BGLgeom implements also some input/output utilities, to make this library 'compatible' with other softwares.
+	\end{frame}
 	
-		\begin{frame}{Inside BGLgeom}
+	\begin{frame}{Inside BGLgeom}
+		\begin{itemize}
+			\item \textbf{Adapters for BGL}: layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
+			\item \textbf{Classes to build graph properties}: the main part of the library; classes to be associated vertices and edges
+			as properties including the basic geometric requirements.
+			\item \textbf{Geometrical and numerical utilities}: Code to compute integrals, generate meshes, compute intersections between linear edges.
+			\item \textbf{I/O utilities}: one reader class to read tabular ASCII files, and three writer classes to produce three different types of output: ASCII, .pts and .vtp files.
+			\item \textbf{Tests}: source code examples to show how the main classes and writers work.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{Geometric properties}
+		We implemented the geometrical properties we were required as \textit{bundled properties}, which are then associated to each single vertex and edge.
+		\begin{block}{Vertex\_base\_property}
 			\begin{itemize}
-				\item \textbf{Adapters for BGL}: layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
-				\item \textbf{Classes to build graph properties}: the main part of the library; classes to be associated vertices and edges
-				as properties including the basic geometric requirements.
-				\item \textbf{Geometrical and numerical utilities}: Code to compute integrals, generate meshes, compute intersections between linear edges.
-				\item \textbf{I/O utilities}: one reader class to read tabular ASCII files, and three writer classes to produce three different types of output: ASCII, .pts and .vtp files.
-				\item \textbf{Tests}: source code examples to show how the main classes and writers work.
+				\item coordinates, describing the physical location of the point in the space
+				\item boundary conditions (possibly more than one)
+				\item label
+				\item index
 			\end{itemize}
-		\end{frame}
-	
-		\begin{frame}
-			\frametitle{Geometric properties}
-			We implemented the geometrical properties we were required as \textit{bundled properties}, which are then associated to each single vertex and edge.
-			\begin{block}{Vertex\_base\_property}
-				\begin{itemize}
-					\item coordinates, describing the physical location of the point in the space
-					\item boundary conditions (possibly more than one)
-					\item label
-					\item index
-				\end{itemize}
-			\end{block}
-			\begin{block}{Edge\_base\_property}
-				\begin{itemize}
-					\item geometry (linear, b-spline, generic)
-					\item mesh
-					\item label
-					\item index
-				\end{itemize}
-			\end{block}		
-		\end{frame}
-		\begin{frame}
-			\frametitle{Edge geometry abstract class}
-			All geometry classes derive from an abstract class, \texttt{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: evaluation of the curve, computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve between 0 and 1, so we actually have parameterizations of the type
-			\begin{equation*}
-			f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
-			\end{equation*}
-			for each geometry.
-		\end{frame}
-		\begin{frame}
-			\frametitle{Concrete edge geometries}
+		\end{block}
+		\begin{block}{Edge\_base\_property}
 			\begin{itemize}
-				\item \textbf{Linear geometry} describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. 
-				\item \textbf{Generic geometry} can store the exact parameterization of any curve; it requires to provide the exact analytic expression of the curve and of its first and second derivative, each one parametrized between 0 and 1.
-				\item \textbf{Bspline geometry} stores as private attributes the control points and the knot vectors for the curve and for its first and second derivatives.	
-				The user can choose between interpolating and approximating b-splines.
+				\item geometry (linear, b-spline, generic)
+				\item mesh
+				\item label
+				\item index
 			\end{itemize}
-		\end{frame}
-			
-%		\begin{frame}[fragile]
-%			\frametitle{Example: declaring a geometric graph}
-%			\begin{lstlisting}
-%			#include <boost/graph/adjacency_list.hpp>
-%			#include "base_properties.hpp"
+		\end{block}		
+	\end{frame}
+	\begin{frame}
+		\frametitle{Edge geometry abstract class}
+		All geometry classes derive from an abstract class, \texttt{edge\_geometry}, which specifies the functionalities that the geometry of an edge should have: evaluation of the curve, computation of first and second derivative, curvature and curvilinear abscissa at given value (or a vector of values) of the parameter. All the classes hold a parameterization of the curve between 0 and 1, so we actually have parameterizations of the type
+		\begin{equation*}
+		f:[0,1]\rightarrow\mathbb{R}^{n} \quad, \quad n=2,3.
+		\end{equation*}
+		for each geometry.
+	\end{frame}
+	\begin{frame}
+		\frametitle{Concrete edge geometries}
+		\begin{itemize}
+			\item \textbf{Linear geometry} describes straight lines. It stores as internal attributes the coordinates of the source and the target of the edge. The coordinates of source and target are used to rescale the parameterization from [0,1] to the real position in the space. 
+			\item \textbf{Generic geometry} can store the exact parameterization of any curve; it requires to provide the exact analytic expression of the curve and of its first and second derivative, each one parametrized between 0 and 1.
+			\item \textbf{Bspline geometry} stores as private attributes the control points and the knot vectors for the curve and for its first and second derivatives.	
+			The user can choose between interpolating and approximating b-splines.
+		\end{itemize}
+	\end{frame}
+	
+	%		\begin{frame}[fragile]
+	%			\frametitle{Example: declaring a geometric graph}
+	%			\begin{lstlisting}
+	%			#include <boost/graph/adjacency_list.hpp>
+	%			#include "base_properties.hpp"
+	%			
+	%			using Edge_prop = 
+	%			BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
+	%			using Vertex_prop = BGLgeom::Vertex_base_property<3>;
+	%			using Graph = 
+	%			boost::adjacency_list< boost::vecS, boost::vecS, 
+	%			boost::directedS, Vertex_prop, Edge_prop >;
+	%			Graph G;
+	%			\end{lstlisting}
+	%		\end{frame}
+	
+	%		\begin{frame}[fragile]
+	%			\frametitle{Example: extending base properties}
+%				\begin{lstlisting}[frame=single, name=create_graph]
+%				#include "base_properties.hpp"
+%
+%				struct My_edge_prop : public BGLgeom::Edge_base_property<3> {
+%				double variable1;			// may be pressure
+%				int varaible2;				// some flag
+%				std::string a_string;	// a description
+%				my_class object;			// may be solver for FEM problem on edge
+%				
+%				My_edge_prop() : BGLgeom::Edge_base_property<3>(),
+%				variable1(.0),
+%				variable2(0),
+%				a_string(),
+%				object() {};	
+%				};
+%				\end{lstlisting}
+	%		\end{frame}
+	
+%			\begin{frame}[fragile]
+%			\frametitle{Example: Adding vertices and edges}
+%			\begin{lstlisting}[frame=single]
+%			#include "graph_access.hpp"
+%			#include "graph_builder.hpp"
+%			#include "base_properties.hpp"		
+%			#include "point.hpp"
 %			
 %			using Edge_prop = 
 %			BGLgeom::Edge_base_property< BGLgeom::linear_geometry<3>, 3 >;
@@ -144,7 +182,53 @@
 %			using Graph = 
 %			boost::adjacency_list< boost::vecS, boost::vecS, 
 %			boost::directedS, Vertex_prop, Edge_prop >;
+%			
 %			Graph G;
+%			BGLgeom::Vertex_desc<Graph> src, tgt;
+%			BGLgeom::Edge_desc<Graph> e;
+%			
+%			src = BGLgeom::new_vertex(G); // add a new vertex 
+%			tgt = BGLgeom::new_vertex(G); // add another vertex
+%			G[src].coordinates = BGLgeom::point<3>(1,1,1); // set src coordinates
+%			G[tgt].coordinates = BGLgeom::point<3>(2,2,2); // set tgt coordinates
+%			
+%			// add an edge connecting src to tgt
+%			e = BGLgeom::new_linear_edge(src, tgt, G);
+%			// set edge's index	
+%			G[e].index = 1;
 %			\end{lstlisting}
 %		\end{frame}
+
+	\begin{frame}
+		\frametitle{Reader class}
+			We provided in this library a generic ASCII reader to read topology and properties of the graph from a tabular file. The reader is a template abstract class; while deriving his own concrete reader, the user has to specify:
+			\begin{itemize}
+				\item all the attributes to be stored while reading;
+				\item \texttt{get\_data()}: how to read (in the right order) from the file the data for each single edge, using the inner stream attribute;
+				\item \texttt{get\_source\_data()} and \texttt{get\_target\_data()}: how to pack the data into the vertex property of source and target of the edge currently read;
+				\item \texttt{get\_edge\_data()}: how to pack the data into the edge property which will be assigned to the new edge ;
+				\item \texttt{get\_topological\_data()}: if topological information are provided, how to "exploit" them, otherwise an empty struct (the default \texttt{BGLgeom::no\_topological\_data} is provided in the same header).
+			\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Writer classes}
+		Three kinds of writers are provided to output the graph and its properties; each one produces a different format of output.
+		\begin{itemize}
+			\item{Writer\_ASCII} produces as output a tabular format (.txt, .dat, etc). It is an abstract class with the same philosophy as the \texttt{reader\_ASCII} class: the user has to define its concrete writer, specifying which properties of the graph to print, and how.
+			\item{Writer\_pts} produces the output in a particular format (.pts): it expresses the graph as a sequence of arcs, and for each arc the boundary conditions on source and target and all points of the mesh defined on it (if present) are printed. 
+			\item{Writer\_vtp} produces a .vtp output, i.e. a VTK polygonal data format. The output consists into two files: one coding the edges, and one coding the vertices of the graph. This kind of output is thought to visualization purpouse: using for instance software such as Paraview, the output files can be easily displayed.
+		\end{itemize}
+	
+	\begin{frame}
+		\frametitle{Future developments}
+		\begin{block}{Dynamic edge properits}
+			contenuto...
+		\end{block}
+		\begin{block}{title}
+			contenuto...
+		\end{block}
+	\end{frame}
+
+	\end{frame}	
 \end{document}
