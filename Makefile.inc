@@ -9,21 +9,19 @@
 
 ### USER CONFIGURATION VARIABLES ###
 # Directory where the project resides.
-#PROJECT_DIR=/D/Progetto_pacs/Pacs_project_Ilaria_Mattia
-PROJECT_DIR=/home/pacs_student/Desktop/pacs/Project/Pacs_project_Ilaria_Mattia
+PROJECT_DIR =
 
 # Installation path
-#INSTALL_PATH = /D/BGLgeom
-INSTALL_PATH = /home/pacs_student/Desktop/BGLgeom
+INSTALL_PATH =
 
 # Path to Boost Graph Library
-#export mkBGLInc = /D/boost_1_61_0/boost #/graph
+export mkBGLInc =
 
 # Path to GetFEM main folder
-#export mkGetFEMHome = /D/GetFEM/5.0
+export mkGetFEMHome =
 
 # Path to MANworks main folder
-#export mkMANworksHome = /D/MANworks
+export mkMANworksHome =
 
 # Tolenrance on being zero (for comparison on points and segments)
 # This variable is needed when including point.hpp and intersections2D.hpp headers, 
@@ -33,39 +31,39 @@ TOL_VALUE = 1e-10
 
 ## EDIT THESE ONLY IF YOU DO NOT USE MODULE SYSTEM OF MOX CLUSTER ##
 # Path to VTK includes
-#export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
+export mkVtkInc   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/include/vtk-5.10
 # Path to VTK libraries
-#export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
+export mkVtkLib   = /u/geo2/sw/Toolchains/gcc+system/4.9/Packages/libs/vtk/5/lib/vtk-5.10
 # Path to Eigen includes
-#export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
+export mkEigenInc = /u/geo2/sw/Packages/libs/eigen/3/include/eigen3
 
 
 ### NOW DO NOT EDIT ANYTHING ###
 
 # Path to GetFEM library
-GETFEM_LIB_DIR = $(mkGetFEMHome)/lib
+GETFEM_LIB_DIR   = $(mkGetFEMHome)/lib
 # Path to GetFEM includes
-GETFEM_INC_DIR = $(mkGetFEMHome)/include
+GETFEM_INC_DIR   = $(mkGetFEMHome)/include
 # Path to MANworks library
 MANWORKS_LIB_DIR = $(mkMANworksHome)/lib
 # Path to Manworks includes
 MANWORKS_INC_DIR = $(mkMANworksHome)/include
 # Path to Eigen includes
-EIGEN_INC_DIR = $(mkEigenInc)
+EIGEN_INC_DIR    = $(mkEigenInc)
 # Path to VTK includes
-VTK_INC_DIR   = $(mkVtkInc)
+VTK_INC_DIR      = $(mkVtkInc)
 # Path to VTK library
-VTK_LIB_DIR   = $(mkVtkLib)
+VTK_LIB_DIR      = $(mkVtkLib)
 # Path to BGL includes
-BGL_INC_DIR   = $(mkBGLInc)
+BGL_INC_DIR      = $(mkBGLInc)
 
 ## Project Folders
 # libBGLgeom is stored here (we consider the installation path)
 BGLGEOM_DIR = $(INSTALL_PATH)
 # Example on network diffusion is stored here
-NETW_DIR = $(PROJECT_DIR)/network_diffusion
+NETW_DIR    = $(PROJECT_DIR)/network_diffusion
 # Example on fracture intersection is sotred here
-FRAC_DIR = $(PROJECT_DIR)/fracture_intersection
+FRAC_DIR    = $(PROJECT_DIR)/fracture_intersection
 
 # Parsing vtk libraries. In the modules are present also libraries for Python. We filter them out
 VTK_LIBS1 = $(wildcard $(VTK_LIB_DIR)/libvtk*.so.5.10.1) #collecting all libraries
