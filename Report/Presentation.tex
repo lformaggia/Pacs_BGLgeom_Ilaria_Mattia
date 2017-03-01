@@ -96,13 +96,13 @@
 	
 	\begin{frame}
 		\frametitle{BGLgeom}
-		This library has been developed to provide an environment where building and running all those applications which have both a graph topological structure and a geometric description for vertices (position in the space) and edges (which could not be linear).\\
+		This library has been developed to provide an environment to build and run all those applications which have both a graph topological structure and a geometric description for vertices (position in the space) and edges (which could not be linear).\\
 		BGLgeom implements also some input/output utilities, to make this library 'compatible' with other softwares.
 	\end{frame}
 	
 	\begin{frame}{Inside BGLgeom}
 		\begin{itemize}
-			\item \textbf{Adapters for BGL}: layers and additional functions to hidden the most used native BGL ones and to improve readibility and ease of use.
+			\item \textbf{Adapters for BGL}: layers and additional functions to hide the most used native BGL ones and to improve readibility and ease of use.
 			\item \textbf{Classes to build graph properties}: the main part of the library; classes to be associated vertices and edges
 			as properties including the basic geometric requirements.
 			\item \textbf{Geometrical and numerical utilities}: Code to compute integrals, generate meshes, compute intersections between linear edges.
@@ -114,7 +114,7 @@
 	\begin{frame}
 		\frametitle{Geometric properties}
 		We implemented the geometrical properties we were required as \textit{bundled properties}, which are then associated to each single vertex and edge.
-		\begin{block}{Vertex\_base\_property}
+		\begin{block}{Vertex\_base\_property$<$dim, num\_BC=1$>$}
 			\begin{itemize}
 				\item coordinates, describing the physical location of the point in the space
 				\item boundary conditions (possibly more than one)
@@ -122,7 +122,7 @@
 				\item index
 			\end{itemize}
 		\end{block}
-		\begin{block}{Edge\_base\_property}
+		\begin{block}{Edge\_base\_property$<$geometry, dim$>$}
 			\begin{itemize}
 				\item geometry (linear, b-spline, generic)
 				\item mesh
@@ -147,6 +147,10 @@
 			\item \textbf{Bspline geometry} stores as private attributes the control points and the knot vectors for the curve and for its first and second derivatives.	
 			The user can choose between interpolating and approximating b-splines.
 		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{Mesh}
+			We provide a class that is at the same time a mesh generator and a container for two types of mesh: the parametric one, generated from the parameterization of the edge, and the real one, that is the evaluation of the parametric mesh on the same edge. We decided to store also the parametric mesh since it may be useful to evaluate it to get other quantities, such as curvature, in correspondence of the points of the real mesh.
 	\end{frame}
 
 	\defverbatim[colored]\lstI{
@@ -279,6 +283,7 @@
 	\section{Applications}
 	\begin{frame}
 		\frametitle{Fracture intersection}
+		\framesubtitle{Application to porous media}
 			A list of fractures, all lying on the same plane, is given as input. \\
 			The goal is to build a graph representing the network, with vertices in correspondence of the fractures' extremities and of the intersection points and edges representing the fractures.
 	\end{frame}
@@ -321,7 +326,7 @@
 	\begin{frame}{Example on duplicates removal}
 		\begin{figure}
 			\centering 
-			\includegraphics[width=1\textwidth]{"rem_dupl"}
+			\includegraphics[width=1.2\textwidth]{"rem_dupl"}
 		\end{figure}
 	\end{frame}
 
@@ -351,7 +356,7 @@
 		\begin{frame}
 		\frametitle{Coupled problem on one dimensional network}
 		\framesubtitle{Application to microcirculation}
-		The goal is to solve a fluid transport problem ina permeable biological tissue perfused by a capillary network. The whole domain $\Omega$ is divided into the tissue volume $\Omega_{t}$ and the capillary bed $\Omega_{v}$. The latter is reduced from a 3D to a 1D description, thus generating a graph for the capillary network, where the edges are straight lines.
+		The goal is to solve a fluid transport problem in a permeable biological tissue perfused by a capillary network. The whole domain $\Omega$ is divided into the tissue volume $\Omega_{t}$ and the capillary bed $\Omega_{v}$. The latter is reduced from a 3D to a 1D description, thus generating a graph for the capillary network, where the edges are straight lines.
 		\newline\newline
 		The quantity of interest is the concentration of transported solute $c$, function of space and time. The wall of capillaries is assumed permeable, so that solute can flow from vessels to tissue.
 		\newline\newline
@@ -362,8 +367,8 @@
 		\frametitle{Our role}
 		The problem was substantially already solved thanks to code developed in previous and ongoing PACS project and based on GetFEM++ solvers. The remaining issue was a comprehensive description and generation of the underlying graph for the capillary network. Here we gave our contribution:
 		\begin{itemize}
-			\item We first of all developed a Matlab script to generate a random capillary networks with successive bifurcations in orthogonal planes; it produces a file with the coordinates of source and target of the edges in each row.
-			\item Then we used our BGLgeom library to read the input file with the generated capillary network and build the corresponding graph, setting properly coordinates and BCs on the vertices.
+			\item We first developed a Matlab script to generate a random capillary network with successive bifurcations in orthogonal planes; it produces a file with the coordinates of source and target of the edges in each row.
+			\item Then we used BGLgeom library tools to read the input file with the generated capillary network and build the corresponding graph, setting properly coordinates and BCs on the vertices.
 			\item We generated a uniform mesh on each edge.
 			\item Finally we output the graph in .pts format, ready to be read by the GetFEM++ solver.
 		\end{itemize}	
