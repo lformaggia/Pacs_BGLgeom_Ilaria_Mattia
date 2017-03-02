@@ -63,7 +63,7 @@ using namespace BGLgeom;
 
 int main(){
 	
-	constexpr double pi = std::atan(1.0)*4.0;
+	const double pi = std::atan(1.0)*4.0;
 
 	std::vector<point<2>> control_pts;
 	control_pts.push_back(point<2>(0,0));
