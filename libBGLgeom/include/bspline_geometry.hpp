@@ -300,9 +300,9 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 				bspderiv (deg-1, dC, (nc-1), dk, dk.size (), d2C, d2k);				
 			} else {	// _type == BSP_type::Interp
 				if(deg != 3){
-					std::cerr << "ERROR! BGLgeom::bspline_geometry(): " << std::endl;
-					std::cerr <<"\tinterpolating constructor only available for degree = 3 " << 
-						"(cubic bsplines)!" << std::endl;
+					std::cerr << "ERROR! BGLgeom::bspline_geometry(): "
+						<< "interpolating constructor only available for degree = 3 "
+						<< "(cubic bsplines)!" << std::endl;
 					std::cerr << "Aborting" << std::endl;
 					exit(EXIT_FAILURE);
 				} else {
@@ -546,7 +546,7 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		
 		//! Norm of the first derivative (to compute curvilinear abscissa)
 		double
-		velocity (double x)	{
+		velocity (double x) const {
 			point tmp = point::Zero();
 			bspeval (deg-1, dC, (nc-1), dk, x, tmp);
 			return tmp.norm();

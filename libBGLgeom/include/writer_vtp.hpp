@@ -282,7 +282,7 @@ class writer_vtp{
   			writer_vertices -> SetInput(polyData_color);
 			#else
   			writer->SetInputData(polyData);	
-    		writer_vertices -> SetInputData(polyData_color)
+    		writer_vertices -> SetInputData(polyData_color);
   			#endif
   			
   			writer -> Write();

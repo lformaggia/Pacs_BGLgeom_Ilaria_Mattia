@@ -55,7 +55,7 @@ using namespace boost;
 
 int main(){
 
-	constexpr double pi = std::atan(1.0)*4.0;
+	const double pi = std::atan(1.0)*4.0;
 
 	std::cout << "====================== LINEAR_GEOMETRY ======================" << std::endl << std::endl;
 	

@@ -32,6 +32,7 @@
 #include "intersections2D.hpp"
 #include <iostream>
 #include <iomanip>
+#include <numeric>
 
 using namespace BGLgeom;
 

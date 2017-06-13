@@ -59,7 +59,7 @@ using namespace BGLgeom;
 
 int main(){
 	
-  	constexpr double pi = std::atan(1.0)*4.0;
+  	const double pi = std::atan(1.0)*4.0;
 	
 	//generic edge
   	auto fun = [](double x) -> point<2>{
@@ -132,15 +132,15 @@ int main(){
 	std::cout << "=================== ANOTHER GENERIC EDGE =======================" << std::endl;
 	std::cout << "Representing a half-circumference" << std::endl << std::endl;
 	
-	auto gamma = [](double x) -> point<2>{
+	auto gamma = [pi](double x) -> point<2>{
 		return point<2>(std::cos(pi*x), 2*std::sin(pi*x)); 
   	};	
     
-    auto gamma1 = [](double x) -> point<2>{
+    auto gamma1 = [pi](double x) -> point<2>{
 		return point<2>(-pi*std::sin(pi*x), 2*pi*std::cos(pi*x));
   	};
   	
-	auto gamma2 = [](double x) -> point<2>{
+	auto gamma2 = [pi](double x) -> point<2>{
 		return point<2>(-pi*pi*std::cos(pi*x), -2*pi*pi*std::sin(pi*x)); 
   	};
   	
@@ -226,15 +226,15 @@ int main(){
 										 Edge_base_property<generic_geometry<3>,3> >;
 	Graph G;
 	
-	auto alfa = [](double x) -> point<3>{
+	auto alfa = [pi](double x) -> point<3>{
 		return point<3>(std::cos(pi*x), 2*std::sin(pi*x), x);
 	};
 	
-	auto alfa1 = [](double x) -> point<3>{
+	auto alfa1 = [pi](double x) -> point<3>{
 		return point<3>(-pi*std::sin(pi*x), 2*pi*std::cos(pi*x), 1);
   	};
 	
-	auto alfa2 = [](double x) -> point<3>{
+	auto alfa2 = [pi](double x) -> point<3>{
 		return point<3>(-pi*pi*std::cos(pi*x), -2*pi*pi*std::sin(pi*x), 0); 
   	};
   	
