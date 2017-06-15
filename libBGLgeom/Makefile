@@ -59,7 +59,7 @@ dynamic: $(LIB_OBJS_DYNAMIC)
 	@echo " "
 	@echo "--- Building dynamic library ---"
 	@mkdir -p $(LIB_DIR)
-	$(CXX) -shared -Wl,-soname,$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
+	$(CXX) -shared -Wl,-$(SONAME),$(DYNAMIC_LIBFILE).1 $(LIB_OBJS_DYNAMIC) -o $(DYNAMIC_LIB).1.0
 	@echo "--- COMPLETED ---"
 	
 $(BUILD_DIR_DYNAMIC)/%.o: $(SOURCE_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
