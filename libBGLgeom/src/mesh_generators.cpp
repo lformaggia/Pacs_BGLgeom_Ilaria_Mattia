@@ -34,8 +34,10 @@
 
 #include <stdexcept>
 #include <algorithm>
+#include <boost/range/numeric.hpp>
 #include "rk45.hpp"
 #include "mesh_generators.hpp"
+
 
 namespace BGLgeom {
 

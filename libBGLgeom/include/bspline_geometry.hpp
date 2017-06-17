@@ -405,9 +405,9 @@ bspline_geometry : public BGLgeom::edge_geometry<dim> {
 		vect
 		grev_abs(){
 			if(deg != 3){
-				std::cerr << "ERROR! BGLgeom::bspline_geometry::grev(): " <<
-				std::cerr << "\tcomputing of Greville abscissae only available for degree = 3 " << 
-					"(cubic bsplines)!" << std::endl;
+				std::cerr << "ERROR! BGLgeom::bspline_geometry::grev(): "
+					  << "\tcomputing of Greville abscissae only available for degree = 3 "
+					  << "(cubic bsplines)!" << std::endl;
 				std::cerr << "Aborting" << std::endl;
 				exit(EXIT_FAILURE);
 			} else {
